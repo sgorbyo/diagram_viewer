@@ -1,7 +1,124 @@
 library diagram_viewer;
 
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
+import 'package:diagram_viewer/diagram_content_repository.dart';
+import 'package:flutter/material.dart';
+import 'package:diagram_viewer/presentation/bloc/scrolling/scrolling_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:diagram_viewer/presentation/widgets/scrolling_view.dart';
+
+/// A [Function] called by [DiagramViewer] when a Drag operation starts and
+/// which returns a [bool] indicating whether the client will or not manage the
+/// whole Start, Continue and End Scale process, or it should be managed by
+/// [DiagramViewer].
+///
+/// For example: during the Drag of a diagram object the [DiagramViewer] will
+/// not scroll leaving the Client to move the touched object.
+typedef ClientDeclaresDrag = bool Function({Matrix4 matrix, Offset offset});
+
+class DiagramViewer extends StatelessWidget {
+  final DiagramContentRepository diagramContentRepository;
+
+  /// Whether to detect translation gestures during the event processing.
+  ///
+  /// Defaults to true.
+  ///
+  final bool shouldTranslate;
+
+  /// Whether to detect scale gestures during the event processing.
+  ///
+  /// Defaults to true.
+  ///
+  final bool shouldScale;
+
+  /// Whether to detect rotation gestures during the event processing.
+  ///
+  /// Defaults to false.
+  ///
+  final bool shouldRotate;
+
+  /// Whether [ClipRect] widget should clip [child] widget.
+  ///
+  /// Defaults to true.
+  ///
+  final bool clipChild;
+
+  final ScrollingView contentView;
+
+  DiagramViewer({
+    Key? key,
+    this.shouldTranslate = true,
+    this.shouldScale = true,
+    this.shouldRotate = false,
+    this.clipChild = true,
+    required this.diagramContentRepository,
+  })  : contentView = ScrollingView(
+          shouldTranslate: shouldTranslate,
+          shouldScale: shouldScale,
+          shouldRotate: shouldRotate,
+          clipChild: clipChild,
+        ),
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return RepositoryProvider(
+      create: (context) => diagramContentRepository,
+      child: BlocProvider(
+        create: (context) => ScrollingBloc(
+          contentRepository: diagramContentRepository,
+        ),
+        child: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+          {
+            context.read<ScrollingBloc>().add(
+                  ScrollingEvent.viewportChanged(
+                    size: Size(
+                      constraints.maxWidth,
+                      constraints.maxHeight,
+                    ),
+                  ),
+                );
+            return GestureDetector(
+              // key: widget._clientKey,
+              onScaleStart: (ScaleStartDetails details) {
+                debugPrint("Number of touches = ${details.pointerCount}");
+                context
+                    .read<ScrollingBloc>()
+                    .add(ScrollingEvent.startScale(details: details));
+              },
+              onScaleUpdate: (ScaleUpdateDetails details) {
+                Offset? focalPoint;
+
+                RenderObject? renderObject = context.findRenderObject();
+                if (renderObject != null) {
+                  RenderBox renderBox = renderObject as RenderBox;
+                  focalPoint = renderBox.globalToLocal(details.focalPoint);
+                }
+
+                context.read<ScrollingBloc>().add(ScrollingEvent.continueScale(
+                      details: details,
+                      additionalFocalPoint: focalPoint,
+                    ));
+              },
+              onScaleEnd: (ScaleEndDetails details) {
+                context
+                    .read<ScrollingBloc>()
+                    .add(ScrollingEvent.endScale(details: details));
+              },
+              child: contentView,
+            );
+          }
+        }),
+      ),
+    );
+  }
+}
+
+class SimpleBlocObserver extends BlocObserver {
+  @override
+  void onTransition(Bloc bloc, Transition transition) {
+    super.onTransition(bloc, transition);
+    debugPrint(
+        '${bloc.runtimeType} ${transition.currentState.runtimeType} (${transition.event.runtimeType})-> ${transition.nextState.runtimeType} ');
+  }
 }

@@ -2,6 +2,7 @@ name: diagram_viewer
 description: A new Flutter package project.
 version: 0.0.1
 homepage: https://github.com/sgorbyo/diagram_viewer
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 environment:
   sdk: '>=3.0.1 <4.0.0'
@@ -11,10 +12,23 @@ dependencies:
   flutter:
     sdk: flutter
 
+  bloc: ^8.1.2
+
+  flutter_bloc: ^8.1.3
+  json_annotation: ^4.8.1
+  freezed_annotation:
+  vector_math:
+  equatable:
+  uuid:
+  meta:
+  matrix4_transform:
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.1
+  build_runner: ^2.4.4
+  freezed: ^2.3.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
