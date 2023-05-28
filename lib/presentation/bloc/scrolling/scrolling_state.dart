@@ -40,6 +40,7 @@ class ScrollingState with _$ScrollingState {
     required Rect diagramRect,
   }) = _ScrollingAnimatingInertialScrolling;
   const factory ScrollingState.stoppingAnimation({
+    required Matrix4 matrix,
     required List<DiagramObjectEntity> content,
     required Size size,
     required Rect diagramRect,

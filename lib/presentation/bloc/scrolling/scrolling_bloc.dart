@@ -91,6 +91,7 @@ class ScrollingBloc extends Bloc<ScrollingEvent, ScrollingState> {
       },
       animatingInertialScrolling: (animatingInertialScrolling) async {
         emit(ScrollingState.stoppingAnimation(
+          matrix: animatingInertialScrolling.matrix,
           content: animatingInertialScrolling.content,
           size: animatingInertialScrolling.size,
           diagramRect: animatingInertialScrolling.diagramRect,
@@ -99,6 +100,7 @@ class ScrollingBloc extends Bloc<ScrollingEvent, ScrollingState> {
       },
       animatingFromOutOfBounds: (animatingFromOutOfBounds) async {
         emit(ScrollingState.stoppingAnimation(
+          matrix: animatingFromOutOfBounds.matrix,
           content: animatingFromOutOfBounds.content,
           size: animatingFromOutOfBounds.size,
           diagramRect: animatingFromOutOfBounds.diagramRect,

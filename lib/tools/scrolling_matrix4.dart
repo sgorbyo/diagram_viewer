@@ -24,15 +24,23 @@ extension ScrollingMatrix4 on Matrix4 {
 
   // Offset
   Offset get offset => Offset(x, y);
+
   set offset(Offset value) {
     x = value.dx;
     y = value.dy;
   }
 
+  Offset get oppositeOffset => Offset(-x, -y);
+
   void traslateByOffset(Offset offset) {
     x += offset.dx;
     y += offset.dy;
   }
+}
+
+extension ScrollingOffset on Offset {
+  Offset translateByOffset(Offset translation) =>
+      Offset(dx + translation.dx, dy + translation.dy);
 }
 
 extension Ex on double {

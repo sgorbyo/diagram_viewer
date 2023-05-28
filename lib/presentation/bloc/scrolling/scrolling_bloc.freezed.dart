@@ -2264,6 +2264,7 @@ abstract class _ScrollingAnimationEnd implements ScrollingEvent {
 
 /// @nodoc
 mixin _$ScrollingState {
+  Matrix4 get matrix => throw _privateConstructorUsedError;
   List<DiagramObjectEntity>? get content => throw _privateConstructorUsedError;
   Size? get size => throw _privateConstructorUsedError;
   Rect? get diagramRect => throw _privateConstructorUsedError;
@@ -2275,8 +2276,7 @@ mixin _$ScrollingState {
     required TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)
         animatingInitialToIdle,
-    required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
-            Size size, Rect diagramRect)
+    required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect)
         idle,
     required TResult Function(
             Matrix4 matrix,
@@ -2296,8 +2296,8 @@ mixin _$ScrollingState {
             Size size,
             Rect diagramRect)
         animatingInertialScrolling,
-    required TResult Function(List<DiagramObjectEntity> content, Size size,
-            Rect diagramRect, ScaleStartDetails details)
+    required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect, ScaleStartDetails details)
         stoppingAnimation,
     required TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)
@@ -2332,8 +2332,8 @@ mixin _$ScrollingState {
             Size size,
             Rect diagramRect)?
         animatingInertialScrolling,
-    TResult? Function(List<DiagramObjectEntity> content, Size size,
-            Rect diagramRect, ScaleStartDetails details)?
+    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect, ScaleStartDetails details)?
         stoppingAnimation,
     TResult? Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
@@ -2368,8 +2368,8 @@ mixin _$ScrollingState {
             Size size,
             Rect diagramRect)?
         animatingInertialScrolling,
-    TResult Function(List<DiagramObjectEntity> content, Size size,
-            Rect diagramRect, ScaleStartDetails details)?
+    TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect, ScaleStartDetails details)?
         stoppingAnimation,
     TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
@@ -2432,7 +2432,11 @@ abstract class $ScrollingStateCopyWith<$Res> {
           ScrollingState value, $Res Function(ScrollingState) then) =
       _$ScrollingStateCopyWithImpl<$Res, ScrollingState>;
   @useResult
-  $Res call({List<DiagramObjectEntity> content, Size size, Rect diagramRect});
+  $Res call(
+      {Matrix4 matrix,
+      List<DiagramObjectEntity> content,
+      Size size,
+      Rect diagramRect});
 }
 
 /// @nodoc
@@ -2448,11 +2452,16 @@ class _$ScrollingStateCopyWithImpl<$Res, $Val extends ScrollingState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? matrix = null,
     Object? content = null,
     Object? size = null,
     Object? diagramRect = null,
   }) {
     return _then(_value.copyWith(
+      matrix: null == matrix
+          ? _value.matrix
+          : matrix // ignore: cast_nullable_to_non_nullable
+              as Matrix4,
       content: null == content
           ? _value.content!
           : content // ignore: cast_nullable_to_non_nullable
@@ -2584,8 +2593,7 @@ class _$_ScrollingInitial implements _ScrollingInitial {
     required TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)
         animatingInitialToIdle,
-    required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
-            Size size, Rect diagramRect)
+    required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect)
         idle,
     required TResult Function(
             Matrix4 matrix,
@@ -2605,8 +2613,8 @@ class _$_ScrollingInitial implements _ScrollingInitial {
             Size size,
             Rect diagramRect)
         animatingInertialScrolling,
-    required TResult Function(List<DiagramObjectEntity> content, Size size,
-            Rect diagramRect, ScaleStartDetails details)
+    required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect, ScaleStartDetails details)
         stoppingAnimation,
     required TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)
@@ -2644,8 +2652,8 @@ class _$_ScrollingInitial implements _ScrollingInitial {
             Size size,
             Rect diagramRect)?
         animatingInertialScrolling,
-    TResult? Function(List<DiagramObjectEntity> content, Size size,
-            Rect diagramRect, ScaleStartDetails details)?
+    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect, ScaleStartDetails details)?
         stoppingAnimation,
     TResult? Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
@@ -2683,8 +2691,8 @@ class _$_ScrollingInitial implements _ScrollingInitial {
             Size size,
             Rect diagramRect)?
         animatingInertialScrolling,
-    TResult Function(List<DiagramObjectEntity> content, Size size,
-            Rect diagramRect, ScaleStartDetails details)?
+    TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect, ScaleStartDetails details)?
         stoppingAnimation,
     TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
@@ -2760,6 +2768,7 @@ abstract class _ScrollingInitial implements ScrollingState {
       final Size? size,
       final Rect? diagramRect}) = _$_ScrollingInitial;
 
+  @override
   Matrix4 get matrix;
   @override
   List<DiagramObjectEntity>? get content;
@@ -2903,8 +2912,7 @@ class _$_ScrollingAnimatingInitialToIdle
     required TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)
         animatingInitialToIdle,
-    required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
-            Size size, Rect diagramRect)
+    required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect)
         idle,
     required TResult Function(
             Matrix4 matrix,
@@ -2924,8 +2932,8 @@ class _$_ScrollingAnimatingInitialToIdle
             Size size,
             Rect diagramRect)
         animatingInertialScrolling,
-    required TResult Function(List<DiagramObjectEntity> content, Size size,
-            Rect diagramRect, ScaleStartDetails details)
+    required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect, ScaleStartDetails details)
         stoppingAnimation,
     required TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)
@@ -2964,8 +2972,8 @@ class _$_ScrollingAnimatingInitialToIdle
             Size size,
             Rect diagramRect)?
         animatingInertialScrolling,
-    TResult? Function(List<DiagramObjectEntity> content, Size size,
-            Rect diagramRect, ScaleStartDetails details)?
+    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect, ScaleStartDetails details)?
         stoppingAnimation,
     TResult? Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
@@ -3004,8 +3012,8 @@ class _$_ScrollingAnimatingInitialToIdle
             Size size,
             Rect diagramRect)?
         animatingInertialScrolling,
-    TResult Function(List<DiagramObjectEntity> content, Size size,
-            Rect diagramRect, ScaleStartDetails details)?
+    TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect, ScaleStartDetails details)?
         stoppingAnimation,
     TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
@@ -3084,6 +3092,7 @@ abstract class _ScrollingAnimatingInitialToIdle implements ScrollingState {
       required final Rect diagramRect}) = _$_ScrollingAnimatingInitialToIdle;
 
   Matrix4 get oldMatrix;
+  @override
   Matrix4 get matrix;
   @override
   List<DiagramObjectEntity> get content;
@@ -3211,8 +3220,7 @@ class _$_ScrollingIdle implements _ScrollingIdle {
     required TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)
         animatingInitialToIdle,
-    required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
-            Size size, Rect diagramRect)
+    required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect)
         idle,
     required TResult Function(
             Matrix4 matrix,
@@ -3232,8 +3240,8 @@ class _$_ScrollingIdle implements _ScrollingIdle {
             Size size,
             Rect diagramRect)
         animatingInertialScrolling,
-    required TResult Function(List<DiagramObjectEntity> content, Size size,
-            Rect diagramRect, ScaleStartDetails details)
+    required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect, ScaleStartDetails details)
         stoppingAnimation,
     required TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)
@@ -3271,8 +3279,8 @@ class _$_ScrollingIdle implements _ScrollingIdle {
             Size size,
             Rect diagramRect)?
         animatingInertialScrolling,
-    TResult? Function(List<DiagramObjectEntity> content, Size size,
-            Rect diagramRect, ScaleStartDetails details)?
+    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect, ScaleStartDetails details)?
         stoppingAnimation,
     TResult? Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
@@ -3310,8 +3318,8 @@ class _$_ScrollingIdle implements _ScrollingIdle {
             Size size,
             Rect diagramRect)?
         animatingInertialScrolling,
-    TResult Function(List<DiagramObjectEntity> content, Size size,
-            Rect diagramRect, ScaleStartDetails details)?
+    TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect, ScaleStartDetails details)?
         stoppingAnimation,
     TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
@@ -3387,6 +3395,7 @@ abstract class _ScrollingIdle implements ScrollingState {
       required final Size size,
       required final Rect diagramRect}) = _$_ScrollingIdle;
 
+  @override
   Matrix4 get matrix;
   @override
   List<DiagramObjectEntity> get content;
@@ -3566,8 +3575,7 @@ class _$_ScrollingScrolling implements _ScrollingScrolling {
     required TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)
         animatingInitialToIdle,
-    required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
-            Size size, Rect diagramRect)
+    required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect)
         idle,
     required TResult Function(
             Matrix4 matrix,
@@ -3587,8 +3595,8 @@ class _$_ScrollingScrolling implements _ScrollingScrolling {
             Size size,
             Rect diagramRect)
         animatingInertialScrolling,
-    required TResult Function(List<DiagramObjectEntity> content, Size size,
-            Rect diagramRect, ScaleStartDetails details)
+    required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect, ScaleStartDetails details)
         stoppingAnimation,
     required TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)
@@ -3627,8 +3635,8 @@ class _$_ScrollingScrolling implements _ScrollingScrolling {
             Size size,
             Rect diagramRect)?
         animatingInertialScrolling,
-    TResult? Function(List<DiagramObjectEntity> content, Size size,
-            Rect diagramRect, ScaleStartDetails details)?
+    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect, ScaleStartDetails details)?
         stoppingAnimation,
     TResult? Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
@@ -3667,8 +3675,8 @@ class _$_ScrollingScrolling implements _ScrollingScrolling {
             Size size,
             Rect diagramRect)?
         animatingInertialScrolling,
-    TResult Function(List<DiagramObjectEntity> content, Size size,
-            Rect diagramRect, ScaleStartDetails details)?
+    TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect, ScaleStartDetails details)?
         stoppingAnimation,
     TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
@@ -3749,6 +3757,7 @@ abstract class _ScrollingScrolling implements ScrollingState {
       required final double squaredDistance,
       required final DateTime eventDateTime}) = _$_ScrollingScrolling;
 
+  @override
   Matrix4 get matrix;
   @override
   List<DiagramObjectEntity> get content;
@@ -3915,8 +3924,7 @@ class _$_ScrollingAnimatingInertialScrolling
     required TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)
         animatingInitialToIdle,
-    required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
-            Size size, Rect diagramRect)
+    required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect)
         idle,
     required TResult Function(
             Matrix4 matrix,
@@ -3936,8 +3944,8 @@ class _$_ScrollingAnimatingInertialScrolling
             Size size,
             Rect diagramRect)
         animatingInertialScrolling,
-    required TResult Function(List<DiagramObjectEntity> content, Size size,
-            Rect diagramRect, ScaleStartDetails details)
+    required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect, ScaleStartDetails details)
         stoppingAnimation,
     required TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)
@@ -3976,8 +3984,8 @@ class _$_ScrollingAnimatingInertialScrolling
             Size size,
             Rect diagramRect)?
         animatingInertialScrolling,
-    TResult? Function(List<DiagramObjectEntity> content, Size size,
-            Rect diagramRect, ScaleStartDetails details)?
+    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect, ScaleStartDetails details)?
         stoppingAnimation,
     TResult? Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
@@ -4016,8 +4024,8 @@ class _$_ScrollingAnimatingInertialScrolling
             Size size,
             Rect diagramRect)?
         animatingInertialScrolling,
-    TResult Function(List<DiagramObjectEntity> content, Size size,
-            Rect diagramRect, ScaleStartDetails details)?
+    TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect, ScaleStartDetails details)?
         stoppingAnimation,
     TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
@@ -4098,6 +4106,7 @@ abstract class _ScrollingAnimatingInertialScrolling implements ScrollingState {
       _$_ScrollingAnimatingInertialScrolling;
 
   Matrix4 get oldMatrix;
+  @override
   Matrix4 get matrix;
   int get animationTimeInMilliseconds;
   @override
@@ -4122,7 +4131,8 @@ abstract class _$$_StoppingAnimationCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {List<DiagramObjectEntity> content,
+      {Matrix4 matrix,
+      List<DiagramObjectEntity> content,
       Size size,
       Rect diagramRect,
       ScaleStartDetails details});
@@ -4139,12 +4149,17 @@ class __$$_StoppingAnimationCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? matrix = null,
     Object? content = null,
     Object? size = null,
     Object? diagramRect = null,
     Object? details = null,
   }) {
     return _then(_$_StoppingAnimation(
+      matrix: null == matrix
+          ? _value.matrix
+          : matrix // ignore: cast_nullable_to_non_nullable
+              as Matrix4,
       content: null == content
           ? _value._content
           : content // ignore: cast_nullable_to_non_nullable
@@ -4169,12 +4184,15 @@ class __$$_StoppingAnimationCopyWithImpl<$Res>
 
 class _$_StoppingAnimation implements _StoppingAnimation {
   const _$_StoppingAnimation(
-      {required final List<DiagramObjectEntity> content,
+      {required this.matrix,
+      required final List<DiagramObjectEntity> content,
       required this.size,
       required this.diagramRect,
       required this.details})
       : _content = content;
 
+  @override
+  final Matrix4 matrix;
   final List<DiagramObjectEntity> _content;
   @override
   List<DiagramObjectEntity> get content {
@@ -4192,7 +4210,7 @@ class _$_StoppingAnimation implements _StoppingAnimation {
 
   @override
   String toString() {
-    return 'ScrollingState.stoppingAnimation(content: $content, size: $size, diagramRect: $diagramRect, details: $details)';
+    return 'ScrollingState.stoppingAnimation(matrix: $matrix, content: $content, size: $size, diagramRect: $diagramRect, details: $details)';
   }
 
   @override
@@ -4200,6 +4218,7 @@ class _$_StoppingAnimation implements _StoppingAnimation {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_StoppingAnimation &&
+            (identical(other.matrix, matrix) || other.matrix == matrix) &&
             const DeepCollectionEquality().equals(other._content, _content) &&
             (identical(other.size, size) || other.size == size) &&
             (identical(other.diagramRect, diagramRect) ||
@@ -4210,6 +4229,7 @@ class _$_StoppingAnimation implements _StoppingAnimation {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      matrix,
       const DeepCollectionEquality().hash(_content),
       size,
       diagramRect,
@@ -4231,8 +4251,7 @@ class _$_StoppingAnimation implements _StoppingAnimation {
     required TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)
         animatingInitialToIdle,
-    required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
-            Size size, Rect diagramRect)
+    required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect)
         idle,
     required TResult Function(
             Matrix4 matrix,
@@ -4252,14 +4271,14 @@ class _$_StoppingAnimation implements _StoppingAnimation {
             Size size,
             Rect diagramRect)
         animatingInertialScrolling,
-    required TResult Function(List<DiagramObjectEntity> content, Size size,
-            Rect diagramRect, ScaleStartDetails details)
+    required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect, ScaleStartDetails details)
         stoppingAnimation,
     required TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)
         animatingFromOutOfBounds,
   }) {
-    return stoppingAnimation(content, size, diagramRect, details);
+    return stoppingAnimation(matrix, content, size, diagramRect, details);
   }
 
   @override
@@ -4291,14 +4310,14 @@ class _$_StoppingAnimation implements _StoppingAnimation {
             Size size,
             Rect diagramRect)?
         animatingInertialScrolling,
-    TResult? Function(List<DiagramObjectEntity> content, Size size,
-            Rect diagramRect, ScaleStartDetails details)?
+    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect, ScaleStartDetails details)?
         stoppingAnimation,
     TResult? Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
         animatingFromOutOfBounds,
   }) {
-    return stoppingAnimation?.call(content, size, diagramRect, details);
+    return stoppingAnimation?.call(matrix, content, size, diagramRect, details);
   }
 
   @override
@@ -4330,8 +4349,8 @@ class _$_StoppingAnimation implements _StoppingAnimation {
             Size size,
             Rect diagramRect)?
         animatingInertialScrolling,
-    TResult Function(List<DiagramObjectEntity> content, Size size,
-            Rect diagramRect, ScaleStartDetails details)?
+    TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect, ScaleStartDetails details)?
         stoppingAnimation,
     TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
@@ -4339,7 +4358,7 @@ class _$_StoppingAnimation implements _StoppingAnimation {
     required TResult orElse(),
   }) {
     if (stoppingAnimation != null) {
-      return stoppingAnimation(content, size, diagramRect, details);
+      return stoppingAnimation(matrix, content, size, diagramRect, details);
     }
     return orElse();
   }
@@ -4402,11 +4421,14 @@ class _$_StoppingAnimation implements _StoppingAnimation {
 
 abstract class _StoppingAnimation implements ScrollingState {
   const factory _StoppingAnimation(
-      {required final List<DiagramObjectEntity> content,
+      {required final Matrix4 matrix,
+      required final List<DiagramObjectEntity> content,
       required final Size size,
       required final Rect diagramRect,
       required final ScaleStartDetails details}) = _$_StoppingAnimation;
 
+  @override
+  Matrix4 get matrix;
   @override
   List<DiagramObjectEntity> get content;
   @override
@@ -4550,8 +4572,7 @@ class _$_ScrollingAnimatingFromOutOfBounds
     required TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)
         animatingInitialToIdle,
-    required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
-            Size size, Rect diagramRect)
+    required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect)
         idle,
     required TResult Function(
             Matrix4 matrix,
@@ -4571,8 +4592,8 @@ class _$_ScrollingAnimatingFromOutOfBounds
             Size size,
             Rect diagramRect)
         animatingInertialScrolling,
-    required TResult Function(List<DiagramObjectEntity> content, Size size,
-            Rect diagramRect, ScaleStartDetails details)
+    required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect, ScaleStartDetails details)
         stoppingAnimation,
     required TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)
@@ -4611,8 +4632,8 @@ class _$_ScrollingAnimatingFromOutOfBounds
             Size size,
             Rect diagramRect)?
         animatingInertialScrolling,
-    TResult? Function(List<DiagramObjectEntity> content, Size size,
-            Rect diagramRect, ScaleStartDetails details)?
+    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect, ScaleStartDetails details)?
         stoppingAnimation,
     TResult? Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
@@ -4651,8 +4672,8 @@ class _$_ScrollingAnimatingFromOutOfBounds
             Size size,
             Rect diagramRect)?
         animatingInertialScrolling,
-    TResult Function(List<DiagramObjectEntity> content, Size size,
-            Rect diagramRect, ScaleStartDetails details)?
+    TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect, ScaleStartDetails details)?
         stoppingAnimation,
     TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
@@ -4731,6 +4752,7 @@ abstract class _ScrollingAnimatingFromOutOfBounds implements ScrollingState {
       required final Rect diagramRect}) = _$_ScrollingAnimatingFromOutOfBounds;
 
   Matrix4 get oldMatrix;
+  @override
   Matrix4 get matrix;
   @override
   List<DiagramObjectEntity> get content;
