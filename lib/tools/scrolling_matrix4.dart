@@ -1,6 +1,5 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
+import 'package:vector_math/vector_math_64.dart';
 
 extension ScrollingMatrix4 on Matrix4 {
   // Scale
@@ -41,6 +40,11 @@ extension ScrollingMatrix4 on Matrix4 {
 extension ScrollingOffset on Offset {
   Offset translateByOffset(Offset translation) =>
       Offset(dx + translation.dx, dy + translation.dy);
+  Vector4 vector4() => Vector4(dx, dy, 0.0, 1);
+}
+
+extension Ext on Vector4 {
+  Offset toOffset() => Offset(x, y);
 }
 
 extension Ex on double {

@@ -30,7 +30,6 @@ class _ScrollingViewState extends State<ScrollingView>
   CurvedAnimation? _curvedAnimation;
   Matrix4? matrix;
   Matrix4? _oldMatrix;
-  DateTime? _lastDragDateTime;
 
   void _animateMatrixInitialToIdle({
     required Matrix4 mEnd,
@@ -169,7 +168,6 @@ class _ScrollingViewState extends State<ScrollingView>
               scrolling: (extScrolling) => current.maybeMap(
                 scrolling: (_) {
                   _oldMatrix = extScrolling.matrix;
-                  _lastDragDateTime = DateTime.now();
                   return true;
                 },
                 animatingFromOutOfBounds: (_) => true,

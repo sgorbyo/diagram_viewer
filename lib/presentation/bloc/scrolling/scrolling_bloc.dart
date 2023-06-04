@@ -280,17 +280,11 @@ class ScrollingBloc extends Bloc<ScrollingEvent, ScrollingState> {
                     300 &&
                 scrolling.squaredDistance > minSquaredDistanceForAnimating &&
                 event.details.velocity.pixelsPerSecond.distance > 1) {
-              debugPrint("Dentro If");
               Duration duration = Duration(
                   milliseconds: 1000 *
                       event.details.velocity.pixelsPerSecond.distance ~/
                       friction);
 
-              double distance =
-                  event.details.velocity.pixelsPerSecond.distanceSquared /
-                      twiceFriction;
-              debugPrint(
-                  "Velocità pixel/secondo: ${event.details.velocity.pixelsPerSecond.distance}, tempo ms = ${duration.inMilliseconds}, spazio pixel = $distance ");
               Offset deltaOffset = Offset(
                 pow(event.details.velocity.pixelsPerSecond.dx, 2) /
                     twiceFriction *
@@ -299,7 +293,6 @@ class ScrollingBloc extends Bloc<ScrollingEvent, ScrollingState> {
                     twiceFriction *
                     event.details.velocity.pixelsPerSecond.dy.sign,
               );
-              debugPrint("Delta calcolato = $deltaOffset");
               // appoggioMatrix
               Matrix4 appoggioMatrix = targetMatrix.clone();
               appoggioMatrix.x += deltaOffset.dx;
@@ -311,12 +304,6 @@ class ScrollingBloc extends Bloc<ScrollingEvent, ScrollingState> {
                 viewPortSize: scrolling.size,
                 dynamic: true,
               );
-              Offset destOffset = destinationMatrix.offset;
-              Offset originOffset = scrolling.matrix.offset;
-              double newDistance = (destOffset - originOffset).distance;
-              double oldDistance = deltaOffset.distance;
-              debugPrint(
-                  "tempo Prima di aggiustato = ${duration.inMilliseconds}");
               int adjustedTimePeriodInMilliseconds = duration.inMilliseconds *
                   (destinationMatrix.offset - scrolling.matrix.offset)
                       .distance ~/
@@ -324,8 +311,6 @@ class ScrollingBloc extends Bloc<ScrollingEvent, ScrollingState> {
               if (adjustedTimePeriodInMilliseconds == 0) {
                 adjustedTimePeriodInMilliseconds = 100;
               }
-              debugPrint(
-                  "tempo aggiustato = $adjustedTimePeriodInMilliseconds");
               emit(ScrollingState.animatingInertialScrolling(
                 oldMatrix: scrolling.matrix,
                 matrix: destinationMatrix,
@@ -335,7 +320,6 @@ class ScrollingBloc extends Bloc<ScrollingEvent, ScrollingState> {
                 diagramRect: scrolling.diagramRect,
               ));
             } else {
-              debugPrint("Fuori If");
               emit(ScrollingState.idle(
                 matrix: targetMatrix,
                 content: scrolling.content,
@@ -455,14 +439,6 @@ class ScrollingBloc extends Bloc<ScrollingEvent, ScrollingState> {
           }
         },
         idle: (idle) async {
-          Rect contentRect = getDiagramRectFromContent(idle.content!);
-          Matrix4 matrix = _adjustMatrix(
-            matrix: idle.matrix,
-            logicalContentRect: contentRect,
-            viewPortSize: idle.size,
-            dynamic: false,
-          );
-
           emit(ScrollingState.idle(
             matrix: idle.matrix,
             content: event.list,
@@ -816,7 +792,7 @@ class ScrollingBloc extends Bloc<ScrollingEvent, ScrollingState> {
 
   @override
   Future<void> close() {
-    listSubscription?.cancel();
+    listSubscription.cancel();
     return super.close();
   }
 
@@ -835,7 +811,7 @@ class ScrollingBloc extends Bloc<ScrollingEvent, ScrollingState> {
             "Unexpected Event: $uEvent while in animatingInertialScrolling");
       },
       orElse: () {
-        assert(false, 'unmanaged event: ${uEvent} when in state: ${state}');
+        assert(false, 'unmanaged event: $uEvent when in state: $state');
       },
     );
   }

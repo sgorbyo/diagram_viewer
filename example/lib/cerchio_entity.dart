@@ -1,7 +1,9 @@
 import 'dart:ui';
+import 'package:diagram_viewer/tools/scrolling_matrix4.dart';
 import 'package:equatable/equatable.dart';
 import 'package:diagram_viewer/diagram_object_entity.dart';
-import 'package:vector_math/vector_math.dart';
+import 'package:uuid/uuid.dart';
+import 'package:vector_math/vector_math_64.dart';
 
 class CerchioEntity extends Equatable implements DiagramObjectEntity {
   final Vector4 position;
@@ -11,8 +13,9 @@ class CerchioEntity extends Equatable implements DiagramObjectEntity {
   CerchioEntity({
     required this.position,
     required this.radius,
-    required this.id,
-  }) : super();
+    String? id,
+  })  : id = id ?? const Uuid().v1(),
+        super();
 
   @override
   List<Object?> get props => [id, position];
@@ -23,8 +26,8 @@ class CerchioEntity extends Equatable implements DiagramObjectEntity {
           position.x,
           position.y,
         ),
-        width: radius,
-        height: radius,
+        width: radius * 2.0,
+        height: radius * 2.0,
       );
 
   @override
@@ -35,5 +38,12 @@ class CerchioEntity extends Equatable implements DiagramObjectEntity {
     paint.color = const Color.fromRGBO(0, 0, 255, 1.0);
     paint.style = PaintingStyle.stroke;
     canvas.drawPath(path, paint);
+  }
+
+  bool inMe({required Vector4 vector}) {
+    if (enclosingRect().contains(vector.toOffset())) {
+      return true;
+    }
+    return false;
   }
 }

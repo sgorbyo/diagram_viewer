@@ -10,12 +10,8 @@ double correctedScaleForEndEvent({
 }) {
   double result;
 
-  print(
-    'Scala prima del check: $proposedNewScale, scala massima: $maxAllowableScale, scala minima: $minAllowableScale',
-  );
   result = proposedNewScale.clamp(minAllowableScale, maxAllowableScale);
 
-  print('Delta scala proposto: $result');
   return result;
 }
 
@@ -155,19 +151,10 @@ Offset correctedOffsetForEndEvent({
 }) {
   Offset resultOffset = offsetToCheck;
 
-  print('Offset da correggere: (${offsetToCheck.dx}, ${offsetToCheck.dy})');
-  print(
-      'Larghezza diagramma: ${diagramRect.width}, altezza diagramma: ${diagramRect.height}');
-  print(
-      'dimensioni schermo in pixel: $clientRectPixelSize e in scala ho larghezza: ${clientRectPixelSize.width / appliedScale}, '
-      'altezza: ${clientRectPixelSize.height / appliedScale}');
-
   resultOffset = offsetSafeClamp(
       offsetToCheck, maxAllowableStaticOffset, minAllowableStaticOffset);
 
-  if (resultOffset.dx.abs() > 5000 || resultOffset.dy.abs() > 5000) {
-    print('$resultOffset');
-  }
+  if (resultOffset.dx.abs() > 5000 || resultOffset.dy.abs() > 5000) {}
 
   return resultOffset;
 }
@@ -197,7 +184,7 @@ Matrix4 normalizeMatrix4({
   final Offset correctOffset = offsetSafeClamp(
       Offset(sourceMatrix[12], sourceMatrix[13]), maxOffset, minOffset);
   final Matrix4 result = Matrix4.copy(sourceMatrix);
-  result[0] = result[0].clamp(minScale, maxScale) as double;
+  result[0] = result[0].clamp(minScale, maxScale);
   result[5] = result[0];
   result[12] = correctOffset.dx;
   result[13] = correctOffset.dy;

@@ -1,11 +1,15 @@
 library diagram_viewer;
 
+import 'dart:async';
+
 import 'package:diagram_viewer/diagram_content_repository.dart';
+import 'package:diagram_viewer/diagram_viewer_event/diagram_viewer_event.dart';
 import 'package:diagram_viewer/tools/scrolling_matrix4.dart';
 import 'package:flutter/material.dart';
 import 'package:diagram_viewer/presentation/bloc/scrolling/scrolling_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:diagram_viewer/presentation/widgets/scrolling_view.dart';
+import 'package:vector_math/vector_math_64.dart';
 
 /// A [Function] called by [DiagramViewer] when a Drag operation starts and
 /// which returns a [bool] indicating whether the client will or not manage the
@@ -13,8 +17,8 @@ import 'package:diagram_viewer/presentation/widgets/scrolling_view.dart';
 /// [DiagramViewer].
 ///
 /// For example: during the Drag of a diagram object the [DiagramViewer] will
-/// not scroll leaving the Client to move the touched object.
-typedef ClientAcceptsDrag = bool Function({Offset logicalOffset});
+/// not scroll leaving the Client free to move the touched object.
+typedef ClientAcceptsDrag = bool Function({required Vector4 logicalVector});
 
 class DiagramViewer extends StatefulWidget {
   DiagramViewer({
@@ -25,13 +29,20 @@ class DiagramViewer extends StatefulWidget {
     this.clipChild = true,
     this.clientAcceptsDrag,
     required this.diagramContentRepository,
-  })  : contentView = ScrollingView(
-          shouldTranslate: shouldTranslate,
-          shouldScale: shouldScale,
-          shouldRotate: shouldRotate,
-          clipChild: clipChild,
-        ),
-        super(key: key);
+  }) : super(key: key) {
+    contentView = ScrollingView(
+      shouldTranslate: shouldTranslate,
+      shouldScale: shouldScale,
+      shouldRotate: shouldRotate,
+      clipChild: clipChild,
+    );
+    stream = _controller.stream;
+  }
+
+  final StreamController<DiagramViewerEvent> _controller =
+      StreamController<DiagramViewerEvent>();
+
+  late final Stream<DiagramViewerEvent> stream;
 
   /// The repository containing the objects included in the diagram.
   final DiagramContentRepository diagramContentRepository;
@@ -61,7 +72,7 @@ class DiagramViewer extends StatefulWidget {
   final bool clipChild;
 
   /// The widget that visualizes the diagram area
-  final ScrollingView contentView;
+  late final ScrollingView contentView;
 
   final ClientAcceptsDrag? clientAcceptsDrag;
 
@@ -117,27 +128,24 @@ class _DiagramViewerState extends State<DiagramViewer> {
               child: GestureDetector(
                 onDoubleTapDown: (signal) => debugPrint("$signal"),
                 onScaleStart: (ScaleStartDetails details) {
-                  Matrix4 theMatrix =
-                      context.read<ScrollingBloc>().state.matrix;
                   if (widget.mouseDown && widget.clientAcceptsDrag != null) {
-                    Offset focalPoint = details.localFocalPoint
-                        .translateByOffset(theMatrix.oppositeOffset);
-                    focalPoint = focalPoint! / theMatrix.zoom;
-                    if (widget.clientAcceptsDrag!(logicalOffset: focalPoint)) {
-                      debugPrint("Drag starts at logical point -> $focalPoint");
-                      // TODO SUBSTITUTE THE FOLLOWING WITH A PROPER EVENT
+                    Vector4 clickPos = localFocalPointToLogicalVector(
+                      localFocalPoint: details.localFocalPoint,
+                      matrix: context.read<ScrollingBloc>().state.matrix,
+                    );
+                    if (widget.clientAcceptsDrag!(logicalVector: clickPos)) {
                       widget.draggingOutside = true;
-                      context
-                          .read<ScrollingBloc>()
-                          .add(ScrollingEvent.startScale(details: details));
+                      sendEvent(
+                        DiagramViewerEvent.startDrag(
+                          coordinates: clickPos,
+                        ),
+                      );
                     } else {
-                      debugPrint("ScaleStart -> $details");
                       context
                           .read<ScrollingBloc>()
                           .add(ScrollingEvent.startScale(details: details));
                     }
                   } else {
-                    debugPrint("ScaleStart -> $details");
                     context
                         .read<ScrollingBloc>()
                         .add(ScrollingEvent.startScale(details: details));
@@ -145,36 +153,48 @@ class _DiagramViewerState extends State<DiagramViewer> {
                 },
                 onScaleUpdate: (ScaleUpdateDetails details) {
                   if (widget.draggingOutside) {
-                    debugPrint("Dragging -> $details");
+                    Vector4 clickPos = localFocalPointToLogicalVector(
+                      localFocalPoint: details.localFocalPoint,
+                      matrix: context.read<ScrollingBloc>().state.matrix,
+                    );
+                    Vector4 delta = localDeltaToLogicalVector(
+                      localDelta: details.focalPointDelta,
+                      matrix: context.read<ScrollingBloc>().state.matrix,
+                    );
+                    sendEvent(
+                      DiagramViewerEvent.continueDrag(
+                        coordinates: clickPos,
+                        delta: delta,
+                      ),
+                    );
                   } else {
-                    debugPrint("ScaleUpdate -> $details");
-                  }
-                  Offset? focalPoint;
+                    Offset? focalPoint;
 
-                  RenderObject? renderObject = context.findRenderObject();
-                  if (renderObject != null) {
-                    RenderBox renderBox = renderObject as RenderBox;
-                    focalPoint = renderBox.globalToLocal(details.focalPoint);
-                  }
+                    RenderObject? renderObject = context.findRenderObject();
+                    if (renderObject != null) {
+                      RenderBox renderBox = renderObject as RenderBox;
+                      focalPoint = renderBox.globalToLocal(details.focalPoint);
+                    }
 
-                  context
-                      .read<ScrollingBloc>()
-                      .add(ScrollingEvent.continueScale(
-                        details: details,
-                        additionalFocalPoint: focalPoint,
-                      ));
+                    context
+                        .read<ScrollingBloc>()
+                        .add(ScrollingEvent.continueScale(
+                          details: details,
+                          additionalFocalPoint: focalPoint,
+                        ));
+                  }
                 },
                 onScaleEnd: (ScaleEndDetails details) {
                   if (widget.draggingOutside) {
                     widget.draggingOutside = false;
-                    debugPrint("Drag End-> $details");
+                    sendEvent(
+                      const DiagramViewerEvent.endDrag(),
+                    );
                   } else {
-                    debugPrint("Scale End-> $details");
+                    context
+                        .read<ScrollingBloc>()
+                        .add(ScrollingEvent.endScale(details: details));
                   }
-
-                  context
-                      .read<ScrollingBloc>()
-                      .add(ScrollingEvent.endScale(details: details));
                 },
                 child: widget.contentView,
               ),
@@ -184,6 +204,35 @@ class _DiagramViewerState extends State<DiagramViewer> {
       ),
     );
   }
+
+  Vector4 localFocalPointToLogicalVector({
+    required Offset localFocalPoint,
+    required Matrix4 matrix,
+  }) {
+    Matrix4 myMatrix = Matrix4.inverted(matrix);
+    Vector4 clickPos = localFocalPoint.vector4();
+    myMatrix.transform(clickPos);
+    return clickPos;
+  }
+
+  Vector4 localDeltaToLogicalVector({
+    required Offset localDelta,
+    required Matrix4 matrix,
+  }) {
+    Vector4 clickPos = localDelta.vector4();
+    clickPos =
+        Vector4(clickPos.x / matrix.zoom, clickPos.y / matrix.zoom, 0, 1);
+    return clickPos;
+  }
+
+  @override
+  void dispose() {
+    widget._controller.close();
+    super.dispose();
+  }
+
+  void sendEvent(DiagramViewerEvent event) =>
+      widget._controller.sink.add(event);
 }
 
 class SimpleBlocObserver extends BlocObserver {
