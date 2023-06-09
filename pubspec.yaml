@@ -22,13 +22,17 @@ dependencies:
   uuid:
   meta:
   matrix4_transform:
+  logger:
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  test:
+  bloc_test:
   flutter_lints: ^2.0.1
-  build_runner: ^2.4.4
-  freezed: ^2.3.4
+  build_runner: ^2.4.5
+  freezed: ^2.3.5
+  mocktail:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

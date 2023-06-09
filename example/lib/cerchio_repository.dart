@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:diagram_viewer/tools/scrolling_matrix4.dart';
+import 'package:logger/logger.dart';
+
 import 'cerchio_entity.dart';
 import 'package:diagram_viewer/diagram_content_repository.dart';
 import 'package:vector_math/vector_math_64.dart';
-import 'package:flutter/material.dart';
 
 class CerchioRepository extends DiagramContentRepository {
   final Map<String, CerchioEntity> _storage = {};
@@ -16,48 +18,10 @@ class CerchioRepository extends DiagramContentRepository {
   final StreamController<List<CerchioEntity>> _controller =
       StreamController<List<CerchioEntity>>();
 
+  var logger = Logger();
+
   CerchioRepository() {
     _randomPopulate(50);
-    // CerchioEntity model = CerchioEntity(
-    //   position: Vector4(
-    //     0.0,
-    //     0.0,
-    //     0.0,
-    //     1.0,
-    //   ),
-    //   radius: radius,
-    // );
-    // _storage[model.id] = model;
-    // model = CerchioEntity(
-    //   position: Vector4(
-    //     1500.5,
-    //     1500.5,
-    //     0.0,
-    //     1.0,
-    //   ),
-    //   radius: radius,
-    // );
-    // _storage[model.id] = model;
-    // model = CerchioEntity(
-    //   position: Vector4(
-    //     0.0,
-    //     1500.5,
-    //     0.0,
-    //     1.0,
-    //   ),
-    //   radius: radius,
-    // );
-    // _storage[model.id] = model;
-    // model = CerchioEntity(
-    //   position: Vector4(
-    //     1500.5,
-    //     0.0,
-    //     0.0,
-    //     1.0,
-    //   ),
-    //   radius: radius,
-    // );
-    // _storage[model.id] = model;
     stream = _controller.stream;
     _sendToStream();
   }
@@ -66,26 +30,21 @@ class CerchioRepository extends DiagramContentRepository {
   void restart() => _sendToStream();
 
   String? cerchioAtOffset({required Vector4 vector}) {
-    String? result;
-    double squaredDistance = double.infinity;
-    _storage.forEach((key, value) {
-      double currentSqDistance = value.position.distanceToSquared(vector);
-      if (value.inMe(vector: vector) && currentSqDistance < squaredDistance) {
-        result = key;
-        squaredDistance = currentSqDistance;
-      }
-    });
-    return result;
+    String result = _storage.keys
+        .firstWhere((k) => _storage[k]!.inMe(vector: vector), orElse: () => "");
+
+    return result == "" ? null : result;
   }
 
   void moveCerchioBy(
       {required String cerchioId, required Vector4 deltaVector}) {
-    Vector4 newPos = _storage[cerchioId]!.position + deltaVector;
+    Vector4 newPos = _storage[cerchioId]!.position.movedBy(deltaVector);
     _storage[cerchioId] = CerchioEntity(
       id: _storage[cerchioId]!.id,
       position: newPos,
       radius: radius,
     );
+
     _sendToStream();
   }
 
@@ -105,7 +64,6 @@ class CerchioRepository extends DiagramContentRepository {
         ),
         radius: radius,
       );
-      debugPrint("Entity at ${entity.position}");
       _storage[entity.id] = entity;
     }
   }

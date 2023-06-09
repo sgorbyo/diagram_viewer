@@ -18,22 +18,32 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$DiagramViewerEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(Vector4 coordinates) startDrag,
-    required TResult Function(Vector4 coordinates, Vector4 delta) continueDrag,
+    required TResult Function(
+            Vector4 coordinates, Map<String, dynamic> piggyback)
+        startDrag,
+    required TResult Function(
+            Vector4 coordinates, Vector4 delta, Map<String, dynamic> piggyback)
+        continueDrag,
     required TResult Function() endDrag,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(Vector4 coordinates)? startDrag,
-    TResult? Function(Vector4 coordinates, Vector4 delta)? continueDrag,
+    TResult? Function(Vector4 coordinates, Map<String, dynamic> piggyback)?
+        startDrag,
+    TResult? Function(
+            Vector4 coordinates, Vector4 delta, Map<String, dynamic> piggyback)?
+        continueDrag,
     TResult? Function()? endDrag,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Vector4 coordinates)? startDrag,
-    TResult Function(Vector4 coordinates, Vector4 delta)? continueDrag,
+    TResult Function(Vector4 coordinates, Map<String, dynamic> piggyback)?
+        startDrag,
+    TResult Function(
+            Vector4 coordinates, Vector4 delta, Map<String, dynamic> piggyback)?
+        continueDrag,
     TResult Function()? endDrag,
     required TResult orElse(),
   }) =>
@@ -86,7 +96,7 @@ abstract class _$$_StartDragCopyWith<$Res> {
           _$_StartDrag value, $Res Function(_$_StartDrag) then) =
       __$$_StartDragCopyWithImpl<$Res>;
   @useResult
-  $Res call({Vector4 coordinates});
+  $Res call({Vector4 coordinates, Map<String, dynamic> piggyback});
 }
 
 /// @nodoc
@@ -101,12 +111,17 @@ class __$$_StartDragCopyWithImpl<$Res>
   @override
   $Res call({
     Object? coordinates = null,
+    Object? piggyback = null,
   }) {
     return _then(_$_StartDrag(
       coordinates: null == coordinates
           ? _value.coordinates
           : coordinates // ignore: cast_nullable_to_non_nullable
               as Vector4,
+      piggyback: null == piggyback
+          ? _value._piggyback
+          : piggyback // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>,
     ));
   }
 }
@@ -114,14 +129,24 @@ class __$$_StartDragCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_StartDrag implements _StartDrag {
-  const _$_StartDrag({required this.coordinates});
+  const _$_StartDrag(
+      {required this.coordinates,
+      required final Map<String, dynamic> piggyback})
+      : _piggyback = piggyback;
 
   @override
   final Vector4 coordinates;
+  final Map<String, dynamic> _piggyback;
+  @override
+  Map<String, dynamic> get piggyback {
+    if (_piggyback is EqualUnmodifiableMapView) return _piggyback;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_piggyback);
+  }
 
   @override
   String toString() {
-    return 'DiagramViewerEvent.startDrag(coordinates: $coordinates)';
+    return 'DiagramViewerEvent.startDrag(coordinates: $coordinates, piggyback: $piggyback)';
   }
 
   @override
@@ -130,11 +155,14 @@ class _$_StartDrag implements _StartDrag {
         (other.runtimeType == runtimeType &&
             other is _$_StartDrag &&
             (identical(other.coordinates, coordinates) ||
-                other.coordinates == coordinates));
+                other.coordinates == coordinates) &&
+            const DeepCollectionEquality()
+                .equals(other._piggyback, _piggyback));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, coordinates);
+  int get hashCode => Object.hash(runtimeType, coordinates,
+      const DeepCollectionEquality().hash(_piggyback));
 
   @JsonKey(ignore: true)
   @override
@@ -145,33 +173,43 @@ class _$_StartDrag implements _StartDrag {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(Vector4 coordinates) startDrag,
-    required TResult Function(Vector4 coordinates, Vector4 delta) continueDrag,
+    required TResult Function(
+            Vector4 coordinates, Map<String, dynamic> piggyback)
+        startDrag,
+    required TResult Function(
+            Vector4 coordinates, Vector4 delta, Map<String, dynamic> piggyback)
+        continueDrag,
     required TResult Function() endDrag,
   }) {
-    return startDrag(coordinates);
+    return startDrag(coordinates, piggyback);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(Vector4 coordinates)? startDrag,
-    TResult? Function(Vector4 coordinates, Vector4 delta)? continueDrag,
+    TResult? Function(Vector4 coordinates, Map<String, dynamic> piggyback)?
+        startDrag,
+    TResult? Function(
+            Vector4 coordinates, Vector4 delta, Map<String, dynamic> piggyback)?
+        continueDrag,
     TResult? Function()? endDrag,
   }) {
-    return startDrag?.call(coordinates);
+    return startDrag?.call(coordinates, piggyback);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Vector4 coordinates)? startDrag,
-    TResult Function(Vector4 coordinates, Vector4 delta)? continueDrag,
+    TResult Function(Vector4 coordinates, Map<String, dynamic> piggyback)?
+        startDrag,
+    TResult Function(
+            Vector4 coordinates, Vector4 delta, Map<String, dynamic> piggyback)?
+        continueDrag,
     TResult Function()? endDrag,
     required TResult orElse(),
   }) {
     if (startDrag != null) {
-      return startDrag(coordinates);
+      return startDrag(coordinates, piggyback);
     }
     return orElse();
   }
@@ -212,9 +250,12 @@ class _$_StartDrag implements _StartDrag {
 }
 
 abstract class _StartDrag implements DiagramViewerEvent {
-  const factory _StartDrag({required final Vector4 coordinates}) = _$_StartDrag;
+  const factory _StartDrag(
+      {required final Vector4 coordinates,
+      required final Map<String, dynamic> piggyback}) = _$_StartDrag;
 
   Vector4 get coordinates;
+  Map<String, dynamic> get piggyback;
   @JsonKey(ignore: true)
   _$$_StartDragCopyWith<_$_StartDrag> get copyWith =>
       throw _privateConstructorUsedError;
@@ -226,7 +267,8 @@ abstract class _$$_ContinueDragCopyWith<$Res> {
           _$_ContinueDrag value, $Res Function(_$_ContinueDrag) then) =
       __$$_ContinueDragCopyWithImpl<$Res>;
   @useResult
-  $Res call({Vector4 coordinates, Vector4 delta});
+  $Res call(
+      {Vector4 coordinates, Vector4 delta, Map<String, dynamic> piggyback});
 }
 
 /// @nodoc
@@ -242,6 +284,7 @@ class __$$_ContinueDragCopyWithImpl<$Res>
   $Res call({
     Object? coordinates = null,
     Object? delta = null,
+    Object? piggyback = null,
   }) {
     return _then(_$_ContinueDrag(
       coordinates: null == coordinates
@@ -252,6 +295,10 @@ class __$$_ContinueDragCopyWithImpl<$Res>
           ? _value.delta
           : delta // ignore: cast_nullable_to_non_nullable
               as Vector4,
+      piggyback: null == piggyback
+          ? _value._piggyback
+          : piggyback // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>,
     ));
   }
 }
@@ -259,16 +306,27 @@ class __$$_ContinueDragCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_ContinueDrag implements _ContinueDrag {
-  const _$_ContinueDrag({required this.coordinates, required this.delta});
+  const _$_ContinueDrag(
+      {required this.coordinates,
+      required this.delta,
+      required final Map<String, dynamic> piggyback})
+      : _piggyback = piggyback;
 
   @override
   final Vector4 coordinates;
   @override
   final Vector4 delta;
+  final Map<String, dynamic> _piggyback;
+  @override
+  Map<String, dynamic> get piggyback {
+    if (_piggyback is EqualUnmodifiableMapView) return _piggyback;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_piggyback);
+  }
 
   @override
   String toString() {
-    return 'DiagramViewerEvent.continueDrag(coordinates: $coordinates, delta: $delta)';
+    return 'DiagramViewerEvent.continueDrag(coordinates: $coordinates, delta: $delta, piggyback: $piggyback)';
   }
 
   @override
@@ -278,11 +336,14 @@ class _$_ContinueDrag implements _ContinueDrag {
             other is _$_ContinueDrag &&
             (identical(other.coordinates, coordinates) ||
                 other.coordinates == coordinates) &&
-            (identical(other.delta, delta) || other.delta == delta));
+            (identical(other.delta, delta) || other.delta == delta) &&
+            const DeepCollectionEquality()
+                .equals(other._piggyback, _piggyback));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, coordinates, delta);
+  int get hashCode => Object.hash(runtimeType, coordinates, delta,
+      const DeepCollectionEquality().hash(_piggyback));
 
   @JsonKey(ignore: true)
   @override
@@ -293,33 +354,43 @@ class _$_ContinueDrag implements _ContinueDrag {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(Vector4 coordinates) startDrag,
-    required TResult Function(Vector4 coordinates, Vector4 delta) continueDrag,
+    required TResult Function(
+            Vector4 coordinates, Map<String, dynamic> piggyback)
+        startDrag,
+    required TResult Function(
+            Vector4 coordinates, Vector4 delta, Map<String, dynamic> piggyback)
+        continueDrag,
     required TResult Function() endDrag,
   }) {
-    return continueDrag(coordinates, delta);
+    return continueDrag(coordinates, delta, piggyback);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(Vector4 coordinates)? startDrag,
-    TResult? Function(Vector4 coordinates, Vector4 delta)? continueDrag,
+    TResult? Function(Vector4 coordinates, Map<String, dynamic> piggyback)?
+        startDrag,
+    TResult? Function(
+            Vector4 coordinates, Vector4 delta, Map<String, dynamic> piggyback)?
+        continueDrag,
     TResult? Function()? endDrag,
   }) {
-    return continueDrag?.call(coordinates, delta);
+    return continueDrag?.call(coordinates, delta, piggyback);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Vector4 coordinates)? startDrag,
-    TResult Function(Vector4 coordinates, Vector4 delta)? continueDrag,
+    TResult Function(Vector4 coordinates, Map<String, dynamic> piggyback)?
+        startDrag,
+    TResult Function(
+            Vector4 coordinates, Vector4 delta, Map<String, dynamic> piggyback)?
+        continueDrag,
     TResult Function()? endDrag,
     required TResult orElse(),
   }) {
     if (continueDrag != null) {
-      return continueDrag(coordinates, delta);
+      return continueDrag(coordinates, delta, piggyback);
     }
     return orElse();
   }
@@ -362,10 +433,12 @@ class _$_ContinueDrag implements _ContinueDrag {
 abstract class _ContinueDrag implements DiagramViewerEvent {
   const factory _ContinueDrag(
       {required final Vector4 coordinates,
-      required final Vector4 delta}) = _$_ContinueDrag;
+      required final Vector4 delta,
+      required final Map<String, dynamic> piggyback}) = _$_ContinueDrag;
 
   Vector4 get coordinates;
   Vector4 get delta;
+  Map<String, dynamic> get piggyback;
   @JsonKey(ignore: true)
   _$$_ContinueDragCopyWith<_$_ContinueDrag> get copyWith =>
       throw _privateConstructorUsedError;
@@ -408,8 +481,12 @@ class _$_EndDrag implements _EndDrag {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(Vector4 coordinates) startDrag,
-    required TResult Function(Vector4 coordinates, Vector4 delta) continueDrag,
+    required TResult Function(
+            Vector4 coordinates, Map<String, dynamic> piggyback)
+        startDrag,
+    required TResult Function(
+            Vector4 coordinates, Vector4 delta, Map<String, dynamic> piggyback)
+        continueDrag,
     required TResult Function() endDrag,
   }) {
     return endDrag();
@@ -418,8 +495,11 @@ class _$_EndDrag implements _EndDrag {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(Vector4 coordinates)? startDrag,
-    TResult? Function(Vector4 coordinates, Vector4 delta)? continueDrag,
+    TResult? Function(Vector4 coordinates, Map<String, dynamic> piggyback)?
+        startDrag,
+    TResult? Function(
+            Vector4 coordinates, Vector4 delta, Map<String, dynamic> piggyback)?
+        continueDrag,
     TResult? Function()? endDrag,
   }) {
     return endDrag?.call();
@@ -428,8 +508,11 @@ class _$_EndDrag implements _EndDrag {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Vector4 coordinates)? startDrag,
-    TResult Function(Vector4 coordinates, Vector4 delta)? continueDrag,
+    TResult Function(Vector4 coordinates, Map<String, dynamic> piggyback)?
+        startDrag,
+    TResult Function(
+            Vector4 coordinates, Vector4 delta, Map<String, dynamic> piggyback)?
+        continueDrag,
     TResult Function()? endDrag,
     required TResult orElse(),
   }) {

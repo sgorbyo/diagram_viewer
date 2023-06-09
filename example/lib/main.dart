@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:diagram_viewer/diagram_viewer_event/diagram_viewer_event.dart';
+import 'package:example/bloc/main_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math_64.dart' show Vector4;
 import 'cerchio_repository.dart';
 import 'package:diagram_viewer/diagram_viewer.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,52 +23,60 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.pink,
       ),
-      home: MyHomePage(title: 'Scrolling Viewer Demo Home Page'),
+      home: HomePage(title: 'Scrolling Viewer Demo Home Page'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({super.key, required this.title}) {
-    cerchioRepository = CerchioRepository();
+class HomePage extends StatelessWidget {
+  final String title;
+  final CerchioRepository cerchioRepository = CerchioRepository();
+  late final StreamSubscription<DiagramViewerEvent> listSubscription;
+  late final DiagramViewer diagramViewer;
+  late final MainBloc mainBloc;
+
+  HomePage({super.key, required this.title}) {
     diagramViewer = DiagramViewer(
       diagramContentRepository: cerchioRepository,
       clientAcceptsDrag: clientAcceptsDrag,
     );
+    mainBloc = MainBloc(repository: cerchioRepository);
     listSubscription = diagramViewer.stream.listen((DiagramViewerEvent event) {
-      event.maybeMap(
-        continueDrag: (continueDrag) {
-          String? id = cerchioRepository.cerchioAtOffset(
-              vector: continueDrag.coordinates);
-          if (id != null) {
-            cerchioRepository.moveCerchioBy(
-                cerchioId: id, deltaVector: continueDrag.delta);
-          }
+      event.map(
+        startDrag: (startDrag) {
+          String? id = startDrag.piggyback["ObjectAtPoint"];
+          assert(id != null);
+          mainBloc.add(MainEvent.startMoving(id: id!));
         },
-        orElse: () {},
+        continueDrag: (continueDrag) {
+          mainBloc.add(MainEvent.continueMoving(delta: continueDrag.delta));
+        },
+        endDrag: (endDrag) {
+          mainBloc.add(const MainEvent.endMoving());
+        },
       );
     });
   }
-  final String title;
-  late final CerchioRepository cerchioRepository;
-  late final StreamSubscription<DiagramViewerEvent> listSubscription;
-  late final DiagramViewer diagramViewer;
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
 
-  bool clientAcceptsDrag({required Vector4 logicalVector}) =>
-      cerchioRepository.cerchioAtOffset(vector: logicalVector) != null;
-}
+  dynamic clientAcceptsDrag({required Vector4 logicalVector}) =>
+      cerchioRepository.cerchioAtOffset(vector: logicalVector) != null
+          ? {
+              "ObjectAtPoint":
+                  cerchioRepository.cerchioAtOffset(vector: logicalVector)
+            }
+          : null;
 
-class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: widget.diagramViewer,
+    return BlocProvider(
+      create: (context) => mainBloc,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(title),
+        ),
+        body: Center(
+          child: diagramViewer,
+        ),
       ),
     );
   }

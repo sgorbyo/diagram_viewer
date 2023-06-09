@@ -26,4 +26,12 @@ class ScrollingEvent with _$ScrollingEvent {
   }) = _InertialAnimationEnd;
   const factory ScrollingEvent.inertialAnimationStop() = _InertialAnimationStop;
   const factory ScrollingEvent.scrollingAnimationEnd() = _ScrollingAnimationEnd;
+  const factory ScrollingEvent.startExternalDragOperation({dynamic piggyback}) =
+      _StartExternalDragOperation;
+  const factory ScrollingEvent.continueExternalDragOperation(
+      {required Vector4 localFocalPoint,
+      required Vector4 localDelta,
+      dynamic piggyback}) = _ContinueExternalDragOperation;
+  const factory ScrollingEvent.endExternalDragOperation() =
+      _EndExternalDragOperation;
 }

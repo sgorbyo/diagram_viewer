@@ -53,4 +53,11 @@ class ScrollingState with _$ScrollingState {
     required Size size,
     required Rect diagramRect,
   }) = _ScrollingAnimatingFromOutOfBounds;
+  const factory ScrollingState.externalOperation({
+    required Matrix4 matrix,
+    required List<DiagramObjectEntity> content,
+    required Size size,
+    required Rect diagramRect,
+    required Map<String, dynamic> piggyback,
+  }) = _ScrollingExternalOperation;
 }

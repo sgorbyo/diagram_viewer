@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:diagram_viewer/presentation/bloc/scrolling/scrolling_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:diagram_viewer/presentation/widgets/scrolling_view.dart';
+import 'package:logger/logger.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 /// A [Function] called by [DiagramViewer] when a Drag operation starts and
@@ -18,7 +19,7 @@ import 'package:vector_math/vector_math_64.dart';
 ///
 /// For example: during the Drag of a diagram object the [DiagramViewer] will
 /// not scroll leaving the Client free to move the touched object.
-typedef ClientAcceptsDrag = bool Function({required Vector4 logicalVector});
+typedef ClientAcceptsDrag = dynamic Function({required Vector4 logicalVector});
 
 class DiagramViewer extends StatefulWidget {
   DiagramViewer({
@@ -76,6 +77,11 @@ class DiagramViewer extends StatefulWidget {
 
   final ClientAcceptsDrag? clientAcceptsDrag;
 
+  @override
+  State<DiagramViewer> createState() => _DiagramViewerState();
+}
+
+class _DiagramViewerState extends State<DiagramViewer> {
   //---------------------------Temporary variables------------------------------
 
   /// Runtime property used to separate drag from scroll events.
@@ -85,26 +91,22 @@ class DiagramViewer extends StatefulWidget {
   /// [Listener].
   Offset clickLocalPosition = Offset.zero;
 
+  var logger = Logger();
+
   /// Runtime property used to detect if a drag operation is being managed
   /// by the client and then should generate special related events.
-  bool draggingOutside = false;
+  // bool draggingOutside = false;
 
-  @override
-  State<DiagramViewer> createState() => _DiagramViewerState();
-}
-
-class _DiagramViewerState extends State<DiagramViewer> {
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider(
       create: (context) => widget.diagramContentRepository,
       child: BlocProvider(
-        create: (context) => ScrollingBloc(
-          contentRepository: widget.diagramContentRepository,
-        ),
-        child: LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints) {
-          {
+          create: (context) => ScrollingBloc(
+                contentRepository: widget.diagramContentRepository,
+              ),
+          child: LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
             context.read<ScrollingBloc>().add(
                   ScrollingEvent.viewportChanged(
                     size: Size(
@@ -117,91 +119,120 @@ class _DiagramViewerState extends State<DiagramViewer> {
               // The Listener is needed because we need to disambiguate drag
               // from pan & scroll events.
               onPointerDown: (signal) {
-                widget.mouseDown = true;
-                widget.clickLocalPosition = signal.localPosition;
+                mouseDown = true;
+                clickLocalPosition = signal.localPosition;
               },
               onPointerUp: (signal) {
-                widget.mouseDown = false;
-                widget.clickLocalPosition = Offset.zero;
+                mouseDown = false;
+                clickLocalPosition = Offset.zero;
               },
               behavior: HitTestBehavior.translucent,
               child: GestureDetector(
-                onDoubleTapDown: (signal) => debugPrint("$signal"),
-                onScaleStart: (ScaleStartDetails details) {
-                  if (widget.mouseDown && widget.clientAcceptsDrag != null) {
-                    Vector4 clickPos = localFocalPointToLogicalVector(
-                      localFocalPoint: details.localFocalPoint,
-                      matrix: context.read<ScrollingBloc>().state.matrix,
-                    );
-                    if (widget.clientAcceptsDrag!(logicalVector: clickPos)) {
-                      widget.draggingOutside = true;
-                      sendEvent(
-                        DiagramViewerEvent.startDrag(
-                          coordinates: clickPos,
-                        ),
-                      );
-                    } else {
+                onDoubleTapDown: (signal) async => logger.d("$signal"),
+                onScaleStart: (ScaleStartDetails details) async {
+                  ScrollingState state = context.read<ScrollingBloc>().state;
+                  await state.maybeMap(
+                    idle: (idle) async {
+                      if (mouseDown && widget.clientAcceptsDrag != null) {
+                        Vector4 clickPos = localFocalPointToLogicalVector(
+                          localFocalPoint: details.localFocalPoint,
+                          matrix: context.read<ScrollingBloc>().state.matrix,
+                        );
+                        dynamic clientResponse =
+                            widget.clientAcceptsDrag!(logicalVector: clickPos);
+
+                        if (clientResponse != null) {
+                          context
+                              .read<ScrollingBloc>()
+                              .add(ScrollingEvent.startExternalDragOperation(
+                                piggyback: clientResponse,
+                              ));
+
+                          sendEvent(
+                            DiagramViewerEvent.startDrag(
+                              coordinates: clickPos,
+                              piggyback: clientResponse,
+                            ),
+                          );
+                        } else {
+                          context
+                              .read<ScrollingBloc>()
+                              .add(ScrollingEvent.startScale(details: details));
+                        }
+                      } else {
+                        context
+                            .read<ScrollingBloc>()
+                            .add(ScrollingEvent.startScale(details: details));
+                      }
+                    },
+                    orElse: () async {
                       context
                           .read<ScrollingBloc>()
                           .add(ScrollingEvent.startScale(details: details));
-                    }
-                  } else {
-                    context
-                        .read<ScrollingBloc>()
-                        .add(ScrollingEvent.startScale(details: details));
-                  }
+                    },
+                  );
                 },
-                onScaleUpdate: (ScaleUpdateDetails details) {
-                  if (widget.draggingOutside) {
-                    Vector4 clickPos = localFocalPointToLogicalVector(
-                      localFocalPoint: details.localFocalPoint,
-                      matrix: context.read<ScrollingBloc>().state.matrix,
-                    );
-                    Vector4 delta = localDeltaToLogicalVector(
-                      localDelta: details.focalPointDelta,
-                      matrix: context.read<ScrollingBloc>().state.matrix,
-                    );
-                    sendEvent(
-                      DiagramViewerEvent.continueDrag(
-                        coordinates: clickPos,
-                        delta: delta,
-                      ),
-                    );
-                  } else {
-                    Offset? focalPoint;
+                onScaleUpdate: (ScaleUpdateDetails details) async {
+                  ScrollingState state = context.read<ScrollingBloc>().state;
+                  await state.maybeMap(
+                    externalOperation: (externalOperation) async {
+                      Vector4 clickPos = localFocalPointToLogicalVector(
+                        localFocalPoint: details.localFocalPoint,
+                        matrix: context.read<ScrollingBloc>().state.matrix,
+                      );
+                      Vector4 delta = localDeltaToLogicalVector(
+                        localDelta: details.focalPointDelta,
+                        matrix: context.read<ScrollingBloc>().state.matrix,
+                      );
+                      context
+                          .read<ScrollingBloc>()
+                          .add(ScrollingEvent.continueExternalDragOperation(
+                            piggyback: externalOperation.piggyback,
+                            localFocalPoint: details.localFocalPoint.vector4(),
+                            localDelta: details.focalPointDelta.vector4(),
+                          ));
 
-                    RenderObject? renderObject = context.findRenderObject();
-                    if (renderObject != null) {
-                      RenderBox renderBox = renderObject as RenderBox;
-                      focalPoint = renderBox.globalToLocal(details.focalPoint);
-                    }
-
-                    context
-                        .read<ScrollingBloc>()
-                        .add(ScrollingEvent.continueScale(
-                          details: details,
-                          additionalFocalPoint: focalPoint,
-                        ));
-                  }
+                      sendEvent(
+                        DiagramViewerEvent.continueDrag(
+                          coordinates: clickPos,
+                          delta: delta,
+                          piggyback: externalOperation.piggyback,
+                        ),
+                      );
+                    },
+                    orElse: () async {
+                      context.read<ScrollingBloc>().add(
+                            ScrollingEvent.continueScale(
+                              details: details,
+                              additionalFocalPoint: details.localFocalPoint,
+                            ),
+                          );
+                    },
+                  );
                 },
-                onScaleEnd: (ScaleEndDetails details) {
-                  if (widget.draggingOutside) {
-                    widget.draggingOutside = false;
-                    sendEvent(
-                      const DiagramViewerEvent.endDrag(),
-                    );
-                  } else {
-                    context
-                        .read<ScrollingBloc>()
-                        .add(ScrollingEvent.endScale(details: details));
-                  }
+                onScaleEnd: (ScaleEndDetails details) async {
+                  ScrollingState state = context.read<ScrollingBloc>().state;
+                  await state.maybeMap(
+                    externalOperation: (externalOperation) async {
+                      context
+                          .read<ScrollingBloc>()
+                          .add(const ScrollingEvent.endExternalDragOperation());
+
+                      sendEvent(
+                        const DiagramViewerEvent.endDrag(),
+                      );
+                    },
+                    orElse: () async {
+                      context
+                          .read<ScrollingBloc>()
+                          .add(ScrollingEvent.endScale(details: details));
+                    },
+                  );
                 },
                 child: widget.contentView,
               ),
             );
-          }
-        }),
-      ),
+          })),
     );
   }
 
@@ -220,8 +251,10 @@ class _DiagramViewerState extends State<DiagramViewer> {
     required Matrix4 matrix,
   }) {
     Vector4 clickPos = localDelta.vector4();
+
     clickPos =
         Vector4(clickPos.x / matrix.zoom, clickPos.y / matrix.zoom, 0, 1);
+
     return clickPos;
   }
 

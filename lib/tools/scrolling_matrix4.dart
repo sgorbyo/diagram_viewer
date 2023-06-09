@@ -45,6 +45,8 @@ extension ScrollingOffset on Offset {
 
 extension Ext on Vector4 {
   Offset toOffset() => Offset(x, y);
+  Vector4 movedBy(Vector4 delta) =>
+      Vector4(x + delta.x, y + delta.y, z + delta.z, 1);
 }
 
 extension Ex on double {

@@ -32,6 +32,11 @@ mixin _$ScrollingEvent {
     required TResult Function(Matrix4 reachedMatrix) inertialAnimationEnd,
     required TResult Function() inertialAnimationStop,
     required TResult Function() scrollingAnimationEnd,
+    required TResult Function(dynamic piggyback) startExternalDragOperation,
+    required TResult Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)
+        continueExternalDragOperation,
+    required TResult Function() endExternalDragOperation,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -48,6 +53,11 @@ mixin _$ScrollingEvent {
     TResult? Function(Matrix4 reachedMatrix)? inertialAnimationEnd,
     TResult? Function()? inertialAnimationStop,
     TResult? Function()? scrollingAnimationEnd,
+    TResult? Function(dynamic piggyback)? startExternalDragOperation,
+    TResult? Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)?
+        continueExternalDragOperation,
+    TResult? Function()? endExternalDragOperation,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -64,6 +74,11 @@ mixin _$ScrollingEvent {
     TResult Function(Matrix4 reachedMatrix)? inertialAnimationEnd,
     TResult Function()? inertialAnimationStop,
     TResult Function()? scrollingAnimationEnd,
+    TResult Function(dynamic piggyback)? startExternalDragOperation,
+    TResult Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)?
+        continueExternalDragOperation,
+    TResult Function()? endExternalDragOperation,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -84,6 +99,12 @@ mixin _$ScrollingEvent {
         inertialAnimationStop,
     required TResult Function(_ScrollingAnimationEnd value)
         scrollingAnimationEnd,
+    required TResult Function(_StartExternalDragOperation value)
+        startExternalDragOperation,
+    required TResult Function(_ContinueExternalDragOperation value)
+        continueExternalDragOperation,
+    required TResult Function(_EndExternalDragOperation value)
+        endExternalDragOperation,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -101,6 +122,12 @@ mixin _$ScrollingEvent {
     TResult? Function(_InertialAnimationEnd value)? inertialAnimationEnd,
     TResult? Function(_InertialAnimationStop value)? inertialAnimationStop,
     TResult? Function(_ScrollingAnimationEnd value)? scrollingAnimationEnd,
+    TResult? Function(_StartExternalDragOperation value)?
+        startExternalDragOperation,
+    TResult? Function(_ContinueExternalDragOperation value)?
+        continueExternalDragOperation,
+    TResult? Function(_EndExternalDragOperation value)?
+        endExternalDragOperation,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -118,6 +145,11 @@ mixin _$ScrollingEvent {
     TResult Function(_InertialAnimationEnd value)? inertialAnimationEnd,
     TResult Function(_InertialAnimationStop value)? inertialAnimationStop,
     TResult Function(_ScrollingAnimationEnd value)? scrollingAnimationEnd,
+    TResult Function(_StartExternalDragOperation value)?
+        startExternalDragOperation,
+    TResult Function(_ContinueExternalDragOperation value)?
+        continueExternalDragOperation,
+    TResult Function(_EndExternalDragOperation value)? endExternalDragOperation,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -219,6 +251,11 @@ class _$_StartScale implements _StartScale {
     required TResult Function(Matrix4 reachedMatrix) inertialAnimationEnd,
     required TResult Function() inertialAnimationStop,
     required TResult Function() scrollingAnimationEnd,
+    required TResult Function(dynamic piggyback) startExternalDragOperation,
+    required TResult Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)
+        continueExternalDragOperation,
+    required TResult Function() endExternalDragOperation,
   }) {
     return startScale(details);
   }
@@ -238,6 +275,11 @@ class _$_StartScale implements _StartScale {
     TResult? Function(Matrix4 reachedMatrix)? inertialAnimationEnd,
     TResult? Function()? inertialAnimationStop,
     TResult? Function()? scrollingAnimationEnd,
+    TResult? Function(dynamic piggyback)? startExternalDragOperation,
+    TResult? Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)?
+        continueExternalDragOperation,
+    TResult? Function()? endExternalDragOperation,
   }) {
     return startScale?.call(details);
   }
@@ -257,6 +299,11 @@ class _$_StartScale implements _StartScale {
     TResult Function(Matrix4 reachedMatrix)? inertialAnimationEnd,
     TResult Function()? inertialAnimationStop,
     TResult Function()? scrollingAnimationEnd,
+    TResult Function(dynamic piggyback)? startExternalDragOperation,
+    TResult Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)?
+        continueExternalDragOperation,
+    TResult Function()? endExternalDragOperation,
     required TResult orElse(),
   }) {
     if (startScale != null) {
@@ -283,6 +330,12 @@ class _$_StartScale implements _StartScale {
         inertialAnimationStop,
     required TResult Function(_ScrollingAnimationEnd value)
         scrollingAnimationEnd,
+    required TResult Function(_StartExternalDragOperation value)
+        startExternalDragOperation,
+    required TResult Function(_ContinueExternalDragOperation value)
+        continueExternalDragOperation,
+    required TResult Function(_EndExternalDragOperation value)
+        endExternalDragOperation,
   }) {
     return startScale(this);
   }
@@ -303,6 +356,12 @@ class _$_StartScale implements _StartScale {
     TResult? Function(_InertialAnimationEnd value)? inertialAnimationEnd,
     TResult? Function(_InertialAnimationStop value)? inertialAnimationStop,
     TResult? Function(_ScrollingAnimationEnd value)? scrollingAnimationEnd,
+    TResult? Function(_StartExternalDragOperation value)?
+        startExternalDragOperation,
+    TResult? Function(_ContinueExternalDragOperation value)?
+        continueExternalDragOperation,
+    TResult? Function(_EndExternalDragOperation value)?
+        endExternalDragOperation,
   }) {
     return startScale?.call(this);
   }
@@ -323,6 +382,11 @@ class _$_StartScale implements _StartScale {
     TResult Function(_InertialAnimationEnd value)? inertialAnimationEnd,
     TResult Function(_InertialAnimationStop value)? inertialAnimationStop,
     TResult Function(_ScrollingAnimationEnd value)? scrollingAnimationEnd,
+    TResult Function(_StartExternalDragOperation value)?
+        startExternalDragOperation,
+    TResult Function(_ContinueExternalDragOperation value)?
+        continueExternalDragOperation,
+    TResult Function(_EndExternalDragOperation value)? endExternalDragOperation,
     required TResult orElse(),
   }) {
     if (startScale != null) {
@@ -429,6 +493,11 @@ class _$_ContinueScale implements _ContinueScale {
     required TResult Function(Matrix4 reachedMatrix) inertialAnimationEnd,
     required TResult Function() inertialAnimationStop,
     required TResult Function() scrollingAnimationEnd,
+    required TResult Function(dynamic piggyback) startExternalDragOperation,
+    required TResult Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)
+        continueExternalDragOperation,
+    required TResult Function() endExternalDragOperation,
   }) {
     return continueScale(details, additionalFocalPoint);
   }
@@ -448,6 +517,11 @@ class _$_ContinueScale implements _ContinueScale {
     TResult? Function(Matrix4 reachedMatrix)? inertialAnimationEnd,
     TResult? Function()? inertialAnimationStop,
     TResult? Function()? scrollingAnimationEnd,
+    TResult? Function(dynamic piggyback)? startExternalDragOperation,
+    TResult? Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)?
+        continueExternalDragOperation,
+    TResult? Function()? endExternalDragOperation,
   }) {
     return continueScale?.call(details, additionalFocalPoint);
   }
@@ -467,6 +541,11 @@ class _$_ContinueScale implements _ContinueScale {
     TResult Function(Matrix4 reachedMatrix)? inertialAnimationEnd,
     TResult Function()? inertialAnimationStop,
     TResult Function()? scrollingAnimationEnd,
+    TResult Function(dynamic piggyback)? startExternalDragOperation,
+    TResult Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)?
+        continueExternalDragOperation,
+    TResult Function()? endExternalDragOperation,
     required TResult orElse(),
   }) {
     if (continueScale != null) {
@@ -493,6 +572,12 @@ class _$_ContinueScale implements _ContinueScale {
         inertialAnimationStop,
     required TResult Function(_ScrollingAnimationEnd value)
         scrollingAnimationEnd,
+    required TResult Function(_StartExternalDragOperation value)
+        startExternalDragOperation,
+    required TResult Function(_ContinueExternalDragOperation value)
+        continueExternalDragOperation,
+    required TResult Function(_EndExternalDragOperation value)
+        endExternalDragOperation,
   }) {
     return continueScale(this);
   }
@@ -513,6 +598,12 @@ class _$_ContinueScale implements _ContinueScale {
     TResult? Function(_InertialAnimationEnd value)? inertialAnimationEnd,
     TResult? Function(_InertialAnimationStop value)? inertialAnimationStop,
     TResult? Function(_ScrollingAnimationEnd value)? scrollingAnimationEnd,
+    TResult? Function(_StartExternalDragOperation value)?
+        startExternalDragOperation,
+    TResult? Function(_ContinueExternalDragOperation value)?
+        continueExternalDragOperation,
+    TResult? Function(_EndExternalDragOperation value)?
+        endExternalDragOperation,
   }) {
     return continueScale?.call(this);
   }
@@ -533,6 +624,11 @@ class _$_ContinueScale implements _ContinueScale {
     TResult Function(_InertialAnimationEnd value)? inertialAnimationEnd,
     TResult Function(_InertialAnimationStop value)? inertialAnimationStop,
     TResult Function(_ScrollingAnimationEnd value)? scrollingAnimationEnd,
+    TResult Function(_StartExternalDragOperation value)?
+        startExternalDragOperation,
+    TResult Function(_ContinueExternalDragOperation value)?
+        continueExternalDragOperation,
+    TResult Function(_EndExternalDragOperation value)? endExternalDragOperation,
     required TResult orElse(),
   }) {
     if (continueScale != null) {
@@ -632,6 +728,11 @@ class _$_EndScale implements _EndScale {
     required TResult Function(Matrix4 reachedMatrix) inertialAnimationEnd,
     required TResult Function() inertialAnimationStop,
     required TResult Function() scrollingAnimationEnd,
+    required TResult Function(dynamic piggyback) startExternalDragOperation,
+    required TResult Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)
+        continueExternalDragOperation,
+    required TResult Function() endExternalDragOperation,
   }) {
     return endScale(details);
   }
@@ -651,6 +752,11 @@ class _$_EndScale implements _EndScale {
     TResult? Function(Matrix4 reachedMatrix)? inertialAnimationEnd,
     TResult? Function()? inertialAnimationStop,
     TResult? Function()? scrollingAnimationEnd,
+    TResult? Function(dynamic piggyback)? startExternalDragOperation,
+    TResult? Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)?
+        continueExternalDragOperation,
+    TResult? Function()? endExternalDragOperation,
   }) {
     return endScale?.call(details);
   }
@@ -670,6 +776,11 @@ class _$_EndScale implements _EndScale {
     TResult Function(Matrix4 reachedMatrix)? inertialAnimationEnd,
     TResult Function()? inertialAnimationStop,
     TResult Function()? scrollingAnimationEnd,
+    TResult Function(dynamic piggyback)? startExternalDragOperation,
+    TResult Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)?
+        continueExternalDragOperation,
+    TResult Function()? endExternalDragOperation,
     required TResult orElse(),
   }) {
     if (endScale != null) {
@@ -696,6 +807,12 @@ class _$_EndScale implements _EndScale {
         inertialAnimationStop,
     required TResult Function(_ScrollingAnimationEnd value)
         scrollingAnimationEnd,
+    required TResult Function(_StartExternalDragOperation value)
+        startExternalDragOperation,
+    required TResult Function(_ContinueExternalDragOperation value)
+        continueExternalDragOperation,
+    required TResult Function(_EndExternalDragOperation value)
+        endExternalDragOperation,
   }) {
     return endScale(this);
   }
@@ -716,6 +833,12 @@ class _$_EndScale implements _EndScale {
     TResult? Function(_InertialAnimationEnd value)? inertialAnimationEnd,
     TResult? Function(_InertialAnimationStop value)? inertialAnimationStop,
     TResult? Function(_ScrollingAnimationEnd value)? scrollingAnimationEnd,
+    TResult? Function(_StartExternalDragOperation value)?
+        startExternalDragOperation,
+    TResult? Function(_ContinueExternalDragOperation value)?
+        continueExternalDragOperation,
+    TResult? Function(_EndExternalDragOperation value)?
+        endExternalDragOperation,
   }) {
     return endScale?.call(this);
   }
@@ -736,6 +859,11 @@ class _$_EndScale implements _EndScale {
     TResult Function(_InertialAnimationEnd value)? inertialAnimationEnd,
     TResult Function(_InertialAnimationStop value)? inertialAnimationStop,
     TResult Function(_ScrollingAnimationEnd value)? scrollingAnimationEnd,
+    TResult Function(_StartExternalDragOperation value)?
+        startExternalDragOperation,
+    TResult Function(_ContinueExternalDragOperation value)?
+        continueExternalDragOperation,
+    TResult Function(_EndExternalDragOperation value)? endExternalDragOperation,
     required TResult orElse(),
   }) {
     if (endScale != null) {
@@ -841,6 +969,11 @@ class _$_RestartScale implements _RestartScale {
     required TResult Function(Matrix4 reachedMatrix) inertialAnimationEnd,
     required TResult Function() inertialAnimationStop,
     required TResult Function() scrollingAnimationEnd,
+    required TResult Function(dynamic piggyback) startExternalDragOperation,
+    required TResult Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)
+        continueExternalDragOperation,
+    required TResult Function() endExternalDragOperation,
   }) {
     return restartScale(details, matrix);
   }
@@ -860,6 +993,11 @@ class _$_RestartScale implements _RestartScale {
     TResult? Function(Matrix4 reachedMatrix)? inertialAnimationEnd,
     TResult? Function()? inertialAnimationStop,
     TResult? Function()? scrollingAnimationEnd,
+    TResult? Function(dynamic piggyback)? startExternalDragOperation,
+    TResult? Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)?
+        continueExternalDragOperation,
+    TResult? Function()? endExternalDragOperation,
   }) {
     return restartScale?.call(details, matrix);
   }
@@ -879,6 +1017,11 @@ class _$_RestartScale implements _RestartScale {
     TResult Function(Matrix4 reachedMatrix)? inertialAnimationEnd,
     TResult Function()? inertialAnimationStop,
     TResult Function()? scrollingAnimationEnd,
+    TResult Function(dynamic piggyback)? startExternalDragOperation,
+    TResult Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)?
+        continueExternalDragOperation,
+    TResult Function()? endExternalDragOperation,
     required TResult orElse(),
   }) {
     if (restartScale != null) {
@@ -905,6 +1048,12 @@ class _$_RestartScale implements _RestartScale {
         inertialAnimationStop,
     required TResult Function(_ScrollingAnimationEnd value)
         scrollingAnimationEnd,
+    required TResult Function(_StartExternalDragOperation value)
+        startExternalDragOperation,
+    required TResult Function(_ContinueExternalDragOperation value)
+        continueExternalDragOperation,
+    required TResult Function(_EndExternalDragOperation value)
+        endExternalDragOperation,
   }) {
     return restartScale(this);
   }
@@ -925,6 +1074,12 @@ class _$_RestartScale implements _RestartScale {
     TResult? Function(_InertialAnimationEnd value)? inertialAnimationEnd,
     TResult? Function(_InertialAnimationStop value)? inertialAnimationStop,
     TResult? Function(_ScrollingAnimationEnd value)? scrollingAnimationEnd,
+    TResult? Function(_StartExternalDragOperation value)?
+        startExternalDragOperation,
+    TResult? Function(_ContinueExternalDragOperation value)?
+        continueExternalDragOperation,
+    TResult? Function(_EndExternalDragOperation value)?
+        endExternalDragOperation,
   }) {
     return restartScale?.call(this);
   }
@@ -945,6 +1100,11 @@ class _$_RestartScale implements _RestartScale {
     TResult Function(_InertialAnimationEnd value)? inertialAnimationEnd,
     TResult Function(_InertialAnimationStop value)? inertialAnimationStop,
     TResult Function(_ScrollingAnimationEnd value)? scrollingAnimationEnd,
+    TResult Function(_StartExternalDragOperation value)?
+        startExternalDragOperation,
+    TResult Function(_ContinueExternalDragOperation value)?
+        continueExternalDragOperation,
+    TResult Function(_EndExternalDragOperation value)? endExternalDragOperation,
     required TResult orElse(),
   }) {
     if (restartScale != null) {
@@ -1044,6 +1204,11 @@ class _$_ViewportChanged implements _ViewportChanged {
     required TResult Function(Matrix4 reachedMatrix) inertialAnimationEnd,
     required TResult Function() inertialAnimationStop,
     required TResult Function() scrollingAnimationEnd,
+    required TResult Function(dynamic piggyback) startExternalDragOperation,
+    required TResult Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)
+        continueExternalDragOperation,
+    required TResult Function() endExternalDragOperation,
   }) {
     return viewportChanged(size);
   }
@@ -1063,6 +1228,11 @@ class _$_ViewportChanged implements _ViewportChanged {
     TResult? Function(Matrix4 reachedMatrix)? inertialAnimationEnd,
     TResult? Function()? inertialAnimationStop,
     TResult? Function()? scrollingAnimationEnd,
+    TResult? Function(dynamic piggyback)? startExternalDragOperation,
+    TResult? Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)?
+        continueExternalDragOperation,
+    TResult? Function()? endExternalDragOperation,
   }) {
     return viewportChanged?.call(size);
   }
@@ -1082,6 +1252,11 @@ class _$_ViewportChanged implements _ViewportChanged {
     TResult Function(Matrix4 reachedMatrix)? inertialAnimationEnd,
     TResult Function()? inertialAnimationStop,
     TResult Function()? scrollingAnimationEnd,
+    TResult Function(dynamic piggyback)? startExternalDragOperation,
+    TResult Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)?
+        continueExternalDragOperation,
+    TResult Function()? endExternalDragOperation,
     required TResult orElse(),
   }) {
     if (viewportChanged != null) {
@@ -1108,6 +1283,12 @@ class _$_ViewportChanged implements _ViewportChanged {
         inertialAnimationStop,
     required TResult Function(_ScrollingAnimationEnd value)
         scrollingAnimationEnd,
+    required TResult Function(_StartExternalDragOperation value)
+        startExternalDragOperation,
+    required TResult Function(_ContinueExternalDragOperation value)
+        continueExternalDragOperation,
+    required TResult Function(_EndExternalDragOperation value)
+        endExternalDragOperation,
   }) {
     return viewportChanged(this);
   }
@@ -1128,6 +1309,12 @@ class _$_ViewportChanged implements _ViewportChanged {
     TResult? Function(_InertialAnimationEnd value)? inertialAnimationEnd,
     TResult? Function(_InertialAnimationStop value)? inertialAnimationStop,
     TResult? Function(_ScrollingAnimationEnd value)? scrollingAnimationEnd,
+    TResult? Function(_StartExternalDragOperation value)?
+        startExternalDragOperation,
+    TResult? Function(_ContinueExternalDragOperation value)?
+        continueExternalDragOperation,
+    TResult? Function(_EndExternalDragOperation value)?
+        endExternalDragOperation,
   }) {
     return viewportChanged?.call(this);
   }
@@ -1148,6 +1335,11 @@ class _$_ViewportChanged implements _ViewportChanged {
     TResult Function(_InertialAnimationEnd value)? inertialAnimationEnd,
     TResult Function(_InertialAnimationStop value)? inertialAnimationStop,
     TResult Function(_ScrollingAnimationEnd value)? scrollingAnimationEnd,
+    TResult Function(_StartExternalDragOperation value)?
+        startExternalDragOperation,
+    TResult Function(_ContinueExternalDragOperation value)?
+        continueExternalDragOperation,
+    TResult Function(_EndExternalDragOperation value)? endExternalDragOperation,
     required TResult orElse(),
   }) {
     if (viewportChanged != null) {
@@ -1252,6 +1444,11 @@ class _$_ContentChanged implements _ContentChanged {
     required TResult Function(Matrix4 reachedMatrix) inertialAnimationEnd,
     required TResult Function() inertialAnimationStop,
     required TResult Function() scrollingAnimationEnd,
+    required TResult Function(dynamic piggyback) startExternalDragOperation,
+    required TResult Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)
+        continueExternalDragOperation,
+    required TResult Function() endExternalDragOperation,
   }) {
     return contentChanged(list);
   }
@@ -1271,6 +1468,11 @@ class _$_ContentChanged implements _ContentChanged {
     TResult? Function(Matrix4 reachedMatrix)? inertialAnimationEnd,
     TResult? Function()? inertialAnimationStop,
     TResult? Function()? scrollingAnimationEnd,
+    TResult? Function(dynamic piggyback)? startExternalDragOperation,
+    TResult? Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)?
+        continueExternalDragOperation,
+    TResult? Function()? endExternalDragOperation,
   }) {
     return contentChanged?.call(list);
   }
@@ -1290,6 +1492,11 @@ class _$_ContentChanged implements _ContentChanged {
     TResult Function(Matrix4 reachedMatrix)? inertialAnimationEnd,
     TResult Function()? inertialAnimationStop,
     TResult Function()? scrollingAnimationEnd,
+    TResult Function(dynamic piggyback)? startExternalDragOperation,
+    TResult Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)?
+        continueExternalDragOperation,
+    TResult Function()? endExternalDragOperation,
     required TResult orElse(),
   }) {
     if (contentChanged != null) {
@@ -1316,6 +1523,12 @@ class _$_ContentChanged implements _ContentChanged {
         inertialAnimationStop,
     required TResult Function(_ScrollingAnimationEnd value)
         scrollingAnimationEnd,
+    required TResult Function(_StartExternalDragOperation value)
+        startExternalDragOperation,
+    required TResult Function(_ContinueExternalDragOperation value)
+        continueExternalDragOperation,
+    required TResult Function(_EndExternalDragOperation value)
+        endExternalDragOperation,
   }) {
     return contentChanged(this);
   }
@@ -1336,6 +1549,12 @@ class _$_ContentChanged implements _ContentChanged {
     TResult? Function(_InertialAnimationEnd value)? inertialAnimationEnd,
     TResult? Function(_InertialAnimationStop value)? inertialAnimationStop,
     TResult? Function(_ScrollingAnimationEnd value)? scrollingAnimationEnd,
+    TResult? Function(_StartExternalDragOperation value)?
+        startExternalDragOperation,
+    TResult? Function(_ContinueExternalDragOperation value)?
+        continueExternalDragOperation,
+    TResult? Function(_EndExternalDragOperation value)?
+        endExternalDragOperation,
   }) {
     return contentChanged?.call(this);
   }
@@ -1356,6 +1575,11 @@ class _$_ContentChanged implements _ContentChanged {
     TResult Function(_InertialAnimationEnd value)? inertialAnimationEnd,
     TResult Function(_InertialAnimationStop value)? inertialAnimationStop,
     TResult Function(_ScrollingAnimationEnd value)? scrollingAnimationEnd,
+    TResult Function(_StartExternalDragOperation value)?
+        startExternalDragOperation,
+    TResult Function(_ContinueExternalDragOperation value)?
+        continueExternalDragOperation,
+    TResult Function(_EndExternalDragOperation value)? endExternalDragOperation,
     required TResult orElse(),
   }) {
     if (contentChanged != null) {
@@ -1430,6 +1654,11 @@ class _$_InitialToIdleAnimationEnd implements _InitialToIdleAnimationEnd {
     required TResult Function(Matrix4 reachedMatrix) inertialAnimationEnd,
     required TResult Function() inertialAnimationStop,
     required TResult Function() scrollingAnimationEnd,
+    required TResult Function(dynamic piggyback) startExternalDragOperation,
+    required TResult Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)
+        continueExternalDragOperation,
+    required TResult Function() endExternalDragOperation,
   }) {
     return initialToIdleAnimationEnd();
   }
@@ -1449,6 +1678,11 @@ class _$_InitialToIdleAnimationEnd implements _InitialToIdleAnimationEnd {
     TResult? Function(Matrix4 reachedMatrix)? inertialAnimationEnd,
     TResult? Function()? inertialAnimationStop,
     TResult? Function()? scrollingAnimationEnd,
+    TResult? Function(dynamic piggyback)? startExternalDragOperation,
+    TResult? Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)?
+        continueExternalDragOperation,
+    TResult? Function()? endExternalDragOperation,
   }) {
     return initialToIdleAnimationEnd?.call();
   }
@@ -1468,6 +1702,11 @@ class _$_InitialToIdleAnimationEnd implements _InitialToIdleAnimationEnd {
     TResult Function(Matrix4 reachedMatrix)? inertialAnimationEnd,
     TResult Function()? inertialAnimationStop,
     TResult Function()? scrollingAnimationEnd,
+    TResult Function(dynamic piggyback)? startExternalDragOperation,
+    TResult Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)?
+        continueExternalDragOperation,
+    TResult Function()? endExternalDragOperation,
     required TResult orElse(),
   }) {
     if (initialToIdleAnimationEnd != null) {
@@ -1494,6 +1733,12 @@ class _$_InitialToIdleAnimationEnd implements _InitialToIdleAnimationEnd {
         inertialAnimationStop,
     required TResult Function(_ScrollingAnimationEnd value)
         scrollingAnimationEnd,
+    required TResult Function(_StartExternalDragOperation value)
+        startExternalDragOperation,
+    required TResult Function(_ContinueExternalDragOperation value)
+        continueExternalDragOperation,
+    required TResult Function(_EndExternalDragOperation value)
+        endExternalDragOperation,
   }) {
     return initialToIdleAnimationEnd(this);
   }
@@ -1514,6 +1759,12 @@ class _$_InitialToIdleAnimationEnd implements _InitialToIdleAnimationEnd {
     TResult? Function(_InertialAnimationEnd value)? inertialAnimationEnd,
     TResult? Function(_InertialAnimationStop value)? inertialAnimationStop,
     TResult? Function(_ScrollingAnimationEnd value)? scrollingAnimationEnd,
+    TResult? Function(_StartExternalDragOperation value)?
+        startExternalDragOperation,
+    TResult? Function(_ContinueExternalDragOperation value)?
+        continueExternalDragOperation,
+    TResult? Function(_EndExternalDragOperation value)?
+        endExternalDragOperation,
   }) {
     return initialToIdleAnimationEnd?.call(this);
   }
@@ -1534,6 +1785,11 @@ class _$_InitialToIdleAnimationEnd implements _InitialToIdleAnimationEnd {
     TResult Function(_InertialAnimationEnd value)? inertialAnimationEnd,
     TResult Function(_InertialAnimationStop value)? inertialAnimationStop,
     TResult Function(_ScrollingAnimationEnd value)? scrollingAnimationEnd,
+    TResult Function(_StartExternalDragOperation value)?
+        startExternalDragOperation,
+    TResult Function(_ContinueExternalDragOperation value)?
+        continueExternalDragOperation,
+    TResult Function(_EndExternalDragOperation value)? endExternalDragOperation,
     required TResult orElse(),
   }) {
     if (initialToIdleAnimationEnd != null) {
@@ -1603,6 +1859,11 @@ class _$_OutOfBoundsToIdleAnimationEnd
     required TResult Function(Matrix4 reachedMatrix) inertialAnimationEnd,
     required TResult Function() inertialAnimationStop,
     required TResult Function() scrollingAnimationEnd,
+    required TResult Function(dynamic piggyback) startExternalDragOperation,
+    required TResult Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)
+        continueExternalDragOperation,
+    required TResult Function() endExternalDragOperation,
   }) {
     return outOfBoundsToIdleAnimationEnd();
   }
@@ -1622,6 +1883,11 @@ class _$_OutOfBoundsToIdleAnimationEnd
     TResult? Function(Matrix4 reachedMatrix)? inertialAnimationEnd,
     TResult? Function()? inertialAnimationStop,
     TResult? Function()? scrollingAnimationEnd,
+    TResult? Function(dynamic piggyback)? startExternalDragOperation,
+    TResult? Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)?
+        continueExternalDragOperation,
+    TResult? Function()? endExternalDragOperation,
   }) {
     return outOfBoundsToIdleAnimationEnd?.call();
   }
@@ -1641,6 +1907,11 @@ class _$_OutOfBoundsToIdleAnimationEnd
     TResult Function(Matrix4 reachedMatrix)? inertialAnimationEnd,
     TResult Function()? inertialAnimationStop,
     TResult Function()? scrollingAnimationEnd,
+    TResult Function(dynamic piggyback)? startExternalDragOperation,
+    TResult Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)?
+        continueExternalDragOperation,
+    TResult Function()? endExternalDragOperation,
     required TResult orElse(),
   }) {
     if (outOfBoundsToIdleAnimationEnd != null) {
@@ -1667,6 +1938,12 @@ class _$_OutOfBoundsToIdleAnimationEnd
         inertialAnimationStop,
     required TResult Function(_ScrollingAnimationEnd value)
         scrollingAnimationEnd,
+    required TResult Function(_StartExternalDragOperation value)
+        startExternalDragOperation,
+    required TResult Function(_ContinueExternalDragOperation value)
+        continueExternalDragOperation,
+    required TResult Function(_EndExternalDragOperation value)
+        endExternalDragOperation,
   }) {
     return outOfBoundsToIdleAnimationEnd(this);
   }
@@ -1687,6 +1964,12 @@ class _$_OutOfBoundsToIdleAnimationEnd
     TResult? Function(_InertialAnimationEnd value)? inertialAnimationEnd,
     TResult? Function(_InertialAnimationStop value)? inertialAnimationStop,
     TResult? Function(_ScrollingAnimationEnd value)? scrollingAnimationEnd,
+    TResult? Function(_StartExternalDragOperation value)?
+        startExternalDragOperation,
+    TResult? Function(_ContinueExternalDragOperation value)?
+        continueExternalDragOperation,
+    TResult? Function(_EndExternalDragOperation value)?
+        endExternalDragOperation,
   }) {
     return outOfBoundsToIdleAnimationEnd?.call(this);
   }
@@ -1707,6 +1990,11 @@ class _$_OutOfBoundsToIdleAnimationEnd
     TResult Function(_InertialAnimationEnd value)? inertialAnimationEnd,
     TResult Function(_InertialAnimationStop value)? inertialAnimationStop,
     TResult Function(_ScrollingAnimationEnd value)? scrollingAnimationEnd,
+    TResult Function(_StartExternalDragOperation value)?
+        startExternalDragOperation,
+    TResult Function(_ContinueExternalDragOperation value)?
+        continueExternalDragOperation,
+    TResult Function(_EndExternalDragOperation value)? endExternalDragOperation,
     required TResult orElse(),
   }) {
     if (outOfBoundsToIdleAnimationEnd != null) {
@@ -1801,6 +2089,11 @@ class _$_InertialAnimationEnd implements _InertialAnimationEnd {
     required TResult Function(Matrix4 reachedMatrix) inertialAnimationEnd,
     required TResult Function() inertialAnimationStop,
     required TResult Function() scrollingAnimationEnd,
+    required TResult Function(dynamic piggyback) startExternalDragOperation,
+    required TResult Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)
+        continueExternalDragOperation,
+    required TResult Function() endExternalDragOperation,
   }) {
     return inertialAnimationEnd(reachedMatrix);
   }
@@ -1820,6 +2113,11 @@ class _$_InertialAnimationEnd implements _InertialAnimationEnd {
     TResult? Function(Matrix4 reachedMatrix)? inertialAnimationEnd,
     TResult? Function()? inertialAnimationStop,
     TResult? Function()? scrollingAnimationEnd,
+    TResult? Function(dynamic piggyback)? startExternalDragOperation,
+    TResult? Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)?
+        continueExternalDragOperation,
+    TResult? Function()? endExternalDragOperation,
   }) {
     return inertialAnimationEnd?.call(reachedMatrix);
   }
@@ -1839,6 +2137,11 @@ class _$_InertialAnimationEnd implements _InertialAnimationEnd {
     TResult Function(Matrix4 reachedMatrix)? inertialAnimationEnd,
     TResult Function()? inertialAnimationStop,
     TResult Function()? scrollingAnimationEnd,
+    TResult Function(dynamic piggyback)? startExternalDragOperation,
+    TResult Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)?
+        continueExternalDragOperation,
+    TResult Function()? endExternalDragOperation,
     required TResult orElse(),
   }) {
     if (inertialAnimationEnd != null) {
@@ -1865,6 +2168,12 @@ class _$_InertialAnimationEnd implements _InertialAnimationEnd {
         inertialAnimationStop,
     required TResult Function(_ScrollingAnimationEnd value)
         scrollingAnimationEnd,
+    required TResult Function(_StartExternalDragOperation value)
+        startExternalDragOperation,
+    required TResult Function(_ContinueExternalDragOperation value)
+        continueExternalDragOperation,
+    required TResult Function(_EndExternalDragOperation value)
+        endExternalDragOperation,
   }) {
     return inertialAnimationEnd(this);
   }
@@ -1885,6 +2194,12 @@ class _$_InertialAnimationEnd implements _InertialAnimationEnd {
     TResult? Function(_InertialAnimationEnd value)? inertialAnimationEnd,
     TResult? Function(_InertialAnimationStop value)? inertialAnimationStop,
     TResult? Function(_ScrollingAnimationEnd value)? scrollingAnimationEnd,
+    TResult? Function(_StartExternalDragOperation value)?
+        startExternalDragOperation,
+    TResult? Function(_ContinueExternalDragOperation value)?
+        continueExternalDragOperation,
+    TResult? Function(_EndExternalDragOperation value)?
+        endExternalDragOperation,
   }) {
     return inertialAnimationEnd?.call(this);
   }
@@ -1905,6 +2220,11 @@ class _$_InertialAnimationEnd implements _InertialAnimationEnd {
     TResult Function(_InertialAnimationEnd value)? inertialAnimationEnd,
     TResult Function(_InertialAnimationStop value)? inertialAnimationStop,
     TResult Function(_ScrollingAnimationEnd value)? scrollingAnimationEnd,
+    TResult Function(_StartExternalDragOperation value)?
+        startExternalDragOperation,
+    TResult Function(_ContinueExternalDragOperation value)?
+        continueExternalDragOperation,
+    TResult Function(_EndExternalDragOperation value)? endExternalDragOperation,
     required TResult orElse(),
   }) {
     if (inertialAnimationEnd != null) {
@@ -1976,6 +2296,11 @@ class _$_InertialAnimationStop implements _InertialAnimationStop {
     required TResult Function(Matrix4 reachedMatrix) inertialAnimationEnd,
     required TResult Function() inertialAnimationStop,
     required TResult Function() scrollingAnimationEnd,
+    required TResult Function(dynamic piggyback) startExternalDragOperation,
+    required TResult Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)
+        continueExternalDragOperation,
+    required TResult Function() endExternalDragOperation,
   }) {
     return inertialAnimationStop();
   }
@@ -1995,6 +2320,11 @@ class _$_InertialAnimationStop implements _InertialAnimationStop {
     TResult? Function(Matrix4 reachedMatrix)? inertialAnimationEnd,
     TResult? Function()? inertialAnimationStop,
     TResult? Function()? scrollingAnimationEnd,
+    TResult? Function(dynamic piggyback)? startExternalDragOperation,
+    TResult? Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)?
+        continueExternalDragOperation,
+    TResult? Function()? endExternalDragOperation,
   }) {
     return inertialAnimationStop?.call();
   }
@@ -2014,6 +2344,11 @@ class _$_InertialAnimationStop implements _InertialAnimationStop {
     TResult Function(Matrix4 reachedMatrix)? inertialAnimationEnd,
     TResult Function()? inertialAnimationStop,
     TResult Function()? scrollingAnimationEnd,
+    TResult Function(dynamic piggyback)? startExternalDragOperation,
+    TResult Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)?
+        continueExternalDragOperation,
+    TResult Function()? endExternalDragOperation,
     required TResult orElse(),
   }) {
     if (inertialAnimationStop != null) {
@@ -2040,6 +2375,12 @@ class _$_InertialAnimationStop implements _InertialAnimationStop {
         inertialAnimationStop,
     required TResult Function(_ScrollingAnimationEnd value)
         scrollingAnimationEnd,
+    required TResult Function(_StartExternalDragOperation value)
+        startExternalDragOperation,
+    required TResult Function(_ContinueExternalDragOperation value)
+        continueExternalDragOperation,
+    required TResult Function(_EndExternalDragOperation value)
+        endExternalDragOperation,
   }) {
     return inertialAnimationStop(this);
   }
@@ -2060,6 +2401,12 @@ class _$_InertialAnimationStop implements _InertialAnimationStop {
     TResult? Function(_InertialAnimationEnd value)? inertialAnimationEnd,
     TResult? Function(_InertialAnimationStop value)? inertialAnimationStop,
     TResult? Function(_ScrollingAnimationEnd value)? scrollingAnimationEnd,
+    TResult? Function(_StartExternalDragOperation value)?
+        startExternalDragOperation,
+    TResult? Function(_ContinueExternalDragOperation value)?
+        continueExternalDragOperation,
+    TResult? Function(_EndExternalDragOperation value)?
+        endExternalDragOperation,
   }) {
     return inertialAnimationStop?.call(this);
   }
@@ -2080,6 +2427,11 @@ class _$_InertialAnimationStop implements _InertialAnimationStop {
     TResult Function(_InertialAnimationEnd value)? inertialAnimationEnd,
     TResult Function(_InertialAnimationStop value)? inertialAnimationStop,
     TResult Function(_ScrollingAnimationEnd value)? scrollingAnimationEnd,
+    TResult Function(_StartExternalDragOperation value)?
+        startExternalDragOperation,
+    TResult Function(_ContinueExternalDragOperation value)?
+        continueExternalDragOperation,
+    TResult Function(_EndExternalDragOperation value)? endExternalDragOperation,
     required TResult orElse(),
   }) {
     if (inertialAnimationStop != null) {
@@ -2145,6 +2497,11 @@ class _$_ScrollingAnimationEnd implements _ScrollingAnimationEnd {
     required TResult Function(Matrix4 reachedMatrix) inertialAnimationEnd,
     required TResult Function() inertialAnimationStop,
     required TResult Function() scrollingAnimationEnd,
+    required TResult Function(dynamic piggyback) startExternalDragOperation,
+    required TResult Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)
+        continueExternalDragOperation,
+    required TResult Function() endExternalDragOperation,
   }) {
     return scrollingAnimationEnd();
   }
@@ -2164,6 +2521,11 @@ class _$_ScrollingAnimationEnd implements _ScrollingAnimationEnd {
     TResult? Function(Matrix4 reachedMatrix)? inertialAnimationEnd,
     TResult? Function()? inertialAnimationStop,
     TResult? Function()? scrollingAnimationEnd,
+    TResult? Function(dynamic piggyback)? startExternalDragOperation,
+    TResult? Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)?
+        continueExternalDragOperation,
+    TResult? Function()? endExternalDragOperation,
   }) {
     return scrollingAnimationEnd?.call();
   }
@@ -2183,6 +2545,11 @@ class _$_ScrollingAnimationEnd implements _ScrollingAnimationEnd {
     TResult Function(Matrix4 reachedMatrix)? inertialAnimationEnd,
     TResult Function()? inertialAnimationStop,
     TResult Function()? scrollingAnimationEnd,
+    TResult Function(dynamic piggyback)? startExternalDragOperation,
+    TResult Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)?
+        continueExternalDragOperation,
+    TResult Function()? endExternalDragOperation,
     required TResult orElse(),
   }) {
     if (scrollingAnimationEnd != null) {
@@ -2209,6 +2576,12 @@ class _$_ScrollingAnimationEnd implements _ScrollingAnimationEnd {
         inertialAnimationStop,
     required TResult Function(_ScrollingAnimationEnd value)
         scrollingAnimationEnd,
+    required TResult Function(_StartExternalDragOperation value)
+        startExternalDragOperation,
+    required TResult Function(_ContinueExternalDragOperation value)
+        continueExternalDragOperation,
+    required TResult Function(_EndExternalDragOperation value)
+        endExternalDragOperation,
   }) {
     return scrollingAnimationEnd(this);
   }
@@ -2229,6 +2602,12 @@ class _$_ScrollingAnimationEnd implements _ScrollingAnimationEnd {
     TResult? Function(_InertialAnimationEnd value)? inertialAnimationEnd,
     TResult? Function(_InertialAnimationStop value)? inertialAnimationStop,
     TResult? Function(_ScrollingAnimationEnd value)? scrollingAnimationEnd,
+    TResult? Function(_StartExternalDragOperation value)?
+        startExternalDragOperation,
+    TResult? Function(_ContinueExternalDragOperation value)?
+        continueExternalDragOperation,
+    TResult? Function(_EndExternalDragOperation value)?
+        endExternalDragOperation,
   }) {
     return scrollingAnimationEnd?.call(this);
   }
@@ -2249,6 +2628,11 @@ class _$_ScrollingAnimationEnd implements _ScrollingAnimationEnd {
     TResult Function(_InertialAnimationEnd value)? inertialAnimationEnd,
     TResult Function(_InertialAnimationStop value)? inertialAnimationStop,
     TResult Function(_ScrollingAnimationEnd value)? scrollingAnimationEnd,
+    TResult Function(_StartExternalDragOperation value)?
+        startExternalDragOperation,
+    TResult Function(_ContinueExternalDragOperation value)?
+        continueExternalDragOperation,
+    TResult Function(_EndExternalDragOperation value)? endExternalDragOperation,
     required TResult orElse(),
   }) {
     if (scrollingAnimationEnd != null) {
@@ -2260,6 +2644,712 @@ class _$_ScrollingAnimationEnd implements _ScrollingAnimationEnd {
 
 abstract class _ScrollingAnimationEnd implements ScrollingEvent {
   const factory _ScrollingAnimationEnd() = _$_ScrollingAnimationEnd;
+}
+
+/// @nodoc
+abstract class _$$_StartExternalDragOperationCopyWith<$Res> {
+  factory _$$_StartExternalDragOperationCopyWith(
+          _$_StartExternalDragOperation value,
+          $Res Function(_$_StartExternalDragOperation) then) =
+      __$$_StartExternalDragOperationCopyWithImpl<$Res>;
+  @useResult
+  $Res call({dynamic piggyback});
+}
+
+/// @nodoc
+class __$$_StartExternalDragOperationCopyWithImpl<$Res>
+    extends _$ScrollingEventCopyWithImpl<$Res, _$_StartExternalDragOperation>
+    implements _$$_StartExternalDragOperationCopyWith<$Res> {
+  __$$_StartExternalDragOperationCopyWithImpl(
+      _$_StartExternalDragOperation _value,
+      $Res Function(_$_StartExternalDragOperation) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? piggyback = freezed,
+  }) {
+    return _then(_$_StartExternalDragOperation(
+      piggyback: freezed == piggyback
+          ? _value.piggyback
+          : piggyback // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_StartExternalDragOperation implements _StartExternalDragOperation {
+  const _$_StartExternalDragOperation({this.piggyback});
+
+  @override
+  final dynamic piggyback;
+
+  @override
+  String toString() {
+    return 'ScrollingEvent.startExternalDragOperation(piggyback: $piggyback)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_StartExternalDragOperation &&
+            const DeepCollectionEquality().equals(other.piggyback, piggyback));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(piggyback));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_StartExternalDragOperationCopyWith<_$_StartExternalDragOperation>
+      get copyWith => __$$_StartExternalDragOperationCopyWithImpl<
+          _$_StartExternalDragOperation>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(ScaleStartDetails details) startScale,
+    required TResult Function(
+            ScaleUpdateDetails details, Offset? additionalFocalPoint)
+        continueScale,
+    required TResult Function(ScaleEndDetails details) endScale,
+    required TResult Function(ScaleStartDetails details, Matrix4 matrix)
+        restartScale,
+    required TResult Function(Size size) viewportChanged,
+    required TResult Function(List<DiagramObjectEntity> list) contentChanged,
+    required TResult Function() initialToIdleAnimationEnd,
+    required TResult Function() outOfBoundsToIdleAnimationEnd,
+    required TResult Function(Matrix4 reachedMatrix) inertialAnimationEnd,
+    required TResult Function() inertialAnimationStop,
+    required TResult Function() scrollingAnimationEnd,
+    required TResult Function(dynamic piggyback) startExternalDragOperation,
+    required TResult Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)
+        continueExternalDragOperation,
+    required TResult Function() endExternalDragOperation,
+  }) {
+    return startExternalDragOperation(piggyback);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(ScaleStartDetails details)? startScale,
+    TResult? Function(ScaleUpdateDetails details, Offset? additionalFocalPoint)?
+        continueScale,
+    TResult? Function(ScaleEndDetails details)? endScale,
+    TResult? Function(ScaleStartDetails details, Matrix4 matrix)? restartScale,
+    TResult? Function(Size size)? viewportChanged,
+    TResult? Function(List<DiagramObjectEntity> list)? contentChanged,
+    TResult? Function()? initialToIdleAnimationEnd,
+    TResult? Function()? outOfBoundsToIdleAnimationEnd,
+    TResult? Function(Matrix4 reachedMatrix)? inertialAnimationEnd,
+    TResult? Function()? inertialAnimationStop,
+    TResult? Function()? scrollingAnimationEnd,
+    TResult? Function(dynamic piggyback)? startExternalDragOperation,
+    TResult? Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)?
+        continueExternalDragOperation,
+    TResult? Function()? endExternalDragOperation,
+  }) {
+    return startExternalDragOperation?.call(piggyback);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(ScaleStartDetails details)? startScale,
+    TResult Function(ScaleUpdateDetails details, Offset? additionalFocalPoint)?
+        continueScale,
+    TResult Function(ScaleEndDetails details)? endScale,
+    TResult Function(ScaleStartDetails details, Matrix4 matrix)? restartScale,
+    TResult Function(Size size)? viewportChanged,
+    TResult Function(List<DiagramObjectEntity> list)? contentChanged,
+    TResult Function()? initialToIdleAnimationEnd,
+    TResult Function()? outOfBoundsToIdleAnimationEnd,
+    TResult Function(Matrix4 reachedMatrix)? inertialAnimationEnd,
+    TResult Function()? inertialAnimationStop,
+    TResult Function()? scrollingAnimationEnd,
+    TResult Function(dynamic piggyback)? startExternalDragOperation,
+    TResult Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)?
+        continueExternalDragOperation,
+    TResult Function()? endExternalDragOperation,
+    required TResult orElse(),
+  }) {
+    if (startExternalDragOperation != null) {
+      return startExternalDragOperation(piggyback);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_StartScale value) startScale,
+    required TResult Function(_ContinueScale value) continueScale,
+    required TResult Function(_EndScale value) endScale,
+    required TResult Function(_RestartScale value) restartScale,
+    required TResult Function(_ViewportChanged value) viewportChanged,
+    required TResult Function(_ContentChanged value) contentChanged,
+    required TResult Function(_InitialToIdleAnimationEnd value)
+        initialToIdleAnimationEnd,
+    required TResult Function(_OutOfBoundsToIdleAnimationEnd value)
+        outOfBoundsToIdleAnimationEnd,
+    required TResult Function(_InertialAnimationEnd value) inertialAnimationEnd,
+    required TResult Function(_InertialAnimationStop value)
+        inertialAnimationStop,
+    required TResult Function(_ScrollingAnimationEnd value)
+        scrollingAnimationEnd,
+    required TResult Function(_StartExternalDragOperation value)
+        startExternalDragOperation,
+    required TResult Function(_ContinueExternalDragOperation value)
+        continueExternalDragOperation,
+    required TResult Function(_EndExternalDragOperation value)
+        endExternalDragOperation,
+  }) {
+    return startExternalDragOperation(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_StartScale value)? startScale,
+    TResult? Function(_ContinueScale value)? continueScale,
+    TResult? Function(_EndScale value)? endScale,
+    TResult? Function(_RestartScale value)? restartScale,
+    TResult? Function(_ViewportChanged value)? viewportChanged,
+    TResult? Function(_ContentChanged value)? contentChanged,
+    TResult? Function(_InitialToIdleAnimationEnd value)?
+        initialToIdleAnimationEnd,
+    TResult? Function(_OutOfBoundsToIdleAnimationEnd value)?
+        outOfBoundsToIdleAnimationEnd,
+    TResult? Function(_InertialAnimationEnd value)? inertialAnimationEnd,
+    TResult? Function(_InertialAnimationStop value)? inertialAnimationStop,
+    TResult? Function(_ScrollingAnimationEnd value)? scrollingAnimationEnd,
+    TResult? Function(_StartExternalDragOperation value)?
+        startExternalDragOperation,
+    TResult? Function(_ContinueExternalDragOperation value)?
+        continueExternalDragOperation,
+    TResult? Function(_EndExternalDragOperation value)?
+        endExternalDragOperation,
+  }) {
+    return startExternalDragOperation?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_StartScale value)? startScale,
+    TResult Function(_ContinueScale value)? continueScale,
+    TResult Function(_EndScale value)? endScale,
+    TResult Function(_RestartScale value)? restartScale,
+    TResult Function(_ViewportChanged value)? viewportChanged,
+    TResult Function(_ContentChanged value)? contentChanged,
+    TResult Function(_InitialToIdleAnimationEnd value)?
+        initialToIdleAnimationEnd,
+    TResult Function(_OutOfBoundsToIdleAnimationEnd value)?
+        outOfBoundsToIdleAnimationEnd,
+    TResult Function(_InertialAnimationEnd value)? inertialAnimationEnd,
+    TResult Function(_InertialAnimationStop value)? inertialAnimationStop,
+    TResult Function(_ScrollingAnimationEnd value)? scrollingAnimationEnd,
+    TResult Function(_StartExternalDragOperation value)?
+        startExternalDragOperation,
+    TResult Function(_ContinueExternalDragOperation value)?
+        continueExternalDragOperation,
+    TResult Function(_EndExternalDragOperation value)? endExternalDragOperation,
+    required TResult orElse(),
+  }) {
+    if (startExternalDragOperation != null) {
+      return startExternalDragOperation(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _StartExternalDragOperation implements ScrollingEvent {
+  const factory _StartExternalDragOperation({final dynamic piggyback}) =
+      _$_StartExternalDragOperation;
+
+  dynamic get piggyback;
+  @JsonKey(ignore: true)
+  _$$_StartExternalDragOperationCopyWith<_$_StartExternalDragOperation>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$_ContinueExternalDragOperationCopyWith<$Res> {
+  factory _$$_ContinueExternalDragOperationCopyWith(
+          _$_ContinueExternalDragOperation value,
+          $Res Function(_$_ContinueExternalDragOperation) then) =
+      __$$_ContinueExternalDragOperationCopyWithImpl<$Res>;
+  @useResult
+  $Res call({Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback});
+}
+
+/// @nodoc
+class __$$_ContinueExternalDragOperationCopyWithImpl<$Res>
+    extends _$ScrollingEventCopyWithImpl<$Res, _$_ContinueExternalDragOperation>
+    implements _$$_ContinueExternalDragOperationCopyWith<$Res> {
+  __$$_ContinueExternalDragOperationCopyWithImpl(
+      _$_ContinueExternalDragOperation _value,
+      $Res Function(_$_ContinueExternalDragOperation) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? localFocalPoint = null,
+    Object? localDelta = null,
+    Object? piggyback = freezed,
+  }) {
+    return _then(_$_ContinueExternalDragOperation(
+      localFocalPoint: null == localFocalPoint
+          ? _value.localFocalPoint
+          : localFocalPoint // ignore: cast_nullable_to_non_nullable
+              as Vector4,
+      localDelta: null == localDelta
+          ? _value.localDelta
+          : localDelta // ignore: cast_nullable_to_non_nullable
+              as Vector4,
+      piggyback: freezed == piggyback
+          ? _value.piggyback
+          : piggyback // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_ContinueExternalDragOperation
+    implements _ContinueExternalDragOperation {
+  const _$_ContinueExternalDragOperation(
+      {required this.localFocalPoint,
+      required this.localDelta,
+      this.piggyback});
+
+  @override
+  final Vector4 localFocalPoint;
+  @override
+  final Vector4 localDelta;
+  @override
+  final dynamic piggyback;
+
+  @override
+  String toString() {
+    return 'ScrollingEvent.continueExternalDragOperation(localFocalPoint: $localFocalPoint, localDelta: $localDelta, piggyback: $piggyback)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_ContinueExternalDragOperation &&
+            (identical(other.localFocalPoint, localFocalPoint) ||
+                other.localFocalPoint == localFocalPoint) &&
+            (identical(other.localDelta, localDelta) ||
+                other.localDelta == localDelta) &&
+            const DeepCollectionEquality().equals(other.piggyback, piggyback));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, localFocalPoint, localDelta,
+      const DeepCollectionEquality().hash(piggyback));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_ContinueExternalDragOperationCopyWith<_$_ContinueExternalDragOperation>
+      get copyWith => __$$_ContinueExternalDragOperationCopyWithImpl<
+          _$_ContinueExternalDragOperation>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(ScaleStartDetails details) startScale,
+    required TResult Function(
+            ScaleUpdateDetails details, Offset? additionalFocalPoint)
+        continueScale,
+    required TResult Function(ScaleEndDetails details) endScale,
+    required TResult Function(ScaleStartDetails details, Matrix4 matrix)
+        restartScale,
+    required TResult Function(Size size) viewportChanged,
+    required TResult Function(List<DiagramObjectEntity> list) contentChanged,
+    required TResult Function() initialToIdleAnimationEnd,
+    required TResult Function() outOfBoundsToIdleAnimationEnd,
+    required TResult Function(Matrix4 reachedMatrix) inertialAnimationEnd,
+    required TResult Function() inertialAnimationStop,
+    required TResult Function() scrollingAnimationEnd,
+    required TResult Function(dynamic piggyback) startExternalDragOperation,
+    required TResult Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)
+        continueExternalDragOperation,
+    required TResult Function() endExternalDragOperation,
+  }) {
+    return continueExternalDragOperation(
+        localFocalPoint, localDelta, piggyback);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(ScaleStartDetails details)? startScale,
+    TResult? Function(ScaleUpdateDetails details, Offset? additionalFocalPoint)?
+        continueScale,
+    TResult? Function(ScaleEndDetails details)? endScale,
+    TResult? Function(ScaleStartDetails details, Matrix4 matrix)? restartScale,
+    TResult? Function(Size size)? viewportChanged,
+    TResult? Function(List<DiagramObjectEntity> list)? contentChanged,
+    TResult? Function()? initialToIdleAnimationEnd,
+    TResult? Function()? outOfBoundsToIdleAnimationEnd,
+    TResult? Function(Matrix4 reachedMatrix)? inertialAnimationEnd,
+    TResult? Function()? inertialAnimationStop,
+    TResult? Function()? scrollingAnimationEnd,
+    TResult? Function(dynamic piggyback)? startExternalDragOperation,
+    TResult? Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)?
+        continueExternalDragOperation,
+    TResult? Function()? endExternalDragOperation,
+  }) {
+    return continueExternalDragOperation?.call(
+        localFocalPoint, localDelta, piggyback);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(ScaleStartDetails details)? startScale,
+    TResult Function(ScaleUpdateDetails details, Offset? additionalFocalPoint)?
+        continueScale,
+    TResult Function(ScaleEndDetails details)? endScale,
+    TResult Function(ScaleStartDetails details, Matrix4 matrix)? restartScale,
+    TResult Function(Size size)? viewportChanged,
+    TResult Function(List<DiagramObjectEntity> list)? contentChanged,
+    TResult Function()? initialToIdleAnimationEnd,
+    TResult Function()? outOfBoundsToIdleAnimationEnd,
+    TResult Function(Matrix4 reachedMatrix)? inertialAnimationEnd,
+    TResult Function()? inertialAnimationStop,
+    TResult Function()? scrollingAnimationEnd,
+    TResult Function(dynamic piggyback)? startExternalDragOperation,
+    TResult Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)?
+        continueExternalDragOperation,
+    TResult Function()? endExternalDragOperation,
+    required TResult orElse(),
+  }) {
+    if (continueExternalDragOperation != null) {
+      return continueExternalDragOperation(
+          localFocalPoint, localDelta, piggyback);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_StartScale value) startScale,
+    required TResult Function(_ContinueScale value) continueScale,
+    required TResult Function(_EndScale value) endScale,
+    required TResult Function(_RestartScale value) restartScale,
+    required TResult Function(_ViewportChanged value) viewportChanged,
+    required TResult Function(_ContentChanged value) contentChanged,
+    required TResult Function(_InitialToIdleAnimationEnd value)
+        initialToIdleAnimationEnd,
+    required TResult Function(_OutOfBoundsToIdleAnimationEnd value)
+        outOfBoundsToIdleAnimationEnd,
+    required TResult Function(_InertialAnimationEnd value) inertialAnimationEnd,
+    required TResult Function(_InertialAnimationStop value)
+        inertialAnimationStop,
+    required TResult Function(_ScrollingAnimationEnd value)
+        scrollingAnimationEnd,
+    required TResult Function(_StartExternalDragOperation value)
+        startExternalDragOperation,
+    required TResult Function(_ContinueExternalDragOperation value)
+        continueExternalDragOperation,
+    required TResult Function(_EndExternalDragOperation value)
+        endExternalDragOperation,
+  }) {
+    return continueExternalDragOperation(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_StartScale value)? startScale,
+    TResult? Function(_ContinueScale value)? continueScale,
+    TResult? Function(_EndScale value)? endScale,
+    TResult? Function(_RestartScale value)? restartScale,
+    TResult? Function(_ViewportChanged value)? viewportChanged,
+    TResult? Function(_ContentChanged value)? contentChanged,
+    TResult? Function(_InitialToIdleAnimationEnd value)?
+        initialToIdleAnimationEnd,
+    TResult? Function(_OutOfBoundsToIdleAnimationEnd value)?
+        outOfBoundsToIdleAnimationEnd,
+    TResult? Function(_InertialAnimationEnd value)? inertialAnimationEnd,
+    TResult? Function(_InertialAnimationStop value)? inertialAnimationStop,
+    TResult? Function(_ScrollingAnimationEnd value)? scrollingAnimationEnd,
+    TResult? Function(_StartExternalDragOperation value)?
+        startExternalDragOperation,
+    TResult? Function(_ContinueExternalDragOperation value)?
+        continueExternalDragOperation,
+    TResult? Function(_EndExternalDragOperation value)?
+        endExternalDragOperation,
+  }) {
+    return continueExternalDragOperation?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_StartScale value)? startScale,
+    TResult Function(_ContinueScale value)? continueScale,
+    TResult Function(_EndScale value)? endScale,
+    TResult Function(_RestartScale value)? restartScale,
+    TResult Function(_ViewportChanged value)? viewportChanged,
+    TResult Function(_ContentChanged value)? contentChanged,
+    TResult Function(_InitialToIdleAnimationEnd value)?
+        initialToIdleAnimationEnd,
+    TResult Function(_OutOfBoundsToIdleAnimationEnd value)?
+        outOfBoundsToIdleAnimationEnd,
+    TResult Function(_InertialAnimationEnd value)? inertialAnimationEnd,
+    TResult Function(_InertialAnimationStop value)? inertialAnimationStop,
+    TResult Function(_ScrollingAnimationEnd value)? scrollingAnimationEnd,
+    TResult Function(_StartExternalDragOperation value)?
+        startExternalDragOperation,
+    TResult Function(_ContinueExternalDragOperation value)?
+        continueExternalDragOperation,
+    TResult Function(_EndExternalDragOperation value)? endExternalDragOperation,
+    required TResult orElse(),
+  }) {
+    if (continueExternalDragOperation != null) {
+      return continueExternalDragOperation(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _ContinueExternalDragOperation implements ScrollingEvent {
+  const factory _ContinueExternalDragOperation(
+      {required final Vector4 localFocalPoint,
+      required final Vector4 localDelta,
+      final dynamic piggyback}) = _$_ContinueExternalDragOperation;
+
+  Vector4 get localFocalPoint;
+  Vector4 get localDelta;
+  dynamic get piggyback;
+  @JsonKey(ignore: true)
+  _$$_ContinueExternalDragOperationCopyWith<_$_ContinueExternalDragOperation>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$_EndExternalDragOperationCopyWith<$Res> {
+  factory _$$_EndExternalDragOperationCopyWith(
+          _$_EndExternalDragOperation value,
+          $Res Function(_$_EndExternalDragOperation) then) =
+      __$$_EndExternalDragOperationCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$_EndExternalDragOperationCopyWithImpl<$Res>
+    extends _$ScrollingEventCopyWithImpl<$Res, _$_EndExternalDragOperation>
+    implements _$$_EndExternalDragOperationCopyWith<$Res> {
+  __$$_EndExternalDragOperationCopyWithImpl(_$_EndExternalDragOperation _value,
+      $Res Function(_$_EndExternalDragOperation) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$_EndExternalDragOperation implements _EndExternalDragOperation {
+  const _$_EndExternalDragOperation();
+
+  @override
+  String toString() {
+    return 'ScrollingEvent.endExternalDragOperation()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_EndExternalDragOperation);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(ScaleStartDetails details) startScale,
+    required TResult Function(
+            ScaleUpdateDetails details, Offset? additionalFocalPoint)
+        continueScale,
+    required TResult Function(ScaleEndDetails details) endScale,
+    required TResult Function(ScaleStartDetails details, Matrix4 matrix)
+        restartScale,
+    required TResult Function(Size size) viewportChanged,
+    required TResult Function(List<DiagramObjectEntity> list) contentChanged,
+    required TResult Function() initialToIdleAnimationEnd,
+    required TResult Function() outOfBoundsToIdleAnimationEnd,
+    required TResult Function(Matrix4 reachedMatrix) inertialAnimationEnd,
+    required TResult Function() inertialAnimationStop,
+    required TResult Function() scrollingAnimationEnd,
+    required TResult Function(dynamic piggyback) startExternalDragOperation,
+    required TResult Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)
+        continueExternalDragOperation,
+    required TResult Function() endExternalDragOperation,
+  }) {
+    return endExternalDragOperation();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(ScaleStartDetails details)? startScale,
+    TResult? Function(ScaleUpdateDetails details, Offset? additionalFocalPoint)?
+        continueScale,
+    TResult? Function(ScaleEndDetails details)? endScale,
+    TResult? Function(ScaleStartDetails details, Matrix4 matrix)? restartScale,
+    TResult? Function(Size size)? viewportChanged,
+    TResult? Function(List<DiagramObjectEntity> list)? contentChanged,
+    TResult? Function()? initialToIdleAnimationEnd,
+    TResult? Function()? outOfBoundsToIdleAnimationEnd,
+    TResult? Function(Matrix4 reachedMatrix)? inertialAnimationEnd,
+    TResult? Function()? inertialAnimationStop,
+    TResult? Function()? scrollingAnimationEnd,
+    TResult? Function(dynamic piggyback)? startExternalDragOperation,
+    TResult? Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)?
+        continueExternalDragOperation,
+    TResult? Function()? endExternalDragOperation,
+  }) {
+    return endExternalDragOperation?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(ScaleStartDetails details)? startScale,
+    TResult Function(ScaleUpdateDetails details, Offset? additionalFocalPoint)?
+        continueScale,
+    TResult Function(ScaleEndDetails details)? endScale,
+    TResult Function(ScaleStartDetails details, Matrix4 matrix)? restartScale,
+    TResult Function(Size size)? viewportChanged,
+    TResult Function(List<DiagramObjectEntity> list)? contentChanged,
+    TResult Function()? initialToIdleAnimationEnd,
+    TResult Function()? outOfBoundsToIdleAnimationEnd,
+    TResult Function(Matrix4 reachedMatrix)? inertialAnimationEnd,
+    TResult Function()? inertialAnimationStop,
+    TResult Function()? scrollingAnimationEnd,
+    TResult Function(dynamic piggyback)? startExternalDragOperation,
+    TResult Function(
+            Vector4 localFocalPoint, Vector4 localDelta, dynamic piggyback)?
+        continueExternalDragOperation,
+    TResult Function()? endExternalDragOperation,
+    required TResult orElse(),
+  }) {
+    if (endExternalDragOperation != null) {
+      return endExternalDragOperation();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_StartScale value) startScale,
+    required TResult Function(_ContinueScale value) continueScale,
+    required TResult Function(_EndScale value) endScale,
+    required TResult Function(_RestartScale value) restartScale,
+    required TResult Function(_ViewportChanged value) viewportChanged,
+    required TResult Function(_ContentChanged value) contentChanged,
+    required TResult Function(_InitialToIdleAnimationEnd value)
+        initialToIdleAnimationEnd,
+    required TResult Function(_OutOfBoundsToIdleAnimationEnd value)
+        outOfBoundsToIdleAnimationEnd,
+    required TResult Function(_InertialAnimationEnd value) inertialAnimationEnd,
+    required TResult Function(_InertialAnimationStop value)
+        inertialAnimationStop,
+    required TResult Function(_ScrollingAnimationEnd value)
+        scrollingAnimationEnd,
+    required TResult Function(_StartExternalDragOperation value)
+        startExternalDragOperation,
+    required TResult Function(_ContinueExternalDragOperation value)
+        continueExternalDragOperation,
+    required TResult Function(_EndExternalDragOperation value)
+        endExternalDragOperation,
+  }) {
+    return endExternalDragOperation(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_StartScale value)? startScale,
+    TResult? Function(_ContinueScale value)? continueScale,
+    TResult? Function(_EndScale value)? endScale,
+    TResult? Function(_RestartScale value)? restartScale,
+    TResult? Function(_ViewportChanged value)? viewportChanged,
+    TResult? Function(_ContentChanged value)? contentChanged,
+    TResult? Function(_InitialToIdleAnimationEnd value)?
+        initialToIdleAnimationEnd,
+    TResult? Function(_OutOfBoundsToIdleAnimationEnd value)?
+        outOfBoundsToIdleAnimationEnd,
+    TResult? Function(_InertialAnimationEnd value)? inertialAnimationEnd,
+    TResult? Function(_InertialAnimationStop value)? inertialAnimationStop,
+    TResult? Function(_ScrollingAnimationEnd value)? scrollingAnimationEnd,
+    TResult? Function(_StartExternalDragOperation value)?
+        startExternalDragOperation,
+    TResult? Function(_ContinueExternalDragOperation value)?
+        continueExternalDragOperation,
+    TResult? Function(_EndExternalDragOperation value)?
+        endExternalDragOperation,
+  }) {
+    return endExternalDragOperation?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_StartScale value)? startScale,
+    TResult Function(_ContinueScale value)? continueScale,
+    TResult Function(_EndScale value)? endScale,
+    TResult Function(_RestartScale value)? restartScale,
+    TResult Function(_ViewportChanged value)? viewportChanged,
+    TResult Function(_ContentChanged value)? contentChanged,
+    TResult Function(_InitialToIdleAnimationEnd value)?
+        initialToIdleAnimationEnd,
+    TResult Function(_OutOfBoundsToIdleAnimationEnd value)?
+        outOfBoundsToIdleAnimationEnd,
+    TResult Function(_InertialAnimationEnd value)? inertialAnimationEnd,
+    TResult Function(_InertialAnimationStop value)? inertialAnimationStop,
+    TResult Function(_ScrollingAnimationEnd value)? scrollingAnimationEnd,
+    TResult Function(_StartExternalDragOperation value)?
+        startExternalDragOperation,
+    TResult Function(_ContinueExternalDragOperation value)?
+        continueExternalDragOperation,
+    TResult Function(_EndExternalDragOperation value)? endExternalDragOperation,
+    required TResult orElse(),
+  }) {
+    if (endExternalDragOperation != null) {
+      return endExternalDragOperation(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _EndExternalDragOperation implements ScrollingEvent {
+  const factory _EndExternalDragOperation() = _$_EndExternalDragOperation;
 }
 
 /// @nodoc
@@ -2299,15 +3389,15 @@ mixin _$ScrollingState {
     required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
             Size size, Rect diagramRect, ScaleStartDetails details)
         stoppingAnimation,
-    required TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
-            List<DiagramObjectEntity> content, Size size, Rect diagramRect)
+    required TResult Function(
+            Matrix4 oldMatrix, Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect)
         animatingFromOutOfBounds,
+    required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect, Map<String, dynamic> piggyback) externalOperation,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity>? content,
-            Size? size, Rect? diagramRect)?
+    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity>? content, Size? size, Rect? diagramRect)?
         initial,
     TResult? Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
@@ -2338,12 +3428,12 @@ mixin _$ScrollingState {
     TResult? Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
         animatingFromOutOfBounds,
+    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect, Map<String, dynamic> piggyback)? externalOperation,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Matrix4 matrix, List<DiagramObjectEntity>? content,
-            Size? size, Rect? diagramRect)?
+    TResult Function(Matrix4 matrix, List<DiagramObjectEntity>? content, Size? size, Rect? diagramRect)?
         initial,
     TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
@@ -2374,6 +3464,7 @@ mixin _$ScrollingState {
     TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
         animatingFromOutOfBounds,
+    TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect, Map<String, dynamic> piggyback)? externalOperation,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -2389,6 +3480,8 @@ mixin _$ScrollingState {
     required TResult Function(_StoppingAnimation value) stoppingAnimation,
     required TResult Function(_ScrollingAnimatingFromOutOfBounds value)
         animatingFromOutOfBounds,
+    required TResult Function(_ScrollingExternalOperation value)
+        externalOperation,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -2403,6 +3496,7 @@ mixin _$ScrollingState {
     TResult? Function(_StoppingAnimation value)? stoppingAnimation,
     TResult? Function(_ScrollingAnimatingFromOutOfBounds value)?
         animatingFromOutOfBounds,
+    TResult? Function(_ScrollingExternalOperation value)? externalOperation,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -2417,6 +3511,7 @@ mixin _$ScrollingState {
     TResult Function(_StoppingAnimation value)? stoppingAnimation,
     TResult Function(_ScrollingAnimatingFromOutOfBounds value)?
         animatingFromOutOfBounds,
+    TResult Function(_ScrollingExternalOperation value)? externalOperation,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -2616,9 +3711,10 @@ class _$_ScrollingInitial implements _ScrollingInitial {
     required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
             Size size, Rect diagramRect, ScaleStartDetails details)
         stoppingAnimation,
-    required TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
-            List<DiagramObjectEntity> content, Size size, Rect diagramRect)
+    required TResult Function(
+            Matrix4 oldMatrix, Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect)
         animatingFromOutOfBounds,
+    required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect, Map<String, dynamic> piggyback) externalOperation,
   }) {
     return initial(matrix, content, size, diagramRect);
   }
@@ -2626,8 +3722,7 @@ class _$_ScrollingInitial implements _ScrollingInitial {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity>? content,
-            Size? size, Rect? diagramRect)?
+    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity>? content, Size? size, Rect? diagramRect)?
         initial,
     TResult? Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
@@ -2658,6 +3753,7 @@ class _$_ScrollingInitial implements _ScrollingInitial {
     TResult? Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
         animatingFromOutOfBounds,
+    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect, Map<String, dynamic> piggyback)? externalOperation,
   }) {
     return initial?.call(matrix, content, size, diagramRect);
   }
@@ -2665,8 +3761,7 @@ class _$_ScrollingInitial implements _ScrollingInitial {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Matrix4 matrix, List<DiagramObjectEntity>? content,
-            Size? size, Rect? diagramRect)?
+    TResult Function(Matrix4 matrix, List<DiagramObjectEntity>? content, Size? size, Rect? diagramRect)?
         initial,
     TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
@@ -2697,6 +3792,7 @@ class _$_ScrollingInitial implements _ScrollingInitial {
     TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
         animatingFromOutOfBounds,
+    TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect, Map<String, dynamic> piggyback)? externalOperation,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -2718,6 +3814,8 @@ class _$_ScrollingInitial implements _ScrollingInitial {
     required TResult Function(_StoppingAnimation value) stoppingAnimation,
     required TResult Function(_ScrollingAnimatingFromOutOfBounds value)
         animatingFromOutOfBounds,
+    required TResult Function(_ScrollingExternalOperation value)
+        externalOperation,
   }) {
     return initial(this);
   }
@@ -2735,6 +3833,7 @@ class _$_ScrollingInitial implements _ScrollingInitial {
     TResult? Function(_StoppingAnimation value)? stoppingAnimation,
     TResult? Function(_ScrollingAnimatingFromOutOfBounds value)?
         animatingFromOutOfBounds,
+    TResult? Function(_ScrollingExternalOperation value)? externalOperation,
   }) {
     return initial?.call(this);
   }
@@ -2752,6 +3851,7 @@ class _$_ScrollingInitial implements _ScrollingInitial {
     TResult Function(_StoppingAnimation value)? stoppingAnimation,
     TResult Function(_ScrollingAnimatingFromOutOfBounds value)?
         animatingFromOutOfBounds,
+    TResult Function(_ScrollingExternalOperation value)? externalOperation,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -2935,9 +4035,10 @@ class _$_ScrollingAnimatingInitialToIdle
     required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
             Size size, Rect diagramRect, ScaleStartDetails details)
         stoppingAnimation,
-    required TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
-            List<DiagramObjectEntity> content, Size size, Rect diagramRect)
+    required TResult Function(
+            Matrix4 oldMatrix, Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect)
         animatingFromOutOfBounds,
+    required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect, Map<String, dynamic> piggyback) externalOperation,
   }) {
     return animatingInitialToIdle(
         oldMatrix, matrix, content, size, diagramRect);
@@ -2946,8 +4047,7 @@ class _$_ScrollingAnimatingInitialToIdle
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity>? content,
-            Size? size, Rect? diagramRect)?
+    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity>? content, Size? size, Rect? diagramRect)?
         initial,
     TResult? Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
@@ -2978,6 +4078,7 @@ class _$_ScrollingAnimatingInitialToIdle
     TResult? Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
         animatingFromOutOfBounds,
+    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect, Map<String, dynamic> piggyback)? externalOperation,
   }) {
     return animatingInitialToIdle?.call(
         oldMatrix, matrix, content, size, diagramRect);
@@ -2986,8 +4087,7 @@ class _$_ScrollingAnimatingInitialToIdle
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Matrix4 matrix, List<DiagramObjectEntity>? content,
-            Size? size, Rect? diagramRect)?
+    TResult Function(Matrix4 matrix, List<DiagramObjectEntity>? content, Size? size, Rect? diagramRect)?
         initial,
     TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
@@ -3018,6 +4118,7 @@ class _$_ScrollingAnimatingInitialToIdle
     TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
         animatingFromOutOfBounds,
+    TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect, Map<String, dynamic> piggyback)? externalOperation,
     required TResult orElse(),
   }) {
     if (animatingInitialToIdle != null) {
@@ -3040,6 +4141,8 @@ class _$_ScrollingAnimatingInitialToIdle
     required TResult Function(_StoppingAnimation value) stoppingAnimation,
     required TResult Function(_ScrollingAnimatingFromOutOfBounds value)
         animatingFromOutOfBounds,
+    required TResult Function(_ScrollingExternalOperation value)
+        externalOperation,
   }) {
     return animatingInitialToIdle(this);
   }
@@ -3057,6 +4160,7 @@ class _$_ScrollingAnimatingInitialToIdle
     TResult? Function(_StoppingAnimation value)? stoppingAnimation,
     TResult? Function(_ScrollingAnimatingFromOutOfBounds value)?
         animatingFromOutOfBounds,
+    TResult? Function(_ScrollingExternalOperation value)? externalOperation,
   }) {
     return animatingInitialToIdle?.call(this);
   }
@@ -3074,6 +4178,7 @@ class _$_ScrollingAnimatingInitialToIdle
     TResult Function(_StoppingAnimation value)? stoppingAnimation,
     TResult Function(_ScrollingAnimatingFromOutOfBounds value)?
         animatingFromOutOfBounds,
+    TResult Function(_ScrollingExternalOperation value)? externalOperation,
     required TResult orElse(),
   }) {
     if (animatingInitialToIdle != null) {
@@ -3243,9 +4348,10 @@ class _$_ScrollingIdle implements _ScrollingIdle {
     required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
             Size size, Rect diagramRect, ScaleStartDetails details)
         stoppingAnimation,
-    required TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
-            List<DiagramObjectEntity> content, Size size, Rect diagramRect)
+    required TResult Function(
+            Matrix4 oldMatrix, Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect)
         animatingFromOutOfBounds,
+    required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect, Map<String, dynamic> piggyback) externalOperation,
   }) {
     return idle(matrix, content, size, diagramRect);
   }
@@ -3253,8 +4359,7 @@ class _$_ScrollingIdle implements _ScrollingIdle {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity>? content,
-            Size? size, Rect? diagramRect)?
+    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity>? content, Size? size, Rect? diagramRect)?
         initial,
     TResult? Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
@@ -3285,6 +4390,7 @@ class _$_ScrollingIdle implements _ScrollingIdle {
     TResult? Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
         animatingFromOutOfBounds,
+    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect, Map<String, dynamic> piggyback)? externalOperation,
   }) {
     return idle?.call(matrix, content, size, diagramRect);
   }
@@ -3292,8 +4398,7 @@ class _$_ScrollingIdle implements _ScrollingIdle {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Matrix4 matrix, List<DiagramObjectEntity>? content,
-            Size? size, Rect? diagramRect)?
+    TResult Function(Matrix4 matrix, List<DiagramObjectEntity>? content, Size? size, Rect? diagramRect)?
         initial,
     TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
@@ -3324,6 +4429,7 @@ class _$_ScrollingIdle implements _ScrollingIdle {
     TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
         animatingFromOutOfBounds,
+    TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect, Map<String, dynamic> piggyback)? externalOperation,
     required TResult orElse(),
   }) {
     if (idle != null) {
@@ -3345,6 +4451,8 @@ class _$_ScrollingIdle implements _ScrollingIdle {
     required TResult Function(_StoppingAnimation value) stoppingAnimation,
     required TResult Function(_ScrollingAnimatingFromOutOfBounds value)
         animatingFromOutOfBounds,
+    required TResult Function(_ScrollingExternalOperation value)
+        externalOperation,
   }) {
     return idle(this);
   }
@@ -3362,6 +4470,7 @@ class _$_ScrollingIdle implements _ScrollingIdle {
     TResult? Function(_StoppingAnimation value)? stoppingAnimation,
     TResult? Function(_ScrollingAnimatingFromOutOfBounds value)?
         animatingFromOutOfBounds,
+    TResult? Function(_ScrollingExternalOperation value)? externalOperation,
   }) {
     return idle?.call(this);
   }
@@ -3379,6 +4488,7 @@ class _$_ScrollingIdle implements _ScrollingIdle {
     TResult Function(_StoppingAnimation value)? stoppingAnimation,
     TResult Function(_ScrollingAnimatingFromOutOfBounds value)?
         animatingFromOutOfBounds,
+    TResult Function(_ScrollingExternalOperation value)? externalOperation,
     required TResult orElse(),
   }) {
     if (idle != null) {
@@ -3598,9 +4708,10 @@ class _$_ScrollingScrolling implements _ScrollingScrolling {
     required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
             Size size, Rect diagramRect, ScaleStartDetails details)
         stoppingAnimation,
-    required TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
-            List<DiagramObjectEntity> content, Size size, Rect diagramRect)
+    required TResult Function(
+            Matrix4 oldMatrix, Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect)
         animatingFromOutOfBounds,
+    required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect, Map<String, dynamic> piggyback) externalOperation,
   }) {
     return scrolling(matrix, content, translationUpdater, scaleUpdater, size,
         diagramRect, squaredDistance, eventDateTime);
@@ -3609,8 +4720,7 @@ class _$_ScrollingScrolling implements _ScrollingScrolling {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity>? content,
-            Size? size, Rect? diagramRect)?
+    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity>? content, Size? size, Rect? diagramRect)?
         initial,
     TResult? Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
@@ -3641,6 +4751,7 @@ class _$_ScrollingScrolling implements _ScrollingScrolling {
     TResult? Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
         animatingFromOutOfBounds,
+    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect, Map<String, dynamic> piggyback)? externalOperation,
   }) {
     return scrolling?.call(matrix, content, translationUpdater, scaleUpdater,
         size, diagramRect, squaredDistance, eventDateTime);
@@ -3649,8 +4760,7 @@ class _$_ScrollingScrolling implements _ScrollingScrolling {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Matrix4 matrix, List<DiagramObjectEntity>? content,
-            Size? size, Rect? diagramRect)?
+    TResult Function(Matrix4 matrix, List<DiagramObjectEntity>? content, Size? size, Rect? diagramRect)?
         initial,
     TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
@@ -3681,6 +4791,7 @@ class _$_ScrollingScrolling implements _ScrollingScrolling {
     TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
         animatingFromOutOfBounds,
+    TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect, Map<String, dynamic> piggyback)? externalOperation,
     required TResult orElse(),
   }) {
     if (scrolling != null) {
@@ -3703,6 +4814,8 @@ class _$_ScrollingScrolling implements _ScrollingScrolling {
     required TResult Function(_StoppingAnimation value) stoppingAnimation,
     required TResult Function(_ScrollingAnimatingFromOutOfBounds value)
         animatingFromOutOfBounds,
+    required TResult Function(_ScrollingExternalOperation value)
+        externalOperation,
   }) {
     return scrolling(this);
   }
@@ -3720,6 +4833,7 @@ class _$_ScrollingScrolling implements _ScrollingScrolling {
     TResult? Function(_StoppingAnimation value)? stoppingAnimation,
     TResult? Function(_ScrollingAnimatingFromOutOfBounds value)?
         animatingFromOutOfBounds,
+    TResult? Function(_ScrollingExternalOperation value)? externalOperation,
   }) {
     return scrolling?.call(this);
   }
@@ -3737,6 +4851,7 @@ class _$_ScrollingScrolling implements _ScrollingScrolling {
     TResult Function(_StoppingAnimation value)? stoppingAnimation,
     TResult Function(_ScrollingAnimatingFromOutOfBounds value)?
         animatingFromOutOfBounds,
+    TResult Function(_ScrollingExternalOperation value)? externalOperation,
     required TResult orElse(),
   }) {
     if (scrolling != null) {
@@ -3947,9 +5062,10 @@ class _$_ScrollingAnimatingInertialScrolling
     required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
             Size size, Rect diagramRect, ScaleStartDetails details)
         stoppingAnimation,
-    required TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
-            List<DiagramObjectEntity> content, Size size, Rect diagramRect)
+    required TResult Function(
+            Matrix4 oldMatrix, Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect)
         animatingFromOutOfBounds,
+    required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect, Map<String, dynamic> piggyback) externalOperation,
   }) {
     return animatingInertialScrolling(oldMatrix, matrix,
         animationTimeInMilliseconds, content, size, diagramRect);
@@ -3958,8 +5074,7 @@ class _$_ScrollingAnimatingInertialScrolling
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity>? content,
-            Size? size, Rect? diagramRect)?
+    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity>? content, Size? size, Rect? diagramRect)?
         initial,
     TResult? Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
@@ -3990,6 +5105,7 @@ class _$_ScrollingAnimatingInertialScrolling
     TResult? Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
         animatingFromOutOfBounds,
+    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect, Map<String, dynamic> piggyback)? externalOperation,
   }) {
     return animatingInertialScrolling?.call(oldMatrix, matrix,
         animationTimeInMilliseconds, content, size, diagramRect);
@@ -3998,8 +5114,7 @@ class _$_ScrollingAnimatingInertialScrolling
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Matrix4 matrix, List<DiagramObjectEntity>? content,
-            Size? size, Rect? diagramRect)?
+    TResult Function(Matrix4 matrix, List<DiagramObjectEntity>? content, Size? size, Rect? diagramRect)?
         initial,
     TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
@@ -4030,6 +5145,7 @@ class _$_ScrollingAnimatingInertialScrolling
     TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
         animatingFromOutOfBounds,
+    TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect, Map<String, dynamic> piggyback)? externalOperation,
     required TResult orElse(),
   }) {
     if (animatingInertialScrolling != null) {
@@ -4052,6 +5168,8 @@ class _$_ScrollingAnimatingInertialScrolling
     required TResult Function(_StoppingAnimation value) stoppingAnimation,
     required TResult Function(_ScrollingAnimatingFromOutOfBounds value)
         animatingFromOutOfBounds,
+    required TResult Function(_ScrollingExternalOperation value)
+        externalOperation,
   }) {
     return animatingInertialScrolling(this);
   }
@@ -4069,6 +5187,7 @@ class _$_ScrollingAnimatingInertialScrolling
     TResult? Function(_StoppingAnimation value)? stoppingAnimation,
     TResult? Function(_ScrollingAnimatingFromOutOfBounds value)?
         animatingFromOutOfBounds,
+    TResult? Function(_ScrollingExternalOperation value)? externalOperation,
   }) {
     return animatingInertialScrolling?.call(this);
   }
@@ -4086,6 +5205,7 @@ class _$_ScrollingAnimatingInertialScrolling
     TResult Function(_StoppingAnimation value)? stoppingAnimation,
     TResult Function(_ScrollingAnimatingFromOutOfBounds value)?
         animatingFromOutOfBounds,
+    TResult Function(_ScrollingExternalOperation value)? externalOperation,
     required TResult orElse(),
   }) {
     if (animatingInertialScrolling != null) {
@@ -4274,9 +5394,10 @@ class _$_StoppingAnimation implements _StoppingAnimation {
     required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
             Size size, Rect diagramRect, ScaleStartDetails details)
         stoppingAnimation,
-    required TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
-            List<DiagramObjectEntity> content, Size size, Rect diagramRect)
+    required TResult Function(
+            Matrix4 oldMatrix, Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect)
         animatingFromOutOfBounds,
+    required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect, Map<String, dynamic> piggyback) externalOperation,
   }) {
     return stoppingAnimation(matrix, content, size, diagramRect, details);
   }
@@ -4284,8 +5405,7 @@ class _$_StoppingAnimation implements _StoppingAnimation {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity>? content,
-            Size? size, Rect? diagramRect)?
+    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity>? content, Size? size, Rect? diagramRect)?
         initial,
     TResult? Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
@@ -4316,6 +5436,7 @@ class _$_StoppingAnimation implements _StoppingAnimation {
     TResult? Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
         animatingFromOutOfBounds,
+    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect, Map<String, dynamic> piggyback)? externalOperation,
   }) {
     return stoppingAnimation?.call(matrix, content, size, diagramRect, details);
   }
@@ -4323,8 +5444,7 @@ class _$_StoppingAnimation implements _StoppingAnimation {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Matrix4 matrix, List<DiagramObjectEntity>? content,
-            Size? size, Rect? diagramRect)?
+    TResult Function(Matrix4 matrix, List<DiagramObjectEntity>? content, Size? size, Rect? diagramRect)?
         initial,
     TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
@@ -4355,6 +5475,7 @@ class _$_StoppingAnimation implements _StoppingAnimation {
     TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
         animatingFromOutOfBounds,
+    TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect, Map<String, dynamic> piggyback)? externalOperation,
     required TResult orElse(),
   }) {
     if (stoppingAnimation != null) {
@@ -4376,6 +5497,8 @@ class _$_StoppingAnimation implements _StoppingAnimation {
     required TResult Function(_StoppingAnimation value) stoppingAnimation,
     required TResult Function(_ScrollingAnimatingFromOutOfBounds value)
         animatingFromOutOfBounds,
+    required TResult Function(_ScrollingExternalOperation value)
+        externalOperation,
   }) {
     return stoppingAnimation(this);
   }
@@ -4393,6 +5516,7 @@ class _$_StoppingAnimation implements _StoppingAnimation {
     TResult? Function(_StoppingAnimation value)? stoppingAnimation,
     TResult? Function(_ScrollingAnimatingFromOutOfBounds value)?
         animatingFromOutOfBounds,
+    TResult? Function(_ScrollingExternalOperation value)? externalOperation,
   }) {
     return stoppingAnimation?.call(this);
   }
@@ -4410,6 +5534,7 @@ class _$_StoppingAnimation implements _StoppingAnimation {
     TResult Function(_StoppingAnimation value)? stoppingAnimation,
     TResult Function(_ScrollingAnimatingFromOutOfBounds value)?
         animatingFromOutOfBounds,
+    TResult Function(_ScrollingExternalOperation value)? externalOperation,
     required TResult orElse(),
   }) {
     if (stoppingAnimation != null) {
@@ -4595,9 +5720,10 @@ class _$_ScrollingAnimatingFromOutOfBounds
     required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
             Size size, Rect diagramRect, ScaleStartDetails details)
         stoppingAnimation,
-    required TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
-            List<DiagramObjectEntity> content, Size size, Rect diagramRect)
+    required TResult Function(
+            Matrix4 oldMatrix, Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect)
         animatingFromOutOfBounds,
+    required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect, Map<String, dynamic> piggyback) externalOperation,
   }) {
     return animatingFromOutOfBounds(
         oldMatrix, matrix, content, size, diagramRect);
@@ -4606,8 +5732,7 @@ class _$_ScrollingAnimatingFromOutOfBounds
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity>? content,
-            Size? size, Rect? diagramRect)?
+    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity>? content, Size? size, Rect? diagramRect)?
         initial,
     TResult? Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
@@ -4638,6 +5763,7 @@ class _$_ScrollingAnimatingFromOutOfBounds
     TResult? Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
         animatingFromOutOfBounds,
+    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect, Map<String, dynamic> piggyback)? externalOperation,
   }) {
     return animatingFromOutOfBounds?.call(
         oldMatrix, matrix, content, size, diagramRect);
@@ -4646,8 +5772,7 @@ class _$_ScrollingAnimatingFromOutOfBounds
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Matrix4 matrix, List<DiagramObjectEntity>? content,
-            Size? size, Rect? diagramRect)?
+    TResult Function(Matrix4 matrix, List<DiagramObjectEntity>? content, Size? size, Rect? diagramRect)?
         initial,
     TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
@@ -4678,6 +5803,7 @@ class _$_ScrollingAnimatingFromOutOfBounds
     TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
         animatingFromOutOfBounds,
+    TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect, Map<String, dynamic> piggyback)? externalOperation,
     required TResult orElse(),
   }) {
     if (animatingFromOutOfBounds != null) {
@@ -4700,6 +5826,8 @@ class _$_ScrollingAnimatingFromOutOfBounds
     required TResult Function(_StoppingAnimation value) stoppingAnimation,
     required TResult Function(_ScrollingAnimatingFromOutOfBounds value)
         animatingFromOutOfBounds,
+    required TResult Function(_ScrollingExternalOperation value)
+        externalOperation,
   }) {
     return animatingFromOutOfBounds(this);
   }
@@ -4717,6 +5845,7 @@ class _$_ScrollingAnimatingFromOutOfBounds
     TResult? Function(_StoppingAnimation value)? stoppingAnimation,
     TResult? Function(_ScrollingAnimatingFromOutOfBounds value)?
         animatingFromOutOfBounds,
+    TResult? Function(_ScrollingExternalOperation value)? externalOperation,
   }) {
     return animatingFromOutOfBounds?.call(this);
   }
@@ -4734,6 +5863,7 @@ class _$_ScrollingAnimatingFromOutOfBounds
     TResult Function(_StoppingAnimation value)? stoppingAnimation,
     TResult Function(_ScrollingAnimatingFromOutOfBounds value)?
         animatingFromOutOfBounds,
+    TResult Function(_ScrollingExternalOperation value)? externalOperation,
     required TResult orElse(),
   }) {
     if (animatingFromOutOfBounds != null) {
@@ -4764,6 +5894,342 @@ abstract class _ScrollingAnimatingFromOutOfBounds implements ScrollingState {
   @JsonKey(ignore: true)
   _$$_ScrollingAnimatingFromOutOfBoundsCopyWith<
           _$_ScrollingAnimatingFromOutOfBounds>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$_ScrollingExternalOperationCopyWith<$Res>
+    implements $ScrollingStateCopyWith<$Res> {
+  factory _$$_ScrollingExternalOperationCopyWith(
+          _$_ScrollingExternalOperation value,
+          $Res Function(_$_ScrollingExternalOperation) then) =
+      __$$_ScrollingExternalOperationCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {Matrix4 matrix,
+      List<DiagramObjectEntity> content,
+      Size size,
+      Rect diagramRect,
+      Map<String, dynamic> piggyback});
+}
+
+/// @nodoc
+class __$$_ScrollingExternalOperationCopyWithImpl<$Res>
+    extends _$ScrollingStateCopyWithImpl<$Res, _$_ScrollingExternalOperation>
+    implements _$$_ScrollingExternalOperationCopyWith<$Res> {
+  __$$_ScrollingExternalOperationCopyWithImpl(
+      _$_ScrollingExternalOperation _value,
+      $Res Function(_$_ScrollingExternalOperation) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? matrix = null,
+    Object? content = null,
+    Object? size = null,
+    Object? diagramRect = null,
+    Object? piggyback = null,
+  }) {
+    return _then(_$_ScrollingExternalOperation(
+      matrix: null == matrix
+          ? _value.matrix
+          : matrix // ignore: cast_nullable_to_non_nullable
+              as Matrix4,
+      content: null == content
+          ? _value._content
+          : content // ignore: cast_nullable_to_non_nullable
+              as List<DiagramObjectEntity>,
+      size: null == size
+          ? _value.size
+          : size // ignore: cast_nullable_to_non_nullable
+              as Size,
+      diagramRect: null == diagramRect
+          ? _value.diagramRect
+          : diagramRect // ignore: cast_nullable_to_non_nullable
+              as Rect,
+      piggyback: null == piggyback
+          ? _value._piggyback
+          : piggyback // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_ScrollingExternalOperation implements _ScrollingExternalOperation {
+  const _$_ScrollingExternalOperation(
+      {required this.matrix,
+      required final List<DiagramObjectEntity> content,
+      required this.size,
+      required this.diagramRect,
+      required final Map<String, dynamic> piggyback})
+      : _content = content,
+        _piggyback = piggyback;
+
+  @override
+  final Matrix4 matrix;
+  final List<DiagramObjectEntity> _content;
+  @override
+  List<DiagramObjectEntity> get content {
+    if (_content is EqualUnmodifiableListView) return _content;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_content);
+  }
+
+  @override
+  final Size size;
+  @override
+  final Rect diagramRect;
+  final Map<String, dynamic> _piggyback;
+  @override
+  Map<String, dynamic> get piggyback {
+    if (_piggyback is EqualUnmodifiableMapView) return _piggyback;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_piggyback);
+  }
+
+  @override
+  String toString() {
+    return 'ScrollingState.externalOperation(matrix: $matrix, content: $content, size: $size, diagramRect: $diagramRect, piggyback: $piggyback)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_ScrollingExternalOperation &&
+            (identical(other.matrix, matrix) || other.matrix == matrix) &&
+            const DeepCollectionEquality().equals(other._content, _content) &&
+            (identical(other.size, size) || other.size == size) &&
+            (identical(other.diagramRect, diagramRect) ||
+                other.diagramRect == diagramRect) &&
+            const DeepCollectionEquality()
+                .equals(other._piggyback, _piggyback));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      matrix,
+      const DeepCollectionEquality().hash(_content),
+      size,
+      diagramRect,
+      const DeepCollectionEquality().hash(_piggyback));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_ScrollingExternalOperationCopyWith<_$_ScrollingExternalOperation>
+      get copyWith => __$$_ScrollingExternalOperationCopyWithImpl<
+          _$_ScrollingExternalOperation>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(Matrix4 matrix,
+            List<DiagramObjectEntity>? content, Size? size, Rect? diagramRect)
+        initial,
+    required TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
+            List<DiagramObjectEntity> content, Size size, Rect diagramRect)
+        animatingInitialToIdle,
+    required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect)
+        idle,
+    required TResult Function(
+            Matrix4 matrix,
+            List<DiagramObjectEntity> content,
+            ValueUpdater<Offset> translationUpdater,
+            ValueUpdater<double> scaleUpdater,
+            Size size,
+            Rect diagramRect,
+            double squaredDistance,
+            DateTime eventDateTime)
+        scrolling,
+    required TResult Function(
+            Matrix4 oldMatrix,
+            Matrix4 matrix,
+            int animationTimeInMilliseconds,
+            List<DiagramObjectEntity> content,
+            Size size,
+            Rect diagramRect)
+        animatingInertialScrolling,
+    required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect, ScaleStartDetails details)
+        stoppingAnimation,
+    required TResult Function(
+            Matrix4 oldMatrix, Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect)
+        animatingFromOutOfBounds,
+    required TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect, Map<String, dynamic> piggyback) externalOperation,
+  }) {
+    return externalOperation(matrix, content, size, diagramRect, piggyback);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity>? content, Size? size, Rect? diagramRect)?
+        initial,
+    TResult? Function(Matrix4 oldMatrix, Matrix4 matrix,
+            List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
+        animatingInitialToIdle,
+    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
+        idle,
+    TResult? Function(
+            Matrix4 matrix,
+            List<DiagramObjectEntity> content,
+            ValueUpdater<Offset> translationUpdater,
+            ValueUpdater<double> scaleUpdater,
+            Size size,
+            Rect diagramRect,
+            double squaredDistance,
+            DateTime eventDateTime)?
+        scrolling,
+    TResult? Function(
+            Matrix4 oldMatrix,
+            Matrix4 matrix,
+            int animationTimeInMilliseconds,
+            List<DiagramObjectEntity> content,
+            Size size,
+            Rect diagramRect)?
+        animatingInertialScrolling,
+    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect, ScaleStartDetails details)?
+        stoppingAnimation,
+    TResult? Function(Matrix4 oldMatrix, Matrix4 matrix,
+            List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
+        animatingFromOutOfBounds,
+    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect, Map<String, dynamic> piggyback)? externalOperation,
+  }) {
+    return externalOperation?.call(
+        matrix, content, size, diagramRect, piggyback);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(Matrix4 matrix, List<DiagramObjectEntity>? content, Size? size, Rect? diagramRect)?
+        initial,
+    TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
+            List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
+        animatingInitialToIdle,
+    TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
+        idle,
+    TResult Function(
+            Matrix4 matrix,
+            List<DiagramObjectEntity> content,
+            ValueUpdater<Offset> translationUpdater,
+            ValueUpdater<double> scaleUpdater,
+            Size size,
+            Rect diagramRect,
+            double squaredDistance,
+            DateTime eventDateTime)?
+        scrolling,
+    TResult Function(
+            Matrix4 oldMatrix,
+            Matrix4 matrix,
+            int animationTimeInMilliseconds,
+            List<DiagramObjectEntity> content,
+            Size size,
+            Rect diagramRect)?
+        animatingInertialScrolling,
+    TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect, ScaleStartDetails details)?
+        stoppingAnimation,
+    TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
+            List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
+        animatingFromOutOfBounds,
+    TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect, Map<String, dynamic> piggyback)? externalOperation,
+    required TResult orElse(),
+  }) {
+    if (externalOperation != null) {
+      return externalOperation(matrix, content, size, diagramRect, piggyback);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_ScrollingInitial value) initial,
+    required TResult Function(_ScrollingAnimatingInitialToIdle value)
+        animatingInitialToIdle,
+    required TResult Function(_ScrollingIdle value) idle,
+    required TResult Function(_ScrollingScrolling value) scrolling,
+    required TResult Function(_ScrollingAnimatingInertialScrolling value)
+        animatingInertialScrolling,
+    required TResult Function(_StoppingAnimation value) stoppingAnimation,
+    required TResult Function(_ScrollingAnimatingFromOutOfBounds value)
+        animatingFromOutOfBounds,
+    required TResult Function(_ScrollingExternalOperation value)
+        externalOperation,
+  }) {
+    return externalOperation(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_ScrollingInitial value)? initial,
+    TResult? Function(_ScrollingAnimatingInitialToIdle value)?
+        animatingInitialToIdle,
+    TResult? Function(_ScrollingIdle value)? idle,
+    TResult? Function(_ScrollingScrolling value)? scrolling,
+    TResult? Function(_ScrollingAnimatingInertialScrolling value)?
+        animatingInertialScrolling,
+    TResult? Function(_StoppingAnimation value)? stoppingAnimation,
+    TResult? Function(_ScrollingAnimatingFromOutOfBounds value)?
+        animatingFromOutOfBounds,
+    TResult? Function(_ScrollingExternalOperation value)? externalOperation,
+  }) {
+    return externalOperation?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_ScrollingInitial value)? initial,
+    TResult Function(_ScrollingAnimatingInitialToIdle value)?
+        animatingInitialToIdle,
+    TResult Function(_ScrollingIdle value)? idle,
+    TResult Function(_ScrollingScrolling value)? scrolling,
+    TResult Function(_ScrollingAnimatingInertialScrolling value)?
+        animatingInertialScrolling,
+    TResult Function(_StoppingAnimation value)? stoppingAnimation,
+    TResult Function(_ScrollingAnimatingFromOutOfBounds value)?
+        animatingFromOutOfBounds,
+    TResult Function(_ScrollingExternalOperation value)? externalOperation,
+    required TResult orElse(),
+  }) {
+    if (externalOperation != null) {
+      return externalOperation(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _ScrollingExternalOperation implements ScrollingState {
+  const factory _ScrollingExternalOperation(
+          {required final Matrix4 matrix,
+          required final List<DiagramObjectEntity> content,
+          required final Size size,
+          required final Rect diagramRect,
+          required final Map<String, dynamic> piggyback}) =
+      _$_ScrollingExternalOperation;
+
+  @override
+  Matrix4 get matrix;
+  @override
+  List<DiagramObjectEntity> get content;
+  @override
+  Size get size;
+  @override
+  Rect get diagramRect;
+  Map<String, dynamic> get piggyback;
+  @override
+  @JsonKey(ignore: true)
+  _$$_ScrollingExternalOperationCopyWith<_$_ScrollingExternalOperation>
       get copyWith => throw _privateConstructorUsedError;
 }
 

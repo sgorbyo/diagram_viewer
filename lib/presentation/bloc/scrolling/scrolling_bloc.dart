@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:diagram_viewer/tools/scrolling_geometry_tools.dart';
+import 'package:vector_math/vector_math_64.dart';
 import '../../../diagram_content_repository.dart';
 import 'package:diagram_viewer/tools/scrolling_matrix4.dart';
 import '../../../diagram_object_entity.dart';
@@ -64,6 +65,12 @@ class ScrollingBloc extends Bloc<ScrollingEvent, ScrollingState> {
         scrollingAnimationEnd: (scrollingAnimationEnd) {},
         inertialAnimationStop: (inertialAnimationStop) {},
         restartScale: (restartScale) async => _restartScale(restartScale, emit),
+        startExternalDragOperation: (startExternalDragOperation) async =>
+            _startExternalDragOperation(startExternalDragOperation, emit),
+        continueExternalDragOperation: (continueExternalDragOperation) async =>
+            _continueExternalDragOperation(continueExternalDragOperation, emit),
+        endExternalDragOperation: (endExternalDragOperation) async =>
+            _endExternalDragOperation(endExternalDragOperation, emit),
       );
     });
   }
@@ -106,6 +113,91 @@ class ScrollingBloc extends Bloc<ScrollingEvent, ScrollingState> {
           diagramRect: animatingFromOutOfBounds.diagramRect,
           details: event.details,
         ));
+      },
+      orElse: () async => _unexpectedEvent(event, state),
+    );
+  }
+
+  Future<void> _startExternalDragOperation(
+    _StartExternalDragOperation event,
+    Emitter<ScrollingState> emit,
+  ) async {
+    await state.maybeMap(
+      idle: (idle) async {
+        emit(
+          ScrollingState.externalOperation(
+            matrix: idle.matrix,
+            content: idle.content,
+            size: idle.size,
+            diagramRect: idle.diagramRect,
+            piggyback: event.piggyback,
+          ),
+        );
+      },
+      orElse: () async => _unexpectedEvent(event, state),
+    );
+  }
+
+  Future<void> _continueExternalDragOperation(
+    _ContinueExternalDragOperation event,
+    Emitter<ScrollingState> emit,
+  ) async {
+    await state.maybeMap(
+      externalOperation: (externalOperation) async {
+        double? xDelta;
+        double? yDelta;
+        if (event.localFocalPoint.x < dynamicBorderWidth) {
+          xDelta = dynamicBorderWidth - event.localFocalPoint.x;
+        } else if (externalOperation.size.width - event.localFocalPoint.x <
+                dynamicBorderWidth &&
+            event.localDelta.x > 0) {
+          xDelta = dynamicBorderWidth -
+              externalOperation.size.width +
+              event.localFocalPoint.x;
+        }
+        if (event.localFocalPoint.y + event.localDelta.y < dynamicBorderWidth) {
+          yDelta = -event.localDelta.y;
+        } else if (externalOperation.size.height -
+                event.localFocalPoint.y -
+                event.localDelta.y <
+            dynamicBorderWidth) {
+          yDelta = event.localDelta.y;
+        }
+        Matrix4 matrix = externalOperation.matrix.clone();
+        matrix.x += xDelta ?? 0;
+        matrix.y += yDelta ?? 0;
+        if (xDelta != null) {
+          debugPrint("Scrolling x by $xDelta, Scrolling y by $yDelta");
+        }
+
+        emit(
+          ScrollingState.externalOperation(
+            matrix: matrix,
+            content: externalOperation.content,
+            size: externalOperation.size,
+            diagramRect: externalOperation.diagramRect,
+            piggyback: event.piggyback,
+          ),
+        );
+      },
+      orElse: () async => _unexpectedEvent(event, state),
+    );
+  }
+
+  Future<void> _endExternalDragOperation(
+    _EndExternalDragOperation event,
+    Emitter<ScrollingState> emit,
+  ) async {
+    await state.maybeMap(
+      externalOperation: (externalOperation) async {
+        emit(
+          ScrollingState.idle(
+            matrix: externalOperation.matrix,
+            content: externalOperation.content,
+            size: externalOperation.size,
+            diagramRect: externalOperation.diagramRect,
+          ),
+        );
       },
       orElse: () async => _unexpectedEvent(event, state),
     );
@@ -169,8 +261,6 @@ class ScrollingBloc extends Bloc<ScrollingEvent, ScrollingState> {
                 stateMatrix.zoom.toPrecision(3) > minScale.toPrecision(3)) {
               Matrix4 scaleDeltaMatrix =
                   _scale(scaleDelta, additionalFocalPoint!);
-              debugPrint(
-                  "scaleDelta = $scaleDelta, minScale = $minScale, StateMatrix.zoom = ${stateMatrix.zoom}");
               stateMatrix = scaleDeltaMatrix * stateMatrix;
               scaled = true;
             }
@@ -198,8 +288,14 @@ class ScrollingBloc extends Bloc<ScrollingEvent, ScrollingState> {
           ),
         );
       },
+      externalOperation: (externalOperation) async {},
       stoppingAnimation: (stoppingAnimation) async {},
-      orElse: () async => _unexpectedEvent(event, state),
+      idle: (idle) async {
+        debugPrint("Probable out of sync event on External Start Dragging");
+      },
+      orElse: () async {
+        _unexpectedEvent(event, state);
+      },
     );
   }
 
@@ -444,6 +540,15 @@ class ScrollingBloc extends Bloc<ScrollingEvent, ScrollingState> {
             content: event.list,
             size: idle.size,
             diagramRect: getDiagramRectFromContent(event.list),
+          ));
+        },
+        externalOperation: (externalOperation) async {
+          emit(ScrollingState.externalOperation(
+            matrix: externalOperation.matrix,
+            content: event.list,
+            size: externalOperation.size,
+            diagramRect: getDiagramRectFromContent(event.list),
+            piggyback: externalOperation.piggyback,
           ));
         },
         orElse: () async {});

@@ -249,6 +249,12 @@ class _ScrollingViewState extends State<ScrollingView>
               scrolling.diagramRect,
               scrolling.content,
             ),
+            externalOperation: (externalOperation) =>
+                contentAndBackgroundWidget(
+              externalOperation.matrix,
+              externalOperation.diagramRect,
+              externalOperation.content,
+            ),
             orElse: () => Container(),
           );
         });
