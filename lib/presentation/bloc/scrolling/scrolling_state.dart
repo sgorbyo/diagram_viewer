@@ -58,6 +58,6 @@ class ScrollingState with _$ScrollingState {
     required List<DiagramObjectEntity> content,
     required Size size,
     required Rect diagramRect,
-    required Map<String, dynamic> piggyback,
+    required Map<String, dynamic>? piggyback,
   }) = _ScrollingExternalOperation;
 }

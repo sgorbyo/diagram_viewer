@@ -1,12 +1,10 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logger/logger.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 import '../cerchio_repository.dart';
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
 
 part 'main_event.dart';
 part 'main_state.dart';
