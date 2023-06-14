@@ -54,6 +54,9 @@ class HomePage extends StatelessWidget {
         endDrag: (endDrag) {
           mainBloc.add(const MainEvent.endMoving());
         },
+        doubleTap: (doubleTap) {
+          debugPrint("DoubleTap detected at ${doubleTap.coordinates}");
+        },
       );
     });
   }

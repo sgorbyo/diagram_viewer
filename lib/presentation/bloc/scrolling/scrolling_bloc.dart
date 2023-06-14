@@ -4,10 +4,11 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:diagram_viewer/tools/scrolling_geometry_tools.dart';
-import 'package:vector_math/vector_math_64.dart';
+// import 'package:vector_math/vector_math_64.dart';
 import '../../../diagram_content_repository.dart';
 import 'package:diagram_viewer/tools/scrolling_matrix4.dart';
 import '../../../diagram_object_entity.dart';
+import '../../../diagram_viewer_event/diagram_viewer_event.dart';
 
 part 'scrolling_event.dart';
 part 'scrolling_state.dart';
@@ -36,9 +37,11 @@ class ScrollingBloc extends Bloc<ScrollingEvent, ScrollingState> {
   bool shouldRotate = false;
   late final StreamSubscription<List<DiagramObjectEntity>> listSubscription;
   final DiagramContentRepository contentRepository;
+  final Stream<DiagramViewerEvent> clientStream;
 
   ScrollingBloc({
     required this.contentRepository,
+    required this.clientStream,
   }) : super(ScrollingState.initial(
           matrix: Matrix4.identity(),
         )) {
@@ -144,31 +147,9 @@ class ScrollingBloc extends Bloc<ScrollingEvent, ScrollingState> {
   ) async {
     await state.maybeMap(
       externalOperation: (externalOperation) async {
-        double? xDelta;
-        double? yDelta;
-        if (event.localFocalPoint.x < dynamicBorderWidth) {
-          xDelta = dynamicBorderWidth - event.localFocalPoint.x;
-        } else if (externalOperation.size.width - event.localFocalPoint.x <
-                dynamicBorderWidth &&
-            event.localDelta.x > 0) {
-          xDelta = dynamicBorderWidth -
-              externalOperation.size.width +
-              event.localFocalPoint.x;
-        }
-        if (event.localFocalPoint.y + event.localDelta.y < dynamicBorderWidth) {
-          yDelta = -event.localDelta.y;
-        } else if (externalOperation.size.height -
-                event.localFocalPoint.y -
-                event.localDelta.y <
-            dynamicBorderWidth) {
-          yDelta = event.localDelta.y;
-        }
         Matrix4 matrix = externalOperation.matrix.clone();
-        matrix.x += xDelta ?? 0;
-        matrix.y += yDelta ?? 0;
-        if (xDelta != null) {
-          debugPrint("Scrolling x by $xDelta, Scrolling y by $yDelta");
-        }
+        matrix.x += event.autoscrollOffset.dx;
+        matrix.y += event.autoscrollOffset.dy;
 
         emit(
           ScrollingState.externalOperation(

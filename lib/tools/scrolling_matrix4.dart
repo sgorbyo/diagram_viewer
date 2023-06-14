@@ -41,6 +41,7 @@ extension ScrollingOffset on Offset {
   Offset translateByOffset(Offset translation) =>
       Offset(dx + translation.dx, dy + translation.dy);
   Vector4 vector4() => Vector4(dx, dy, 0.0, 1);
+  Offset opposite() => Offset(-dx, -dy);
 }
 
 extension Ext on Vector4 {

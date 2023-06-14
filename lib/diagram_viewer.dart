@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:diagram_viewer/diagram_content_repository.dart';
 import 'package:diagram_viewer/diagram_viewer_event/diagram_viewer_event.dart';
 import 'package:diagram_viewer/tools/scrolling_matrix4.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:diagram_viewer/presentation/bloc/scrolling/scrolling_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -97,6 +98,8 @@ class _DiagramViewerState extends State<DiagramViewer> {
   /// by the client and then should generate special related events.
   // bool draggingOutside = false;
 
+  static const double dynamicBorderWidth = 20;
+
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider(
@@ -104,6 +107,7 @@ class _DiagramViewerState extends State<DiagramViewer> {
       child: BlocProvider(
           create: (context) => ScrollingBloc(
                 contentRepository: widget.diagramContentRepository,
+                clientStream: widget.stream,
               ),
           child: LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
@@ -126,9 +130,27 @@ class _DiagramViewerState extends State<DiagramViewer> {
                 mouseDown = false;
                 clickLocalPosition = Offset.zero;
               },
+              onPointerSignal: (pointerSignal) {
+                if (pointerSignal is PointerScrollEvent) {
+                  // TODO Manage the case of Mouse Scrolling Wheel
+                }
+              },
               behavior: HitTestBehavior.translucent,
               child: GestureDetector(
-                onDoubleTapDown: (signal) async => logger.d("$signal"),
+                // Just an example of how we can transmit events trough the
+                // Stream;
+                onDoubleTapDown: (onDoubleTapDown) async {
+                  Vector4 clickPos = localFocalPointToLogicalVector(
+                    localFocalPoint: onDoubleTapDown.localPosition,
+                    matrix: context.read<ScrollingBloc>().state.matrix,
+                  );
+                  sendEvent(
+                    DiagramViewerEvent.doubleTap(
+                      coordinates: clickPos,
+                      piggyback: {},
+                    ),
+                  );
+                },
                 onScaleStart: (ScaleStartDetails details) async {
                   ScrollingState state = context.read<ScrollingBloc>().state;
                   await state.maybeMap(
@@ -173,34 +195,88 @@ class _DiagramViewerState extends State<DiagramViewer> {
                   );
                 },
                 onScaleUpdate: (ScaleUpdateDetails details) async {
+                  // Collect the current state to understand what behavior
+                  // should be implemented.
                   ScrollingState state = context.read<ScrollingBloc>().state;
+                  // Separately manage each state.
                   await state.maybeMap(
                     externalOperation: (externalOperation) async {
+                      // We are in the middle of an externally managed operation.
+
+                      // Collect the autoScrolling possible operation and
+                      // parameters.
+                      Offset autoscrollOffset = autoScrollingDelta(
+                        localFocalPoint: details.localFocalPoint,
+                        physicalViewportSize: externalOperation.size,
+                        localDelta: details.focalPointDelta,
+                      );
+
+                      // Convert the screen localFocalPoint to a Vector4
+                      // having the same coordinates expressed in the diagram
+                      // space.
                       Vector4 clickPos = localFocalPointToLogicalVector(
                         localFocalPoint: details.localFocalPoint,
                         matrix: context.read<ScrollingBloc>().state.matrix,
                       );
+
+                      // Convert the screen focalPointDelta to a corresponding
+                      // Vector4 having the same length expressed in the diagram
+                      // space.
                       Vector4 delta = localDeltaToLogicalVector(
                         localDelta: details.focalPointDelta,
                         matrix: context.read<ScrollingBloc>().state.matrix,
                       );
-                      context
-                          .read<ScrollingBloc>()
-                          .add(ScrollingEvent.continueExternalDragOperation(
-                            piggyback: externalOperation.piggyback,
-                            localFocalPoint: details.localFocalPoint.vector4(),
-                            localDelta: details.focalPointDelta.vector4(),
-                          ));
 
-                      sendEvent(
-                        DiagramViewerEvent.continueDrag(
-                          coordinates: clickPos,
-                          delta: delta,
-                          piggyback: externalOperation.piggyback,
-                        ),
-                      );
+                      // Check if autoscroll is needed
+                      if (autoscrollOffset != Offset.zero) {
+                        // We need autoscroll
+
+                        // In case of autoscroll we don't care about the Delta
+                        // but we use a computed vector in the space of the
+                        // diagram for moving in sync both the shape and the
+                        // scroll position of the view.
+                        Vector4 autoscrollVector = localDeltaToLogicalVector(
+                          localDelta: autoscrollOffset.opposite(),
+                          matrix: context.read<ScrollingBloc>().state.matrix,
+                        );
+
+                        // Send the screen offset change (delta) to the
+                        // ScrollingBloc for updating the scrolling position of
+                        // the diagram.
+                        context
+                            .read<ScrollingBloc>()
+                            .add(ScrollingEvent.continueExternalDragOperation(
+                              piggyback: externalOperation.piggyback,
+                              autoscrollOffset: autoscrollOffset,
+                            ));
+
+                        // Send the event for moving the object being dragged
+                        // through the stream. We used a conventional Delta
+                        // synchronized with the autoScroll.
+                        sendEvent(
+                          DiagramViewerEvent.continueDrag(
+                            coordinates: clickPos,
+                            delta: autoscrollVector,
+                            piggyback: externalOperation.piggyback,
+                          ),
+                        );
+                      } else {
+                        // We do not need autoscroll
+
+                        // Send the event for moving the object being dragged
+                        // through the stream using the real delta converted to
+                        // Diagram coordinate system.
+                        sendEvent(
+                          DiagramViewerEvent.continueDrag(
+                            coordinates: clickPos,
+                            delta: delta,
+                            piggyback: externalOperation.piggyback,
+                          ),
+                        );
+                      }
                     },
                     orElse: () async {
+                      // We are in the case of not external managed operation.
                       context.read<ScrollingBloc>().add(
                             ScrollingEvent.continueScale(
                               details: details,
@@ -234,6 +310,31 @@ class _DiagramViewerState extends State<DiagramViewer> {
             );
           })),
     );
+  }
+
+  Offset autoScrollingDelta({
+    required Offset localFocalPoint,
+    required Size physicalViewportSize,
+    required Offset localDelta,
+  }) {
+    double? xDelta;
+    double? yDelta;
+    if (localFocalPoint.dx < dynamicBorderWidth) {
+      xDelta = dynamicBorderWidth - localFocalPoint.dx;
+    } else if (physicalViewportSize.width - localFocalPoint.dx <
+        dynamicBorderWidth) {
+      xDelta =
+          -dynamicBorderWidth + physicalViewportSize.width - localFocalPoint.dx;
+    }
+    if (localFocalPoint.dy < dynamicBorderWidth) {
+      yDelta = dynamicBorderWidth - localFocalPoint.dy;
+    } else if (physicalViewportSize.height - localFocalPoint.dy <
+        dynamicBorderWidth) {
+      yDelta = -dynamicBorderWidth +
+          physicalViewportSize.height -
+          localFocalPoint.dy;
+    }
+    return Offset(xDelta ?? 0.0, yDelta ?? 0.0);
   }
 
   Vector4 localFocalPointToLogicalVector({

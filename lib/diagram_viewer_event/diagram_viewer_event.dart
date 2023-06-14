@@ -12,7 +12,11 @@ class DiagramViewerEvent with _$DiagramViewerEvent {
   const factory DiagramViewerEvent.continueDrag({
     required Vector4 coordinates,
     required Vector4 delta,
-    required Map<String, dynamic> piggyback,
+    required Map<String, dynamic>? piggyback,
   }) = _ContinueDrag;
   const factory DiagramViewerEvent.endDrag() = _EndDrag;
+  const factory DiagramViewerEvent.doubleTap({
+    required Vector4 coordinates,
+    required Map<String, dynamic>? piggyback,
+  }) = _DoubleTap;
 }
