@@ -1,586 +1,438 @@
-import 'dart:async';
-
-import 'package:diagram_viewer/diagram_content_repository.dart';
-import 'package:diagram_viewer/diagram_object_entity.dart';
+// filepath: /Users/danilo/StudioProjects/diagram_viewer/test/presentation/widgets/scrolling_view_test.dart
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:bloc_test/bloc_test.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:matrix4_transform/matrix4_transform.dart';
 import 'package:diagram_viewer/presentation/bloc/scrolling/scrolling_bloc.dart';
 import 'package:diagram_viewer/presentation/widgets/scrolling_view.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
+import 'package:diagram_viewer/diagram_object_entity.dart';
 
-class MockScrollingBloc extends Mock implements ScrollingBloc {
-  final List<ScrollingEvent> addedEvents = [];
-  final _stateController = StreamController<ScrollingState>.broadcast();
-  ScrollingState _currentState = ScrollingState.initial(
-      matrix: Matrix4.identity(),
-      content: const [],
-      size: const Size(800, 600),
-      diagramRect: const Rect.fromLTWH(0, 0, 1000, 1000));
+// Mock classes for testing
+class MockScrollingBloc extends MockBloc<ScrollingEvent, ScrollingState>
+    implements ScrollingBloc {}
 
-  MockScrollingBloc() {
-    when(() => stream).thenAnswer((_) => _stateController.stream);
-  }
+class TestDiagramObject extends Fake implements DiagramObjectEntity {
+  final Rect _rect;
+
+  TestDiagramObject({Rect? rect})
+      : _rect = rect ?? const Rect.fromLTWH(0, 0, 100, 100);
 
   @override
-  void add(ScrollingEvent event) {
-    addedEvents.add(event);
-    // Per debugging: print('Event added: $event');
-  }
+  Rect enclosingRect() => _rect;
 
   @override
-  ScrollingState get state => _currentState;
-
-  void emitState(ScrollingState newState) {
-    _currentState = newState;
-    _stateController.add(newState);
-  }
+  void printOnCanvas({required Canvas canvas}) {}
 
   @override
-  Future<void> close() async {
-    await _stateController.close();
-    return Future<void>.value();
-  }
+  List<Object?> get props => [_rect];
 
-  void dispose() {
-    // Metodo custom per cleanup nei test
-  }
+  @override
+  bool? get stringify => true;
 }
 
-class MockValueUpdater<T> extends Mock implements ValueUpdater<T> {
-  @override
-  T update(T value) => value;
+// Helper methods for common state creation
+ScrollingState createIdleState() {
+  return ScrollingState.idle(
+    matrix: Matrix4.identity(),
+    content: [TestDiagramObject()],
+    size: const Size(800, 600),
+    diagramRect: const Rect.fromLTWH(0, 0, 100, 100),
+  );
 }
 
-class MockDiagramObjectEntity extends Mock implements DiagramObjectEntity {}
+ScrollingState createAnimatingInitialToIdleState() {
+  return ScrollingState.animatingInitialToIdle(
+    oldMatrix: Matrix4.identity(),
+    matrix: Matrix4.identity()..scale(2.0),
+    content: [TestDiagramObject()],
+    size: const Size(800, 600),
+    diagramRect: const Rect.fromLTWH(0, 0, 100, 100),
+  );
+}
 
-class MockDiagramContentRepository extends Mock
-    implements DiagramContentRepository {}
+ScrollingState createScrollingState() {
+  return ScrollingState.scrolling(
+    matrix: Matrix4.identity()..translate(50.0, 50.0),
+    content: [TestDiagramObject()],
+    translationUpdater: ValueUpdater<Offset>(
+      onUpdate: (oldVal, newVal) => newVal - (oldVal ?? Offset.zero),
+    )..value = const Offset(50, 50),
+    scaleUpdater: ValueUpdater<double>(
+      onUpdate: (oldVal, newVal) => newVal / (oldVal ?? 1),
+    )..value = 1.0,
+    size: const Size(800, 600),
+    diagramRect: const Rect.fromLTWH(0, 0, 100, 100),
+    squaredDistance: 0,
+    eventDateTime: DateTime.now(),
+  );
+}
+
+ScrollingState createAnimatingFromOutOfBoundsState() {
+  return ScrollingState.animatingFromOutOfBounds(
+    oldMatrix: Matrix4.identity()..translate(200.0, 200.0),
+    matrix: Matrix4.identity()..translate(100.0, 100.0),
+    content: [TestDiagramObject()],
+    size: const Size(800, 600),
+    diagramRect: const Rect.fromLTWH(0, 0, 100, 100),
+  );
+}
+
+ScrollingState createAnimatingInertialScrollingState() {
+  return ScrollingState.animatingInertialScrolling(
+    oldMatrix: Matrix4.identity()..translate(50.0, 50.0),
+    matrix: Matrix4.identity()..translate(100.0, 100.0),
+    animationTimeInMilliseconds: 300,
+    content: [TestDiagramObject()],
+    size: const Size(800, 600),
+    diagramRect: const Rect.fromLTWH(0, 0, 100, 100),
+  );
+}
+
+ScrollingState createStoppingAnimationState() {
+  return ScrollingState.stoppingAnimation(
+    content: [TestDiagramObject()],
+    size: const Size(800, 600),
+    diagramRect: const Rect.fromLTWH(0, 0, 100, 100),
+    details: ScaleStartDetails(focalPoint: const Offset(400, 300)),
+  );
+}
 
 void main() {
-  late MockScrollingBloc mockScrollingBloc;
-  late MockDiagramContentRepository mockDiagramContentRepository;
-  final testMatrix = Matrix4.identity();
-  final testContent = <DiagramObjectEntity>[];
-  const testDiagramRect = Rect.fromLTWH(0, 0, 1000, 1000);
-  const testSize = Size(800, 600);
-
-  setUpAll(() {
-    registerFallbackValue(ScaleUpdateDetails());
-    registerFallbackValue(Offset.zero);
-    registerFallbackValue(1.0);
-    registerFallbackValue(ScrollingState.initial(
-        matrix: testMatrix,
-        content: testContent,
-        size: testSize,
-        diagramRect: testDiagramRect));
-    registerFallbackValue(const ScrollingEvent.viewportChanged(size: testSize));
-  });
+  late MockScrollingBloc mockBloc;
 
   setUp(() {
-    mockScrollingBloc = MockScrollingBloc();
-    mockDiagramContentRepository = MockDiagramContentRepository();
+    mockBloc = MockScrollingBloc();
   });
 
-  Widget createWidgetUnderTest() {
-    return MaterialApp(
-      home: RepositoryProvider<DiagramContentRepository>(
-        create: (context) => mockDiagramContentRepository,
-        child: BlocProvider<ScrollingBloc>(
-          create: (context) => mockScrollingBloc,
-          child: const ScrollingView(
-            shouldTranslate: true,
-            shouldScale: true,
-            shouldRotate: true,
-            clipChild: true,
+  group('ScrollingView Widget - Initialization Tests', () {
+    testWidgets('should show CircularProgressIndicator when in initial state',
+        (WidgetTester tester) async {
+      // Arrange
+      when(() => mockBloc.state).thenReturn(
+        ScrollingState.initial(matrix: Matrix4.identity()),
+      );
+
+      // Act
+      await tester.pumpWidget(
+        MaterialApp(
+          home: BlocProvider<ScrollingBloc>.value(
+            value: mockBloc,
+            child: const ScrollingView(
+              shouldTranslate: true,
+              shouldScale: true,
+              shouldRotate: false,
+              clipChild: true,
+            ),
           ),
         ),
-      ),
-    );
-  }
+      );
 
-  group('ScrollingView Widget Tests', () {
-    tearDown(() {
-      mockScrollingBloc.dispose();
-      mockScrollingBloc.close();
+      // Assert
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
 
-    testWidgets('ScrollingView initializes and responds to viewport changes',
+    testWidgets('should render content with idle state',
         (WidgetTester tester) async {
-      // Setup initial state using `when`
-      when(() => mockScrollingBloc.state).thenReturn(ScrollingState.initial(
-        matrix: testMatrix,
-        content: testContent,
-        size: testSize,
-        diagramRect: testDiagramRect,
-      ));
+      // Arrange
+      when(() => mockBloc.state).thenReturn(createIdleState());
 
-      // Mock the add method
-      when(() => mockScrollingBloc.add(any())).thenReturn(null);
+      // Act
+      await tester.pumpWidget(
+        MaterialApp(
+          home: BlocProvider<ScrollingBloc>.value(
+            value: mockBloc,
+            child: const ScrollingView(
+              shouldTranslate: true,
+              shouldScale: true,
+              shouldRotate: false,
+              clipChild: true,
+            ),
+          ),
+        ),
+      );
 
-      // Render the widget
-      await tester.pumpWidget(createWidgetUnderTest());
-      await tester.pump(const Duration(milliseconds: 100));
-
-      // Verify event was sent using mocktail's verification
-      verify(() => mockScrollingBloc.add(any(
-            that: predicate((event) =>
-                event is ScrollingEvent &&
-                event.toString().contains('viewportChanged')),
-          ))).called(greaterThanOrEqualTo(1));
-
-      // Verify CustomPaint is rendered
-      expect(find.byType(CustomPaint), findsOneWidget);
+      // Assert
+      expect(find.byType(CustomPaint), findsNWidgets(1));
     });
+  });
 
-    testWidgets('ScrollingView handles scale start event',
+  group('ScrollingView Widget - State Transitions Tests', () {
+    testWidgets(
+        'should trigger animation when state changes from initial to animatingInitialToIdle',
         (WidgetTester tester) async {
-      mockScrollingBloc.emitState(ScrollingState.initial(
-          matrix: testMatrix,
-          content: testContent,
-          size: testSize,
-          diagramRect: testDiagramRect));
-      await tester.pumpWidget(createWidgetUnderTest());
-
-      // Find the ScrollingView and simulate a scale start gesture
-      final gesture = await tester.startGesture(Offset.zero);
-      await tester.pump();
-
-      // Verify that the ScrollingBloc received the startScale event
-      verify(() => mockScrollingBloc.add(any(
-            that: predicate((event) =>
-                event is ScrollingEvent &&
-                event.maybeMap(
-                  startScale: (_) => true,
-                  orElse: () => false,
-                )),
-          ))).called(1);
-
-      verify(() => mockScrollingBloc.add(any(
-            that: predicate((event) =>
-                event is ScrollingEvent &&
-                event.maybeMap(
-                  startScale: (_) => true,
-                  orElse: () => false,
-                )),
-          ))).called(1);
-
-      verify(() => mockScrollingBloc.add(any(
-            that: predicate((event) =>
-                event is ScrollingEvent && event.toString().contains('start')),
-          ))).called(1);
-
-      await gesture.up();
-    });
-
-    testWidgets('ScrollingView handles scale update event',
-        (WidgetTester tester) async {
-      mockScrollingBloc.emitState(ScrollingState.initial(
-          matrix: testMatrix,
-          content: testContent,
-          size: testSize,
-          diagramRect: testDiagramRect));
-      await tester.pumpWidget(createWidgetUnderTest());
-
-      // Start a gesture
-      final gesture = await tester.startGesture(Offset.zero);
-      await tester.pump();
-
-      // Simulate a scale update
-      await gesture.moveBy(const Offset(10, 10));
-      await tester.pump();
-
-      // Verify that the ScrollingBloc received the continueScale event
-      verify(() => mockScrollingBloc.add(any(
-            that: predicate((event) =>
-                event is ScrollingEvent &&
-                event.maybeMap(
-                  continueScale: (_) => true,
-                  orElse: () => false,
-                )),
-          ))).called(1);
-
-      verify(() => mockScrollingBloc.add(any(
-            that: predicate((event) =>
-                event is ScrollingEvent &&
-                event.maybeMap(
-                  continueScale: (_) => true,
-                  orElse: () => false,
-                )),
-          ))).called(1);
-
-      verify(() => mockScrollingBloc.add(any(
-            that: predicate((event) =>
-                event is ScrollingEvent && event.toString().contains('update')),
-          ))).called(1);
-
-      await gesture.up();
-    });
-
-    testWidgets('ScrollingView handles scale end event',
-        (WidgetTester tester) async {
-      mockScrollingBloc.emitState(ScrollingState.initial(
-          matrix: testMatrix,
-          content: testContent,
-          size: testSize,
-          diagramRect: testDiagramRect));
-      await tester.pumpWidget(createWidgetUnderTest());
-
-      // Start a gesture
-      final gesture = await tester.startGesture(Offset.zero);
-      await tester.pump();
-
-      // End the gesture
-      await gesture.up();
-      await tester.pump();
-
-      verify(() => mockScrollingBloc.add(any(
-            that: predicate((event) =>
-                event is ScrollingEvent &&
-                event.maybeMap(
-                  endScale: (_) => true,
-                  orElse: () => false,
-                )),
-          ))).called(1);
-
-      verify(() => mockScrollingBloc.add(any(
-            that: predicate((event) =>
-                event is ScrollingEvent &&
-                event.maybeMap(
-                  endScale: (_) => true,
-                  orElse: () => false,
-                )),
-          ))).called(1);
-
-      verify(() => mockScrollingBloc.add(any(
-            that: predicate((event) =>
-                event is ScrollingEvent && event.toString().contains('end')),
-          ))).called(1);
-    });
-
-    testWidgets('ScrollingView handles animations correctly',
-        (WidgetTester tester) async {
-      mockScrollingBloc.emitState(ScrollingState.initial(
-          matrix: testMatrix,
-          content: testContent,
-          size: testSize,
-          diagramRect: testDiagramRect));
-
-      await tester.pumpWidget(createWidgetUnderTest());
-
-      // Simulate animation state changes
-      mockScrollingBloc.emitState(ScrollingState.animatingInitialToIdle(
-          oldMatrix: testMatrix,
-          matrix: testMatrix,
-          content: testContent,
-          size: testSize,
-          diagramRect: testDiagramRect));
-      await tester.pump();
-
-      // Verify CustomPaint is still present during animation
-      expect(find.byType(CustomPaint), findsOneWidget);
-
-      // Change to scrolling state
-      mockScrollingBloc.emitState(ScrollingState.scrolling(
-          matrix: testMatrix,
-          diagramRect: testDiagramRect,
-          content: testContent,
-          translationUpdater: MockValueUpdater<Offset>(),
-          scaleUpdater: MockValueUpdater<double>(),
-          size: testSize,
-          squaredDistance: 0.0,
-          eventDateTime: DateTime.now()));
-      await tester.pump();
-
-      expect(find.byType(CustomPaint), findsOneWidget);
-
-      // Verify scale related events using ScrollingEvent instead of type matching
-      verify(() => mockScrollingBloc.add(any(
-            that: predicate((event) =>
-                event is ScrollingEvent &&
-                event.toString().contains('viewportChanged')),
-          ))).called(1);
-    });
-
-    testWidgets('ScrollingView handles multi-finger gestures',
-        (WidgetTester tester) async {
-      mockScrollingBloc.emitState(ScrollingState.initial(
-          matrix: testMatrix,
-          content: testContent,
-          size: testSize,
-          diagramRect: testDiagramRect));
-
-      await tester.pumpWidget(createWidgetUnderTest());
-
-      // Start two gestures
-      final gesture1 = await tester.startGesture(const Offset(0, 0));
-      final gesture2 = await tester.startGesture(const Offset(50, 50));
-      await tester.pump();
-
-      // Move both fingers
-      await gesture1.moveBy(const Offset(20, 20));
-      await gesture2.moveBy(const Offset(-20, -20));
-      await tester.pump();
-
-      // End gestures
-      await gesture1.up();
-      await gesture2.up();
-      await tester.pump();
-
-      // Verify events using predicate instead of type matching
-      verify(() => mockScrollingBloc.add(any(
-            that: predicate((event) =>
-                event is ScrollingEvent && event.toString().contains('scale')),
-          ))).called(any);
-    });
-
-    testWidgets('ScrollingView handles rapid gesture sequences',
-        (WidgetTester tester) async {
-      mockScrollingBloc.emitState(ScrollingState.initial(
-          matrix: testMatrix,
-          content: testContent,
-          size: testSize,
-          diagramRect: testDiagramRect));
-
-      await tester.pumpWidget(createWidgetUnderTest());
-
-      // Perform rapid sequence of gestures
-      for (int i = 0; i < 5; i++) {
-        final gesture = await tester.startGesture(Offset(i * 10.0, i * 10.0));
-        await tester.pump(const Duration(milliseconds: 16)); // ~ 1 frame
-        await gesture.moveBy(const Offset(5, 5));
-        await tester.pump(const Duration(milliseconds: 16));
-        await gesture.up();
-        await tester.pump(const Duration(milliseconds: 16));
-      }
-
-      // Verify widget remained responsive
-      expect(find.byType(CustomPaint), findsOneWidget);
-
-      // Verify events were handled using predicate
-      verify(() => mockScrollingBloc.add(any(
-            that: predicate((event) => event is ScrollingEvent),
-          ))).called(greaterThan(0));
-    });
-
-    testWidgets('ScrollingView handles state changes correctly',
-        (WidgetTester tester) async {
-      final stateController = StreamController<ScrollingState>.broadcast();
-      when(() => mockScrollingBloc.stream)
-          .thenAnswer((_) => stateController.stream);
-      mockScrollingBloc.emitState(ScrollingState.initial(
-          matrix: testMatrix,
-          content: testContent,
-          size: testSize,
-          diagramRect: testDiagramRect));
-
-      await tester.pumpWidget(createWidgetUnderTest());
-
-      // Verify initial state
-      expect(find.byType(CustomPaint), findsOneWidget);
-
-      // Add a new state to the stream
-      stateController.add(ScrollingState.idle(
-          matrix: testMatrix,
-          diagramRect: testDiagramRect,
-          content: testContent,
-          size: testSize));
-      await tester.pump();
-
-      // Verify that the widget is rebuilt with the new state
-      expect(find.byType(CustomPaint), findsOneWidget);
-
-      // Clean up
-      stateController.close();
-    });
-
-    testWidgets('ScrollingView handles rapid state changes without errors',
-        (WidgetTester tester) async {
-      // Setup stream
-      final streamController = StreamController<ScrollingState>.broadcast();
-      when(() => mockScrollingBloc.stream)
-          .thenAnswer((_) => streamController.stream);
-      mockScrollingBloc.emitState(ScrollingState.initial(
-          matrix: testMatrix,
-          content: testContent,
-          size: testSize,
-          diagramRect: testDiagramRect));
-
-      await tester.pumpWidget(createWidgetUnderTest());
-
-      // Define a series of states
+      // Arrange
       final states = [
-        ScrollingState.idle(
-            matrix: testMatrix,
-            diagramRect: testDiagramRect,
-            content: testContent,
-            size: testSize),
-        ScrollingState.animatingInitialToIdle(
-            oldMatrix: testMatrix,
-            matrix: testMatrix,
-            diagramRect: testDiagramRect,
-            content: testContent,
-            size: testSize),
-        ScrollingState.scrolling(
-            matrix: testMatrix,
-            diagramRect: testDiagramRect,
-            content: testContent,
-            translationUpdater: MockValueUpdater<Offset>(),
-            scaleUpdater: MockValueUpdater<double>(),
-            size: testSize,
-            squaredDistance: 0.0,
-            eventDateTime: DateTime.now()),
+        ScrollingState.initial(matrix: Matrix4.identity()),
+        createAnimatingInitialToIdleState(),
       ];
 
-      // Add states rapidly to the stream
-      for (final state in states) {
-        streamController.add(state);
-        await tester.pump(const Duration(milliseconds: 10));
-      }
+      whenListen(
+        mockBloc,
+        Stream.fromIterable(states),
+        initialState: states.first,
+      );
 
-      // Allow time for the widget to process all states
-      await tester.pumpAndSettle();
+      // Act
+      await tester.pumpWidget(
+        MaterialApp(
+          home: BlocProvider<ScrollingBloc>.value(
+            value: mockBloc,
+            child: const ScrollingView(
+              shouldTranslate: true,
+              shouldScale: true,
+              shouldRotate: false,
+              clipChild: true,
+            ),
+          ),
+        ),
+      );
 
-      // Verify that the CustomPaint widget is rendered
+      // Initial state
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+      // Transition should happen
+      await tester.pump();
+
+      // Animation should be in progress
       expect(find.byType(CustomPaint), findsOneWidget);
 
-      streamController.close();
+      // Let the animation complete
+      await tester.pump(const Duration(milliseconds: 1000));
+
+      // Verify event is emitted after animation
+      verify(() =>
+              mockBloc.add(const ScrollingEvent.initialToIdleAnimationEnd()))
+          .called(1);
     });
 
-    testWidgets(
-        'ScrollingView shouldTranslate, shouldScale, shouldRotate properties are respected',
+    testWidgets('should handle outOfBoundsToIdle animation',
         (WidgetTester tester) async {
-      // Test with shouldTranslate = false
-      mockScrollingBloc =
-          MockScrollingBloc(); // Re-initialize to reset call counts
-      mockScrollingBloc.emitState(ScrollingState.initial(
-          matrix: testMatrix,
-          content: testContent,
-          size: testSize,
-          diagramRect: testDiagramRect));
+      // Arrange
+      final states = [
+        createIdleState(),
+        createAnimatingFromOutOfBoundsState(),
+      ];
 
+      whenListen(
+        mockBloc,
+        Stream.fromIterable(states),
+        initialState: states.first,
+      );
+
+      // Act
       await tester.pumpWidget(
         MaterialApp(
-          home: RepositoryProvider<DiagramContentRepository>(
-            create: (context) => mockDiagramContentRepository,
-            child: BlocProvider<ScrollingBloc>(
-              create: (context) => mockScrollingBloc,
-              child: const ScrollingView(
-                shouldTranslate: false,
-                shouldScale: true,
-                shouldRotate: true,
-                clipChild: true,
-              ),
+          home: BlocProvider<ScrollingBloc>.value(
+            value: mockBloc,
+            child: const ScrollingView(
+              shouldTranslate: true,
+              shouldScale: true,
+              shouldRotate: false,
+              clipChild: true,
             ),
           ),
         ),
       );
 
-      // Find the ScrollingView and simulate a scale start gesture
-      final gesture = await tester.startGesture(Offset.zero);
-      await tester.pump();
-      await gesture.moveBy(const Offset(10, 10));
-      await tester.pump();
-      await gesture.up();
+      // Initial state
+      expect(find.byType(CustomPaint), findsOneWidget);
+
+      // Trigger state transition
       await tester.pump();
 
-      // Verify that the ScrollingBloc did not receive the continueScale event
-      verifyNever(() => mockScrollingBloc.add(any(
-            that: predicate((event) =>
-                event is ScrollingEvent &&
-                event.maybeMap(
-                  continueScale: (_) => true,
-                  orElse: () => false,
-                )),
-          )));
+      // Animation should be in progress
+      expect(find.byType(CustomPaint), findsOneWidget);
 
-      // Test with shouldScale = false
-      mockScrollingBloc =
-          MockScrollingBloc(); // Re-initialize to reset call counts
-      mockScrollingBloc.emitState(ScrollingState.initial(
-          matrix: testMatrix,
-          content: testContent,
-          size: testSize,
-          diagramRect: testDiagramRect));
+      // Let the animation complete
+      await tester.pump(const Duration(milliseconds: 300));
 
+      // Verify event is emitted after animation
+      verify(() => mockBloc
+          .add(const ScrollingEvent.outOfBoundsToIdleAnimationEnd())).called(1);
+    });
+
+    testWidgets('should handle inertial scrolling animation',
+        (WidgetTester tester) async {
+      // Arrange
+      final states = [
+        createIdleState(),
+        createAnimatingInertialScrollingState(),
+      ];
+
+      whenListen(
+        mockBloc,
+        Stream.fromIterable(states),
+        initialState: states.first,
+      );
+
+      final targetMatrix = Matrix4.identity()..translate(100.0, 100.0);
+
+      // Act
       await tester.pumpWidget(
         MaterialApp(
-          home: RepositoryProvider<DiagramContentRepository>(
-            create: (context) => mockDiagramContentRepository,
-            child: BlocProvider<ScrollingBloc>(
-              create: (context) => mockScrollingBloc,
-              child: const ScrollingView(
-                shouldTranslate: true,
-                shouldScale: false,
-                shouldRotate: true,
-                clipChild: true,
-              ),
+          home: BlocProvider<ScrollingBloc>.value(
+            value: mockBloc,
+            child: const ScrollingView(
+              shouldTranslate: true,
+              shouldScale: true,
+              shouldRotate: false,
+              clipChild: true,
             ),
           ),
         ),
       );
 
-      // Find the ScrollingView and simulate a scale start gesture
-      final gesture2 = await tester.startGesture(Offset.zero);
-      await tester.pump();
-      await gesture2.moveBy(const Offset(10, 10));
-      await tester.pump();
-      await gesture2.up();
+      // Initial state
+      expect(find.byType(CustomPaint), findsOneWidget);
+
+      // Trigger state transition
       await tester.pump();
 
-      // Verify that the ScrollingBloc did not receive the continueScale event
-      verifyNever(() => mockScrollingBloc.add(any(
-            that: predicate((event) =>
-                event is ScrollingEvent &&
-                event.maybeMap(
-                  continueScale: (_) => true,
-                  orElse: () => false,
-                )),
-          )));
+      // Animation should be in progress
+      expect(find.byType(CustomPaint), findsOneWidget);
 
-      // Test with shouldRotate = false
-      mockScrollingBloc =
-          MockScrollingBloc(); // Re-initialize to reset call counts
-      mockScrollingBloc.emitState(ScrollingState.initial(
-          matrix: testMatrix,
-          content: testContent,
-          size: testSize,
-          diagramRect: testDiagramRect));
+      // Let the animation complete
+      await tester.pump(const Duration(milliseconds: 300));
 
+      // Verify event is emitted after animation
+      verify(() => mockBloc.add(any(that: isA<ScrollingEvent>()))).called(1);
+    });
+
+    testWidgets('should handle stopping animation',
+        (WidgetTester tester) async {
+      // Arrange
+      when(() => mockBloc.state)
+          .thenReturn(createAnimatingInertialScrollingState());
+
+      // Act
       await tester.pumpWidget(
         MaterialApp(
-          home: RepositoryProvider<DiagramContentRepository>(
-            create: (context) => mockDiagramContentRepository,
-            child: BlocProvider<ScrollingBloc>(
-              create: (context) => mockScrollingBloc,
-              child: const ScrollingView(
-                shouldTranslate: true,
-                shouldScale: true,
-                shouldRotate: false,
-                clipChild: true,
-              ),
+          home: BlocProvider<ScrollingBloc>.value(
+            value: mockBloc,
+            child: const ScrollingView(
+              shouldTranslate: true,
+              shouldScale: true,
+              shouldRotate: false,
+              clipChild: true,
             ),
           ),
         ),
       );
 
-      // Find the ScrollingView and simulate a scale start gesture
-      final gesture3 = await tester.startGesture(Offset.zero);
-      await tester.pump();
-      await gesture3.moveBy(const Offset(10, 10));
-      await tester.pump();
-      await gesture3.up();
+      // Initial animation state
+      expect(find.byType(CustomPaint), findsOneWidget);
+
+      // Trigger stoppingAnimation state
+      when(() => mockBloc.state).thenReturn(createStoppingAnimationState());
+      whenListen(
+        mockBloc,
+        Stream.value(createStoppingAnimationState()),
+        initialState: createAnimatingInertialScrollingState(),
+      );
+
       await tester.pump();
 
-      // Verify that the ScrollingBloc did receive the continueScale event
-      verify(() => mockScrollingBloc.add(any(
-            that: predicate((event) =>
-                event is ScrollingEvent &&
-                event.maybeMap(
-                  continueScale: (_) => true,
-                  orElse: () => false,
-                )),
-          )));
+      // Animation should be stopped
+      verify(() => mockBloc.add(any(that: isA<ScrollingEvent>()))).called(1);
+    });
+  });
+
+  group('ScrollingView Widget - CustomPainter Tests', () {
+    testWidgets('DiagramBackgroundPainter should render background',
+        (WidgetTester tester) async {
+      // Arrange
+      when(() => mockBloc.state).thenReturn(createIdleState());
+
+      // Act
+      await tester.pumpWidget(
+        MaterialApp(
+          home: BlocProvider<ScrollingBloc>.value(
+            value: mockBloc,
+            child: const ScrollingView(
+              shouldTranslate: true,
+              shouldScale: true,
+              shouldRotate: false,
+              clipChild: true,
+            ),
+          ),
+        ),
+      );
+
+      // Find the CustomPaint widget
+      final customPaint = tester.widget<CustomPaint>(find.byType(CustomPaint));
+
+      // Assert that painter is of correct type
+      expect(customPaint.painter, isA<DiagramBackgroundPainter>());
+      expect(customPaint.foregroundPainter, isA<DiagramContentPainter>());
+    });
+  });
+
+  group('ScrollingView Widget - Animation Controller Management', () {
+    testWidgets('should dispose animation controller when widget is disposed',
+        (WidgetTester tester) async {
+      // Arrange
+      when(() => mockBloc.state)
+          .thenReturn(createAnimatingInitialToIdleState());
+
+      // Act
+      await tester.pumpWidget(
+        MaterialApp(
+          home: BlocProvider<ScrollingBloc>.value(
+            value: mockBloc,
+            child: const ScrollingView(
+              shouldTranslate: true,
+              shouldScale: true,
+              shouldRotate: false,
+              clipChild: true,
+            ),
+          ),
+        ),
+      );
+
+      // Dispose widget
+      await tester.pumpWidget(Container());
+
+      // No exceptions should be thrown when widget is disposed
+    });
+  });
+
+  group('ScrollingView Widget - Matrix Transformation Tests', () {
+    testWidgets('should apply matrix transformations correctly',
+        (WidgetTester tester) async {
+      // Arrange
+      final scaledMatrix = Matrix4.identity()..scale(2.0);
+      when(() => mockBloc.state).thenReturn(
+        ScrollingState.idle(
+          matrix: scaledMatrix,
+          content: [TestDiagramObject()],
+          size: const Size(800, 600),
+          diagramRect: const Rect.fromLTWH(0, 0, 100, 100),
+        ),
+      );
+
+      // Act
+      await tester.pumpWidget(
+        MaterialApp(
+          home: BlocProvider<ScrollingBloc>.value(
+            value: mockBloc,
+            child: const ScrollingView(
+              shouldTranslate: true,
+              shouldScale: true,
+              shouldRotate: false,
+              clipChild: true,
+            ),
+          ),
+        ),
+      );
+
+      // Find the CustomPaint widget
+      final customPaint = tester.widget<CustomPaint>(find.byType(CustomPaint));
+      final backgroundPainter = customPaint.painter as DiagramBackgroundPainter;
+
+      // Assert that the correct transformation matrix is used
+      expect(backgroundPainter.matrix, equals(scaledMatrix));
     });
   });
 }

@@ -453,7 +453,7 @@ class ScrollingBloc extends Bloc<ScrollingEvent, ScrollingState> {
           }
         },
         idle: (idle) async {
-          Rect contentRect = getDiagramRectFromContent(idle.content!);
+          Rect contentRect = getDiagramRectFromContent(idle.content);
           Matrix4 matrix = _adjustMatrix(
             matrix: idle.matrix,
             logicalContentRect: contentRect,
@@ -814,7 +814,7 @@ class ScrollingBloc extends Bloc<ScrollingEvent, ScrollingState> {
 
   @override
   Future<void> close() {
-    listSubscription?.cancel();
+    listSubscription.cancel();
     return super.close();
   }
 
@@ -833,7 +833,7 @@ class ScrollingBloc extends Bloc<ScrollingEvent, ScrollingState> {
             "Unexpected Event: $uEvent while in animatingInertialScrolling");
       },
       orElse: () {
-        assert(false, 'unmanaged event: ${uEvent} when in state: ${state}');
+        assert(false, 'unmanaged event: $uEvent when in state: $state');
       },
     );
   }

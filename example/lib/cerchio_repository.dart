@@ -11,7 +11,7 @@ class CerchioRepository extends DiagramContentRepository {
   static const width = 1024;
   static const height = 768;
   static const radius = 50.0;
-  Rect _lastArea = Rect.zero;
+  final Rect _lastArea = Rect.zero;
   // Initializing a stream controller
   final StreamController<List<CerchioEntity>> _controller =
       StreamController<List<CerchioEntity>>();

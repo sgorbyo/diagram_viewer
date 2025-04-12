@@ -8,7 +8,7 @@ class CerchioEntity extends Equatable implements DiagramObjectEntity {
   final double radius;
   final String id;
 
-  CerchioEntity({
+  const CerchioEntity({
     required this.position,
     required this.radius,
     required this.id,
