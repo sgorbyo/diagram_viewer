@@ -9,15 +9,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  bloc: ^9.0.0
-  flutter_bloc: ^9.0.0
+  bloc: ^8.1.4
+  flutter_bloc: ^8.1.3
   json_annotation: ^4.8.1
-  freezed_annotation: ^2.3.4  # Aggiungi versione
-  vector_math: ^2.1.4  # Aggiungi versione
+  freezed_annotation: ^2.3.4
+  vector_math: ^2.1.4
   equatable: ^2.0.7
-  uuid: ^3.0.7  # Aggiungi versione
-  meta: ^1.9.1  # Aggiungi versione
-  matrix4_transform: ^2.0.1  # Aggiungi versione
+  uuid: ^3.0.7
+  meta: ^1.9.1
+  matrix4_transform: ^2.0.1
 
 dev_dependencies:
   flutter_test:
@@ -25,6 +25,8 @@ dev_dependencies:
   flutter_lints: ^2.0.1
   build_runner: ^2.4.4
   freezed: ^2.3.4
+  mocktail: ^1.0.0
+  bloc_test: ^9.0.3
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
