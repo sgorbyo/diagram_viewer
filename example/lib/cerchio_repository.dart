@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:math';
-import 'dart:ui';
 import 'cerchio_model.dart';
 import 'cerchio_entity.dart';
 import 'package:diagram_viewer/diagram_content_repository.dart';
@@ -11,7 +10,6 @@ class CerchioRepository extends DiagramContentRepository {
   static const width = 1024;
   static const height = 768;
   static const radius = 50.0;
-  final Rect _lastArea = Rect.zero;
   // Initializing a stream controller
   final StreamController<List<CerchioEntity>> _controller =
       StreamController<List<CerchioEntity>>();

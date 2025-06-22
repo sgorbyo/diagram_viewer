@@ -10,6 +10,8 @@ class ScrollingView extends StatefulWidget {
   final bool shouldScale;
   final bool shouldRotate;
   final bool clipChild;
+  final Color backgroundColor;
+  final Color outsideColor;
 
   const ScrollingView({
     Key? key,
@@ -17,6 +19,8 @@ class ScrollingView extends StatefulWidget {
     required this.shouldScale,
     required this.shouldRotate,
     required this.clipChild,
+    required this.backgroundColor,
+    required this.outsideColor,
   }) : super(key: key);
 
   @override
@@ -30,7 +34,6 @@ class _ScrollingViewState extends State<ScrollingView>
   CurvedAnimation? _curvedAnimation;
   Matrix4? matrix;
   Matrix4? _oldMatrix;
-  DateTime? _lastDragDateTime;
 
   void _animateMatrixInitialToIdle({
     required Matrix4 mEnd,
@@ -169,7 +172,6 @@ class _ScrollingViewState extends State<ScrollingView>
               scrolling: (extScrolling) => current.maybeMap(
                 scrolling: (_) {
                   _oldMatrix = extScrolling.matrix;
-                  _lastDragDateTime = DateTime.now();
                   return true;
                 },
                 animatingFromOutOfBounds: (_) => true,
@@ -265,6 +267,8 @@ class _ScrollingViewState extends State<ScrollingView>
           painter: DiagramBackgroundPainter(
             matrix: matrix,
             diagramRect: diagramRect,
+            backgroundColor: widget.backgroundColor,
+            outsideColor: widget.outsideColor,
           ),
           foregroundPainter: DiagramContentPainter(
             matrix: matrix,
@@ -279,14 +283,20 @@ class DiagramBackgroundPainter extends CustomPainter {
   Paint diagramOutsidePaint = Paint();
   final Matrix4 matrix;
   final Rect diagramRect;
+  final Color backgroundColor;
+  final Color outsideColor;
 
-  DiagramBackgroundPainter({required this.matrix, required this.diagramRect});
+  DiagramBackgroundPainter({
+    required this.matrix,
+    required this.diagramRect,
+    this.backgroundColor = const Color.fromRGBO(250, 250, 250, 1.0),
+    this.outsideColor = const Color.fromRGBO(128, 128, 128, 1.0),
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
-    // TODO Use Theme for the following colors.
-    diagramBackgroundPaint.color = const Color.fromRGBO(250, 250, 250, 1.0);
-    diagramOutsidePaint.color = const Color.fromRGBO(128, 128, 128, 1.0);
+    diagramBackgroundPaint.color = backgroundColor;
+    diagramOutsidePaint.color = outsideColor;
     Path outside = Path();
     outside.addRect(Rect.fromLTRB(0.0, 0.0, size.width, size.height));
     canvas.drawPath(outside, diagramOutsidePaint);
@@ -328,7 +338,6 @@ class DiagramContentPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
-    // TODO: implement shouldRepaint
     return true;
   }
 }

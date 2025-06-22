@@ -12,7 +12,7 @@ part of 'scrolling_bloc.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$ScrollingEvent {
@@ -139,31 +139,36 @@ class _$ScrollingEventCopyWithImpl<$Res, $Val extends ScrollingEvent>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of ScrollingEvent
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
-abstract class _$$_StartScaleCopyWith<$Res> {
-  factory _$$_StartScaleCopyWith(
-          _$_StartScale value, $Res Function(_$_StartScale) then) =
-      __$$_StartScaleCopyWithImpl<$Res>;
+abstract class _$$StartScaleImplCopyWith<$Res> {
+  factory _$$StartScaleImplCopyWith(
+          _$StartScaleImpl value, $Res Function(_$StartScaleImpl) then) =
+      __$$StartScaleImplCopyWithImpl<$Res>;
   @useResult
   $Res call({ScaleStartDetails details});
 }
 
 /// @nodoc
-class __$$_StartScaleCopyWithImpl<$Res>
-    extends _$ScrollingEventCopyWithImpl<$Res, _$_StartScale>
-    implements _$$_StartScaleCopyWith<$Res> {
-  __$$_StartScaleCopyWithImpl(
-      _$_StartScale _value, $Res Function(_$_StartScale) _then)
+class __$$StartScaleImplCopyWithImpl<$Res>
+    extends _$ScrollingEventCopyWithImpl<$Res, _$StartScaleImpl>
+    implements _$$StartScaleImplCopyWith<$Res> {
+  __$$StartScaleImplCopyWithImpl(
+      _$StartScaleImpl _value, $Res Function(_$StartScaleImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ScrollingEvent
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? details = null,
   }) {
-    return _then(_$_StartScale(
+    return _then(_$StartScaleImpl(
       details: null == details
           ? _value.details
           : details // ignore: cast_nullable_to_non_nullable
@@ -174,8 +179,8 @@ class __$$_StartScaleCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_StartScale implements _StartScale {
-  const _$_StartScale({required this.details});
+class _$StartScaleImpl implements _StartScale {
+  const _$StartScaleImpl({required this.details});
 
   @override
   final ScaleStartDetails details;
@@ -186,21 +191,23 @@ class _$_StartScale implements _StartScale {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_StartScale &&
+            other is _$StartScaleImpl &&
             (identical(other.details, details) || other.details == details));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, details);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ScrollingEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$_StartScaleCopyWith<_$_StartScale> get copyWith =>
-      __$$_StartScaleCopyWithImpl<_$_StartScale>(this, _$identity);
+  _$$StartScaleImplCopyWith<_$StartScaleImpl> get copyWith =>
+      __$$StartScaleImplCopyWithImpl<_$StartScaleImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -334,38 +341,43 @@ class _$_StartScale implements _StartScale {
 
 abstract class _StartScale implements ScrollingEvent {
   const factory _StartScale({required final ScaleStartDetails details}) =
-      _$_StartScale;
+      _$StartScaleImpl;
 
   ScaleStartDetails get details;
-  @JsonKey(ignore: true)
-  _$$_StartScaleCopyWith<_$_StartScale> get copyWith =>
+
+  /// Create a copy of ScrollingEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$StartScaleImplCopyWith<_$StartScaleImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_ContinueScaleCopyWith<$Res> {
-  factory _$$_ContinueScaleCopyWith(
-          _$_ContinueScale value, $Res Function(_$_ContinueScale) then) =
-      __$$_ContinueScaleCopyWithImpl<$Res>;
+abstract class _$$ContinueScaleImplCopyWith<$Res> {
+  factory _$$ContinueScaleImplCopyWith(
+          _$ContinueScaleImpl value, $Res Function(_$ContinueScaleImpl) then) =
+      __$$ContinueScaleImplCopyWithImpl<$Res>;
   @useResult
   $Res call({ScaleUpdateDetails details, Offset? additionalFocalPoint});
 }
 
 /// @nodoc
-class __$$_ContinueScaleCopyWithImpl<$Res>
-    extends _$ScrollingEventCopyWithImpl<$Res, _$_ContinueScale>
-    implements _$$_ContinueScaleCopyWith<$Res> {
-  __$$_ContinueScaleCopyWithImpl(
-      _$_ContinueScale _value, $Res Function(_$_ContinueScale) _then)
+class __$$ContinueScaleImplCopyWithImpl<$Res>
+    extends _$ScrollingEventCopyWithImpl<$Res, _$ContinueScaleImpl>
+    implements _$$ContinueScaleImplCopyWith<$Res> {
+  __$$ContinueScaleImplCopyWithImpl(
+      _$ContinueScaleImpl _value, $Res Function(_$ContinueScaleImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ScrollingEvent
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? details = null,
     Object? additionalFocalPoint = freezed,
   }) {
-    return _then(_$_ContinueScale(
+    return _then(_$ContinueScaleImpl(
       details: null == details
           ? _value.details
           : details // ignore: cast_nullable_to_non_nullable
@@ -380,8 +392,8 @@ class __$$_ContinueScaleCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_ContinueScale implements _ContinueScale {
-  const _$_ContinueScale({required this.details, this.additionalFocalPoint});
+class _$ContinueScaleImpl implements _ContinueScale {
+  const _$ContinueScaleImpl({required this.details, this.additionalFocalPoint});
 
   @override
   final ScaleUpdateDetails details;
@@ -394,10 +406,10 @@ class _$_ContinueScale implements _ContinueScale {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ContinueScale &&
+            other is _$ContinueScaleImpl &&
             (identical(other.details, details) || other.details == details) &&
             (identical(other.additionalFocalPoint, additionalFocalPoint) ||
                 other.additionalFocalPoint == additionalFocalPoint));
@@ -406,11 +418,13 @@ class _$_ContinueScale implements _ContinueScale {
   @override
   int get hashCode => Object.hash(runtimeType, details, additionalFocalPoint);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ScrollingEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ContinueScaleCopyWith<_$_ContinueScale> get copyWith =>
-      __$$_ContinueScaleCopyWithImpl<_$_ContinueScale>(this, _$identity);
+  _$$ContinueScaleImplCopyWith<_$ContinueScaleImpl> get copyWith =>
+      __$$ContinueScaleImplCopyWithImpl<_$ContinueScaleImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -545,38 +559,43 @@ class _$_ContinueScale implements _ContinueScale {
 abstract class _ContinueScale implements ScrollingEvent {
   const factory _ContinueScale(
       {required final ScaleUpdateDetails details,
-      final Offset? additionalFocalPoint}) = _$_ContinueScale;
+      final Offset? additionalFocalPoint}) = _$ContinueScaleImpl;
 
   ScaleUpdateDetails get details;
   Offset? get additionalFocalPoint;
-  @JsonKey(ignore: true)
-  _$$_ContinueScaleCopyWith<_$_ContinueScale> get copyWith =>
+
+  /// Create a copy of ScrollingEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ContinueScaleImplCopyWith<_$ContinueScaleImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_EndScaleCopyWith<$Res> {
-  factory _$$_EndScaleCopyWith(
-          _$_EndScale value, $Res Function(_$_EndScale) then) =
-      __$$_EndScaleCopyWithImpl<$Res>;
+abstract class _$$EndScaleImplCopyWith<$Res> {
+  factory _$$EndScaleImplCopyWith(
+          _$EndScaleImpl value, $Res Function(_$EndScaleImpl) then) =
+      __$$EndScaleImplCopyWithImpl<$Res>;
   @useResult
   $Res call({ScaleEndDetails details});
 }
 
 /// @nodoc
-class __$$_EndScaleCopyWithImpl<$Res>
-    extends _$ScrollingEventCopyWithImpl<$Res, _$_EndScale>
-    implements _$$_EndScaleCopyWith<$Res> {
-  __$$_EndScaleCopyWithImpl(
-      _$_EndScale _value, $Res Function(_$_EndScale) _then)
+class __$$EndScaleImplCopyWithImpl<$Res>
+    extends _$ScrollingEventCopyWithImpl<$Res, _$EndScaleImpl>
+    implements _$$EndScaleImplCopyWith<$Res> {
+  __$$EndScaleImplCopyWithImpl(
+      _$EndScaleImpl _value, $Res Function(_$EndScaleImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ScrollingEvent
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? details = null,
   }) {
-    return _then(_$_EndScale(
+    return _then(_$EndScaleImpl(
       details: null == details
           ? _value.details
           : details // ignore: cast_nullable_to_non_nullable
@@ -587,8 +606,8 @@ class __$$_EndScaleCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_EndScale implements _EndScale {
-  const _$_EndScale({required this.details});
+class _$EndScaleImpl implements _EndScale {
+  const _$EndScaleImpl({required this.details});
 
   @override
   final ScaleEndDetails details;
@@ -599,21 +618,23 @@ class _$_EndScale implements _EndScale {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_EndScale &&
+            other is _$EndScaleImpl &&
             (identical(other.details, details) || other.details == details));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, details);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ScrollingEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$_EndScaleCopyWith<_$_EndScale> get copyWith =>
-      __$$_EndScaleCopyWithImpl<_$_EndScale>(this, _$identity);
+  _$$EndScaleImplCopyWith<_$EndScaleImpl> get copyWith =>
+      __$$EndScaleImplCopyWithImpl<_$EndScaleImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -747,38 +768,43 @@ class _$_EndScale implements _EndScale {
 
 abstract class _EndScale implements ScrollingEvent {
   const factory _EndScale({required final ScaleEndDetails details}) =
-      _$_EndScale;
+      _$EndScaleImpl;
 
   ScaleEndDetails get details;
-  @JsonKey(ignore: true)
-  _$$_EndScaleCopyWith<_$_EndScale> get copyWith =>
+
+  /// Create a copy of ScrollingEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$EndScaleImplCopyWith<_$EndScaleImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_RestartScaleCopyWith<$Res> {
-  factory _$$_RestartScaleCopyWith(
-          _$_RestartScale value, $Res Function(_$_RestartScale) then) =
-      __$$_RestartScaleCopyWithImpl<$Res>;
+abstract class _$$RestartScaleImplCopyWith<$Res> {
+  factory _$$RestartScaleImplCopyWith(
+          _$RestartScaleImpl value, $Res Function(_$RestartScaleImpl) then) =
+      __$$RestartScaleImplCopyWithImpl<$Res>;
   @useResult
   $Res call({ScaleStartDetails details, Matrix4 matrix});
 }
 
 /// @nodoc
-class __$$_RestartScaleCopyWithImpl<$Res>
-    extends _$ScrollingEventCopyWithImpl<$Res, _$_RestartScale>
-    implements _$$_RestartScaleCopyWith<$Res> {
-  __$$_RestartScaleCopyWithImpl(
-      _$_RestartScale _value, $Res Function(_$_RestartScale) _then)
+class __$$RestartScaleImplCopyWithImpl<$Res>
+    extends _$ScrollingEventCopyWithImpl<$Res, _$RestartScaleImpl>
+    implements _$$RestartScaleImplCopyWith<$Res> {
+  __$$RestartScaleImplCopyWithImpl(
+      _$RestartScaleImpl _value, $Res Function(_$RestartScaleImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ScrollingEvent
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? details = null,
     Object? matrix = null,
   }) {
-    return _then(_$_RestartScale(
+    return _then(_$RestartScaleImpl(
       details: null == details
           ? _value.details
           : details // ignore: cast_nullable_to_non_nullable
@@ -793,8 +819,8 @@ class __$$_RestartScaleCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_RestartScale implements _RestartScale {
-  const _$_RestartScale({required this.details, required this.matrix});
+class _$RestartScaleImpl implements _RestartScale {
+  const _$RestartScaleImpl({required this.details, required this.matrix});
 
   @override
   final ScaleStartDetails details;
@@ -807,10 +833,10 @@ class _$_RestartScale implements _RestartScale {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_RestartScale &&
+            other is _$RestartScaleImpl &&
             (identical(other.details, details) || other.details == details) &&
             (identical(other.matrix, matrix) || other.matrix == matrix));
   }
@@ -818,11 +844,13 @@ class _$_RestartScale implements _RestartScale {
   @override
   int get hashCode => Object.hash(runtimeType, details, matrix);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ScrollingEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$_RestartScaleCopyWith<_$_RestartScale> get copyWith =>
-      __$$_RestartScaleCopyWithImpl<_$_RestartScale>(this, _$identity);
+  _$$RestartScaleImplCopyWith<_$RestartScaleImpl> get copyWith =>
+      __$$RestartScaleImplCopyWithImpl<_$RestartScaleImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -957,38 +985,43 @@ class _$_RestartScale implements _RestartScale {
 abstract class _RestartScale implements ScrollingEvent {
   const factory _RestartScale(
       {required final ScaleStartDetails details,
-      required final Matrix4 matrix}) = _$_RestartScale;
+      required final Matrix4 matrix}) = _$RestartScaleImpl;
 
   ScaleStartDetails get details;
   Matrix4 get matrix;
-  @JsonKey(ignore: true)
-  _$$_RestartScaleCopyWith<_$_RestartScale> get copyWith =>
+
+  /// Create a copy of ScrollingEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$RestartScaleImplCopyWith<_$RestartScaleImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_ViewportChangedCopyWith<$Res> {
-  factory _$$_ViewportChangedCopyWith(
-          _$_ViewportChanged value, $Res Function(_$_ViewportChanged) then) =
-      __$$_ViewportChangedCopyWithImpl<$Res>;
+abstract class _$$ViewportChangedImplCopyWith<$Res> {
+  factory _$$ViewportChangedImplCopyWith(_$ViewportChangedImpl value,
+          $Res Function(_$ViewportChangedImpl) then) =
+      __$$ViewportChangedImplCopyWithImpl<$Res>;
   @useResult
   $Res call({Size size});
 }
 
 /// @nodoc
-class __$$_ViewportChangedCopyWithImpl<$Res>
-    extends _$ScrollingEventCopyWithImpl<$Res, _$_ViewportChanged>
-    implements _$$_ViewportChangedCopyWith<$Res> {
-  __$$_ViewportChangedCopyWithImpl(
-      _$_ViewportChanged _value, $Res Function(_$_ViewportChanged) _then)
+class __$$ViewportChangedImplCopyWithImpl<$Res>
+    extends _$ScrollingEventCopyWithImpl<$Res, _$ViewportChangedImpl>
+    implements _$$ViewportChangedImplCopyWith<$Res> {
+  __$$ViewportChangedImplCopyWithImpl(
+      _$ViewportChangedImpl _value, $Res Function(_$ViewportChangedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ScrollingEvent
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? size = null,
   }) {
-    return _then(_$_ViewportChanged(
+    return _then(_$ViewportChangedImpl(
       size: null == size
           ? _value.size
           : size // ignore: cast_nullable_to_non_nullable
@@ -999,8 +1032,8 @@ class __$$_ViewportChangedCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_ViewportChanged implements _ViewportChanged {
-  const _$_ViewportChanged({required this.size});
+class _$ViewportChangedImpl implements _ViewportChanged {
+  const _$ViewportChangedImpl({required this.size});
 
   @override
   final Size size;
@@ -1011,21 +1044,24 @@ class _$_ViewportChanged implements _ViewportChanged {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ViewportChanged &&
+            other is _$ViewportChangedImpl &&
             (identical(other.size, size) || other.size == size));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, size);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ScrollingEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ViewportChangedCopyWith<_$_ViewportChanged> get copyWith =>
-      __$$_ViewportChangedCopyWithImpl<_$_ViewportChanged>(this, _$identity);
+  _$$ViewportChangedImplCopyWith<_$ViewportChangedImpl> get copyWith =>
+      __$$ViewportChangedImplCopyWithImpl<_$ViewportChangedImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -1159,37 +1195,42 @@ class _$_ViewportChanged implements _ViewportChanged {
 
 abstract class _ViewportChanged implements ScrollingEvent {
   const factory _ViewportChanged({required final Size size}) =
-      _$_ViewportChanged;
+      _$ViewportChangedImpl;
 
   Size get size;
-  @JsonKey(ignore: true)
-  _$$_ViewportChangedCopyWith<_$_ViewportChanged> get copyWith =>
+
+  /// Create a copy of ScrollingEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ViewportChangedImplCopyWith<_$ViewportChangedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_ContentChangedCopyWith<$Res> {
-  factory _$$_ContentChangedCopyWith(
-          _$_ContentChanged value, $Res Function(_$_ContentChanged) then) =
-      __$$_ContentChangedCopyWithImpl<$Res>;
+abstract class _$$ContentChangedImplCopyWith<$Res> {
+  factory _$$ContentChangedImplCopyWith(_$ContentChangedImpl value,
+          $Res Function(_$ContentChangedImpl) then) =
+      __$$ContentChangedImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<DiagramObjectEntity> list});
 }
 
 /// @nodoc
-class __$$_ContentChangedCopyWithImpl<$Res>
-    extends _$ScrollingEventCopyWithImpl<$Res, _$_ContentChanged>
-    implements _$$_ContentChangedCopyWith<$Res> {
-  __$$_ContentChangedCopyWithImpl(
-      _$_ContentChanged _value, $Res Function(_$_ContentChanged) _then)
+class __$$ContentChangedImplCopyWithImpl<$Res>
+    extends _$ScrollingEventCopyWithImpl<$Res, _$ContentChangedImpl>
+    implements _$$ContentChangedImplCopyWith<$Res> {
+  __$$ContentChangedImplCopyWithImpl(
+      _$ContentChangedImpl _value, $Res Function(_$ContentChangedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ScrollingEvent
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? list = null,
   }) {
-    return _then(_$_ContentChanged(
+    return _then(_$ContentChangedImpl(
       list: null == list
           ? _value._list
           : list // ignore: cast_nullable_to_non_nullable
@@ -1200,8 +1241,8 @@ class __$$_ContentChangedCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_ContentChanged implements _ContentChanged {
-  const _$_ContentChanged({required final List<DiagramObjectEntity> list})
+class _$ContentChangedImpl implements _ContentChanged {
+  const _$ContentChangedImpl({required final List<DiagramObjectEntity> list})
       : _list = list;
 
   final List<DiagramObjectEntity> _list;
@@ -1218,10 +1259,10 @@ class _$_ContentChanged implements _ContentChanged {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ContentChanged &&
+            other is _$ContentChangedImpl &&
             const DeepCollectionEquality().equals(other._list, _list));
   }
 
@@ -1229,11 +1270,14 @@ class _$_ContentChanged implements _ContentChanged {
   int get hashCode =>
       Object.hash(runtimeType, const DeepCollectionEquality().hash(_list));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ScrollingEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ContentChangedCopyWith<_$_ContentChanged> get copyWith =>
-      __$$_ContentChangedCopyWithImpl<_$_ContentChanged>(this, _$identity);
+  _$$ContentChangedImplCopyWith<_$ContentChangedImpl> get copyWith =>
+      __$$ContentChangedImplCopyWithImpl<_$ContentChangedImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -1367,36 +1411,42 @@ class _$_ContentChanged implements _ContentChanged {
 
 abstract class _ContentChanged implements ScrollingEvent {
   const factory _ContentChanged(
-      {required final List<DiagramObjectEntity> list}) = _$_ContentChanged;
+      {required final List<DiagramObjectEntity> list}) = _$ContentChangedImpl;
 
   List<DiagramObjectEntity> get list;
-  @JsonKey(ignore: true)
-  _$$_ContentChangedCopyWith<_$_ContentChanged> get copyWith =>
+
+  /// Create a copy of ScrollingEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ContentChangedImplCopyWith<_$ContentChangedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_InitialToIdleAnimationEndCopyWith<$Res> {
-  factory _$$_InitialToIdleAnimationEndCopyWith(
-          _$_InitialToIdleAnimationEnd value,
-          $Res Function(_$_InitialToIdleAnimationEnd) then) =
-      __$$_InitialToIdleAnimationEndCopyWithImpl<$Res>;
+abstract class _$$InitialToIdleAnimationEndImplCopyWith<$Res> {
+  factory _$$InitialToIdleAnimationEndImplCopyWith(
+          _$InitialToIdleAnimationEndImpl value,
+          $Res Function(_$InitialToIdleAnimationEndImpl) then) =
+      __$$InitialToIdleAnimationEndImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_InitialToIdleAnimationEndCopyWithImpl<$Res>
-    extends _$ScrollingEventCopyWithImpl<$Res, _$_InitialToIdleAnimationEnd>
-    implements _$$_InitialToIdleAnimationEndCopyWith<$Res> {
-  __$$_InitialToIdleAnimationEndCopyWithImpl(
-      _$_InitialToIdleAnimationEnd _value,
-      $Res Function(_$_InitialToIdleAnimationEnd) _then)
+class __$$InitialToIdleAnimationEndImplCopyWithImpl<$Res>
+    extends _$ScrollingEventCopyWithImpl<$Res, _$InitialToIdleAnimationEndImpl>
+    implements _$$InitialToIdleAnimationEndImplCopyWith<$Res> {
+  __$$InitialToIdleAnimationEndImplCopyWithImpl(
+      _$InitialToIdleAnimationEndImpl _value,
+      $Res Function(_$InitialToIdleAnimationEndImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of ScrollingEvent
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
 
-class _$_InitialToIdleAnimationEnd implements _InitialToIdleAnimationEnd {
-  const _$_InitialToIdleAnimationEnd();
+class _$InitialToIdleAnimationEndImpl implements _InitialToIdleAnimationEnd {
+  const _$InitialToIdleAnimationEndImpl();
 
   @override
   String toString() {
@@ -1404,10 +1454,10 @@ class _$_InitialToIdleAnimationEnd implements _InitialToIdleAnimationEnd {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_InitialToIdleAnimationEnd);
+            other is _$InitialToIdleAnimationEndImpl);
   }
 
   @override
@@ -1544,32 +1594,36 @@ class _$_InitialToIdleAnimationEnd implements _InitialToIdleAnimationEnd {
 }
 
 abstract class _InitialToIdleAnimationEnd implements ScrollingEvent {
-  const factory _InitialToIdleAnimationEnd() = _$_InitialToIdleAnimationEnd;
+  const factory _InitialToIdleAnimationEnd() = _$InitialToIdleAnimationEndImpl;
 }
 
 /// @nodoc
-abstract class _$$_OutOfBoundsToIdleAnimationEndCopyWith<$Res> {
-  factory _$$_OutOfBoundsToIdleAnimationEndCopyWith(
-          _$_OutOfBoundsToIdleAnimationEnd value,
-          $Res Function(_$_OutOfBoundsToIdleAnimationEnd) then) =
-      __$$_OutOfBoundsToIdleAnimationEndCopyWithImpl<$Res>;
+abstract class _$$OutOfBoundsToIdleAnimationEndImplCopyWith<$Res> {
+  factory _$$OutOfBoundsToIdleAnimationEndImplCopyWith(
+          _$OutOfBoundsToIdleAnimationEndImpl value,
+          $Res Function(_$OutOfBoundsToIdleAnimationEndImpl) then) =
+      __$$OutOfBoundsToIdleAnimationEndImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_OutOfBoundsToIdleAnimationEndCopyWithImpl<$Res>
-    extends _$ScrollingEventCopyWithImpl<$Res, _$_OutOfBoundsToIdleAnimationEnd>
-    implements _$$_OutOfBoundsToIdleAnimationEndCopyWith<$Res> {
-  __$$_OutOfBoundsToIdleAnimationEndCopyWithImpl(
-      _$_OutOfBoundsToIdleAnimationEnd _value,
-      $Res Function(_$_OutOfBoundsToIdleAnimationEnd) _then)
+class __$$OutOfBoundsToIdleAnimationEndImplCopyWithImpl<$Res>
+    extends _$ScrollingEventCopyWithImpl<$Res,
+        _$OutOfBoundsToIdleAnimationEndImpl>
+    implements _$$OutOfBoundsToIdleAnimationEndImplCopyWith<$Res> {
+  __$$OutOfBoundsToIdleAnimationEndImplCopyWithImpl(
+      _$OutOfBoundsToIdleAnimationEndImpl _value,
+      $Res Function(_$OutOfBoundsToIdleAnimationEndImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of ScrollingEvent
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
 
-class _$_OutOfBoundsToIdleAnimationEnd
+class _$OutOfBoundsToIdleAnimationEndImpl
     implements _OutOfBoundsToIdleAnimationEnd {
-  const _$_OutOfBoundsToIdleAnimationEnd();
+  const _$OutOfBoundsToIdleAnimationEndImpl();
 
   @override
   String toString() {
@@ -1577,10 +1631,10 @@ class _$_OutOfBoundsToIdleAnimationEnd
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_OutOfBoundsToIdleAnimationEnd);
+            other is _$OutOfBoundsToIdleAnimationEndImpl);
   }
 
   @override
@@ -1718,32 +1772,34 @@ class _$_OutOfBoundsToIdleAnimationEnd
 
 abstract class _OutOfBoundsToIdleAnimationEnd implements ScrollingEvent {
   const factory _OutOfBoundsToIdleAnimationEnd() =
-      _$_OutOfBoundsToIdleAnimationEnd;
+      _$OutOfBoundsToIdleAnimationEndImpl;
 }
 
 /// @nodoc
-abstract class _$$_InertialAnimationEndCopyWith<$Res> {
-  factory _$$_InertialAnimationEndCopyWith(_$_InertialAnimationEnd value,
-          $Res Function(_$_InertialAnimationEnd) then) =
-      __$$_InertialAnimationEndCopyWithImpl<$Res>;
+abstract class _$$InertialAnimationEndImplCopyWith<$Res> {
+  factory _$$InertialAnimationEndImplCopyWith(_$InertialAnimationEndImpl value,
+          $Res Function(_$InertialAnimationEndImpl) then) =
+      __$$InertialAnimationEndImplCopyWithImpl<$Res>;
   @useResult
   $Res call({Matrix4 reachedMatrix});
 }
 
 /// @nodoc
-class __$$_InertialAnimationEndCopyWithImpl<$Res>
-    extends _$ScrollingEventCopyWithImpl<$Res, _$_InertialAnimationEnd>
-    implements _$$_InertialAnimationEndCopyWith<$Res> {
-  __$$_InertialAnimationEndCopyWithImpl(_$_InertialAnimationEnd _value,
-      $Res Function(_$_InertialAnimationEnd) _then)
+class __$$InertialAnimationEndImplCopyWithImpl<$Res>
+    extends _$ScrollingEventCopyWithImpl<$Res, _$InertialAnimationEndImpl>
+    implements _$$InertialAnimationEndImplCopyWith<$Res> {
+  __$$InertialAnimationEndImplCopyWithImpl(_$InertialAnimationEndImpl _value,
+      $Res Function(_$InertialAnimationEndImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ScrollingEvent
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? reachedMatrix = null,
   }) {
-    return _then(_$_InertialAnimationEnd(
+    return _then(_$InertialAnimationEndImpl(
       reachedMatrix: null == reachedMatrix
           ? _value.reachedMatrix
           : reachedMatrix // ignore: cast_nullable_to_non_nullable
@@ -1754,8 +1810,8 @@ class __$$_InertialAnimationEndCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_InertialAnimationEnd implements _InertialAnimationEnd {
-  const _$_InertialAnimationEnd({required this.reachedMatrix});
+class _$InertialAnimationEndImpl implements _InertialAnimationEnd {
+  const _$InertialAnimationEndImpl({required this.reachedMatrix});
 
   @override
   final Matrix4 reachedMatrix;
@@ -1766,10 +1822,10 @@ class _$_InertialAnimationEnd implements _InertialAnimationEnd {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_InertialAnimationEnd &&
+            other is _$InertialAnimationEndImpl &&
             (identical(other.reachedMatrix, reachedMatrix) ||
                 other.reachedMatrix == reachedMatrix));
   }
@@ -1777,12 +1833,15 @@ class _$_InertialAnimationEnd implements _InertialAnimationEnd {
   @override
   int get hashCode => Object.hash(runtimeType, reachedMatrix);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ScrollingEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$_InertialAnimationEndCopyWith<_$_InertialAnimationEnd> get copyWith =>
-      __$$_InertialAnimationEndCopyWithImpl<_$_InertialAnimationEnd>(
-          this, _$identity);
+  _$$InertialAnimationEndImplCopyWith<_$InertialAnimationEndImpl>
+      get copyWith =>
+          __$$InertialAnimationEndImplCopyWithImpl<_$InertialAnimationEndImpl>(
+              this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -1916,34 +1975,41 @@ class _$_InertialAnimationEnd implements _InertialAnimationEnd {
 
 abstract class _InertialAnimationEnd implements ScrollingEvent {
   const factory _InertialAnimationEnd({required final Matrix4 reachedMatrix}) =
-      _$_InertialAnimationEnd;
+      _$InertialAnimationEndImpl;
 
   Matrix4 get reachedMatrix;
-  @JsonKey(ignore: true)
-  _$$_InertialAnimationEndCopyWith<_$_InertialAnimationEnd> get copyWith =>
-      throw _privateConstructorUsedError;
+
+  /// Create a copy of ScrollingEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$InertialAnimationEndImplCopyWith<_$InertialAnimationEndImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_InertialAnimationStopCopyWith<$Res> {
-  factory _$$_InertialAnimationStopCopyWith(_$_InertialAnimationStop value,
-          $Res Function(_$_InertialAnimationStop) then) =
-      __$$_InertialAnimationStopCopyWithImpl<$Res>;
+abstract class _$$InertialAnimationStopImplCopyWith<$Res> {
+  factory _$$InertialAnimationStopImplCopyWith(
+          _$InertialAnimationStopImpl value,
+          $Res Function(_$InertialAnimationStopImpl) then) =
+      __$$InertialAnimationStopImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_InertialAnimationStopCopyWithImpl<$Res>
-    extends _$ScrollingEventCopyWithImpl<$Res, _$_InertialAnimationStop>
-    implements _$$_InertialAnimationStopCopyWith<$Res> {
-  __$$_InertialAnimationStopCopyWithImpl(_$_InertialAnimationStop _value,
-      $Res Function(_$_InertialAnimationStop) _then)
+class __$$InertialAnimationStopImplCopyWithImpl<$Res>
+    extends _$ScrollingEventCopyWithImpl<$Res, _$InertialAnimationStopImpl>
+    implements _$$InertialAnimationStopImplCopyWith<$Res> {
+  __$$InertialAnimationStopImplCopyWithImpl(_$InertialAnimationStopImpl _value,
+      $Res Function(_$InertialAnimationStopImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of ScrollingEvent
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
 
-class _$_InertialAnimationStop implements _InertialAnimationStop {
-  const _$_InertialAnimationStop();
+class _$InertialAnimationStopImpl implements _InertialAnimationStop {
+  const _$InertialAnimationStopImpl();
 
   @override
   String toString() {
@@ -1951,9 +2017,10 @@ class _$_InertialAnimationStop implements _InertialAnimationStop {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_InertialAnimationStop);
+        (other.runtimeType == runtimeType &&
+            other is _$InertialAnimationStopImpl);
   }
 
   @override
@@ -2090,29 +2157,33 @@ class _$_InertialAnimationStop implements _InertialAnimationStop {
 }
 
 abstract class _InertialAnimationStop implements ScrollingEvent {
-  const factory _InertialAnimationStop() = _$_InertialAnimationStop;
+  const factory _InertialAnimationStop() = _$InertialAnimationStopImpl;
 }
 
 /// @nodoc
-abstract class _$$_ScrollingAnimationEndCopyWith<$Res> {
-  factory _$$_ScrollingAnimationEndCopyWith(_$_ScrollingAnimationEnd value,
-          $Res Function(_$_ScrollingAnimationEnd) then) =
-      __$$_ScrollingAnimationEndCopyWithImpl<$Res>;
+abstract class _$$ScrollingAnimationEndImplCopyWith<$Res> {
+  factory _$$ScrollingAnimationEndImplCopyWith(
+          _$ScrollingAnimationEndImpl value,
+          $Res Function(_$ScrollingAnimationEndImpl) then) =
+      __$$ScrollingAnimationEndImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$_ScrollingAnimationEndCopyWithImpl<$Res>
-    extends _$ScrollingEventCopyWithImpl<$Res, _$_ScrollingAnimationEnd>
-    implements _$$_ScrollingAnimationEndCopyWith<$Res> {
-  __$$_ScrollingAnimationEndCopyWithImpl(_$_ScrollingAnimationEnd _value,
-      $Res Function(_$_ScrollingAnimationEnd) _then)
+class __$$ScrollingAnimationEndImplCopyWithImpl<$Res>
+    extends _$ScrollingEventCopyWithImpl<$Res, _$ScrollingAnimationEndImpl>
+    implements _$$ScrollingAnimationEndImplCopyWith<$Res> {
+  __$$ScrollingAnimationEndImplCopyWithImpl(_$ScrollingAnimationEndImpl _value,
+      $Res Function(_$ScrollingAnimationEndImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of ScrollingEvent
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
 
-class _$_ScrollingAnimationEnd implements _ScrollingAnimationEnd {
-  const _$_ScrollingAnimationEnd();
+class _$ScrollingAnimationEndImpl implements _ScrollingAnimationEnd {
+  const _$ScrollingAnimationEndImpl();
 
   @override
   String toString() {
@@ -2120,9 +2191,10 @@ class _$_ScrollingAnimationEnd implements _ScrollingAnimationEnd {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_ScrollingAnimationEnd);
+        (other.runtimeType == runtimeType &&
+            other is _$ScrollingAnimationEndImpl);
   }
 
   @override
@@ -2259,7 +2331,7 @@ class _$_ScrollingAnimationEnd implements _ScrollingAnimationEnd {
 }
 
 abstract class _ScrollingAnimationEnd implements ScrollingEvent {
-  const factory _ScrollingAnimationEnd() = _$_ScrollingAnimationEnd;
+  const factory _ScrollingAnimationEnd() = _$ScrollingAnimationEndImpl;
 }
 
 /// @nodoc
@@ -2312,7 +2384,8 @@ mixin _$ScrollingState {
     TResult? Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
         animatingInitialToIdle,
-    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
+    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect)?
         idle,
     TResult? Function(
             Matrix4 matrix,
@@ -2348,7 +2421,8 @@ mixin _$ScrollingState {
     TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
         animatingInitialToIdle,
-    TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
+    TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect)?
         idle,
     TResult Function(
             Matrix4 matrix,
@@ -2421,7 +2495,9 @@ mixin _$ScrollingState {
   }) =>
       throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ScrollingState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ScrollingStateCopyWith<ScrollingState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -2445,6 +2521,8 @@ class _$ScrollingStateCopyWithImpl<$Res, $Val extends ScrollingState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ScrollingState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -2470,11 +2548,11 @@ class _$ScrollingStateCopyWithImpl<$Res, $Val extends ScrollingState>
 }
 
 /// @nodoc
-abstract class _$$_ScrollingInitialCopyWith<$Res>
+abstract class _$$ScrollingInitialImplCopyWith<$Res>
     implements $ScrollingStateCopyWith<$Res> {
-  factory _$$_ScrollingInitialCopyWith(
-          _$_ScrollingInitial value, $Res Function(_$_ScrollingInitial) then) =
-      __$$_ScrollingInitialCopyWithImpl<$Res>;
+  factory _$$ScrollingInitialImplCopyWith(_$ScrollingInitialImpl value,
+          $Res Function(_$ScrollingInitialImpl) then) =
+      __$$ScrollingInitialImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -2485,13 +2563,15 @@ abstract class _$$_ScrollingInitialCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_ScrollingInitialCopyWithImpl<$Res>
-    extends _$ScrollingStateCopyWithImpl<$Res, _$_ScrollingInitial>
-    implements _$$_ScrollingInitialCopyWith<$Res> {
-  __$$_ScrollingInitialCopyWithImpl(
-      _$_ScrollingInitial _value, $Res Function(_$_ScrollingInitial) _then)
+class __$$ScrollingInitialImplCopyWithImpl<$Res>
+    extends _$ScrollingStateCopyWithImpl<$Res, _$ScrollingInitialImpl>
+    implements _$$ScrollingInitialImplCopyWith<$Res> {
+  __$$ScrollingInitialImplCopyWithImpl(_$ScrollingInitialImpl _value,
+      $Res Function(_$ScrollingInitialImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ScrollingState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -2500,7 +2580,7 @@ class __$$_ScrollingInitialCopyWithImpl<$Res>
     Object? size = freezed,
     Object? diagramRect = freezed,
   }) {
-    return _then(_$_ScrollingInitial(
+    return _then(_$ScrollingInitialImpl(
       matrix: null == matrix
           ? _value.matrix
           : matrix // ignore: cast_nullable_to_non_nullable
@@ -2523,8 +2603,8 @@ class __$$_ScrollingInitialCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_ScrollingInitial implements _ScrollingInitial {
-  const _$_ScrollingInitial(
+class _$ScrollingInitialImpl implements _ScrollingInitial {
+  const _$ScrollingInitialImpl(
       {required this.matrix,
       final List<DiagramObjectEntity>? content,
       this.size,
@@ -2554,10 +2634,10 @@ class _$_ScrollingInitial implements _ScrollingInitial {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ScrollingInitial &&
+            other is _$ScrollingInitialImpl &&
             (identical(other.matrix, matrix) || other.matrix == matrix) &&
             const DeepCollectionEquality().equals(other._content, _content) &&
             (identical(other.size, size) || other.size == size) &&
@@ -2569,11 +2649,14 @@ class _$_ScrollingInitial implements _ScrollingInitial {
   int get hashCode => Object.hash(runtimeType, matrix,
       const DeepCollectionEquality().hash(_content), size, diagramRect);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ScrollingState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ScrollingInitialCopyWith<_$_ScrollingInitial> get copyWith =>
-      __$$_ScrollingInitialCopyWithImpl<_$_ScrollingInitial>(this, _$identity);
+  _$$ScrollingInitialImplCopyWith<_$ScrollingInitialImpl> get copyWith =>
+      __$$ScrollingInitialImplCopyWithImpl<_$ScrollingInitialImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -2624,7 +2707,8 @@ class _$_ScrollingInitial implements _ScrollingInitial {
     TResult? Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
         animatingInitialToIdle,
-    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
+    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect)?
         idle,
     TResult? Function(
             Matrix4 matrix,
@@ -2663,7 +2747,8 @@ class _$_ScrollingInitial implements _ScrollingInitial {
     TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
         animatingInitialToIdle,
-    TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
+    TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect)?
         idle,
     TResult Function(
             Matrix4 matrix,
@@ -2758,7 +2843,7 @@ abstract class _ScrollingInitial implements ScrollingState {
       {required final Matrix4 matrix,
       final List<DiagramObjectEntity>? content,
       final Size? size,
-      final Rect? diagramRect}) = _$_ScrollingInitial;
+      final Rect? diagramRect}) = _$ScrollingInitialImpl;
 
   Matrix4 get matrix;
   @override
@@ -2767,19 +2852,22 @@ abstract class _ScrollingInitial implements ScrollingState {
   Size? get size;
   @override
   Rect? get diagramRect;
+
+  /// Create a copy of ScrollingState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
-  _$$_ScrollingInitialCopyWith<_$_ScrollingInitial> get copyWith =>
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ScrollingInitialImplCopyWith<_$ScrollingInitialImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_ScrollingAnimatingInitialToIdleCopyWith<$Res>
+abstract class _$$ScrollingAnimatingInitialToIdleImplCopyWith<$Res>
     implements $ScrollingStateCopyWith<$Res> {
-  factory _$$_ScrollingAnimatingInitialToIdleCopyWith(
-          _$_ScrollingAnimatingInitialToIdle value,
-          $Res Function(_$_ScrollingAnimatingInitialToIdle) then) =
-      __$$_ScrollingAnimatingInitialToIdleCopyWithImpl<$Res>;
+  factory _$$ScrollingAnimatingInitialToIdleImplCopyWith(
+          _$ScrollingAnimatingInitialToIdleImpl value,
+          $Res Function(_$ScrollingAnimatingInitialToIdleImpl) then) =
+      __$$ScrollingAnimatingInitialToIdleImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -2791,15 +2879,17 @@ abstract class _$$_ScrollingAnimatingInitialToIdleCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_ScrollingAnimatingInitialToIdleCopyWithImpl<$Res>
+class __$$ScrollingAnimatingInitialToIdleImplCopyWithImpl<$Res>
     extends _$ScrollingStateCopyWithImpl<$Res,
-        _$_ScrollingAnimatingInitialToIdle>
-    implements _$$_ScrollingAnimatingInitialToIdleCopyWith<$Res> {
-  __$$_ScrollingAnimatingInitialToIdleCopyWithImpl(
-      _$_ScrollingAnimatingInitialToIdle _value,
-      $Res Function(_$_ScrollingAnimatingInitialToIdle) _then)
+        _$ScrollingAnimatingInitialToIdleImpl>
+    implements _$$ScrollingAnimatingInitialToIdleImplCopyWith<$Res> {
+  __$$ScrollingAnimatingInitialToIdleImplCopyWithImpl(
+      _$ScrollingAnimatingInitialToIdleImpl _value,
+      $Res Function(_$ScrollingAnimatingInitialToIdleImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ScrollingState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -2809,7 +2899,7 @@ class __$$_ScrollingAnimatingInitialToIdleCopyWithImpl<$Res>
     Object? size = null,
     Object? diagramRect = null,
   }) {
-    return _then(_$_ScrollingAnimatingInitialToIdle(
+    return _then(_$ScrollingAnimatingInitialToIdleImpl(
       oldMatrix: null == oldMatrix
           ? _value.oldMatrix
           : oldMatrix // ignore: cast_nullable_to_non_nullable
@@ -2836,9 +2926,9 @@ class __$$_ScrollingAnimatingInitialToIdleCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_ScrollingAnimatingInitialToIdle
+class _$ScrollingAnimatingInitialToIdleImpl
     implements _ScrollingAnimatingInitialToIdle {
-  const _$_ScrollingAnimatingInitialToIdle(
+  const _$ScrollingAnimatingInitialToIdleImpl(
       {required this.oldMatrix,
       required this.matrix,
       required final List<DiagramObjectEntity> content,
@@ -2869,10 +2959,10 @@ class _$_ScrollingAnimatingInitialToIdle
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ScrollingAnimatingInitialToIdle &&
+            other is _$ScrollingAnimatingInitialToIdleImpl &&
             (identical(other.oldMatrix, oldMatrix) ||
                 other.oldMatrix == oldMatrix) &&
             (identical(other.matrix, matrix) || other.matrix == matrix) &&
@@ -2886,13 +2976,15 @@ class _$_ScrollingAnimatingInitialToIdle
   int get hashCode => Object.hash(runtimeType, oldMatrix, matrix,
       const DeepCollectionEquality().hash(_content), size, diagramRect);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ScrollingState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ScrollingAnimatingInitialToIdleCopyWith<
-          _$_ScrollingAnimatingInitialToIdle>
-      get copyWith => __$$_ScrollingAnimatingInitialToIdleCopyWithImpl<
-          _$_ScrollingAnimatingInitialToIdle>(this, _$identity);
+  _$$ScrollingAnimatingInitialToIdleImplCopyWith<
+          _$ScrollingAnimatingInitialToIdleImpl>
+      get copyWith => __$$ScrollingAnimatingInitialToIdleImplCopyWithImpl<
+          _$ScrollingAnimatingInitialToIdleImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -2944,7 +3036,8 @@ class _$_ScrollingAnimatingInitialToIdle
     TResult? Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
         animatingInitialToIdle,
-    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
+    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect)?
         idle,
     TResult? Function(
             Matrix4 matrix,
@@ -2984,7 +3077,8 @@ class _$_ScrollingAnimatingInitialToIdle
     TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
         animatingInitialToIdle,
-    TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
+    TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect)?
         idle,
     TResult Function(
             Matrix4 matrix,
@@ -3081,7 +3175,7 @@ abstract class _ScrollingAnimatingInitialToIdle implements ScrollingState {
       required final Matrix4 matrix,
       required final List<DiagramObjectEntity> content,
       required final Size size,
-      required final Rect diagramRect}) = _$_ScrollingAnimatingInitialToIdle;
+      required final Rect diagramRect}) = _$ScrollingAnimatingInitialToIdleImpl;
 
   Matrix4 get oldMatrix;
   Matrix4 get matrix;
@@ -3091,19 +3185,22 @@ abstract class _ScrollingAnimatingInitialToIdle implements ScrollingState {
   Size get size;
   @override
   Rect get diagramRect;
+
+  /// Create a copy of ScrollingState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
-  _$$_ScrollingAnimatingInitialToIdleCopyWith<
-          _$_ScrollingAnimatingInitialToIdle>
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ScrollingAnimatingInitialToIdleImplCopyWith<
+          _$ScrollingAnimatingInitialToIdleImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_ScrollingIdleCopyWith<$Res>
+abstract class _$$ScrollingIdleImplCopyWith<$Res>
     implements $ScrollingStateCopyWith<$Res> {
-  factory _$$_ScrollingIdleCopyWith(
-          _$_ScrollingIdle value, $Res Function(_$_ScrollingIdle) then) =
-      __$$_ScrollingIdleCopyWithImpl<$Res>;
+  factory _$$ScrollingIdleImplCopyWith(
+          _$ScrollingIdleImpl value, $Res Function(_$ScrollingIdleImpl) then) =
+      __$$ScrollingIdleImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -3114,13 +3211,15 @@ abstract class _$$_ScrollingIdleCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_ScrollingIdleCopyWithImpl<$Res>
-    extends _$ScrollingStateCopyWithImpl<$Res, _$_ScrollingIdle>
-    implements _$$_ScrollingIdleCopyWith<$Res> {
-  __$$_ScrollingIdleCopyWithImpl(
-      _$_ScrollingIdle _value, $Res Function(_$_ScrollingIdle) _then)
+class __$$ScrollingIdleImplCopyWithImpl<$Res>
+    extends _$ScrollingStateCopyWithImpl<$Res, _$ScrollingIdleImpl>
+    implements _$$ScrollingIdleImplCopyWith<$Res> {
+  __$$ScrollingIdleImplCopyWithImpl(
+      _$ScrollingIdleImpl _value, $Res Function(_$ScrollingIdleImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ScrollingState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -3129,7 +3228,7 @@ class __$$_ScrollingIdleCopyWithImpl<$Res>
     Object? size = null,
     Object? diagramRect = null,
   }) {
-    return _then(_$_ScrollingIdle(
+    return _then(_$ScrollingIdleImpl(
       matrix: null == matrix
           ? _value.matrix
           : matrix // ignore: cast_nullable_to_non_nullable
@@ -3152,8 +3251,8 @@ class __$$_ScrollingIdleCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_ScrollingIdle implements _ScrollingIdle {
-  const _$_ScrollingIdle(
+class _$ScrollingIdleImpl implements _ScrollingIdle {
+  const _$ScrollingIdleImpl(
       {required this.matrix,
       required final List<DiagramObjectEntity> content,
       required this.size,
@@ -3181,10 +3280,10 @@ class _$_ScrollingIdle implements _ScrollingIdle {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ScrollingIdle &&
+            other is _$ScrollingIdleImpl &&
             (identical(other.matrix, matrix) || other.matrix == matrix) &&
             const DeepCollectionEquality().equals(other._content, _content) &&
             (identical(other.size, size) || other.size == size) &&
@@ -3196,11 +3295,13 @@ class _$_ScrollingIdle implements _ScrollingIdle {
   int get hashCode => Object.hash(runtimeType, matrix,
       const DeepCollectionEquality().hash(_content), size, diagramRect);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ScrollingState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ScrollingIdleCopyWith<_$_ScrollingIdle> get copyWith =>
-      __$$_ScrollingIdleCopyWithImpl<_$_ScrollingIdle>(this, _$identity);
+  _$$ScrollingIdleImplCopyWith<_$ScrollingIdleImpl> get copyWith =>
+      __$$ScrollingIdleImplCopyWithImpl<_$ScrollingIdleImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -3251,7 +3352,8 @@ class _$_ScrollingIdle implements _ScrollingIdle {
     TResult? Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
         animatingInitialToIdle,
-    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
+    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect)?
         idle,
     TResult? Function(
             Matrix4 matrix,
@@ -3290,7 +3392,8 @@ class _$_ScrollingIdle implements _ScrollingIdle {
     TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
         animatingInitialToIdle,
-    TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
+    TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect)?
         idle,
     TResult Function(
             Matrix4 matrix,
@@ -3385,7 +3488,7 @@ abstract class _ScrollingIdle implements ScrollingState {
       {required final Matrix4 matrix,
       required final List<DiagramObjectEntity> content,
       required final Size size,
-      required final Rect diagramRect}) = _$_ScrollingIdle;
+      required final Rect diagramRect}) = _$ScrollingIdleImpl;
 
   Matrix4 get matrix;
   @override
@@ -3394,18 +3497,21 @@ abstract class _ScrollingIdle implements ScrollingState {
   Size get size;
   @override
   Rect get diagramRect;
+
+  /// Create a copy of ScrollingState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
-  _$$_ScrollingIdleCopyWith<_$_ScrollingIdle> get copyWith =>
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ScrollingIdleImplCopyWith<_$ScrollingIdleImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_ScrollingScrollingCopyWith<$Res>
+abstract class _$$ScrollingScrollingImplCopyWith<$Res>
     implements $ScrollingStateCopyWith<$Res> {
-  factory _$$_ScrollingScrollingCopyWith(_$_ScrollingScrolling value,
-          $Res Function(_$_ScrollingScrolling) then) =
-      __$$_ScrollingScrollingCopyWithImpl<$Res>;
+  factory _$$ScrollingScrollingImplCopyWith(_$ScrollingScrollingImpl value,
+          $Res Function(_$ScrollingScrollingImpl) then) =
+      __$$ScrollingScrollingImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -3420,13 +3526,15 @@ abstract class _$$_ScrollingScrollingCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_ScrollingScrollingCopyWithImpl<$Res>
-    extends _$ScrollingStateCopyWithImpl<$Res, _$_ScrollingScrolling>
-    implements _$$_ScrollingScrollingCopyWith<$Res> {
-  __$$_ScrollingScrollingCopyWithImpl(
-      _$_ScrollingScrolling _value, $Res Function(_$_ScrollingScrolling) _then)
+class __$$ScrollingScrollingImplCopyWithImpl<$Res>
+    extends _$ScrollingStateCopyWithImpl<$Res, _$ScrollingScrollingImpl>
+    implements _$$ScrollingScrollingImplCopyWith<$Res> {
+  __$$ScrollingScrollingImplCopyWithImpl(_$ScrollingScrollingImpl _value,
+      $Res Function(_$ScrollingScrollingImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ScrollingState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -3439,7 +3547,7 @@ class __$$_ScrollingScrollingCopyWithImpl<$Res>
     Object? squaredDistance = null,
     Object? eventDateTime = null,
   }) {
-    return _then(_$_ScrollingScrolling(
+    return _then(_$ScrollingScrollingImpl(
       matrix: null == matrix
           ? _value.matrix
           : matrix // ignore: cast_nullable_to_non_nullable
@@ -3478,8 +3586,8 @@ class __$$_ScrollingScrollingCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_ScrollingScrolling implements _ScrollingScrolling {
-  const _$_ScrollingScrolling(
+class _$ScrollingScrollingImpl implements _ScrollingScrolling {
+  const _$ScrollingScrollingImpl(
       {required this.matrix,
       required final List<DiagramObjectEntity> content,
       required this.translationUpdater,
@@ -3519,10 +3627,10 @@ class _$_ScrollingScrolling implements _ScrollingScrolling {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ScrollingScrolling &&
+            other is _$ScrollingScrollingImpl &&
             (identical(other.matrix, matrix) || other.matrix == matrix) &&
             const DeepCollectionEquality().equals(other._content, _content) &&
             (identical(other.translationUpdater, translationUpdater) ||
@@ -3550,11 +3658,13 @@ class _$_ScrollingScrolling implements _ScrollingScrolling {
       squaredDistance,
       eventDateTime);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ScrollingState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ScrollingScrollingCopyWith<_$_ScrollingScrolling> get copyWith =>
-      __$$_ScrollingScrollingCopyWithImpl<_$_ScrollingScrolling>(
+  _$$ScrollingScrollingImplCopyWith<_$ScrollingScrollingImpl> get copyWith =>
+      __$$ScrollingScrollingImplCopyWithImpl<_$ScrollingScrollingImpl>(
           this, _$identity);
 
   @override
@@ -3607,7 +3717,8 @@ class _$_ScrollingScrolling implements _ScrollingScrolling {
     TResult? Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
         animatingInitialToIdle,
-    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
+    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect)?
         idle,
     TResult? Function(
             Matrix4 matrix,
@@ -3647,7 +3758,8 @@ class _$_ScrollingScrolling implements _ScrollingScrolling {
     TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
         animatingInitialToIdle,
-    TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
+    TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect)?
         idle,
     TResult Function(
             Matrix4 matrix,
@@ -3747,7 +3859,7 @@ abstract class _ScrollingScrolling implements ScrollingState {
       required final Size size,
       required final Rect diagramRect,
       required final double squaredDistance,
-      required final DateTime eventDateTime}) = _$_ScrollingScrolling;
+      required final DateTime eventDateTime}) = _$ScrollingScrollingImpl;
 
   Matrix4 get matrix;
   @override
@@ -3760,19 +3872,22 @@ abstract class _ScrollingScrolling implements ScrollingState {
   Rect get diagramRect;
   double get squaredDistance;
   DateTime get eventDateTime;
+
+  /// Create a copy of ScrollingState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
-  _$$_ScrollingScrollingCopyWith<_$_ScrollingScrolling> get copyWith =>
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ScrollingScrollingImplCopyWith<_$ScrollingScrollingImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_ScrollingAnimatingInertialScrollingCopyWith<$Res>
+abstract class _$$ScrollingAnimatingInertialScrollingImplCopyWith<$Res>
     implements $ScrollingStateCopyWith<$Res> {
-  factory _$$_ScrollingAnimatingInertialScrollingCopyWith(
-          _$_ScrollingAnimatingInertialScrolling value,
-          $Res Function(_$_ScrollingAnimatingInertialScrolling) then) =
-      __$$_ScrollingAnimatingInertialScrollingCopyWithImpl<$Res>;
+  factory _$$ScrollingAnimatingInertialScrollingImplCopyWith(
+          _$ScrollingAnimatingInertialScrollingImpl value,
+          $Res Function(_$ScrollingAnimatingInertialScrollingImpl) then) =
+      __$$ScrollingAnimatingInertialScrollingImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -3785,15 +3900,17 @@ abstract class _$$_ScrollingAnimatingInertialScrollingCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_ScrollingAnimatingInertialScrollingCopyWithImpl<$Res>
+class __$$ScrollingAnimatingInertialScrollingImplCopyWithImpl<$Res>
     extends _$ScrollingStateCopyWithImpl<$Res,
-        _$_ScrollingAnimatingInertialScrolling>
-    implements _$$_ScrollingAnimatingInertialScrollingCopyWith<$Res> {
-  __$$_ScrollingAnimatingInertialScrollingCopyWithImpl(
-      _$_ScrollingAnimatingInertialScrolling _value,
-      $Res Function(_$_ScrollingAnimatingInertialScrolling) _then)
+        _$ScrollingAnimatingInertialScrollingImpl>
+    implements _$$ScrollingAnimatingInertialScrollingImplCopyWith<$Res> {
+  __$$ScrollingAnimatingInertialScrollingImplCopyWithImpl(
+      _$ScrollingAnimatingInertialScrollingImpl _value,
+      $Res Function(_$ScrollingAnimatingInertialScrollingImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ScrollingState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -3804,7 +3921,7 @@ class __$$_ScrollingAnimatingInertialScrollingCopyWithImpl<$Res>
     Object? size = null,
     Object? diagramRect = null,
   }) {
-    return _then(_$_ScrollingAnimatingInertialScrolling(
+    return _then(_$ScrollingAnimatingInertialScrollingImpl(
       oldMatrix: null == oldMatrix
           ? _value.oldMatrix
           : oldMatrix // ignore: cast_nullable_to_non_nullable
@@ -3835,9 +3952,9 @@ class __$$_ScrollingAnimatingInertialScrollingCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_ScrollingAnimatingInertialScrolling
+class _$ScrollingAnimatingInertialScrollingImpl
     implements _ScrollingAnimatingInertialScrolling {
-  const _$_ScrollingAnimatingInertialScrolling(
+  const _$ScrollingAnimatingInertialScrollingImpl(
       {required this.oldMatrix,
       required this.matrix,
       required this.animationTimeInMilliseconds,
@@ -3871,10 +3988,10 @@ class _$_ScrollingAnimatingInertialScrolling
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ScrollingAnimatingInertialScrolling &&
+            other is _$ScrollingAnimatingInertialScrollingImpl &&
             (identical(other.oldMatrix, oldMatrix) ||
                 other.oldMatrix == oldMatrix) &&
             (identical(other.matrix, matrix) || other.matrix == matrix) &&
@@ -3898,13 +4015,15 @@ class _$_ScrollingAnimatingInertialScrolling
       size,
       diagramRect);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ScrollingState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ScrollingAnimatingInertialScrollingCopyWith<
-          _$_ScrollingAnimatingInertialScrolling>
-      get copyWith => __$$_ScrollingAnimatingInertialScrollingCopyWithImpl<
-          _$_ScrollingAnimatingInertialScrolling>(this, _$identity);
+  _$$ScrollingAnimatingInertialScrollingImplCopyWith<
+          _$ScrollingAnimatingInertialScrollingImpl>
+      get copyWith => __$$ScrollingAnimatingInertialScrollingImplCopyWithImpl<
+          _$ScrollingAnimatingInertialScrollingImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -3956,7 +4075,8 @@ class _$_ScrollingAnimatingInertialScrolling
     TResult? Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
         animatingInitialToIdle,
-    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
+    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect)?
         idle,
     TResult? Function(
             Matrix4 matrix,
@@ -3996,7 +4116,8 @@ class _$_ScrollingAnimatingInertialScrolling
     TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
         animatingInitialToIdle,
-    TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
+    TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect)?
         idle,
     TResult Function(
             Matrix4 matrix,
@@ -4095,7 +4216,7 @@ abstract class _ScrollingAnimatingInertialScrolling implements ScrollingState {
           required final List<DiagramObjectEntity> content,
           required final Size size,
           required final Rect diagramRect}) =
-      _$_ScrollingAnimatingInertialScrolling;
+      _$ScrollingAnimatingInertialScrollingImpl;
 
   Matrix4 get oldMatrix;
   Matrix4 get matrix;
@@ -4106,19 +4227,22 @@ abstract class _ScrollingAnimatingInertialScrolling implements ScrollingState {
   Size get size;
   @override
   Rect get diagramRect;
+
+  /// Create a copy of ScrollingState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
-  _$$_ScrollingAnimatingInertialScrollingCopyWith<
-          _$_ScrollingAnimatingInertialScrolling>
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ScrollingAnimatingInertialScrollingImplCopyWith<
+          _$ScrollingAnimatingInertialScrollingImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_StoppingAnimationCopyWith<$Res>
+abstract class _$$StoppingAnimationImplCopyWith<$Res>
     implements $ScrollingStateCopyWith<$Res> {
-  factory _$$_StoppingAnimationCopyWith(_$_StoppingAnimation value,
-          $Res Function(_$_StoppingAnimation) then) =
-      __$$_StoppingAnimationCopyWithImpl<$Res>;
+  factory _$$StoppingAnimationImplCopyWith(_$StoppingAnimationImpl value,
+          $Res Function(_$StoppingAnimationImpl) then) =
+      __$$StoppingAnimationImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -4129,13 +4253,15 @@ abstract class _$$_StoppingAnimationCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_StoppingAnimationCopyWithImpl<$Res>
-    extends _$ScrollingStateCopyWithImpl<$Res, _$_StoppingAnimation>
-    implements _$$_StoppingAnimationCopyWith<$Res> {
-  __$$_StoppingAnimationCopyWithImpl(
-      _$_StoppingAnimation _value, $Res Function(_$_StoppingAnimation) _then)
+class __$$StoppingAnimationImplCopyWithImpl<$Res>
+    extends _$ScrollingStateCopyWithImpl<$Res, _$StoppingAnimationImpl>
+    implements _$$StoppingAnimationImplCopyWith<$Res> {
+  __$$StoppingAnimationImplCopyWithImpl(_$StoppingAnimationImpl _value,
+      $Res Function(_$StoppingAnimationImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ScrollingState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -4144,7 +4270,7 @@ class __$$_StoppingAnimationCopyWithImpl<$Res>
     Object? diagramRect = null,
     Object? details = null,
   }) {
-    return _then(_$_StoppingAnimation(
+    return _then(_$StoppingAnimationImpl(
       content: null == content
           ? _value._content
           : content // ignore: cast_nullable_to_non_nullable
@@ -4167,8 +4293,8 @@ class __$$_StoppingAnimationCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_StoppingAnimation implements _StoppingAnimation {
-  const _$_StoppingAnimation(
+class _$StoppingAnimationImpl implements _StoppingAnimation {
+  const _$StoppingAnimationImpl(
       {required final List<DiagramObjectEntity> content,
       required this.size,
       required this.diagramRect,
@@ -4196,10 +4322,10 @@ class _$_StoppingAnimation implements _StoppingAnimation {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_StoppingAnimation &&
+            other is _$StoppingAnimationImpl &&
             const DeepCollectionEquality().equals(other._content, _content) &&
             (identical(other.size, size) || other.size == size) &&
             (identical(other.diagramRect, diagramRect) ||
@@ -4215,11 +4341,13 @@ class _$_StoppingAnimation implements _StoppingAnimation {
       diagramRect,
       details);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ScrollingState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$_StoppingAnimationCopyWith<_$_StoppingAnimation> get copyWith =>
-      __$$_StoppingAnimationCopyWithImpl<_$_StoppingAnimation>(
+  _$$StoppingAnimationImplCopyWith<_$StoppingAnimationImpl> get copyWith =>
+      __$$StoppingAnimationImplCopyWithImpl<_$StoppingAnimationImpl>(
           this, _$identity);
 
   @override
@@ -4271,7 +4399,8 @@ class _$_StoppingAnimation implements _StoppingAnimation {
     TResult? Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
         animatingInitialToIdle,
-    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
+    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect)?
         idle,
     TResult? Function(
             Matrix4 matrix,
@@ -4310,7 +4439,8 @@ class _$_StoppingAnimation implements _StoppingAnimation {
     TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
         animatingInitialToIdle,
-    TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
+    TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect)?
         idle,
     TResult Function(
             Matrix4 matrix,
@@ -4405,7 +4535,7 @@ abstract class _StoppingAnimation implements ScrollingState {
       {required final List<DiagramObjectEntity> content,
       required final Size size,
       required final Rect diagramRect,
-      required final ScaleStartDetails details}) = _$_StoppingAnimation;
+      required final ScaleStartDetails details}) = _$StoppingAnimationImpl;
 
   @override
   List<DiagramObjectEntity> get content;
@@ -4414,19 +4544,22 @@ abstract class _StoppingAnimation implements ScrollingState {
   @override
   Rect get diagramRect;
   ScaleStartDetails get details;
+
+  /// Create a copy of ScrollingState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
-  _$$_StoppingAnimationCopyWith<_$_StoppingAnimation> get copyWith =>
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$StoppingAnimationImplCopyWith<_$StoppingAnimationImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_ScrollingAnimatingFromOutOfBoundsCopyWith<$Res>
+abstract class _$$ScrollingAnimatingFromOutOfBoundsImplCopyWith<$Res>
     implements $ScrollingStateCopyWith<$Res> {
-  factory _$$_ScrollingAnimatingFromOutOfBoundsCopyWith(
-          _$_ScrollingAnimatingFromOutOfBounds value,
-          $Res Function(_$_ScrollingAnimatingFromOutOfBounds) then) =
-      __$$_ScrollingAnimatingFromOutOfBoundsCopyWithImpl<$Res>;
+  factory _$$ScrollingAnimatingFromOutOfBoundsImplCopyWith(
+          _$ScrollingAnimatingFromOutOfBoundsImpl value,
+          $Res Function(_$ScrollingAnimatingFromOutOfBoundsImpl) then) =
+      __$$ScrollingAnimatingFromOutOfBoundsImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -4438,15 +4571,17 @@ abstract class _$$_ScrollingAnimatingFromOutOfBoundsCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_ScrollingAnimatingFromOutOfBoundsCopyWithImpl<$Res>
+class __$$ScrollingAnimatingFromOutOfBoundsImplCopyWithImpl<$Res>
     extends _$ScrollingStateCopyWithImpl<$Res,
-        _$_ScrollingAnimatingFromOutOfBounds>
-    implements _$$_ScrollingAnimatingFromOutOfBoundsCopyWith<$Res> {
-  __$$_ScrollingAnimatingFromOutOfBoundsCopyWithImpl(
-      _$_ScrollingAnimatingFromOutOfBounds _value,
-      $Res Function(_$_ScrollingAnimatingFromOutOfBounds) _then)
+        _$ScrollingAnimatingFromOutOfBoundsImpl>
+    implements _$$ScrollingAnimatingFromOutOfBoundsImplCopyWith<$Res> {
+  __$$ScrollingAnimatingFromOutOfBoundsImplCopyWithImpl(
+      _$ScrollingAnimatingFromOutOfBoundsImpl _value,
+      $Res Function(_$ScrollingAnimatingFromOutOfBoundsImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ScrollingState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -4456,7 +4591,7 @@ class __$$_ScrollingAnimatingFromOutOfBoundsCopyWithImpl<$Res>
     Object? size = null,
     Object? diagramRect = null,
   }) {
-    return _then(_$_ScrollingAnimatingFromOutOfBounds(
+    return _then(_$ScrollingAnimatingFromOutOfBoundsImpl(
       oldMatrix: null == oldMatrix
           ? _value.oldMatrix
           : oldMatrix // ignore: cast_nullable_to_non_nullable
@@ -4483,9 +4618,9 @@ class __$$_ScrollingAnimatingFromOutOfBoundsCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_ScrollingAnimatingFromOutOfBounds
+class _$ScrollingAnimatingFromOutOfBoundsImpl
     implements _ScrollingAnimatingFromOutOfBounds {
-  const _$_ScrollingAnimatingFromOutOfBounds(
+  const _$ScrollingAnimatingFromOutOfBoundsImpl(
       {required this.oldMatrix,
       required this.matrix,
       required final List<DiagramObjectEntity> content,
@@ -4516,10 +4651,10 @@ class _$_ScrollingAnimatingFromOutOfBounds
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ScrollingAnimatingFromOutOfBounds &&
+            other is _$ScrollingAnimatingFromOutOfBoundsImpl &&
             (identical(other.oldMatrix, oldMatrix) ||
                 other.oldMatrix == oldMatrix) &&
             (identical(other.matrix, matrix) || other.matrix == matrix) &&
@@ -4533,13 +4668,15 @@ class _$_ScrollingAnimatingFromOutOfBounds
   int get hashCode => Object.hash(runtimeType, oldMatrix, matrix,
       const DeepCollectionEquality().hash(_content), size, diagramRect);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ScrollingState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ScrollingAnimatingFromOutOfBoundsCopyWith<
-          _$_ScrollingAnimatingFromOutOfBounds>
-      get copyWith => __$$_ScrollingAnimatingFromOutOfBoundsCopyWithImpl<
-          _$_ScrollingAnimatingFromOutOfBounds>(this, _$identity);
+  _$$ScrollingAnimatingFromOutOfBoundsImplCopyWith<
+          _$ScrollingAnimatingFromOutOfBoundsImpl>
+      get copyWith => __$$ScrollingAnimatingFromOutOfBoundsImplCopyWithImpl<
+          _$ScrollingAnimatingFromOutOfBoundsImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -4591,7 +4728,8 @@ class _$_ScrollingAnimatingFromOutOfBounds
     TResult? Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
         animatingInitialToIdle,
-    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
+    TResult? Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect)?
         idle,
     TResult? Function(
             Matrix4 matrix,
@@ -4631,7 +4769,8 @@ class _$_ScrollingAnimatingFromOutOfBounds
     TResult Function(Matrix4 oldMatrix, Matrix4 matrix,
             List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
         animatingInitialToIdle,
-    TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content, Size size, Rect diagramRect)?
+    TResult Function(Matrix4 matrix, List<DiagramObjectEntity> content,
+            Size size, Rect diagramRect)?
         idle,
     TResult Function(
             Matrix4 matrix,
@@ -4724,11 +4863,12 @@ class _$_ScrollingAnimatingFromOutOfBounds
 
 abstract class _ScrollingAnimatingFromOutOfBounds implements ScrollingState {
   const factory _ScrollingAnimatingFromOutOfBounds(
-      {required final Matrix4 oldMatrix,
-      required final Matrix4 matrix,
-      required final List<DiagramObjectEntity> content,
-      required final Size size,
-      required final Rect diagramRect}) = _$_ScrollingAnimatingFromOutOfBounds;
+          {required final Matrix4 oldMatrix,
+          required final Matrix4 matrix,
+          required final List<DiagramObjectEntity> content,
+          required final Size size,
+          required final Rect diagramRect}) =
+      _$ScrollingAnimatingFromOutOfBoundsImpl;
 
   Matrix4 get oldMatrix;
   Matrix4 get matrix;
@@ -4738,10 +4878,13 @@ abstract class _ScrollingAnimatingFromOutOfBounds implements ScrollingState {
   Size get size;
   @override
   Rect get diagramRect;
+
+  /// Create a copy of ScrollingState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
-  _$$_ScrollingAnimatingFromOutOfBoundsCopyWith<
-          _$_ScrollingAnimatingFromOutOfBounds>
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ScrollingAnimatingFromOutOfBoundsImplCopyWith<
+          _$ScrollingAnimatingFromOutOfBoundsImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -4765,7 +4908,9 @@ mixin _$ScrollingDynamicParams {
   Size get size => throw _privateConstructorUsedError;
   Rect get contentRect => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ScrollingDynamicParams
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ScrollingDynamicParamsCopyWith<ScrollingDynamicParams> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -4807,6 +4952,8 @@ class _$ScrollingDynamicParamsCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ScrollingDynamicParams
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -4902,11 +5049,12 @@ class _$ScrollingDynamicParamsCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_ScrollingDynamicParamsCopyWith<$Res>
+abstract class _$$ScrollingDynamicParamsImplCopyWith<$Res>
     implements $ScrollingDynamicParamsCopyWith<$Res> {
-  factory _$$_ScrollingDynamicParamsCopyWith(_$_ScrollingDynamicParams value,
-          $Res Function(_$_ScrollingDynamicParams) then) =
-      __$$_ScrollingDynamicParamsCopyWithImpl<$Res>;
+  factory _$$ScrollingDynamicParamsImplCopyWith(
+          _$ScrollingDynamicParamsImpl value,
+          $Res Function(_$ScrollingDynamicParamsImpl) then) =
+      __$$ScrollingDynamicParamsImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -4930,14 +5078,17 @@ abstract class _$$_ScrollingDynamicParamsCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_ScrollingDynamicParamsCopyWithImpl<$Res>
+class __$$ScrollingDynamicParamsImplCopyWithImpl<$Res>
     extends _$ScrollingDynamicParamsCopyWithImpl<$Res,
-        _$_ScrollingDynamicParams>
-    implements _$$_ScrollingDynamicParamsCopyWith<$Res> {
-  __$$_ScrollingDynamicParamsCopyWithImpl(_$_ScrollingDynamicParams _value,
-      $Res Function(_$_ScrollingDynamicParams) _then)
+        _$ScrollingDynamicParamsImpl>
+    implements _$$ScrollingDynamicParamsImplCopyWith<$Res> {
+  __$$ScrollingDynamicParamsImplCopyWithImpl(
+      _$ScrollingDynamicParamsImpl _value,
+      $Res Function(_$ScrollingDynamicParamsImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ScrollingDynamicParams
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -4959,7 +5110,7 @@ class __$$_ScrollingDynamicParamsCopyWithImpl<$Res>
     Object? size = null,
     Object? contentRect = null,
   }) {
-    return _then(_$_ScrollingDynamicParams(
+    return _then(_$ScrollingDynamicParamsImpl(
       content: null == content
           ? _value._content
           : content // ignore: cast_nullable_to_non_nullable
@@ -5034,8 +5185,8 @@ class __$$_ScrollingDynamicParamsCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_ScrollingDynamicParams implements _ScrollingDynamicParams {
-  const _$_ScrollingDynamicParams(
+class _$ScrollingDynamicParamsImpl implements _ScrollingDynamicParams {
+  const _$ScrollingDynamicParamsImpl(
       {required final List<DiagramObjectEntity> content,
       required this.minStaticX,
       required this.minDynamicX,
@@ -5102,10 +5253,10 @@ class _$_ScrollingDynamicParams implements _ScrollingDynamicParams {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ScrollingDynamicParams &&
+            other is _$ScrollingDynamicParamsImpl &&
             const DeepCollectionEquality().equals(other._content, _content) &&
             (identical(other.minStaticX, minStaticX) ||
                 other.minStaticX == minStaticX) &&
@@ -5160,12 +5311,14 @@ class _$_ScrollingDynamicParams implements _ScrollingDynamicParams {
       size,
       contentRect);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ScrollingDynamicParams
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ScrollingDynamicParamsCopyWith<_$_ScrollingDynamicParams> get copyWith =>
-      __$$_ScrollingDynamicParamsCopyWithImpl<_$_ScrollingDynamicParams>(
-          this, _$identity);
+  _$$ScrollingDynamicParamsImplCopyWith<_$ScrollingDynamicParamsImpl>
+      get copyWith => __$$ScrollingDynamicParamsImplCopyWithImpl<
+          _$ScrollingDynamicParamsImpl>(this, _$identity);
 }
 
 abstract class _ScrollingDynamicParams implements ScrollingDynamicParams {
@@ -5186,7 +5339,7 @@ abstract class _ScrollingDynamicParams implements ScrollingDynamicParams {
       required final Offset hardOffset,
       required final double scale,
       required final Size size,
-      required final Rect contentRect}) = _$_ScrollingDynamicParams;
+      required final Rect contentRect}) = _$ScrollingDynamicParamsImpl;
 
   @override
   List<DiagramObjectEntity> get content;
@@ -5222,8 +5375,11 @@ abstract class _ScrollingDynamicParams implements ScrollingDynamicParams {
   Size get size;
   @override
   Rect get contentRect;
+
+  /// Create a copy of ScrollingDynamicParams
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
-  _$$_ScrollingDynamicParamsCopyWith<_$_ScrollingDynamicParams> get copyWith =>
-      throw _privateConstructorUsedError;
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ScrollingDynamicParamsImplCopyWith<_$ScrollingDynamicParamsImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

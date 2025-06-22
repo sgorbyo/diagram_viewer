@@ -60,6 +60,18 @@ class DiagramViewer extends StatelessWidget {
   ///
   final bool clipChild;
 
+  /// The background color of the diagram area.
+  ///
+  /// Defaults to Color.fromRGBO(250, 250, 250, 1.0).
+  ///
+  final Color backgroundColor;
+
+  /// The color of the area outside the diagram bounds.
+  ///
+  /// Defaults to Color.fromRGBO(128, 128, 128, 1.0).
+  ///
+  final Color outsideColor;
+
   /// The view widget that renders the diagram content.
   /// This is created internally based on the configuration settings.
   final ScrollingView contentView;
@@ -71,11 +83,15 @@ class DiagramViewer extends StatelessWidget {
     this.shouldRotate = false,
     this.clipChild = true,
     required this.diagramContentRepository,
+    this.backgroundColor = const Color.fromRGBO(250, 250, 250, 1.0),
+    this.outsideColor = const Color.fromRGBO(128, 128, 128, 1.0),
   })  : contentView = ScrollingView(
           shouldTranslate: shouldTranslate,
           shouldScale: shouldScale,
           shouldRotate: shouldRotate,
           clipChild: clipChild,
+          backgroundColor: backgroundColor,
+          outsideColor: outsideColor,
         ),
         super(key: key);
 
