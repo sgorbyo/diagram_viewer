@@ -1,74 +1,127 @@
 # Diagram Viewer
 
-A Flutter package that provides an interactive diagram viewer with pan, zoom, and rotation capabilities. Perfect for displaying and manipulating diagrams, flowcharts, and other visual content.
+A Flutter package for building interactive diagram viewers with support for smooth scrolling, zooming, and content management.
 
 ## Features
 
-- 🔄 Smooth pan, zoom, and rotation gestures
-- 🎯 Customizable diagram content rendering
-- 🖼️ Background and content separation
-- ⚡ High performance with custom painters
-- 🎨 Themeable background colors
-- 🔲 Boundaries control with inertial scrolling
+- 🎯 Interactive diagram viewing with smooth animations
+- 🔄 Pan and zoom gestures with intuitive controls
+- � Flexible content management through repositories
+- � Customizable diagram objects
+- 🏗️ Clean architecture with separation of concerns
+- ⚡ Efficient rendering with custom paint operations
+- 🔲 Smart boundary handling with inertial scrolling
 - 📱 Cross-platform support (iOS, Android, Web, Desktop)
 
-## Getting started
+## Installation
 
-Add `diagram_viewer` to your `pubspec.yaml`:
+Since this is an internal iLogoTec package, add it to your `pubspec.yaml` using the GitHub repository:
 
 ```yaml
 dependencies:
-  diagram_viewer: ^0.0.1
+  diagram_viewer:
+    git:
+      url: https://github.com/sgorbyo/diagram_viewer.git
+      ref: main  # or specify a tag/commit hash for a specific version
 ```
 
-## Usage
+## Quick Start
+
+1. Create a repository that implements `DiagramContentRepository`:
 
 ```dart
-import 'package:diagram_viewer/diagram_viewer.dart';
+class MyDiagramRepository implements DiagramContentRepository {
+  final _controller = StreamController<List<DiagramObjectEntity>>();
 
-class MyDiagram extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
-    return ScrollingView(
-      shouldTranslate: true,
-      shouldScale: true,
-      shouldRotate: true,
-      clipChild: true,
-    );
+  Stream<List<DiagramObjectEntity>> get stream => _controller.stream;
+
+  @override
+  void dispose() {
+    _controller.close();
+  }
+
+  // Implement other required methods...
+}
+```
+
+2. Create diagram objects by implementing `DiagramObjectEntity`:
+
+```dart
+class MyDiagramObject extends DiagramObjectEntity {
+  final Rect bounds;
+  final Color color;
+
+  MyDiagramObject({required this.bounds, required this.color});
+
+  @override
+  Rect enclosingRect() => bounds;
+
+  @override
+  void printOnCanvas(Canvas canvas) {
+    final paint = Paint()..color = color;
+    canvas.drawRect(bounds, paint);
   }
 }
 ```
 
-## Additional information
-
-### Customization
-
-You can customize the viewer by:
-- Enabling/disabling specific gestures (translation, scaling, rotation)
-- Setting custom background colors
-- Implementing custom diagram objects
-
-### Contributing
-
-Contributions are welcome! If you find a bug or want a feature, please create an issue.
-
-## Getting started
-
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
-
-## Usage
-
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+3. Use `DiagramViewer` in your UI:
 
 ```dart
-const like = 'sample';
+DiagramViewer(
+  diagramContentRepository: MyDiagramRepository(),
+  shouldScale: true,
+  shouldTranslate: true,
+  shouldRotate: false,
+  clipChild: true,
+  backgroundColor: const Color.fromRGBO(250, 250, 250, 1.0),
+  outsideColor: const Color.fromRGBO(128, 128, 128, 1.0),
+)
 ```
 
-## Additional information
+## Architecture
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
-# diagram_viewer
+The package follows a clean architecture pattern with three main components:
+
+1. **DiagramViewer**: The main widget that handles user interaction and displays content.
+2. **DiagramContentRepository**: An abstract interface for managing diagram content.
+3. **DiagramObjectEntity**: Base class for drawable objects in the diagram.
+
+### DiagramViewer Features
+
+The `DiagramViewer` widget supports:
+
+- Pan and zoom gestures (can be enabled/disabled)
+- Background customization
+- Client-controlled drag operations
+- Boundary handling and inertial scrolling
+- Custom clipper support
+
+### Content Management
+
+The `DiagramContentRepository` is responsible for:
+
+- Providing a stream of diagram objects
+- Managing content lifecycle
+- Handling content loading and updates
+
+### Custom Objects
+
+Implement `DiagramObjectEntity` to create custom drawable objects:
+
+- Override `enclosingRect()` to define object boundaries
+- Override `printOnCanvas()` for custom rendering
+- Use the Equatable mixin for proper object comparison
+
+## Example
+
+Check the `/example` folder for a complete implementation showing:
+
+- Custom repository implementation
+- Custom diagram objects
+- Interactive diagram viewer setup
+- Gesture handling
+
+## Notice
+
+This package is for internal use by iLogoTec only. All rights reserved.
