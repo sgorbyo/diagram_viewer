@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:diagram_viewer/events/physical_event.dart';
 import 'package:diagram_viewer/events/diagram_command.dart';
 import 'package:diagram_viewer/interfaces/diagram_configuration.dart';
+import 'package:diagram_viewer/interfaces/diagram_object_entity.dart';
 
 /// Main interface that clients must implement to provide diagram business logic
 /// to the DiagramViewer.
@@ -150,6 +151,13 @@ abstract class IDiagramController {
   /// The client can customize these settings based on the diagram type
   /// and user preferences.
   DiagramConfiguration get configuration;
+
+  /// List of diagram objects to be rendered.
+  ///
+  /// The DiagramViewer uses this list to render the diagram content.
+  /// The client is responsible for providing and updating this list
+  /// based on the current state of the diagram.
+  List<DiagramObjectEntity> get objects;
 
   /// Dispose of the controller and release all resources.
   ///

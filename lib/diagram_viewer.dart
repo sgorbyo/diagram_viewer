@@ -120,6 +120,7 @@ class _DiagramViewerState extends State<DiagramViewer>
 
     // Initialize with controller's initial state
     _logicalExtent = widget.controller.logicalExtent;
+    _objects = widget.controller.objects;
     _config = widget.controller.configuration;
   }
 

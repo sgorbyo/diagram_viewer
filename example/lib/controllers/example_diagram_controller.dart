@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:math';
-import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:diagram_viewer/interfaces/interfaces.dart';
 import 'package:diagram_viewer/events/events.dart';
 import '../cerchio_entity.dart';
@@ -24,6 +24,60 @@ class ExampleDiagramController implements IDiagramController {
 
   ExampleDiagramController() {
     _randomPopulate(50);
+    _setupEventHandling();
+  }
+
+  void _setupEventHandling() {
+    _eventController.stream.listen(_handlePhysicalEvent);
+  }
+
+  void _handlePhysicalEvent(PhysicalEvent event) {
+    event.when(
+      pointer: (eventId, logicalPosition, screenPosition, transformSnapshot,
+          hitList, borderProximity, phase, rawEvent, delta) {
+        if (hitList.isNotEmpty) {
+          // Object manipulation - update model and redraw
+          _updateObjectPosition(hitList.first, logicalPosition);
+          _sendRedrawCommand();
+        } else {
+          // No object hit - apply default pan behavior
+          _commandController
+              .add(DiagramCommand.applyDefaultPanZoom(origin: event));
+        }
+      },
+      gesture: (eventId, logicalPosition, screenPosition, transformSnapshot,
+          hitList, borderProximity, phase, rawEvent, scale, rotation) {
+        // Handle gesture events (zoom, rotation)
+        _commandController
+            .add(DiagramCommand.applyDefaultPanZoom(origin: event));
+      },
+      keyboard: (eventId, logicalPosition, transformSnapshot, hitList,
+          borderProximity, rawEvent, pressedKeys) {
+        // Handle keyboard shortcuts
+        if (pressedKeys.contains(LogicalKeyboardKey.space)) {
+          _sendRedrawCommand();
+        }
+      },
+    );
+  }
+
+  void _updateObjectPosition(DiagramObjectEntity object, Offset newPosition) {
+    // Find the corresponding model and update its position
+    final model = _storage.values.firstWhere(
+      (model) => model.id == object.id,
+      orElse: () => throw Exception('Model not found for object ${object.id}'),
+    );
+
+    // Update position (keeping z and w components)
+    model.position.x = newPosition.dx;
+    model.position.y = newPosition.dy;
+  }
+
+  void _sendRedrawCommand() {
+    _commandController.add(DiagramCommand.redraw(
+      renderables: objects,
+      logicalExtent: logicalExtent,
+    ));
   }
 
   @override
@@ -54,6 +108,7 @@ class ExampleDiagramController implements IDiagramController {
   @override
   DiagramConfiguration get configuration => DiagramConfiguration.defaults;
 
+  @override
   List<DiagramObjectEntity> get objects {
     final List<DiagramObjectEntity> result = [];
     for (final model in _storage.values) {
