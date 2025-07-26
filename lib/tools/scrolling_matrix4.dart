@@ -91,6 +91,34 @@ extension ScrollingMatrix4 on Matrix4 {
     x += offset.dx;
     y += offset.dy;
   }
+
+  /// Creates an initial transformation matrix that fits the diagram within the viewport.
+  ///
+  /// @param diagramRect The rectangle containing the diagram content
+  /// @param viewportSize The size of the viewport
+  /// @return A new Matrix4 with appropriate scale and translation
+  static Matrix4 getInitialMatrix({
+    required Rect diagramRect,
+    required Size viewportSize,
+  }) {
+    final matrix = Matrix4.identity();
+
+    if (diagramRect == Rect.zero || viewportSize == Size.zero) {
+      return matrix;
+    }
+
+    final scaleX = viewportSize.width / diagramRect.width;
+    final scaleY = viewportSize.height / diagramRect.height;
+    final scale = scaleX < scaleY ? scaleX : scaleY;
+
+    matrix.zoom = scale * 0.9; // 90% to leave some margin
+    matrix.x = (viewportSize.width - diagramRect.width * matrix.zoom) / 2 -
+        diagramRect.left * matrix.zoom;
+    matrix.y = (viewportSize.height - diagramRect.height * matrix.zoom) / 2 -
+        diagramRect.top * matrix.zoom;
+
+    return matrix;
+  }
 }
 
 /// Extension on [double] that provides utility methods for numeric precision.

@@ -1,0 +1,19 @@
+{
+  "dart.testRunner": "flutter_test",
+  "dart.flutterTestAdditionalArgs": [
+    "--reporter=expanded",
+    "--coverage"
+  ],
+  "dart.testExplorer": {
+    "enabled": true,
+    "showInlineErrors": true,
+    "showOutput": true
+  },
+  "testing.automaticallyOpenPeekView": "never",
+  "testing.followRunningTest": true,
+  "testing.gutterEnabled": true,
+  "testing.openTesting": "openExplorer",
+  "testing.autoRun.delay": 1000,
+  "testing.autoRun.mode": "off",
+  "testing.automaticallyOpenTestResults": "openExplorer"
+} 
