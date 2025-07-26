@@ -6,6 +6,12 @@ import 'package:diagram_viewer/presentation/bloc/scrolling/scrolling_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:diagram_viewer/presentation/widgets/scrolling_view.dart';
 
+// Export interfaces for client implementation
+export 'interfaces/interfaces.dart';
+
+// Export events and commands for client usage
+export 'events/events.dart';
+
 /// A [Function] called by [DiagramViewer] when a Drag operation starts and
 /// which returns a [bool] indicating whether the client will or not manage the
 /// whole Start, Continue and End Scale process, or it should be managed by

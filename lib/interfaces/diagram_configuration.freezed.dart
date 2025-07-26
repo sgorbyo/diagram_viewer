@@ -1,0 +1,825 @@
+// coverage:ignore-file
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
+
+part of 'diagram_configuration.dart';
+
+// **************************************************************************
+// FreezedGenerator
+// **************************************************************************
+
+T _$identity<T>(T value) => value;
+
+final _privateConstructorUsedError = UnsupportedError(
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+
+/// @nodoc
+mixin _$DiagramConfiguration {
+  /// Background color of the diagram area.
+  ///
+  /// This color is used to fill the area where diagram content is displayed.
+  /// Defaults to white.
+  Color get backgroundColor => throw _privateConstructorUsedError;
+
+  /// Color of the area outside the diagram bounds.
+  ///
+  /// This color is used to fill areas outside the logical diagram extent.
+  /// Defaults to a light gray.
+  Color get outsideColor => throw _privateConstructorUsedError;
+
+  /// Distance from viewport edge that triggers auto-scroll.
+  ///
+  /// When an object is dragged within this distance from the viewport edge,
+  /// the DiagramViewer will automatically scroll to follow the object.
+  /// Defaults to 50.0 pixels.
+  double get edgeThreshold => throw _privateConstructorUsedError;
+
+  /// Maximum zoom level allowed.
+  ///
+  /// Users cannot zoom in beyond this level. This prevents excessive zooming
+  /// that could cause performance issues or make the diagram unusable.
+  /// Defaults to 10.0 (10x zoom).
+  double get maxZoom => throw _privateConstructorUsedError;
+
+  /// Minimum zoom level allowed.
+  ///
+  /// Users cannot zoom out beyond this level. This ensures the diagram
+  /// remains visible and usable.
+  /// Defaults to 0.1 (10% zoom).
+  double get minZoom => throw _privateConstructorUsedError;
+
+  /// Number of pixels allowed for overscroll.
+  ///
+  /// Users can scroll beyond the diagram bounds by this amount before
+  /// the elastic bounce-back animation is triggered.
+  /// Defaults to 100.0 pixels.
+  double get overscrollPixels => throw _privateConstructorUsedError;
+
+  /// Duration of the elastic bounce-back animation.
+  ///
+  /// When users scroll beyond the diagram bounds, this animation returns
+  /// the view to valid bounds with a smooth elastic effect.
+  /// Defaults to 300 milliseconds.
+  Duration get bounceDuration => throw _privateConstructorUsedError;
+
+  /// Interval between auto-scroll steps.
+  ///
+  /// When auto-scrolling is active, this defines how frequently the
+  /// scroll position is updated. Lower values provide smoother scrolling
+  /// but may impact performance.
+  /// Defaults to 16 milliseconds (60 FPS).
+  Duration get autoScrollInterval => throw _privateConstructorUsedError;
+
+  /// Acceleration factor for auto-scroll.
+  ///
+  /// This factor determines how quickly auto-scroll accelerates as objects
+  /// get closer to the viewport edge. Higher values provide more responsive
+  /// auto-scrolling.
+  /// Defaults to 1.5.
+  double get autoScrollAcceleration => throw _privateConstructorUsedError;
+
+  /// Whether to enable translation (pan) gestures.
+  ///
+  /// When true, users can pan the diagram by dragging. When false,
+  /// panning is disabled.
+  /// Defaults to true.
+  bool get enableTranslation => throw _privateConstructorUsedError;
+
+  /// Whether to enable scale (zoom) gestures.
+  ///
+  /// When true, users can zoom the diagram using pinch gestures or
+  /// mouse wheel. When false, zooming is disabled.
+  /// Defaults to true.
+  bool get enableScale => throw _privateConstructorUsedError;
+
+  /// Whether to enable rotation gestures.
+  ///
+  /// When true, users can rotate the diagram using gesture combinations.
+  /// When false, rotation is disabled.
+  /// Defaults to false.
+  bool get enableRotation => throw _privateConstructorUsedError;
+
+  /// Whether to clip content to the diagram bounds.
+  ///
+  /// When true, content outside the diagram bounds is clipped and not visible.
+  /// When false, content can be rendered outside the bounds.
+  /// Defaults to true.
+  bool get clipContent => throw _privateConstructorUsedError;
+
+  /// Whether to enable inertial scrolling.
+  ///
+  /// When true, scrolling continues with inertia after the user stops dragging,
+  /// gradually slowing down. When false, scrolling stops immediately.
+  /// Defaults to true.
+  bool get enableInertialScrolling => throw _privateConstructorUsedError;
+
+  /// Friction factor for inertial scrolling.
+  ///
+  /// This factor determines how quickly inertial scrolling slows down.
+  /// Higher values provide more friction and shorter inertial scrolling.
+  /// Defaults to 0.95.
+  double get inertialFriction => throw _privateConstructorUsedError;
+
+  /// Whether to enable keyboard shortcuts.
+  ///
+  /// When true, keyboard shortcuts for pan, zoom, and other operations
+  /// are enabled. When false, keyboard shortcuts are disabled.
+  /// Defaults to true.
+  bool get enableKeyboardShortcuts => throw _privateConstructorUsedError;
+
+  /// Whether to enable accessibility features.
+  ///
+  /// When true, accessibility features like screen reader support
+  /// are enabled. When false, accessibility features are disabled.
+  /// Defaults to true.
+  bool get enableAccessibility => throw _privateConstructorUsedError;
+
+  /// Create a copy of DiagramConfiguration
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $DiagramConfigurationCopyWith<DiagramConfiguration> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $DiagramConfigurationCopyWith<$Res> {
+  factory $DiagramConfigurationCopyWith(DiagramConfiguration value,
+          $Res Function(DiagramConfiguration) then) =
+      _$DiagramConfigurationCopyWithImpl<$Res, DiagramConfiguration>;
+  @useResult
+  $Res call(
+      {Color backgroundColor,
+      Color outsideColor,
+      double edgeThreshold,
+      double maxZoom,
+      double minZoom,
+      double overscrollPixels,
+      Duration bounceDuration,
+      Duration autoScrollInterval,
+      double autoScrollAcceleration,
+      bool enableTranslation,
+      bool enableScale,
+      bool enableRotation,
+      bool clipContent,
+      bool enableInertialScrolling,
+      double inertialFriction,
+      bool enableKeyboardShortcuts,
+      bool enableAccessibility});
+}
+
+/// @nodoc
+class _$DiagramConfigurationCopyWithImpl<$Res,
+        $Val extends DiagramConfiguration>
+    implements $DiagramConfigurationCopyWith<$Res> {
+  _$DiagramConfigurationCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of DiagramConfiguration
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? backgroundColor = null,
+    Object? outsideColor = null,
+    Object? edgeThreshold = null,
+    Object? maxZoom = null,
+    Object? minZoom = null,
+    Object? overscrollPixels = null,
+    Object? bounceDuration = null,
+    Object? autoScrollInterval = null,
+    Object? autoScrollAcceleration = null,
+    Object? enableTranslation = null,
+    Object? enableScale = null,
+    Object? enableRotation = null,
+    Object? clipContent = null,
+    Object? enableInertialScrolling = null,
+    Object? inertialFriction = null,
+    Object? enableKeyboardShortcuts = null,
+    Object? enableAccessibility = null,
+  }) {
+    return _then(_value.copyWith(
+      backgroundColor: null == backgroundColor
+          ? _value.backgroundColor
+          : backgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color,
+      outsideColor: null == outsideColor
+          ? _value.outsideColor
+          : outsideColor // ignore: cast_nullable_to_non_nullable
+              as Color,
+      edgeThreshold: null == edgeThreshold
+          ? _value.edgeThreshold
+          : edgeThreshold // ignore: cast_nullable_to_non_nullable
+              as double,
+      maxZoom: null == maxZoom
+          ? _value.maxZoom
+          : maxZoom // ignore: cast_nullable_to_non_nullable
+              as double,
+      minZoom: null == minZoom
+          ? _value.minZoom
+          : minZoom // ignore: cast_nullable_to_non_nullable
+              as double,
+      overscrollPixels: null == overscrollPixels
+          ? _value.overscrollPixels
+          : overscrollPixels // ignore: cast_nullable_to_non_nullable
+              as double,
+      bounceDuration: null == bounceDuration
+          ? _value.bounceDuration
+          : bounceDuration // ignore: cast_nullable_to_non_nullable
+              as Duration,
+      autoScrollInterval: null == autoScrollInterval
+          ? _value.autoScrollInterval
+          : autoScrollInterval // ignore: cast_nullable_to_non_nullable
+              as Duration,
+      autoScrollAcceleration: null == autoScrollAcceleration
+          ? _value.autoScrollAcceleration
+          : autoScrollAcceleration // ignore: cast_nullable_to_non_nullable
+              as double,
+      enableTranslation: null == enableTranslation
+          ? _value.enableTranslation
+          : enableTranslation // ignore: cast_nullable_to_non_nullable
+              as bool,
+      enableScale: null == enableScale
+          ? _value.enableScale
+          : enableScale // ignore: cast_nullable_to_non_nullable
+              as bool,
+      enableRotation: null == enableRotation
+          ? _value.enableRotation
+          : enableRotation // ignore: cast_nullable_to_non_nullable
+              as bool,
+      clipContent: null == clipContent
+          ? _value.clipContent
+          : clipContent // ignore: cast_nullable_to_non_nullable
+              as bool,
+      enableInertialScrolling: null == enableInertialScrolling
+          ? _value.enableInertialScrolling
+          : enableInertialScrolling // ignore: cast_nullable_to_non_nullable
+              as bool,
+      inertialFriction: null == inertialFriction
+          ? _value.inertialFriction
+          : inertialFriction // ignore: cast_nullable_to_non_nullable
+              as double,
+      enableKeyboardShortcuts: null == enableKeyboardShortcuts
+          ? _value.enableKeyboardShortcuts
+          : enableKeyboardShortcuts // ignore: cast_nullable_to_non_nullable
+              as bool,
+      enableAccessibility: null == enableAccessibility
+          ? _value.enableAccessibility
+          : enableAccessibility // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$DiagramConfigurationImplCopyWith<$Res>
+    implements $DiagramConfigurationCopyWith<$Res> {
+  factory _$$DiagramConfigurationImplCopyWith(_$DiagramConfigurationImpl value,
+          $Res Function(_$DiagramConfigurationImpl) then) =
+      __$$DiagramConfigurationImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {Color backgroundColor,
+      Color outsideColor,
+      double edgeThreshold,
+      double maxZoom,
+      double minZoom,
+      double overscrollPixels,
+      Duration bounceDuration,
+      Duration autoScrollInterval,
+      double autoScrollAcceleration,
+      bool enableTranslation,
+      bool enableScale,
+      bool enableRotation,
+      bool clipContent,
+      bool enableInertialScrolling,
+      double inertialFriction,
+      bool enableKeyboardShortcuts,
+      bool enableAccessibility});
+}
+
+/// @nodoc
+class __$$DiagramConfigurationImplCopyWithImpl<$Res>
+    extends _$DiagramConfigurationCopyWithImpl<$Res, _$DiagramConfigurationImpl>
+    implements _$$DiagramConfigurationImplCopyWith<$Res> {
+  __$$DiagramConfigurationImplCopyWithImpl(_$DiagramConfigurationImpl _value,
+      $Res Function(_$DiagramConfigurationImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of DiagramConfiguration
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? backgroundColor = null,
+    Object? outsideColor = null,
+    Object? edgeThreshold = null,
+    Object? maxZoom = null,
+    Object? minZoom = null,
+    Object? overscrollPixels = null,
+    Object? bounceDuration = null,
+    Object? autoScrollInterval = null,
+    Object? autoScrollAcceleration = null,
+    Object? enableTranslation = null,
+    Object? enableScale = null,
+    Object? enableRotation = null,
+    Object? clipContent = null,
+    Object? enableInertialScrolling = null,
+    Object? inertialFriction = null,
+    Object? enableKeyboardShortcuts = null,
+    Object? enableAccessibility = null,
+  }) {
+    return _then(_$DiagramConfigurationImpl(
+      backgroundColor: null == backgroundColor
+          ? _value.backgroundColor
+          : backgroundColor // ignore: cast_nullable_to_non_nullable
+              as Color,
+      outsideColor: null == outsideColor
+          ? _value.outsideColor
+          : outsideColor // ignore: cast_nullable_to_non_nullable
+              as Color,
+      edgeThreshold: null == edgeThreshold
+          ? _value.edgeThreshold
+          : edgeThreshold // ignore: cast_nullable_to_non_nullable
+              as double,
+      maxZoom: null == maxZoom
+          ? _value.maxZoom
+          : maxZoom // ignore: cast_nullable_to_non_nullable
+              as double,
+      minZoom: null == minZoom
+          ? _value.minZoom
+          : minZoom // ignore: cast_nullable_to_non_nullable
+              as double,
+      overscrollPixels: null == overscrollPixels
+          ? _value.overscrollPixels
+          : overscrollPixels // ignore: cast_nullable_to_non_nullable
+              as double,
+      bounceDuration: null == bounceDuration
+          ? _value.bounceDuration
+          : bounceDuration // ignore: cast_nullable_to_non_nullable
+              as Duration,
+      autoScrollInterval: null == autoScrollInterval
+          ? _value.autoScrollInterval
+          : autoScrollInterval // ignore: cast_nullable_to_non_nullable
+              as Duration,
+      autoScrollAcceleration: null == autoScrollAcceleration
+          ? _value.autoScrollAcceleration
+          : autoScrollAcceleration // ignore: cast_nullable_to_non_nullable
+              as double,
+      enableTranslation: null == enableTranslation
+          ? _value.enableTranslation
+          : enableTranslation // ignore: cast_nullable_to_non_nullable
+              as bool,
+      enableScale: null == enableScale
+          ? _value.enableScale
+          : enableScale // ignore: cast_nullable_to_non_nullable
+              as bool,
+      enableRotation: null == enableRotation
+          ? _value.enableRotation
+          : enableRotation // ignore: cast_nullable_to_non_nullable
+              as bool,
+      clipContent: null == clipContent
+          ? _value.clipContent
+          : clipContent // ignore: cast_nullable_to_non_nullable
+              as bool,
+      enableInertialScrolling: null == enableInertialScrolling
+          ? _value.enableInertialScrolling
+          : enableInertialScrolling // ignore: cast_nullable_to_non_nullable
+              as bool,
+      inertialFriction: null == inertialFriction
+          ? _value.inertialFriction
+          : inertialFriction // ignore: cast_nullable_to_non_nullable
+              as double,
+      enableKeyboardShortcuts: null == enableKeyboardShortcuts
+          ? _value.enableKeyboardShortcuts
+          : enableKeyboardShortcuts // ignore: cast_nullable_to_non_nullable
+              as bool,
+      enableAccessibility: null == enableAccessibility
+          ? _value.enableAccessibility
+          : enableAccessibility // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$DiagramConfigurationImpl implements _DiagramConfiguration {
+  const _$DiagramConfigurationImpl(
+      {this.backgroundColor = Colors.white,
+      this.outsideColor = const Color(0xFF808080),
+      this.edgeThreshold = 50.0,
+      this.maxZoom = 10.0,
+      this.minZoom = 0.1,
+      this.overscrollPixels = 100.0,
+      this.bounceDuration = const Duration(milliseconds: 300),
+      this.autoScrollInterval = const Duration(milliseconds: 16),
+      this.autoScrollAcceleration = 1.5,
+      this.enableTranslation = true,
+      this.enableScale = true,
+      this.enableRotation = false,
+      this.clipContent = true,
+      this.enableInertialScrolling = true,
+      this.inertialFriction = 0.95,
+      this.enableKeyboardShortcuts = true,
+      this.enableAccessibility = true});
+
+  /// Background color of the diagram area.
+  ///
+  /// This color is used to fill the area where diagram content is displayed.
+  /// Defaults to white.
+  @override
+  @JsonKey()
+  final Color backgroundColor;
+
+  /// Color of the area outside the diagram bounds.
+  ///
+  /// This color is used to fill areas outside the logical diagram extent.
+  /// Defaults to a light gray.
+  @override
+  @JsonKey()
+  final Color outsideColor;
+
+  /// Distance from viewport edge that triggers auto-scroll.
+  ///
+  /// When an object is dragged within this distance from the viewport edge,
+  /// the DiagramViewer will automatically scroll to follow the object.
+  /// Defaults to 50.0 pixels.
+  @override
+  @JsonKey()
+  final double edgeThreshold;
+
+  /// Maximum zoom level allowed.
+  ///
+  /// Users cannot zoom in beyond this level. This prevents excessive zooming
+  /// that could cause performance issues or make the diagram unusable.
+  /// Defaults to 10.0 (10x zoom).
+  @override
+  @JsonKey()
+  final double maxZoom;
+
+  /// Minimum zoom level allowed.
+  ///
+  /// Users cannot zoom out beyond this level. This ensures the diagram
+  /// remains visible and usable.
+  /// Defaults to 0.1 (10% zoom).
+  @override
+  @JsonKey()
+  final double minZoom;
+
+  /// Number of pixels allowed for overscroll.
+  ///
+  /// Users can scroll beyond the diagram bounds by this amount before
+  /// the elastic bounce-back animation is triggered.
+  /// Defaults to 100.0 pixels.
+  @override
+  @JsonKey()
+  final double overscrollPixels;
+
+  /// Duration of the elastic bounce-back animation.
+  ///
+  /// When users scroll beyond the diagram bounds, this animation returns
+  /// the view to valid bounds with a smooth elastic effect.
+  /// Defaults to 300 milliseconds.
+  @override
+  @JsonKey()
+  final Duration bounceDuration;
+
+  /// Interval between auto-scroll steps.
+  ///
+  /// When auto-scrolling is active, this defines how frequently the
+  /// scroll position is updated. Lower values provide smoother scrolling
+  /// but may impact performance.
+  /// Defaults to 16 milliseconds (60 FPS).
+  @override
+  @JsonKey()
+  final Duration autoScrollInterval;
+
+  /// Acceleration factor for auto-scroll.
+  ///
+  /// This factor determines how quickly auto-scroll accelerates as objects
+  /// get closer to the viewport edge. Higher values provide more responsive
+  /// auto-scrolling.
+  /// Defaults to 1.5.
+  @override
+  @JsonKey()
+  final double autoScrollAcceleration;
+
+  /// Whether to enable translation (pan) gestures.
+  ///
+  /// When true, users can pan the diagram by dragging. When false,
+  /// panning is disabled.
+  /// Defaults to true.
+  @override
+  @JsonKey()
+  final bool enableTranslation;
+
+  /// Whether to enable scale (zoom) gestures.
+  ///
+  /// When true, users can zoom the diagram using pinch gestures or
+  /// mouse wheel. When false, zooming is disabled.
+  /// Defaults to true.
+  @override
+  @JsonKey()
+  final bool enableScale;
+
+  /// Whether to enable rotation gestures.
+  ///
+  /// When true, users can rotate the diagram using gesture combinations.
+  /// When false, rotation is disabled.
+  /// Defaults to false.
+  @override
+  @JsonKey()
+  final bool enableRotation;
+
+  /// Whether to clip content to the diagram bounds.
+  ///
+  /// When true, content outside the diagram bounds is clipped and not visible.
+  /// When false, content can be rendered outside the bounds.
+  /// Defaults to true.
+  @override
+  @JsonKey()
+  final bool clipContent;
+
+  /// Whether to enable inertial scrolling.
+  ///
+  /// When true, scrolling continues with inertia after the user stops dragging,
+  /// gradually slowing down. When false, scrolling stops immediately.
+  /// Defaults to true.
+  @override
+  @JsonKey()
+  final bool enableInertialScrolling;
+
+  /// Friction factor for inertial scrolling.
+  ///
+  /// This factor determines how quickly inertial scrolling slows down.
+  /// Higher values provide more friction and shorter inertial scrolling.
+  /// Defaults to 0.95.
+  @override
+  @JsonKey()
+  final double inertialFriction;
+
+  /// Whether to enable keyboard shortcuts.
+  ///
+  /// When true, keyboard shortcuts for pan, zoom, and other operations
+  /// are enabled. When false, keyboard shortcuts are disabled.
+  /// Defaults to true.
+  @override
+  @JsonKey()
+  final bool enableKeyboardShortcuts;
+
+  /// Whether to enable accessibility features.
+  ///
+  /// When true, accessibility features like screen reader support
+  /// are enabled. When false, accessibility features are disabled.
+  /// Defaults to true.
+  @override
+  @JsonKey()
+  final bool enableAccessibility;
+
+  @override
+  String toString() {
+    return 'DiagramConfiguration(backgroundColor: $backgroundColor, outsideColor: $outsideColor, edgeThreshold: $edgeThreshold, maxZoom: $maxZoom, minZoom: $minZoom, overscrollPixels: $overscrollPixels, bounceDuration: $bounceDuration, autoScrollInterval: $autoScrollInterval, autoScrollAcceleration: $autoScrollAcceleration, enableTranslation: $enableTranslation, enableScale: $enableScale, enableRotation: $enableRotation, clipContent: $clipContent, enableInertialScrolling: $enableInertialScrolling, inertialFriction: $inertialFriction, enableKeyboardShortcuts: $enableKeyboardShortcuts, enableAccessibility: $enableAccessibility)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$DiagramConfigurationImpl &&
+            (identical(other.backgroundColor, backgroundColor) ||
+                other.backgroundColor == backgroundColor) &&
+            (identical(other.outsideColor, outsideColor) ||
+                other.outsideColor == outsideColor) &&
+            (identical(other.edgeThreshold, edgeThreshold) ||
+                other.edgeThreshold == edgeThreshold) &&
+            (identical(other.maxZoom, maxZoom) || other.maxZoom == maxZoom) &&
+            (identical(other.minZoom, minZoom) || other.minZoom == minZoom) &&
+            (identical(other.overscrollPixels, overscrollPixels) ||
+                other.overscrollPixels == overscrollPixels) &&
+            (identical(other.bounceDuration, bounceDuration) ||
+                other.bounceDuration == bounceDuration) &&
+            (identical(other.autoScrollInterval, autoScrollInterval) ||
+                other.autoScrollInterval == autoScrollInterval) &&
+            (identical(other.autoScrollAcceleration, autoScrollAcceleration) ||
+                other.autoScrollAcceleration == autoScrollAcceleration) &&
+            (identical(other.enableTranslation, enableTranslation) ||
+                other.enableTranslation == enableTranslation) &&
+            (identical(other.enableScale, enableScale) ||
+                other.enableScale == enableScale) &&
+            (identical(other.enableRotation, enableRotation) ||
+                other.enableRotation == enableRotation) &&
+            (identical(other.clipContent, clipContent) ||
+                other.clipContent == clipContent) &&
+            (identical(
+                    other.enableInertialScrolling, enableInertialScrolling) ||
+                other.enableInertialScrolling == enableInertialScrolling) &&
+            (identical(other.inertialFriction, inertialFriction) ||
+                other.inertialFriction == inertialFriction) &&
+            (identical(
+                    other.enableKeyboardShortcuts, enableKeyboardShortcuts) ||
+                other.enableKeyboardShortcuts == enableKeyboardShortcuts) &&
+            (identical(other.enableAccessibility, enableAccessibility) ||
+                other.enableAccessibility == enableAccessibility));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      backgroundColor,
+      outsideColor,
+      edgeThreshold,
+      maxZoom,
+      minZoom,
+      overscrollPixels,
+      bounceDuration,
+      autoScrollInterval,
+      autoScrollAcceleration,
+      enableTranslation,
+      enableScale,
+      enableRotation,
+      clipContent,
+      enableInertialScrolling,
+      inertialFriction,
+      enableKeyboardShortcuts,
+      enableAccessibility);
+
+  /// Create a copy of DiagramConfiguration
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$DiagramConfigurationImplCopyWith<_$DiagramConfigurationImpl>
+      get copyWith =>
+          __$$DiagramConfigurationImplCopyWithImpl<_$DiagramConfigurationImpl>(
+              this, _$identity);
+}
+
+abstract class _DiagramConfiguration implements DiagramConfiguration {
+  const factory _DiagramConfiguration(
+      {final Color backgroundColor,
+      final Color outsideColor,
+      final double edgeThreshold,
+      final double maxZoom,
+      final double minZoom,
+      final double overscrollPixels,
+      final Duration bounceDuration,
+      final Duration autoScrollInterval,
+      final double autoScrollAcceleration,
+      final bool enableTranslation,
+      final bool enableScale,
+      final bool enableRotation,
+      final bool clipContent,
+      final bool enableInertialScrolling,
+      final double inertialFriction,
+      final bool enableKeyboardShortcuts,
+      final bool enableAccessibility}) = _$DiagramConfigurationImpl;
+
+  /// Background color of the diagram area.
+  ///
+  /// This color is used to fill the area where diagram content is displayed.
+  /// Defaults to white.
+  @override
+  Color get backgroundColor;
+
+  /// Color of the area outside the diagram bounds.
+  ///
+  /// This color is used to fill areas outside the logical diagram extent.
+  /// Defaults to a light gray.
+  @override
+  Color get outsideColor;
+
+  /// Distance from viewport edge that triggers auto-scroll.
+  ///
+  /// When an object is dragged within this distance from the viewport edge,
+  /// the DiagramViewer will automatically scroll to follow the object.
+  /// Defaults to 50.0 pixels.
+  @override
+  double get edgeThreshold;
+
+  /// Maximum zoom level allowed.
+  ///
+  /// Users cannot zoom in beyond this level. This prevents excessive zooming
+  /// that could cause performance issues or make the diagram unusable.
+  /// Defaults to 10.0 (10x zoom).
+  @override
+  double get maxZoom;
+
+  /// Minimum zoom level allowed.
+  ///
+  /// Users cannot zoom out beyond this level. This ensures the diagram
+  /// remains visible and usable.
+  /// Defaults to 0.1 (10% zoom).
+  @override
+  double get minZoom;
+
+  /// Number of pixels allowed for overscroll.
+  ///
+  /// Users can scroll beyond the diagram bounds by this amount before
+  /// the elastic bounce-back animation is triggered.
+  /// Defaults to 100.0 pixels.
+  @override
+  double get overscrollPixels;
+
+  /// Duration of the elastic bounce-back animation.
+  ///
+  /// When users scroll beyond the diagram bounds, this animation returns
+  /// the view to valid bounds with a smooth elastic effect.
+  /// Defaults to 300 milliseconds.
+  @override
+  Duration get bounceDuration;
+
+  /// Interval between auto-scroll steps.
+  ///
+  /// When auto-scrolling is active, this defines how frequently the
+  /// scroll position is updated. Lower values provide smoother scrolling
+  /// but may impact performance.
+  /// Defaults to 16 milliseconds (60 FPS).
+  @override
+  Duration get autoScrollInterval;
+
+  /// Acceleration factor for auto-scroll.
+  ///
+  /// This factor determines how quickly auto-scroll accelerates as objects
+  /// get closer to the viewport edge. Higher values provide more responsive
+  /// auto-scrolling.
+  /// Defaults to 1.5.
+  @override
+  double get autoScrollAcceleration;
+
+  /// Whether to enable translation (pan) gestures.
+  ///
+  /// When true, users can pan the diagram by dragging. When false,
+  /// panning is disabled.
+  /// Defaults to true.
+  @override
+  bool get enableTranslation;
+
+  /// Whether to enable scale (zoom) gestures.
+  ///
+  /// When true, users can zoom the diagram using pinch gestures or
+  /// mouse wheel. When false, zooming is disabled.
+  /// Defaults to true.
+  @override
+  bool get enableScale;
+
+  /// Whether to enable rotation gestures.
+  ///
+  /// When true, users can rotate the diagram using gesture combinations.
+  /// When false, rotation is disabled.
+  /// Defaults to false.
+  @override
+  bool get enableRotation;
+
+  /// Whether to clip content to the diagram bounds.
+  ///
+  /// When true, content outside the diagram bounds is clipped and not visible.
+  /// When false, content can be rendered outside the bounds.
+  /// Defaults to true.
+  @override
+  bool get clipContent;
+
+  /// Whether to enable inertial scrolling.
+  ///
+  /// When true, scrolling continues with inertia after the user stops dragging,
+  /// gradually slowing down. When false, scrolling stops immediately.
+  /// Defaults to true.
+  @override
+  bool get enableInertialScrolling;
+
+  /// Friction factor for inertial scrolling.
+  ///
+  /// This factor determines how quickly inertial scrolling slows down.
+  /// Higher values provide more friction and shorter inertial scrolling.
+  /// Defaults to 0.95.
+  @override
+  double get inertialFriction;
+
+  /// Whether to enable keyboard shortcuts.
+  ///
+  /// When true, keyboard shortcuts for pan, zoom, and other operations
+  /// are enabled. When false, keyboard shortcuts are disabled.
+  /// Defaults to true.
+  @override
+  bool get enableKeyboardShortcuts;
+
+  /// Whether to enable accessibility features.
+  ///
+  /// When true, accessibility features like screen reader support
+  /// are enabled. When false, accessibility features are disabled.
+  /// Defaults to true.
+  @override
+  bool get enableAccessibility;
+
+  /// Create a copy of DiagramConfiguration
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$DiagramConfigurationImplCopyWith<_$DiagramConfigurationImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
