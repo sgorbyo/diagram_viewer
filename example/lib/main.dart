@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'cerchio_repository.dart';
+import 'controllers/example_diagram_controller.dart';
 import 'package:diagram_viewer/diagram_viewer.dart';
 
 void main() {
@@ -35,7 +35,9 @@ class MyHomePage extends StatelessWidget {
         title: Text(title),
       ),
       body: Center(
-        child: DiagramViewer(diagramContentRepository: CerchioRepository()),
+        child: DiagramViewer(
+          controller: ExampleDiagramController(),
+        ),
       ),
     );
   }

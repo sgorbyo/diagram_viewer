@@ -1,27 +1,34 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:diagram_viewer/diagram_object_entity.dart';
+import 'package:diagram_viewer/interfaces/diagram_object_entity.dart';
+import 'package:diagram_viewer/events/transform_2d.dart';
 
 class TestDiagramObject extends DiagramObjectEntity {
   final Rect bounds;
   final Color color;
-  final String id;
+  final String _id;
 
   TestDiagramObject({
     required this.bounds,
     required this.color,
-    required this.id,
-  });
+    required String id,
+  }) : _id = id;
 
   @override
-  Rect enclosingRect() => bounds;
+  String get id => _id;
 
   @override
-  void printOnCanvas({required Canvas canvas}) {
+  Rect get logicalBounds => bounds;
+
+  @override
+  void paint(Canvas canvas, Transform2D transform) {
     final paint = Paint()..color = color;
     canvas.drawRect(bounds, paint);
   }
+
+  @override
+  Rect enclosingRect() => bounds;
 
   @override
   List<Object?> get props => [bounds, color, id];
@@ -103,23 +110,24 @@ void main() {
     });
 
     group('Canvas Rendering', () {
-      testWidgets('printOnCanvas can be called without errors',
+      testWidgets('paint can be called without errors',
           (WidgetTester tester) async {
         // Arrange
         final canvas = Canvas(PictureRecorder());
 
         // Act & Assert - Should not throw
-        expect(() => testObject.printOnCanvas(canvas: canvas), returnsNormally);
+        expect(() => testObject.paint(canvas, Transform2D.identity),
+            returnsNormally);
       });
 
-      testWidgets('printOnCanvas renders with correct paint',
+      testWidgets('paint renders with correct paint',
           (WidgetTester tester) async {
         // Arrange
         final recorder = PictureRecorder();
         final canvas = Canvas(recorder);
 
         // Act
-        testObject.printOnCanvas(canvas: canvas);
+        testObject.paint(canvas, Transform2D.identity);
 
         // Assert
         final picture = recorder.endRecording();

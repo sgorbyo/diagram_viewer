@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:diagram_viewer/events/physical_event.dart';
 import 'package:diagram_viewer/events/transform_2d.dart';
-import 'package:diagram_viewer/diagram_object_entity.dart';
+import 'package:diagram_viewer/interfaces/diagram_object_entity.dart';
 
 part 'diagram_command.freezed.dart';
 

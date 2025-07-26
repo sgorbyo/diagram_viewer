@@ -13,11 +13,11 @@
 ///   // Implementation...
 /// }
 ///
-/// class MyDiagramObject implements IDiagramObject {
+/// class MyDiagramObject extends DiagramObjectEntity {
 ///   // Implementation...
 /// }
 /// ```
 
 export 'i_diagram_controller.dart';
-export 'i_diagram_object.dart';
 export 'diagram_configuration.dart';
+export 'diagram_object_entity.dart';
