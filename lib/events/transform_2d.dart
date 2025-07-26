@@ -52,18 +52,17 @@ class Transform2D with _$Transform2D {
   /// Creates a Transform2D from a Matrix4.
   ///
   /// This factory constructor extracts scale, translation, and rotation
-  /// from a Flutter Matrix4. Note that this is an approximation and
-  /// may not work correctly with complex transformations.
+  /// from a Flutter Matrix4. For diagram viewers, we assume uniform scaling
+  /// (scaleX = scaleY) to avoid distortions. This is optimized for performance
+  /// and consistency.
   factory Transform2D.fromMatrix4(Matrix4 matrix) {
     // Extract translation
     final translation = Offset(matrix[12], matrix[13]);
 
-    // Extract scale (assuming uniform scaling)
-    final scaleX = math.sqrt(matrix[0] * matrix[0] + matrix[1] * matrix[1]);
-    final scaleY = math.sqrt(matrix[4] * matrix[4] + matrix[5] * matrix[5]);
-    final scale = (scaleX + scaleY) / 2.0;
+    // Extract uniform scale (using scaleX only for performance and consistency)
+    final scale = math.sqrt(matrix[0] * matrix[0] + matrix[1] * matrix[1]);
 
-    // Extract rotation (simplified)
+    // Extract rotation
     final rotation = math.atan2(matrix[1], matrix[0]);
 
     return Transform2D(
