@@ -94,6 +94,7 @@ class PhysicalEvent with _$PhysicalEvent {
   /// [phase] - Event phase (start, update, end)
   /// [rawEvent] - Original Flutter pointer event
   /// [delta] - Movement delta (for move events)
+  /// [currentViewport] - Current visible area in logical coordinates
   const factory PhysicalEvent.pointer({
     required String eventId,
     required Offset logicalPosition,
@@ -104,6 +105,7 @@ class PhysicalEvent with _$PhysicalEvent {
     required InteractionPhase phase,
     required PointerEvent rawEvent,
     Offset? delta,
+    required Rect currentViewport,
   }) = PointerPhysicalEvent;
 
   /// Gesture event (multi-touch).
@@ -123,6 +125,7 @@ class PhysicalEvent with _$PhysicalEvent {
   /// [rawEvent] - Original Flutter gesture event
   /// [scale] - Scale factor (for pinch gestures)
   /// [rotation] - Rotation angle in radians (for rotation gestures)
+  /// [currentViewport] - Current visible area in logical coordinates
   const factory PhysicalEvent.gesture({
     required String eventId,
     required Offset logicalPosition,
@@ -134,6 +137,7 @@ class PhysicalEvent with _$PhysicalEvent {
     required Object rawEvent,
     double? scale,
     double? rotation,
+    required Rect currentViewport,
   }) = GesturePhysicalEvent;
 
   /// Keyboard event.
@@ -150,6 +154,7 @@ class PhysicalEvent with _$PhysicalEvent {
   /// [borderProximity] - Proximity to diagram borders
   /// [rawEvent] - Original Flutter key event
   /// [pressedKeys] - Set of currently pressed keys
+  /// [currentViewport] - Current visible area in logical coordinates
   const factory PhysicalEvent.keyboard({
     required String eventId,
     required Offset logicalPosition,
@@ -158,6 +163,7 @@ class PhysicalEvent with _$PhysicalEvent {
     required BorderProximity borderProximity,
     required KeyEvent rawEvent,
     required Set<LogicalKeyboardKey> pressedKeys,
+    required Rect currentViewport,
   }) = KeyboardPhysicalEvent;
 
   /// Returns true if this event is a pointer event.
@@ -172,56 +178,124 @@ class PhysicalEvent with _$PhysicalEvent {
   /// Returns the logical position of this event.
   @override
   Offset get logicalPosition => when(
-        pointer: (eventId, logicalPosition, screenPosition, transformSnapshot,
-                hitList, borderProximity, phase, rawEvent, delta) =>
+        pointer: (eventId,
+                logicalPosition,
+                screenPosition,
+                transformSnapshot,
+                hitList,
+                borderProximity,
+                phase,
+                rawEvent,
+                delta,
+                currentViewport) =>
             logicalPosition,
-        gesture: (eventId, logicalPosition, screenPosition, transformSnapshot,
-                hitList, borderProximity, phase, rawEvent, scale, rotation) =>
+        gesture: (eventId,
+                logicalPosition,
+                screenPosition,
+                transformSnapshot,
+                hitList,
+                borderProximity,
+                phase,
+                rawEvent,
+                scale,
+                rotation,
+                currentViewport) =>
             logicalPosition,
         keyboard: (eventId, logicalPosition, transformSnapshot, hitList,
-                borderProximity, rawEvent, pressedKeys) =>
+                borderProximity, rawEvent, pressedKeys, currentViewport) =>
             logicalPosition,
       );
 
   /// Returns the transform snapshot of this event.
   @override
   Transform2D get transformSnapshot => when(
-        pointer: (eventId, logicalPosition, screenPosition, transformSnapshot,
-                hitList, borderProximity, phase, rawEvent, delta) =>
+        pointer: (eventId,
+                logicalPosition,
+                screenPosition,
+                transformSnapshot,
+                hitList,
+                borderProximity,
+                phase,
+                rawEvent,
+                delta,
+                currentViewport) =>
             transformSnapshot,
-        gesture: (eventId, logicalPosition, screenPosition, transformSnapshot,
-                hitList, borderProximity, phase, rawEvent, scale, rotation) =>
+        gesture: (eventId,
+                logicalPosition,
+                screenPosition,
+                transformSnapshot,
+                hitList,
+                borderProximity,
+                phase,
+                rawEvent,
+                scale,
+                rotation,
+                currentViewport) =>
             transformSnapshot,
         keyboard: (eventId, logicalPosition, transformSnapshot, hitList,
-                borderProximity, rawEvent, pressedKeys) =>
+                borderProximity, rawEvent, pressedKeys, currentViewport) =>
             transformSnapshot,
       );
 
   /// Returns the hit list of this event.
   @override
   List<DiagramObjectEntity> get hitList => when(
-        pointer: (eventId, logicalPosition, screenPosition, transformSnapshot,
-                hitList, borderProximity, phase, rawEvent, delta) =>
+        pointer: (eventId,
+                logicalPosition,
+                screenPosition,
+                transformSnapshot,
+                hitList,
+                borderProximity,
+                phase,
+                rawEvent,
+                delta,
+                currentViewport) =>
             hitList,
-        gesture: (eventId, logicalPosition, screenPosition, transformSnapshot,
-                hitList, borderProximity, phase, rawEvent, scale, rotation) =>
+        gesture: (eventId,
+                logicalPosition,
+                screenPosition,
+                transformSnapshot,
+                hitList,
+                borderProximity,
+                phase,
+                rawEvent,
+                scale,
+                rotation,
+                currentViewport) =>
             hitList,
         keyboard: (eventId, logicalPosition, transformSnapshot, hitList,
-                borderProximity, rawEvent, pressedKeys) =>
+                borderProximity, rawEvent, pressedKeys, currentViewport) =>
             hitList,
       );
 
   /// Returns the border proximity of this event.
   @override
   BorderProximity get borderProximity => when(
-        pointer: (eventId, logicalPosition, screenPosition, transformSnapshot,
-                hitList, borderProximity, phase, rawEvent, delta) =>
+        pointer: (eventId,
+                logicalPosition,
+                screenPosition,
+                transformSnapshot,
+                hitList,
+                borderProximity,
+                phase,
+                rawEvent,
+                delta,
+                currentViewport) =>
             borderProximity,
-        gesture: (eventId, logicalPosition, screenPosition, transformSnapshot,
-                hitList, borderProximity, phase, rawEvent, scale, rotation) =>
+        gesture: (eventId,
+                logicalPosition,
+                screenPosition,
+                transformSnapshot,
+                hitList,
+                borderProximity,
+                phase,
+                rawEvent,
+                scale,
+                rotation,
+                currentViewport) =>
             borderProximity,
         keyboard: (eventId, logicalPosition, transformSnapshot, hitList,
-                borderProximity, rawEvent, pressedKeys) =>
+                borderProximity, rawEvent, pressedKeys, currentViewport) =>
             borderProximity,
       );
 

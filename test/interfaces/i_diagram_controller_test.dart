@@ -122,6 +122,7 @@ void main() {
           phase: InteractionPhase.start,
           rawEvent: mockPointerEvent,
           delta: Offset.zero,
+          currentViewport: const Rect.fromLTWH(0, 0, 800, 600),
         );
 
         expect(() => controller.eventsSink.add(event), returnsNormally);

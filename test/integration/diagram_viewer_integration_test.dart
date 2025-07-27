@@ -39,7 +39,7 @@ class IntegrationTestController implements IDiagramController {
 
     event.when(
       pointer: (eventId, logicalPosition, screenPosition, transformSnapshot,
-          hitList, borderProximity, phase, rawEvent, delta) {
+          hitList, borderProximity, phase, rawEvent, delta, currentViewport) {
         if (hitList.isNotEmpty) {
           // Object manipulation - update model and redraw
           _updateObjectPosition(hitList.first, logicalPosition);
@@ -49,13 +49,22 @@ class IntegrationTestController implements IDiagramController {
           _sendDefaultBehaviorCommand(event);
         }
       },
-      gesture: (eventId, logicalPosition, screenPosition, transformSnapshot,
-          hitList, borderProximity, phase, rawEvent, scale, rotation) {
+      gesture: (eventId,
+          logicalPosition,
+          screenPosition,
+          transformSnapshot,
+          hitList,
+          borderProximity,
+          phase,
+          rawEvent,
+          scale,
+          rotation,
+          currentViewport) {
         // Handle gesture events (zoom, rotation)
         _sendDefaultBehaviorCommand(event);
       },
       keyboard: (eventId, logicalPosition, transformSnapshot, hitList,
-          borderProximity, rawEvent, pressedKeys) {
+          borderProximity, rawEvent, pressedKeys, currentViewport) {
         // Handle keyboard shortcuts
         if (pressedKeys.contains(LogicalKeyboardKey.space)) {
           _sendRedrawCommand();

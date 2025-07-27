@@ -34,31 +34,49 @@ class ExampleDiagramController implements IDiagramController {
   void _handlePhysicalEvent(PhysicalEvent event) {
     event.when(
       pointer: (eventId, logicalPosition, screenPosition, transformSnapshot,
-          hitList, borderProximity, phase, rawEvent, delta) {
+          hitList, borderProximity, phase, rawEvent, delta, currentViewport) {
         if (hitList.isNotEmpty) {
           // Object manipulation - update model and redraw
           _updateObjectPosition(hitList.first, logicalPosition);
-          _sendRedrawCommand();
+          _sendRedrawCommand(currentViewport);
         } else {
           // No object hit - apply default pan behavior
           _commandController
               .add(DiagramCommand.applyDefaultPanZoom(origin: event));
         }
       },
-      gesture: (eventId, logicalPosition, screenPosition, transformSnapshot,
-          hitList, borderProximity, phase, rawEvent, scale, rotation) {
+      gesture: (eventId,
+          logicalPosition,
+          screenPosition,
+          transformSnapshot,
+          hitList,
+          borderProximity,
+          phase,
+          rawEvent,
+          scale,
+          rotation,
+          currentViewport) {
         // Handle gesture events (zoom, rotation)
         _commandController
             .add(DiagramCommand.applyDefaultPanZoom(origin: event));
       },
       keyboard: (eventId, logicalPosition, transformSnapshot, hitList,
-          borderProximity, rawEvent, pressedKeys) {
+          borderProximity, rawEvent, pressedKeys, currentViewport) {
         // Handle keyboard shortcuts
         if (pressedKeys.contains(LogicalKeyboardKey.space)) {
-          _sendRedrawCommand();
+          _sendRedrawCommand(currentViewport);
         }
       },
     );
+  }
+
+  /// Get visible objects within the current viewport.
+  List<DiagramObjectEntity> _getVisibleObjects(Rect viewport,
+      {double margin = 100.0}) {
+    final expandedViewport = viewport.inflate(margin);
+    return objects
+        .where((obj) => obj.logicalBounds.overlaps(expandedViewport))
+        .toList();
   }
 
   void _updateObjectPosition(DiagramObjectEntity object, Offset newPosition) {
@@ -73,9 +91,12 @@ class ExampleDiagramController implements IDiagramController {
     model.position.y = newPosition.dy;
   }
 
-  void _sendRedrawCommand() {
+  void _sendRedrawCommand([Rect? viewport]) {
+    final visibleObjects =
+        viewport != null ? _getVisibleObjects(viewport) : objects;
+
     _commandController.add(DiagramCommand.redraw(
-      renderables: objects,
+      renderables: visibleObjects,
       logicalExtent: logicalExtent,
     ));
   }

@@ -209,6 +209,20 @@ class _DiagramViewerState extends State<DiagramViewer>
     _lastPointerPosition = null;
   }
 
+  /// Calculate the current viewport in logical coordinates.
+  Rect _calculateCurrentViewport() {
+    final size = context.size;
+    if (size == null) return Rect.zero;
+
+    // Convert screen bounds to logical coordinates
+    final topLeft = _currentTransform.physicalToLogical(Offset.zero);
+    final bottomRight =
+        _currentTransform.physicalToLogical(Offset(size.width, size.height));
+
+    return Rect.fromLTRB(
+        topLeft.dx, topLeft.dy, bottomRight.dx, bottomRight.dy);
+  }
+
   /// Create a PhysicalEvent from a raw pointer event.
   PhysicalEvent _createPhysicalEvent({
     required PointerEvent event,
@@ -218,6 +232,7 @@ class _DiagramViewerState extends State<DiagramViewer>
     final logicalPosition = _currentTransform.physicalToLogical(event.position);
     final hitList = _hitTestEngine.hitTest(logicalPosition, _objects);
     final borderProximity = _calculateBorderProximity(event.position);
+    final currentViewport = _calculateCurrentViewport();
 
     return PhysicalEvent.pointer(
       eventId: _currentEventId,
@@ -229,6 +244,7 @@ class _DiagramViewerState extends State<DiagramViewer>
       phase: phase,
       rawEvent: event,
       delta: delta,
+      currentViewport: currentViewport,
     );
   }
 
