@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:diagram_viewer/diagram_viewer.dart';
 import '../interfaces/i_diagram_controller_test.dart';
@@ -70,7 +71,7 @@ void main() {
         // Act - Send a command through the controller
         const command = DiagramCommand.redraw(
           renderables: [],
-          logicalExtent: const Rect.fromLTWH(0, 0, 1000, 1000),
+          logicalExtent: Rect.fromLTWH(0, 0, 1000, 1000),
         );
         mockController.sendCommand(command);
 
@@ -80,7 +81,7 @@ void main() {
         expect(find.byType(DiagramViewer), findsOneWidget);
       });
 
-      testWidgets('should send events to controller',
+      testWidgets('should send pointer events to controller',
           (WidgetTester tester) async {
         // Arrange
         await tester.pumpWidget(
@@ -97,7 +98,115 @@ void main() {
         await tester.tap(find.byType(DiagramViewer));
         await tester.pump();
 
-        // Assert - The widget should handle the tap without crashing
+        // Assert - The controller should have received events
+        expect(mockController.receivedEvents, isNotEmpty);
+        expect(mockController.receivedEvents.first.isPointer, isTrue);
+      });
+
+      testWidgets('should send gesture events to controller',
+          (WidgetTester tester) async {
+        // Arrange
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: DiagramViewer(
+                controller: mockController,
+              ),
+            ),
+          ),
+        );
+
+        // Act - Perform a scale gesture (simulate with multiple pointer events)
+        final center = tester.getCenter(find.byType(DiagramViewer));
+        final gesture = await tester.startGesture(center);
+        await gesture.moveBy(const Offset(50, 0));
+        await gesture.up();
+        await tester.pump();
+
+        // Assert - The controller should have received gesture events
+        expect(mockController.receivedEvents, isNotEmpty);
+        expect(mockController.receivedEvents.any((e) => e.isGesture), isTrue);
+      });
+
+      testWidgets('should send keyboard events to controller',
+          (WidgetTester tester) async {
+        // Arrange
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: DiagramViewer(
+                controller: mockController,
+              ),
+            ),
+          ),
+        );
+
+        // Act - Send a key event
+        await tester.sendKeyEvent(LogicalKeyboardKey.space);
+        await tester.pump();
+
+        // Assert - The controller should have received keyboard events
+        expect(mockController.receivedEvents, isNotEmpty);
+        expect(mockController.receivedEvents.any((e) => e.isKeyboard), isTrue);
+      });
+    });
+
+    group('Command Execution', () {
+      testWidgets('should execute setTransform command',
+          (WidgetTester tester) async {
+        // Arrange
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: DiagramViewer(
+                controller: mockController,
+              ),
+            ),
+          ),
+        );
+
+        // Act - Send a setTransform command
+        const command = DiagramCommand.setTransform(
+          transform: Transform2D(scale: 2.0, translation: Offset(10, 20)),
+        );
+        mockController.sendCommand(command);
+        await tester.pump();
+
+        // Assert - Widget should handle the command without crashing
+        expect(find.byType(DiagramViewer), findsOneWidget);
+      });
+
+      testWidgets('should execute applyDefaultPanZoom command',
+          (WidgetTester tester) async {
+        // Arrange
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: DiagramViewer(
+                controller: mockController,
+              ),
+            ),
+          ),
+        );
+
+        // Act - Send an applyDefaultPanZoom command
+        final event = PhysicalEvent.pointer(
+          eventId: 'test-1',
+          logicalPosition: const Offset(100, 100),
+          screenPosition: const Offset(100, 100),
+          transformSnapshot: const Transform2D(),
+          hitList: [],
+          borderProximity: BorderProximity.none,
+          phase: InteractionPhase.start,
+          rawEvent: PointerDownEvent(position: const Offset(100, 100)),
+          delta: const Offset(10, 10),
+          currentViewport: const Rect.fromLTWH(0, 0, 800, 600),
+        );
+        final command = DiagramCommand.applyDefaultPanZoom(origin: event);
+        mockController.sendCommand(command);
+        await tester.pump();
+
+        // Assert - Widget should handle the command without crashing
         expect(find.byType(DiagramViewer), findsOneWidget);
       });
     });
@@ -140,8 +249,8 @@ void main() {
           edgeThreshold: 100.0,
           maxZoom: 5.0,
           minZoom: 0.1,
-          bounceDuration: const Duration(milliseconds: 300),
-          autoScrollInterval: const Duration(milliseconds: 16),
+          bounceDuration: Duration(milliseconds: 300),
+          autoScrollInterval: Duration(milliseconds: 16),
           autoScrollAcceleration: 2.0,
         );
 

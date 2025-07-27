@@ -2,8 +2,10 @@ library diagram_viewer;
 
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:diagram_viewer/interfaces/interfaces.dart';
 import 'package:diagram_viewer/events/events.dart';
+import 'package:diagram_viewer/tools/transform2d/transform2d_utils.dart';
 
 // Export interfaces for client implementation
 export 'interfaces/interfaces.dart';
@@ -116,7 +118,7 @@ class _DiagramViewerState extends State<DiagramViewer>
 
     // Listen to commands from the controller
     _commandSubscription =
-        widget.controller.commandStream.listen(_handleCommand);
+        widget.controller.commandStream.listen(_executeCommand);
 
     // Initialize with controller's initial state
     _logicalExtent = widget.controller.logicalExtent;
@@ -136,20 +138,29 @@ class _DiagramViewerState extends State<DiagramViewer>
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        return Listener(
-          onPointerDown: _handlePointerDown,
-          onPointerMove: _handlePointerMove,
-          onPointerUp: _handlePointerUp,
-          onPointerCancel: _handlePointerCancel,
-          child: CustomPaint(
-            painter: _DiagramPainter(
-              transform: _currentTransform,
-              objects: _objects,
-              logicalExtent: _logicalExtent,
-              configuration: _config,
-              debug: widget.debug,
+        return Focus(
+          autofocus: true,
+          onKeyEvent: _handleKeyEvent,
+          child: GestureDetector(
+            onScaleStart: _handleScaleStart,
+            onScaleUpdate: _handleScaleUpdate,
+            onScaleEnd: _handleScaleEnd,
+            child: Listener(
+              onPointerDown: _handlePointerDown,
+              onPointerMove: _handlePointerMove,
+              onPointerUp: _handlePointerUp,
+              onPointerCancel: _handlePointerCancel,
+              child: CustomPaint(
+                painter: _DiagramPainter(
+                  transform: _currentTransform,
+                  objects: _objects,
+                  logicalExtent: _logicalExtent,
+                  configuration: _config,
+                  debug: widget.debug,
+                ),
+                size: Size(constraints.maxWidth, constraints.maxHeight),
+              ),
             ),
-            size: Size(constraints.maxWidth, constraints.maxHeight),
           ),
         );
       },
@@ -209,6 +220,79 @@ class _DiagramViewerState extends State<DiagramViewer>
     _lastPointerPosition = null;
   }
 
+  /// Handle scale start events.
+  void _handleScaleStart(ScaleStartDetails details) {
+    final logicalPosition =
+        _currentTransform.physicalToLogical(details.focalPoint);
+    final hitList = _hitTestEngine.hitTest(logicalPosition, _objects);
+    final borderProximity = _calculateBorderProximity(details.focalPoint);
+
+    final physicalEvent = PhysicalEvent.gesture(
+      eventId: _generateEventId(),
+      logicalPosition: logicalPosition,
+      screenPosition: details.focalPoint,
+      transformSnapshot: _currentTransform,
+      hitList: hitList,
+      borderProximity: borderProximity,
+      phase: InteractionPhase.start,
+      rawEvent: details,
+      scale: null,
+      rotation: null,
+      currentViewport: _calculateCurrentViewport(),
+    );
+
+    widget.controller.eventsSink.add(physicalEvent);
+  }
+
+  /// Handle scale update events.
+  void _handleScaleUpdate(ScaleUpdateDetails details) {
+    final logicalPosition =
+        _currentTransform.physicalToLogical(details.focalPoint);
+    final hitList = _hitTestEngine.hitTest(logicalPosition, _objects);
+    final borderProximity = _calculateBorderProximity(details.focalPoint);
+
+    final physicalEvent = PhysicalEvent.gesture(
+      eventId: _generateEventId(),
+      logicalPosition: logicalPosition,
+      screenPosition: details.focalPoint,
+      transformSnapshot: _currentTransform,
+      hitList: hitList,
+      borderProximity: borderProximity,
+      phase: InteractionPhase.update,
+      rawEvent: details,
+      scale: details.scale,
+      rotation: details.rotation,
+      currentViewport: _calculateCurrentViewport(),
+    );
+
+    widget.controller.eventsSink.add(physicalEvent);
+  }
+
+  /// Handle scale end events.
+  void _handleScaleEnd(ScaleEndDetails details) {
+    // Use last pointer position or center of screen for scale end
+    final screenPosition = _lastPointerPosition ?? Offset.zero;
+    final logicalPosition = _currentTransform.physicalToLogical(screenPosition);
+    final hitList = _hitTestEngine.hitTest(logicalPosition, _objects);
+    final borderProximity = _calculateBorderProximity(screenPosition);
+
+    final physicalEvent = PhysicalEvent.gesture(
+      eventId: _generateEventId(),
+      logicalPosition: logicalPosition,
+      screenPosition: screenPosition,
+      transformSnapshot: _currentTransform,
+      hitList: hitList,
+      borderProximity: borderProximity,
+      phase: InteractionPhase.end,
+      rawEvent: details,
+      scale: null,
+      rotation: null,
+      currentViewport: _calculateCurrentViewport(),
+    );
+
+    widget.controller.eventsSink.add(physicalEvent);
+  }
+
   /// Calculate the current viewport in logical coordinates.
   Rect _calculateCurrentViewport() {
     final size = context.size;
@@ -248,6 +332,27 @@ class _DiagramViewerState extends State<DiagramViewer>
     );
   }
 
+  /// Handle keyboard events.
+  KeyEventResult _handleKeyEvent(FocusNode node, KeyEvent event) {
+    final logicalPosition = _currentTransform.physicalToLogical(Offset.zero);
+    final hitList = _hitTestEngine.hitTest(logicalPosition, _objects);
+    final borderProximity = BorderProximity.none;
+
+    final physicalEvent = PhysicalEvent.keyboard(
+      eventId: _generateEventId(),
+      logicalPosition: logicalPosition,
+      transformSnapshot: _currentTransform,
+      hitList: hitList,
+      borderProximity: borderProximity,
+      rawEvent: event,
+      pressedKeys: {event.logicalKey},
+      currentViewport: _calculateCurrentViewport(),
+    );
+
+    widget.controller.eventsSink.add(physicalEvent);
+    return KeyEventResult.handled;
+  }
+
   /// Calculate border proximity for a screen position.
   BorderProximity _calculateBorderProximity(Offset screenPosition) {
     final size = context.size;
@@ -280,12 +385,14 @@ class _DiagramViewerState extends State<DiagramViewer>
     );
   }
 
-  /// Handle commands from the controller.
-  void _handleCommand(DiagramCommand command) {
+  /// Execute a command from the controller.
+  void _executeCommand(DiagramCommand command) {
     command.when(
       applyDefaultPanZoom: (origin) {
-        // Delegate to ScrollingBloc for pure scrolling behavior
-        _applyDefaultPanZoom(origin);
+        // The controller has decided to apply default pan/zoom behavior
+        // This method should be called by the controller when it wants
+        // the DiagramViewer to handle the event with its default behavior
+        _handleDefaultPanZoom(origin);
       },
       setTransform: (transform) {
         setState(() {
@@ -296,6 +403,17 @@ class _DiagramViewerState extends State<DiagramViewer>
         setState(() {
           _objects = renderables;
           _logicalExtent = logicalExtent;
+        });
+
+        // Force a complete repaint to prevent artifacts
+        // This ensures the entire canvas is redrawn when the extent changes
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            setState(() {
+              // Trigger a repaint by updating a dummy value
+              // This forces the CustomPaint to repaint completely
+            });
+          }
         });
       },
       elasticBounceBack: (targetTransform, duration) {
@@ -310,10 +428,129 @@ class _DiagramViewerState extends State<DiagramViewer>
     );
   }
 
-  /// Apply default pan/zoom behavior.
-  void _applyDefaultPanZoom(PhysicalEvent origin) {
-    // This will be implemented to delegate to ScrollingBloc
-    // for pure scrolling behavior when no business logic is needed
+  /// Handle default pan/zoom behavior when requested by controller.
+  void _handleDefaultPanZoom(PhysicalEvent origin) {
+    final size = context.size;
+    if (size == null) return;
+
+    origin.when(
+      pointer: (eventId, logicalPosition, screenPosition, transformSnapshot,
+          hitList, borderProximity, phase, rawEvent, delta, currentViewport) {
+        if (delta != null && phase == InteractionPhase.update) {
+          final newTransform = _currentTransform.applyPan(delta);
+          final cappedTransform = Transform2DUtils.capTransform(
+            transform: newTransform,
+            diagramRect: _logicalExtent,
+            size: size,
+            dynamic: true,
+          );
+          setState(() {
+            _currentTransform = cappedTransform;
+          });
+        }
+      },
+      gesture: (eventId,
+          logicalPosition,
+          screenPosition,
+          transformSnapshot,
+          hitList,
+          borderProximity,
+          phase,
+          rawEvent,
+          scale,
+          rotation,
+          currentViewport) {
+        if (scale != null) {
+          final newTransform =
+              _currentTransform.applyZoom(scale, logicalPosition);
+          final cappedTransform = Transform2DUtils.capTransform(
+            transform: newTransform,
+            diagramRect: _logicalExtent,
+            size: size,
+            dynamic: true,
+          );
+          setState(() {
+            _currentTransform = cappedTransform;
+          });
+        }
+      },
+      keyboard: (eventId, logicalPosition, transformSnapshot, hitList,
+          borderProximity, rawEvent, pressedKeys, currentViewport) {
+        const panStep = 50.0;
+        const zoomStep = 1.2;
+
+        if (pressedKeys.contains(LogicalKeyboardKey.arrowLeft)) {
+          final newTransform = _currentTransform.applyPan(Offset(panStep, 0));
+          final cappedTransform = Transform2DUtils.capTransform(
+            transform: newTransform,
+            diagramRect: _logicalExtent,
+            size: size,
+            dynamic: false,
+          );
+          setState(() {
+            _currentTransform = cappedTransform;
+          });
+        } else if (pressedKeys.contains(LogicalKeyboardKey.arrowRight)) {
+          final newTransform = _currentTransform.applyPan(Offset(-panStep, 0));
+          final cappedTransform = Transform2DUtils.capTransform(
+            transform: newTransform,
+            diagramRect: _logicalExtent,
+            size: size,
+            dynamic: false,
+          );
+          setState(() {
+            _currentTransform = cappedTransform;
+          });
+        } else if (pressedKeys.contains(LogicalKeyboardKey.arrowUp)) {
+          final newTransform = _currentTransform.applyPan(Offset(0, panStep));
+          final cappedTransform = Transform2DUtils.capTransform(
+            transform: newTransform,
+            diagramRect: _logicalExtent,
+            size: size,
+            dynamic: false,
+          );
+          setState(() {
+            _currentTransform = cappedTransform;
+          });
+        } else if (pressedKeys.contains(LogicalKeyboardKey.arrowDown)) {
+          final newTransform = _currentTransform.applyPan(Offset(0, -panStep));
+          final cappedTransform = Transform2DUtils.capTransform(
+            transform: newTransform,
+            diagramRect: _logicalExtent,
+            size: size,
+            dynamic: false,
+          );
+          setState(() {
+            _currentTransform = cappedTransform;
+          });
+        } else if (pressedKeys.contains(LogicalKeyboardKey.equal) ||
+            pressedKeys.contains(LogicalKeyboardKey.add)) {
+          final newTransform =
+              _currentTransform.applyZoom(zoomStep, logicalPosition);
+          final cappedTransform = Transform2DUtils.capTransform(
+            transform: newTransform,
+            diagramRect: _logicalExtent,
+            size: size,
+            dynamic: false,
+          );
+          setState(() {
+            _currentTransform = cappedTransform;
+          });
+        } else if (pressedKeys.contains(LogicalKeyboardKey.minus)) {
+          final newTransform =
+              _currentTransform.applyZoom(1.0 / zoomStep, logicalPosition);
+          final cappedTransform = Transform2DUtils.capTransform(
+            transform: newTransform,
+            diagramRect: _logicalExtent,
+            size: size,
+            dynamic: false,
+          );
+          setState(() {
+            _currentTransform = cappedTransform;
+          });
+        }
+      },
+    );
   }
 
   /// Animate elastic bounce back to valid bounds.
@@ -388,8 +625,11 @@ class _DiagramPainter extends CustomPainter {
     canvas.save();
     canvas.transform(transform.toMatrix4().storage);
 
-    // Draw background
+    // Draw background - ALWAYS paint the entire canvas first
     _drawBackground(canvas, size);
+
+    // Draw diagram area (white background for the diagram)
+    _drawDiagramArea(canvas);
 
     // Draw objects in z-order
     _drawObjects(canvas);
@@ -405,10 +645,27 @@ class _DiagramPainter extends CustomPainter {
   /// Draw the diagram background.
   void _drawBackground(Canvas canvas, Size size) {
     final backgroundPaint = Paint()
-      ..color = configuration.backgroundColor
+      ..color = Colors.grey.shade200 // Light gray background
       ..style = PaintingStyle.fill;
 
-    canvas.drawRect(Offset.zero & size, backgroundPaint);
+    // Paint the entire transformed area to prevent artifacts
+    // Use a large rect to ensure we cover all possible transformed areas
+    final largeRect = Rect.fromCenter(
+      center: Offset.zero,
+      width: size.width * 10, // Much larger than needed
+      height: size.height * 10,
+    );
+    canvas.drawRect(largeRect, backgroundPaint);
+  }
+
+  /// Draw the diagram area (white background).
+  void _drawDiagramArea(Canvas canvas) {
+    final diagramAreaPaint = Paint()
+      ..color = Colors.white // White background for diagram area
+      ..style = PaintingStyle.fill;
+
+    // Paint the diagram area on top of the background
+    canvas.drawRect(logicalExtent, diagramAreaPaint);
   }
 
   /// Draw all objects in z-order.
@@ -446,7 +703,11 @@ class _DiagramPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true; // Always repaint for now, can be optimized later
+  bool shouldRepaint(covariant _DiagramPainter oldDelegate) {
+    return transform != oldDelegate.transform ||
+        objects != oldDelegate.objects ||
+        logicalExtent != oldDelegate.logicalExtent ||
+        configuration != oldDelegate.configuration ||
+        debug != oldDelegate.debug;
   }
 }

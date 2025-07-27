@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:diagram_viewer/interfaces/interfaces.dart';
 import 'package:diagram_viewer/events/events.dart';
@@ -16,13 +17,21 @@ class MockDiagramController implements IDiagramController {
   final Rect _logicalExtent;
   final DiagramConfiguration _configuration;
 
+  // Track received events for testing
+  final List<PhysicalEvent> _receivedEvents = [];
+
   MockDiagramController({
     List<DiagramObjectEntity>? objects,
     Rect? logicalExtent,
     DiagramConfiguration? configuration,
   })  : _objects = objects ?? [],
         _logicalExtent = logicalExtent ?? const Rect.fromLTWH(0, 0, 1000, 1000),
-        _configuration = configuration ?? DiagramConfiguration.defaults;
+        _configuration = configuration ?? DiagramConfiguration.defaults {
+    // Listen to events for testing
+    _eventController.stream.listen((event) {
+      _receivedEvents.add(event);
+    });
+  }
 
   @override
   Stream<DiagramCommand> get commandStream => _commandController.stream;
@@ -53,6 +62,15 @@ class MockDiagramController implements IDiagramController {
   void sendCommand(DiagramCommand command) {
     _commandController.add(command);
   }
+
+  // Testing helpers
+  List<PhysicalEvent> get receivedEvents => List.unmodifiable(_receivedEvents);
+
+  void clearReceivedEvents() {
+    _receivedEvents.clear();
+  }
+
+  bool get hasReceivedEvents => _receivedEvents.isNotEmpty;
 }
 
 void main() {

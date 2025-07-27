@@ -25,6 +25,10 @@ class ExampleDiagramController implements IDiagramController {
   ExampleDiagramController() {
     _randomPopulate(50);
     _setupEventHandling();
+
+    // Send initial redraw command with calculated logical extent
+    // This ensures the DiagramViewer knows about all objects and the correct diagram area
+    _updateLogicalExtentAndRedraw();
   }
 
   void _setupEventHandling() {
@@ -36,11 +40,11 @@ class ExampleDiagramController implements IDiagramController {
       pointer: (eventId, logicalPosition, screenPosition, transformSnapshot,
           hitList, borderProximity, phase, rawEvent, delta, currentViewport) {
         if (hitList.isNotEmpty) {
-          // Object manipulation - update model and redraw
+          // Business logic: sposta oggetto
           _updateObjectPosition(hitList.first, logicalPosition);
           _sendRedrawCommand(currentViewport);
         } else {
-          // No object hit - apply default pan behavior
+          // Business logic: richiedi comportamento di default
           _commandController
               .add(DiagramCommand.applyDefaultPanZoom(origin: event));
         }
@@ -56,7 +60,7 @@ class ExampleDiagramController implements IDiagramController {
           scale,
           rotation,
           currentViewport) {
-        // Handle gesture events (zoom, rotation)
+        // Business logic: richiedi comportamento di default per gesture
         _commandController
             .add(DiagramCommand.applyDefaultPanZoom(origin: event));
       },
@@ -65,38 +69,74 @@ class ExampleDiagramController implements IDiagramController {
         // Handle keyboard shortcuts
         if (pressedKeys.contains(LogicalKeyboardKey.space)) {
           _sendRedrawCommand(currentViewport);
+        } else {
+          // Business logic: richiedi comportamento di default per tastiera
+          _commandController
+              .add(DiagramCommand.applyDefaultPanZoom(origin: event));
         }
       },
     );
   }
 
-  /// Get visible objects within the current viewport.
-  List<DiagramObjectEntity> _getVisibleObjects(Rect viewport,
-      {double margin = 100.0}) {
-    final expandedViewport = viewport.inflate(margin);
-    return objects
-        .where((obj) => obj.logicalBounds.overlaps(expandedViewport))
-        .toList();
-  }
-
+  /// Update object position in the model.
   void _updateObjectPosition(DiagramObjectEntity object, Offset newPosition) {
-    // Find the corresponding model and update its position
-    final model = _storage.values.firstWhere(
-      (model) => model.id == object.id,
-      orElse: () => throw Exception('Model not found for object ${object.id}'),
-    );
+    if (object is CerchioEntity) {
+      final model = _storage.values.firstWhere(
+        (model) => model.id == object.id,
+        orElse: () =>
+            throw Exception('Model not found for object ${object.id}'),
+      );
+      model.position.x = newPosition.dx;
+      model.position.y = newPosition.dy;
 
-    // Update position (keeping z and w components)
-    model.position.x = newPosition.dx;
-    model.position.y = newPosition.dy;
+      // After updating position, we need to recalculate the logical extent
+      // and send a redraw command with the updated extent
+      _updateLogicalExtentAndRedraw();
+    }
   }
 
-  void _sendRedrawCommand([Rect? viewport]) {
-    final visibleObjects =
-        viewport != null ? _getVisibleObjects(viewport) : objects;
+  /// Calculate the current logical extent based on all objects
+  Rect _calculateCurrentLogicalExtent() {
+    if (_storage.isEmpty) {
+      // Default extent when no objects exist
+      return Rect.fromCenter(
+        center: Offset.zero,
+        width: 512,
+        height: 512,
+      );
+    }
 
+    // Start with the first object's bounds
+    Rect bounds = _storage.values.first.position.toRect().inflate(radius);
+
+    // Expand to include all objects
+    for (final model in _storage.values) {
+      bounds = bounds.expandToInclude(
+        model.position.toRect().inflate(radius),
+      );
+    }
+
+    // Add padding around the bounds
+    return bounds.inflate(50); // Increased padding for better visibility
+  }
+
+  /// Update logical extent and send redraw command
+  void _updateLogicalExtentAndRedraw() {
+    final newLogicalExtent = _calculateCurrentLogicalExtent();
+
+    // Send redraw command with updated logical extent
     _commandController.add(DiagramCommand.redraw(
-      renderables: visibleObjects,
+      renderables: objects, // Send all objects, not just visible ones
+      logicalExtent: newLogicalExtent,
+    ));
+  }
+
+  /// Send redraw command to DiagramViewer
+  void _sendRedrawCommand(Rect currentViewport) {
+    // Always send all objects and current logical extent
+    // The DiagramViewer will handle visibility and culling
+    _commandController.add(DiagramCommand.redraw(
+      renderables: objects,
       logicalExtent: logicalExtent,
     ));
   }
@@ -108,23 +148,7 @@ class ExampleDiagramController implements IDiagramController {
   StreamSink<PhysicalEvent> get eventsSink => _eventController.sink;
 
   @override
-  Rect get logicalExtent {
-    if (_storage.isEmpty) {
-      return Rect.fromCenter(
-        center: Offset.zero,
-        width: 512,
-        height: 512,
-      );
-    }
-
-    Rect bounds = _storage.values.first.position.toRect().inflate(radius);
-    for (final model in _storage.values) {
-      bounds = bounds.expandToInclude(
-        model.position.toRect().inflate(radius),
-      );
-    }
-    return bounds.inflate(25); // Add padding
-  }
+  Rect get logicalExtent => _calculateCurrentLogicalExtent();
 
   @override
   DiagramConfiguration get configuration => DiagramConfiguration.defaults;
