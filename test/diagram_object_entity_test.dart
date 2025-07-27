@@ -2,7 +2,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:diagram_viewer/interfaces/diagram_object_entity.dart';
-import 'package:diagram_viewer/events/transform_2d.dart';
 
 class TestDiagramObject extends DiagramObjectEntity {
   final Rect bounds;
@@ -22,7 +21,7 @@ class TestDiagramObject extends DiagramObjectEntity {
   Rect get logicalBounds => bounds;
 
   @override
-  void paint(Canvas canvas, Transform2D transform) {
+  void paint(Canvas canvas) {
     final paint = Paint()..color = color;
     canvas.drawRect(bounds, paint);
   }
@@ -116,8 +115,7 @@ void main() {
         final canvas = Canvas(PictureRecorder());
 
         // Act & Assert - Should not throw
-        expect(() => testObject.paint(canvas, Transform2D.identity),
-            returnsNormally);
+        expect(() => testObject.paint(canvas), returnsNormally);
       });
 
       testWidgets('paint renders with correct paint',
@@ -127,7 +125,7 @@ void main() {
         final canvas = Canvas(recorder);
 
         // Act
-        testObject.paint(canvas, Transform2D.identity);
+        testObject.paint(canvas);
 
         // Assert
         final picture = recorder.endRecording();

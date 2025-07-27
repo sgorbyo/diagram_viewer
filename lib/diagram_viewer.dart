@@ -403,7 +403,7 @@ class _DiagramPainter extends CustomPainter {
 
     for (final object in sortedObjects) {
       if (object.isVisible) {
-        object.paint(canvas, transform);
+        object.paint(canvas); // ← RIMOSSO transform!
       }
     }
   }

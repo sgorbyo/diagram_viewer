@@ -172,7 +172,7 @@ class TestDiagramObject extends DiagramObjectEntity {
   Rect get logicalBounds => bounds;
 
   @override
-  void paint(Canvas canvas, Transform2D transform) {
+  void paint(Canvas canvas) {
     final paint = Paint()..color = color;
     canvas.drawRect(bounds, paint);
   }

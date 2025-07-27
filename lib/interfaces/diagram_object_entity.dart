@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
-import 'package:diagram_viewer/events/transform_2d.dart';
 
 /// An abstract base class that defines the contract for all drawable objects
 /// within the diagram viewer.
@@ -104,19 +103,19 @@ abstract class DiagramObjectEntity extends Equatable {
   @Deprecated('Use logicalBounds instead')
   Rect enclosingRect() => logicalBounds;
 
-  /// Paints this object on the given canvas with the specified transform.
+  /// Paints this object on the given canvas.
   ///
   /// This method is called by the DiagramViewer when the object needs to be drawn.
-  /// It provides better integration with the Transform2D system.
+  /// The canvas is already transformed to logical coordinates, so objects should
+  /// draw using their logical coordinates directly.
   ///
   /// Implementation should:
-  /// - Draw all visual elements of the object
+  /// - Draw all visual elements of the object using logical coordinates
   /// - Handle any object-specific styling or effects
   /// - Consider performance optimizations for complex objects
   ///
-  /// @param canvas The canvas to paint on
-  /// @param transform The current transformation to apply
-  void paint(Canvas canvas, Transform2D transform);
+  /// @param canvas The canvas to paint on (already transformed to logical coordinates)
+  void paint(Canvas canvas);
 
   /// Renders the diagram object onto the provided canvas.
   ///
@@ -133,8 +132,8 @@ abstract class DiagramObjectEntity extends Equatable {
   /// @deprecated Use [paint] instead for the new architecture
   @Deprecated('Use paint instead')
   void printOnCanvas({required Canvas canvas}) {
-    // Default implementation: create a default transform and call the new method
-    paint(canvas, Transform2D.identity);
+    // Default implementation: call the new method
+    paint(canvas);
   }
 
   /// Returns the unique identifier for this object.

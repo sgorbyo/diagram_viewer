@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'package:diagram_viewer/interfaces/diagram_object_entity.dart';
-import 'package:diagram_viewer/events/transform_2d.dart';
 import 'package:vector_math/vector_math.dart';
 
 class CerchioEntity extends DiagramObjectEntity {
@@ -25,20 +24,21 @@ class CerchioEntity extends DiagramObjectEntity {
       );
 
   @override
-  void paint(Canvas canvas, Transform2D transform) {
-    final physicalCenter = transform.logicalToPhysical(Offset(position.x, position.y));
-    final physicalRadius = radius * transform.scale;
-    
-    final path = Path()..addOval(Rect.fromCircle(
-      center: physicalCenter,
-      radius: physicalRadius,
-    ));
-    
+  void paint(Canvas canvas) {
+    // Usa coordinate logiche direttamente (canvas già trasformato)
+    final center = Offset(position.x, position.y);
+
+    final path = Path()
+      ..addOval(Rect.fromCircle(
+        center: center, // ← Coordinate logiche!
+        radius: radius, // ← Raggio logico!
+      ));
+
     final paint = Paint()
-      ..strokeWidth = 1.5 * transform.scale
+      ..strokeWidth = 1.5 // ← Spessore fisso (il canvas gestisce la scala)
       ..color = const Color.fromRGBO(0, 0, 255, 1.0)
       ..style = PaintingStyle.stroke;
-    
+
     canvas.drawPath(path, paint);
   }
 
@@ -62,7 +62,7 @@ class CerchioEntity extends DiagramObjectEntity {
       ..strokeWidth = 1.5
       ..color = const Color.fromRGBO(0, 0, 255, 1.0)
       ..style = PaintingStyle.stroke;
-    
+
     final path = Path()..addOval(logicalBounds);
     canvas.drawPath(path, paint);
   }
