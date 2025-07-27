@@ -3,9 +3,12 @@ library diagram_viewer;
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:diagram_viewer/interfaces/interfaces.dart';
 import 'package:diagram_viewer/events/events.dart';
 import 'package:diagram_viewer/tools/transform2d/transform2d_utils.dart';
+import 'package:diagram_viewer/internal/event_management_bloc.dart';
 
 // Export interfaces for client implementation
 export 'interfaces/interfaces.dart';
@@ -109,6 +112,9 @@ class _DiagramViewerState extends State<DiagramViewer>
   // Configuration
   late DiagramConfiguration _config;
 
+  // Internal BLoC for event management
+  late EventManagementBloc _eventBloc;
+
   @override
   void initState() {
     super.initState();
@@ -126,6 +132,9 @@ class _DiagramViewerState extends State<DiagramViewer>
       duration: _config.autoScrollInterval,
       vsync: this,
     );
+
+    // Initialize internal BLoC
+    _eventBloc = EventManagementBloc(widget.controller);
 
     // Listen to commands from the controller
     _commandSubscription =
@@ -150,6 +159,7 @@ class _DiagramViewerState extends State<DiagramViewer>
     _commandSubscription?.cancel();
     _bounceController.dispose();
     _autoScrollController.dispose();
+    _eventBloc.close();
     super.dispose();
   }
 
@@ -157,27 +167,35 @@ class _DiagramViewerState extends State<DiagramViewer>
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        return Focus(
-          autofocus: true,
-          onKeyEvent: _handleKeyEvent,
-          child: GestureDetector(
-            onScaleStart: _handleScaleStart,
-            onScaleUpdate: _handleScaleUpdate,
-            onScaleEnd: _handleScaleEnd,
-            child: Listener(
-              onPointerDown: _handlePointerDown,
-              onPointerMove: _handlePointerMove,
-              onPointerUp: _handlePointerUp,
-              onPointerCancel: _handlePointerCancel,
-              child: CustomPaint(
-                painter: _DiagramPainter(
-                  transform: _currentTransform,
-                  objects: _objects,
-                  logicalExtent: _logicalExtent,
-                  configuration: _config,
-                  debug: widget.debug,
+        return BlocProvider.value(
+          value: _eventBloc,
+          child: BlocListener<EventManagementBloc, EventManagementState>(
+            listener: (context, state) {
+              // Handle state changes if needed
+            },
+            child: Focus(
+              autofocus: true,
+              onKeyEvent: _handleKeyEvent,
+              child: GestureDetector(
+                onScaleStart: _handleScaleStart,
+                onScaleUpdate: _handleScaleUpdate,
+                onScaleEnd: _handleScaleEnd,
+                child: Listener(
+                  onPointerDown: _handlePointerDown,
+                  onPointerMove: _handlePointerMove,
+                  onPointerUp: _handlePointerUp,
+                  onPointerCancel: _handlePointerCancel,
+                  child: CustomPaint(
+                    painter: _DiagramPainter(
+                      transform: _currentTransform,
+                      objects: _objects,
+                      logicalExtent: _logicalExtent,
+                      configuration: _config,
+                      debug: widget.debug,
+                    ),
+                    size: Size(constraints.maxWidth, constraints.maxHeight),
+                  ),
                 ),
-                size: Size(constraints.maxWidth, constraints.maxHeight),
               ),
             ),
           ),
@@ -196,7 +214,14 @@ class _DiagramViewerState extends State<DiagramViewer>
       phase: InteractionPhase.start,
     );
 
-    widget.controller.eventsSink.add(physicalEvent);
+    // Start panning interaction via BLoC
+    _eventBloc.add(EventManagementEvent.interactionStarted(
+      InteractionType.pan,
+      physicalEvent.eventId,
+    ));
+
+    // Send event to BLoC for processing
+    _eventBloc.add(EventManagementEvent.physicalEventReceived(physicalEvent));
   }
 
   /// Handle pointer move events.
@@ -212,7 +237,8 @@ class _DiagramViewerState extends State<DiagramViewer>
       delta: delta,
     );
 
-    widget.controller.eventsSink.add(physicalEvent);
+    // Send event to BLoC for processing
+    _eventBloc.add(EventManagementEvent.physicalEventReceived(physicalEvent));
   }
 
   /// Handle pointer up events.
@@ -222,7 +248,12 @@ class _DiagramViewerState extends State<DiagramViewer>
       phase: InteractionPhase.end,
     );
 
-    widget.controller.eventsSink.add(physicalEvent);
+    // End interaction via BLoC
+    _eventBloc
+        .add(EventManagementEvent.interactionEnded(physicalEvent.eventId));
+
+    // Send event to BLoC for processing
+    _eventBloc.add(EventManagementEvent.physicalEventReceived(physicalEvent));
 
     _lastPointerPosition = null;
   }
@@ -260,7 +291,14 @@ class _DiagramViewerState extends State<DiagramViewer>
       currentViewport: _calculateCurrentViewport(),
     );
 
-    widget.controller.eventsSink.add(physicalEvent);
+    // Start zooming interaction via BLoC
+    _eventBloc.add(EventManagementEvent.interactionStarted(
+      InteractionType.zoom,
+      physicalEvent.eventId,
+    ));
+
+    // Send event to BLoC for processing
+    _eventBloc.add(EventManagementEvent.physicalEventReceived(physicalEvent));
   }
 
   /// Handle scale update events.
@@ -284,7 +322,8 @@ class _DiagramViewerState extends State<DiagramViewer>
       currentViewport: _calculateCurrentViewport(),
     );
 
-    widget.controller.eventsSink.add(physicalEvent);
+    // Send event to BLoC for processing
+    _eventBloc.add(EventManagementEvent.physicalEventReceived(physicalEvent));
   }
 
   /// Handle scale end events.
@@ -309,7 +348,12 @@ class _DiagramViewerState extends State<DiagramViewer>
       currentViewport: _calculateCurrentViewport(),
     );
 
-    widget.controller.eventsSink.add(physicalEvent);
+    // End interaction via BLoC
+    _eventBloc
+        .add(EventManagementEvent.interactionEnded(physicalEvent.eventId));
+
+    // Send event to BLoC for processing
+    _eventBloc.add(EventManagementEvent.physicalEventReceived(physicalEvent));
   }
 
   /// Calculate the current viewport in logical coordinates.
@@ -459,8 +503,11 @@ class _DiagramViewerState extends State<DiagramViewer>
       pointer: (eventId, logicalPosition, screenPosition, transformSnapshot,
           hitList, borderProximity, phase, rawEvent, delta, currentViewport) {
         if (delta != null && phase == InteractionPhase.update) {
+          // Handle pan events
           final newTransform = _currentTransform.applyPan(delta);
-          final cappedTransform = Transform2DUtils.capTransformWithZoomLimits(
+
+          // Apply transform limits
+          final finalTransform = Transform2DUtils.capTransformWithZoomLimits(
             transform: newTransform,
             diagramRect: _logicalExtent,
             size: size,
@@ -468,8 +515,36 @@ class _DiagramViewerState extends State<DiagramViewer>
             minZoom: _config.minZoom,
             maxZoom: _config.maxZoom,
           );
+
           setState(() {
-            _currentTransform = cappedTransform;
+            _currentTransform = finalTransform;
+          });
+        } else if (rawEvent is PointerScrollEvent) {
+          // Handle mouse wheel zoom
+          const zoomFactor = 1.2; // 20% zoom per scroll unit
+          final scrollDelta = rawEvent.scrollDelta.dy;
+
+          // Determine zoom direction based on scroll direction
+          final scale = scrollDelta < 0 ? zoomFactor : 1.0 / zoomFactor;
+
+          // Convert screen position to logical coordinates for focal point
+          final focalPointInLogical =
+              _currentTransform.physicalToLogical(screenPosition);
+          final newTransform =
+              _currentTransform.applyZoom(scale, focalPointInLogical);
+
+          // Apply transform limits
+          final finalTransform = Transform2DUtils.capTransformWithZoomLimits(
+            transform: newTransform,
+            diagramRect: _logicalExtent,
+            size: size,
+            dynamic: true,
+            minZoom: _config.minZoom,
+            maxZoom: _config.maxZoom,
+          );
+
+          setState(() {
+            _currentTransform = finalTransform;
           });
         }
       },
@@ -485,9 +560,14 @@ class _DiagramViewerState extends State<DiagramViewer>
           rotation,
           currentViewport) {
         if (scale != null) {
+          // Convert screen position to logical coordinates for focal point
+          final focalPointInLogical =
+              _currentTransform.physicalToLogical(screenPosition);
           final newTransform =
-              _currentTransform.applyZoom(scale, logicalPosition);
-          final cappedTransform = Transform2DUtils.capTransformWithZoomLimits(
+              _currentTransform.applyZoom(scale, focalPointInLogical);
+
+          // Apply transform limits
+          final finalTransform = Transform2DUtils.capTransformWithZoomLimits(
             transform: newTransform,
             diagramRect: _logicalExtent,
             size: size,
@@ -495,8 +575,9 @@ class _DiagramViewerState extends State<DiagramViewer>
             minZoom: _config.minZoom,
             maxZoom: _config.maxZoom,
           );
+
           setState(() {
-            _currentTransform = cappedTransform;
+            _currentTransform = finalTransform;
           });
         }
       },

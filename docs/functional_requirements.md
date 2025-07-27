@@ -26,6 +26,13 @@ The package implements a **Diagrammer-Controller architecture** where:
   - Mouse wheel and touch pinch → single transformation event type
   - Double click and double tap → single repeated interaction event type
 
+### Zoom Behavior Requirements
+- The package must implement zoom behavior that maintains the focal point:
+  - **Pinch-to-zoom**: The point between the user's fingers (focal point) must remain stationary in the viewport during zoom operations
+  - **Mouse wheel zoom**: The point under the mouse cursor must remain stationary during zoom operations
+  - **Keyboard zoom**: The center of the viewport must remain stationary during zoom operations
+  - **Zoom constraints**: All zoom operations must respect minimum and maximum zoom limits while maintaining focal point stability
+
 ### Hit-Testing Responsibility
 - The package must perform internal hit-testing:
   - Expose `hitTest(Point) → List<Renderable>` functionality
@@ -100,6 +107,34 @@ The package implements a **Diagrammer-Controller architecture** where:
 - The package must implement proper stream ownership and disposal
 - Support BLoC disposal policies for dynamic sub-components
 - Handle memory-efficient rendering of large diagram sets
+
+## Interaction State Management
+
+### Interaction Semaphore System
+The package must implement a semaphore system to ensure stable interactions:
+
+- **Once a pinch/pan interaction starts**, all subsequent events must be handled directly by the DiagramViewer until completion
+- **No other operations can be activated** during an active interaction
+- **Controllers are notified** of interaction start/end but cannot interrupt ongoing interactions
+- **This ensures focal point stability** and prevents event interference
+
+### Interaction State Tracking
+The package must maintain interaction state:
+- **Idle**: No active interaction, events are delegated to the controller
+- **Panning**: Pan interaction in progress, all events handled directly
+- **Zooming**: Zoom interaction in progress, all events handled directly
+- **PanAndZoom**: Combined interaction in progress, all events handled directly
+
+### Event Flow During Interactions
+- **Before interaction**: Events → Controller → Decision → Command → DiagramViewer
+- **During active interaction**: Events → DiagramViewer (direct handling) → Controller (notification only)
+- **After interaction**: Events → Controller → Decision → Command → DiagramViewer
+
+### Implementation Requirements
+- The package must track active interaction IDs to prevent conflicts
+- Interaction state must be reset when the active interaction ends
+- The semaphore system must be enforced by the DiagramViewer itself, not by controllers
+- This rule applies to all controllers and is a fundamental requirement for stable interactions
 
 ## Accessibility and Input Diversity
 - The package must support:
