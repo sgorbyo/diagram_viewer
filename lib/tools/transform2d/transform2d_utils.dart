@@ -84,6 +84,86 @@ class Transform2DUtils {
     );
   }
 
+  /// Caps a transform to ensure it stays within valid bounds including zoom limits.
+  ///
+  /// This method ensures the diagram doesn't scroll beyond its logical bounds
+  /// and respects zoom limits from configuration, while allowing for dynamic
+  /// overscroll during user interactions.
+  ///
+  /// [transform] - The current transform to cap
+  /// [diagramRect] - The logical bounds of the diagram content
+  /// [size] - The viewport size
+  /// [dynamic] - Whether to allow dynamic overscroll
+  /// [minZoom] - Minimum zoom level from configuration
+  /// [maxZoom] - Maximum zoom level from configuration
+  /// Returns a new Transform2D that respects all bounds
+  static Transform2D capTransformWithZoomLimits({
+    required Transform2D transform,
+    required Rect diagramRect,
+    required Size size,
+    required bool dynamic,
+    required double minZoom,
+    required double maxZoom,
+  }) {
+    // Handle edge case: zero-sized diagram
+    if (diagramRect.width <= 0 || diagramRect.height <= 0) {
+      // For zero-sized diagram, use only config limits
+      double cappedScale = transform.scale;
+      if (cappedScale < minZoom) {
+        cappedScale = minZoom;
+      }
+      if (cappedScale > maxZoom) {
+        cappedScale = maxZoom;
+      }
+
+      final scaleCappedTransform = Transform2D(
+        scale: cappedScale,
+        translation: transform.translation,
+        rotation: transform.rotation,
+      );
+
+      return capTransform(
+        transform: scaleCappedTransform,
+        diagramRect: diagramRect,
+        size: size,
+        dynamic: dynamic,
+      );
+    }
+
+    // First, calculate the dynamic minimum zoom based on diagram extent
+    final dynamicMinZoom = scaleToFit(
+      contentRect: diagramRect,
+      viewSize: size,
+    );
+
+    // Use the higher of config minZoom or dynamic minZoom
+    final effectiveMinZoom = max(minZoom, dynamicMinZoom);
+
+    // Cap the scale to zoom limits
+    double cappedScale = transform.scale;
+    if (cappedScale < effectiveMinZoom) {
+      cappedScale = effectiveMinZoom;
+    }
+    if (cappedScale > maxZoom) {
+      cappedScale = maxZoom;
+    }
+
+    // Create a new transform with the capped scale
+    final scaleCappedTransform = Transform2D(
+      scale: cappedScale,
+      translation: transform.translation,
+      rotation: transform.rotation,
+    );
+
+    // Then cap the translation using the existing logic
+    return capTransform(
+      transform: scaleCappedTransform,
+      diagramRect: diagramRect,
+      size: size,
+      dynamic: dynamic,
+    );
+  }
+
   /// Calculates the minimum scale needed to fit the diagram in the viewport.
   ///
   /// This ensures the entire diagram is visible, with at most one border
@@ -329,11 +409,14 @@ class Transform2DUtils {
     required Size viewPortSize,
   }) {
     assert(
-      physicalContentRect.width.toPrecision(epsilon) >= viewPortSize.width.toPrecision(epsilon) ||
-      physicalContentRect.height.toPrecision(epsilon) >= viewPortSize.height.toPrecision(epsilon),
+      physicalContentRect.width.toPrecision(epsilon) >=
+              viewPortSize.width.toPrecision(epsilon) ||
+          physicalContentRect.height.toPrecision(epsilon) >=
+              viewPortSize.height.toPrecision(epsilon),
     );
 
-    if (physicalContentRect.width.toPrecision(epsilon) < viewPortSize.width.toPrecision(epsilon)) {
+    if (physicalContentRect.width.toPrecision(epsilon) <
+        viewPortSize.width.toPrecision(epsilon)) {
       return Rect.fromCenter(
         center: physicalContentRect.center,
         width: viewPortSize.width,
@@ -341,7 +424,8 @@ class Transform2DUtils {
       );
     }
 
-    if (physicalContentRect.height.toPrecision(epsilon) < viewPortSize.height.toPrecision(epsilon)) {
+    if (physicalContentRect.height.toPrecision(epsilon) <
+        viewPortSize.height.toPrecision(epsilon)) {
       return Rect.fromCenter(
         center: physicalContentRect.center,
         width: physicalContentRect.width,

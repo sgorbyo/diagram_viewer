@@ -74,6 +74,17 @@ class DiagramViewer extends StatefulWidget {
   State<DiagramViewer> createState() => _DiagramViewerState();
 }
 
+/// Extension to access internal state for testing purposes
+extension DiagramViewerTesting on DiagramViewer {
+  /// Get the current transform for testing purposes
+  Transform2D? getCurrentTransform(State<DiagramViewer> state) {
+    if (state is _DiagramViewerState) {
+      return state._currentTransform;
+    }
+    return null;
+  }
+}
+
 class _DiagramViewerState extends State<DiagramViewer>
     with TickerProviderStateMixin {
   // Internal state
@@ -123,7 +134,15 @@ class _DiagramViewerState extends State<DiagramViewer>
     // Initialize with controller's initial state
     _logicalExtent = widget.controller.logicalExtent;
     _objects = widget.controller.objects;
-    _config = widget.controller.configuration;
+    // Use widget configuration if provided, otherwise use controller's
+    _config = widget.configuration ?? widget.controller.configuration;
+
+    // Recalculate constraints after the first frame
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _recalculateTransformConstraints();
+      }
+    });
   }
 
   @override
@@ -405,6 +424,9 @@ class _DiagramViewerState extends State<DiagramViewer>
           _logicalExtent = logicalExtent;
         });
 
+        // Recalculate transform constraints when logical extent changes
+        _recalculateTransformConstraints();
+
         // Force a complete repaint to prevent artifacts
         // This ensures the entire canvas is redrawn when the extent changes
         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -438,11 +460,13 @@ class _DiagramViewerState extends State<DiagramViewer>
           hitList, borderProximity, phase, rawEvent, delta, currentViewport) {
         if (delta != null && phase == InteractionPhase.update) {
           final newTransform = _currentTransform.applyPan(delta);
-          final cappedTransform = Transform2DUtils.capTransform(
+          final cappedTransform = Transform2DUtils.capTransformWithZoomLimits(
             transform: newTransform,
             diagramRect: _logicalExtent,
             size: size,
             dynamic: true,
+            minZoom: _config.minZoom,
+            maxZoom: _config.maxZoom,
           );
           setState(() {
             _currentTransform = cappedTransform;
@@ -463,11 +487,13 @@ class _DiagramViewerState extends State<DiagramViewer>
         if (scale != null) {
           final newTransform =
               _currentTransform.applyZoom(scale, logicalPosition);
-          final cappedTransform = Transform2DUtils.capTransform(
+          final cappedTransform = Transform2DUtils.capTransformWithZoomLimits(
             transform: newTransform,
             diagramRect: _logicalExtent,
             size: size,
             dynamic: true,
+            minZoom: _config.minZoom,
+            maxZoom: _config.maxZoom,
           );
           setState(() {
             _currentTransform = cappedTransform;
@@ -481,44 +507,52 @@ class _DiagramViewerState extends State<DiagramViewer>
 
         if (pressedKeys.contains(LogicalKeyboardKey.arrowLeft)) {
           final newTransform = _currentTransform.applyPan(Offset(panStep, 0));
-          final cappedTransform = Transform2DUtils.capTransform(
+          final cappedTransform = Transform2DUtils.capTransformWithZoomLimits(
             transform: newTransform,
             diagramRect: _logicalExtent,
             size: size,
             dynamic: false,
+            minZoom: _config.minZoom,
+            maxZoom: _config.maxZoom,
           );
           setState(() {
             _currentTransform = cappedTransform;
           });
         } else if (pressedKeys.contains(LogicalKeyboardKey.arrowRight)) {
           final newTransform = _currentTransform.applyPan(Offset(-panStep, 0));
-          final cappedTransform = Transform2DUtils.capTransform(
+          final cappedTransform = Transform2DUtils.capTransformWithZoomLimits(
             transform: newTransform,
             diagramRect: _logicalExtent,
             size: size,
             dynamic: false,
+            minZoom: _config.minZoom,
+            maxZoom: _config.maxZoom,
           );
           setState(() {
             _currentTransform = cappedTransform;
           });
         } else if (pressedKeys.contains(LogicalKeyboardKey.arrowUp)) {
           final newTransform = _currentTransform.applyPan(Offset(0, panStep));
-          final cappedTransform = Transform2DUtils.capTransform(
+          final cappedTransform = Transform2DUtils.capTransformWithZoomLimits(
             transform: newTransform,
             diagramRect: _logicalExtent,
             size: size,
             dynamic: false,
+            minZoom: _config.minZoom,
+            maxZoom: _config.maxZoom,
           );
           setState(() {
             _currentTransform = cappedTransform;
           });
         } else if (pressedKeys.contains(LogicalKeyboardKey.arrowDown)) {
           final newTransform = _currentTransform.applyPan(Offset(0, -panStep));
-          final cappedTransform = Transform2DUtils.capTransform(
+          final cappedTransform = Transform2DUtils.capTransformWithZoomLimits(
             transform: newTransform,
             diagramRect: _logicalExtent,
             size: size,
             dynamic: false,
+            minZoom: _config.minZoom,
+            maxZoom: _config.maxZoom,
           );
           setState(() {
             _currentTransform = cappedTransform;
@@ -527,11 +561,13 @@ class _DiagramViewerState extends State<DiagramViewer>
             pressedKeys.contains(LogicalKeyboardKey.add)) {
           final newTransform =
               _currentTransform.applyZoom(zoomStep, logicalPosition);
-          final cappedTransform = Transform2DUtils.capTransform(
+          final cappedTransform = Transform2DUtils.capTransformWithZoomLimits(
             transform: newTransform,
             diagramRect: _logicalExtent,
             size: size,
             dynamic: false,
+            minZoom: _config.minZoom,
+            maxZoom: _config.maxZoom,
           );
           setState(() {
             _currentTransform = cappedTransform;
@@ -539,11 +575,13 @@ class _DiagramViewerState extends State<DiagramViewer>
         } else if (pressedKeys.contains(LogicalKeyboardKey.minus)) {
           final newTransform =
               _currentTransform.applyZoom(1.0 / zoomStep, logicalPosition);
-          final cappedTransform = Transform2DUtils.capTransform(
+          final cappedTransform = Transform2DUtils.capTransformWithZoomLimits(
             transform: newTransform,
             diagramRect: _logicalExtent,
             size: size,
             dynamic: false,
+            minZoom: _config.minZoom,
+            maxZoom: _config.maxZoom,
           );
           setState(() {
             _currentTransform = cappedTransform;
@@ -575,6 +613,32 @@ class _DiagramViewerState extends State<DiagramViewer>
   /// Generate a unique event ID.
   String _generateEventId() {
     return DateTime.now().millisecondsSinceEpoch.toString();
+  }
+
+  /// Recalculate transform constraints when logical extent or viewport changes.
+  ///
+  /// This ensures the current transform respects the new constraints
+  /// (zoom limits and fit-to-viewport requirements).
+  void _recalculateTransformConstraints() {
+    final size = context.size;
+    if (size == null) return;
+
+    // Apply zoom limits to current transform
+    final constrainedTransform = Transform2DUtils.capTransformWithZoomLimits(
+      transform: _currentTransform,
+      diagramRect: _logicalExtent,
+      size: size,
+      dynamic: false, // Use strict constraints for recalculation
+      minZoom: _config.minZoom,
+      maxZoom: _config.maxZoom,
+    );
+
+    // Only update if the transform actually changed
+    if (constrainedTransform != _currentTransform) {
+      setState(() {
+        _currentTransform = constrainedTransform;
+      });
+    }
   }
 }
 
