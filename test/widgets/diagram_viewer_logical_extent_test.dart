@@ -90,7 +90,7 @@ void main() {
         );
 
         // Act - Send a redraw command with updated logical extent
-        final updatedExtent = const Rect.fromLTWH(50, 50, 300, 300);
+        const updatedExtent = Rect.fromLTWH(50, 50, 300, 300);
         final command = DiagramCommand.redraw(
           renderables: mockController.objects,
           logicalExtent: updatedExtent,
@@ -116,23 +116,23 @@ void main() {
         );
 
         // Act - Send multiple redraw commands with different extents
-        final extent1 = const Rect.fromLTWH(0, 0, 200, 200);
-        final extent2 = const Rect.fromLTWH(50, 50, 300, 300);
-        final extent3 = const Rect.fromLTWH(100, 100, 400, 400);
+        const extent1 = Rect.fromLTWH(0, 0, 200, 200);
+        const extent2 = Rect.fromLTWH(50, 50, 300, 300);
+        const extent3 = Rect.fromLTWH(100, 100, 400, 400);
 
-        mockController.sendCommand(DiagramCommand.redraw(
+        mockController.sendCommand(const DiagramCommand.redraw(
           renderables: [],
           logicalExtent: extent1,
         ));
         await tester.pump();
 
-        mockController.sendCommand(DiagramCommand.redraw(
+        mockController.sendCommand(const DiagramCommand.redraw(
           renderables: [],
           logicalExtent: extent2,
         ));
         await tester.pump();
 
-        mockController.sendCommand(DiagramCommand.redraw(
+        mockController.sendCommand(const DiagramCommand.redraw(
           renderables: [],
           logicalExtent: extent3,
         ));

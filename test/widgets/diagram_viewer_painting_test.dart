@@ -50,23 +50,23 @@ void main() {
         );
 
         // Act - Send multiple redraw commands with different extents
-        final extent1 = const Rect.fromLTWH(0, 0, 200, 200);
-        final extent2 = const Rect.fromLTWH(50, 50, 300, 300);
-        final extent3 = const Rect.fromLTWH(100, 100, 400, 400);
+        const extent1 = Rect.fromLTWH(0, 0, 200, 200);
+        const extent2 = Rect.fromLTWH(50, 50, 300, 300);
+        const extent3 = Rect.fromLTWH(100, 100, 400, 400);
 
-        mockController.sendCommand(DiagramCommand.redraw(
+        mockController.sendCommand(const DiagramCommand.redraw(
           renderables: [],
           logicalExtent: extent1,
         ));
         await tester.pump();
 
-        mockController.sendCommand(DiagramCommand.redraw(
+        mockController.sendCommand(const DiagramCommand.redraw(
           renderables: [],
           logicalExtent: extent2,
         ));
         await tester.pump();
 
-        mockController.sendCommand(DiagramCommand.redraw(
+        mockController.sendCommand(const DiagramCommand.redraw(
           renderables: [],
           logicalExtent: extent3,
         ));
@@ -99,7 +99,7 @@ void main() {
         );
 
         // Act - Send redraw command with different extent
-        final newExtent = const Rect.fromLTWH(50, 50, 300, 300);
+        const newExtent = Rect.fromLTWH(50, 50, 300, 300);
         mockController.sendCommand(DiagramCommand.redraw(
           renderables: mockController.objects,
           logicalExtent: newExtent,
@@ -124,10 +124,10 @@ void main() {
         );
 
         // Act - Send transform command
-        final newTransform =
-            const Transform2D(scale: 2.0, translation: Offset(10, 20));
+        const newTransform =
+            Transform2D(scale: 2.0, translation: Offset(10, 20));
         mockController
-            .sendCommand(DiagramCommand.setTransform(transform: newTransform));
+            .sendCommand(const DiagramCommand.setTransform(transform: newTransform));
         await tester.pump();
 
         // Assert - Widget should handle the transform change without crashing

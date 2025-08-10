@@ -301,7 +301,7 @@ class ExampleDiagramController implements IDiagramController {
   Rect get logicalExtent => _calculateCurrentLogicalExtent();
 
   @override
-  DiagramConfiguration get configuration => DiagramConfiguration(
+  DiagramConfiguration get configuration => const DiagramConfiguration(
         maxZoom: 4.0, // Zoom massimo 4x
         minZoom: 0.01, // Zoom minimo 1%
       );

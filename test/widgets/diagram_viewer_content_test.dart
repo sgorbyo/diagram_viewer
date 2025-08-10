@@ -57,13 +57,13 @@ void main() {
       zoomBloc = ZoomBloc(
         configuration: const DiagramConfiguration(
             bounceDuration: Duration(milliseconds: 0)),
-        diagramRect: Rect.fromLTWH(0, 0, 1000, 1000),
+        diagramRect: const Rect.fromLTWH(0, 0, 1000, 1000),
         viewportSize: const Size(800, 600),
       );
       panBloc = PanBloc(
         configuration: const DiagramConfiguration(
             bounceDuration: Duration(milliseconds: 0)),
-        diagramRect: Rect.fromLTWH(0, 0, 1000, 1000),
+        diagramRect: const Rect.fromLTWH(0, 0, 1000, 1000),
         viewportSize: const Size(800, 600),
       );
     });

@@ -49,5 +49,5 @@ class MockDiagramController implements IDiagramController {
   void dispose() {}
 
   @override
-  Stream<DiagramCommand> get commandStream => Stream.empty();
+  Stream<DiagramCommand> get commandStream => const Stream.empty();
 }

@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:diagram_viewer/diagram_viewer.dart';
-import 'package:diagram_viewer/events/events.dart';
-import 'package:diagram_viewer/interfaces/interfaces.dart';
 import '../interfaces/i_diagram_controller_test.dart';
 
 /// Tests for Magic Mouse scroll functionality
@@ -37,7 +34,7 @@ void main() {
     });
 
     // Helper method to extract scroll events
-    List<DiagramScroll> _extractScrollEvents() {
+    List<DiagramScroll> extractScrollEvents() {
       return mockController.receivedEvents
           .where((event) => event.maybeWhen(
                 scroll: (_) => true,
@@ -66,9 +63,9 @@ void main() {
 
         // Act - Simulate Magic Mouse scroll (PointerScrollEvent)
         tester.binding.handlePointerEvent(
-          PointerScrollEvent(
-            position: const Offset(100, 100),
-            scrollDelta: const Offset(0, 50), // Scroll down
+          const PointerScrollEvent(
+            position: Offset(100, 100),
+            scrollDelta: Offset(0, 50), // Scroll down
             timeStamp: Duration.zero,
             kind: PointerDeviceKind.mouse,
           ),
@@ -77,7 +74,7 @@ void main() {
 
         // Assert - Should receive scroll event
         expect(mockController.hasReceivedEvents, isTrue);
-        final scrollEvents = _extractScrollEvents();
+        final scrollEvents = extractScrollEvents();
         expect(scrollEvents, hasLength(1));
       });
 
@@ -96,9 +93,9 @@ void main() {
 
         // Act - Simulate vertical Magic Mouse scroll
         tester.binding.handlePointerEvent(
-          PointerScrollEvent(
-            position: const Offset(100, 100),
-            scrollDelta: const Offset(0, 30), // Scroll down
+          const PointerScrollEvent(
+            position: Offset(100, 100),
+            scrollDelta: Offset(0, 30), // Scroll down
             timeStamp: Duration.zero,
             kind: PointerDeviceKind.mouse,
           ),
@@ -106,7 +103,7 @@ void main() {
         await tester.pump();
 
         // Assert - Should receive scroll event with correct delta
-        final scrollEvents = _extractScrollEvents();
+        final scrollEvents = extractScrollEvents();
         expect(scrollEvents, hasLength(1));
         expect(scrollEvents.first.scrollDelta, equals(30.0));
         expect(scrollEvents.first.scrollDirection, equals(const Offset(0, 1)));
@@ -127,9 +124,9 @@ void main() {
 
         // Act - Simulate horizontal Magic Mouse scroll
         tester.binding.handlePointerEvent(
-          PointerScrollEvent(
-            position: const Offset(100, 100),
-            scrollDelta: const Offset(25, 0), // Scroll right
+          const PointerScrollEvent(
+            position: Offset(100, 100),
+            scrollDelta: Offset(25, 0), // Scroll right
             timeStamp: Duration.zero,
             kind: PointerDeviceKind.mouse,
           ),
@@ -137,7 +134,7 @@ void main() {
         await tester.pump();
 
         // Assert - Should receive scroll event with correct delta
-        final scrollEvents = _extractScrollEvents();
+        final scrollEvents = extractScrollEvents();
         expect(scrollEvents, hasLength(1));
         expect(scrollEvents.first.scrollDelta, equals(25.0));
         expect(scrollEvents.first.scrollDirection, equals(const Offset(1, 0)));
@@ -160,9 +157,9 @@ void main() {
 
         // Act - Simulate Magic Mouse scroll down
         tester.binding.handlePointerEvent(
-          PointerScrollEvent(
-            position: const Offset(100, 100),
-            scrollDelta: const Offset(0, 40), // Scroll down
+          const PointerScrollEvent(
+            position: Offset(100, 100),
+            scrollDelta: Offset(0, 40), // Scroll down
             timeStamp: Duration.zero,
             kind: PointerDeviceKind.mouse,
           ),
@@ -170,7 +167,7 @@ void main() {
         await tester.pump();
 
         // Assert - Should scroll down (positive Y direction)
-        final scrollEvents = _extractScrollEvents();
+        final scrollEvents = extractScrollEvents();
         expect(scrollEvents, hasLength(1));
         expect(scrollEvents.first.scrollDirection.dy, greaterThan(0));
       });
@@ -190,9 +187,9 @@ void main() {
 
         // Act - Simulate Magic Mouse scroll up
         tester.binding.handlePointerEvent(
-          PointerScrollEvent(
-            position: const Offset(100, 100),
-            scrollDelta: const Offset(0, -35), // Scroll up
+          const PointerScrollEvent(
+            position: Offset(100, 100),
+            scrollDelta: Offset(0, -35), // Scroll up
             timeStamp: Duration.zero,
             kind: PointerDeviceKind.mouse,
           ),
@@ -200,7 +197,7 @@ void main() {
         await tester.pump();
 
         // Assert - Should scroll up (negative Y direction)
-        final scrollEvents = _extractScrollEvents();
+        final scrollEvents = extractScrollEvents();
         expect(scrollEvents, hasLength(1));
         expect(scrollEvents.first.scrollDirection.dy, lessThan(0));
       });

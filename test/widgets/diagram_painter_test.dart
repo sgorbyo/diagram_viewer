@@ -284,7 +284,7 @@ void main() {
           debug: false,
         );
 
-        final newTransform = const Transform2D(scale: 2.0);
+        const newTransform = Transform2D(scale: 2.0);
         final painter2 = DiagramPainter(
           transform: newTransform,
           objects: objects,
@@ -335,7 +335,7 @@ void main() {
           debug: false,
         );
 
-        final newLogicalExtent = const Rect.fromLTWH(0, 0, 2000, 2000);
+        const newLogicalExtent = Rect.fromLTWH(0, 0, 2000, 2000);
         final painter2 = DiagramPainter(
           transform: transform,
           objects: objects,
@@ -358,7 +358,7 @@ void main() {
           debug: false,
         );
 
-        final newConfiguration = const DiagramConfiguration(
+        const newConfiguration = DiagramConfiguration(
           minZoom: 0.1,
           maxZoom: 5.0,
         );
@@ -422,7 +422,7 @@ void main() {
     group('Transform Handling', () {
       test('should create painter with scaled transform', () {
         // Arrange
-        final scaledTransform = const Transform2D(scale: 2.0);
+        const scaledTransform = Transform2D(scale: 2.0);
         final painter = DiagramPainter(
           transform: scaledTransform,
           objects: objects,
@@ -437,7 +437,7 @@ void main() {
 
       test('should create painter with translated transform', () {
         // Arrange
-        final translatedTransform = const Transform2D(
+        const translatedTransform = Transform2D(
           translation: Offset(100, 100),
         );
         final painter = DiagramPainter(
@@ -454,7 +454,7 @@ void main() {
 
       test('should create painter with complex transform', () {
         // Arrange
-        final complexTransform = const Transform2D(
+        const complexTransform = Transform2D(
           scale: 1.5,
           translation: Offset(50, 50),
         );
@@ -474,7 +474,7 @@ void main() {
     group('Configuration', () {
       test('should use configuration settings', () {
         // Arrange
-        final customConfig = const DiagramConfiguration(
+        const customConfig = DiagramConfiguration(
           backgroundColor: Colors.red,
           minZoom: 0.1,
           maxZoom: 10.0,

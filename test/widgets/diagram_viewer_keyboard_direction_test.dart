@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:diagram_viewer/diagram_viewer.dart';
-import 'package:diagram_viewer/events/events.dart';
-import 'package:diagram_viewer/interfaces/interfaces.dart';
 // Removed unused import
 import '../interfaces/i_diagram_controller_test.dart';
 
@@ -37,7 +34,7 @@ void main() {
     });
 
     // Helper method to extract scroll events
-    List<DiagramScroll> _extractScrollEvents() {
+    List<DiagramScroll> extractScrollEvents() {
       return mockController.receivedEvents
           .where((event) => event.maybeWhen(
                 scroll: (_) => true,
@@ -53,12 +50,12 @@ void main() {
     group('Controller Keyboard Response Tests', () {
       test('should handle arrow up keyboard event correctly', () async {
         // Arrange - Create a keyboard scroll event
-        final keyboardScrollEvent = DiagramEventUnion.scroll(
+        const keyboardScrollEvent = DiagramEventUnion.scroll(
           DiagramScroll(
             eventId: 'test-1',
             logicalPosition: Offset.zero,
             screenPosition: Offset.zero,
-            transformSnapshot: const Transform2D(
+            transformSnapshot: Transform2D(
                 scale: 1.0, translation: Offset.zero, rotation: 0.0),
             hitList: [],
             timestamp: Duration.zero,
@@ -69,7 +66,7 @@ void main() {
             scrollDelta: 50.0,
             scrollVelocity: 0.0,
             scrollDuration: Duration.zero,
-            scrollDirection: const Offset(0, -1), // Should scroll up
+            scrollDirection: Offset(0, -1), // Should scroll up
             isInertial: false,
             scrollCount: 1,
           ),
@@ -85,7 +82,7 @@ void main() {
 
         // Assert - Should receive the event
         expect(mockController.hasReceivedEvents, isTrue);
-        final scrollEvents = _extractScrollEvents();
+        final scrollEvents = extractScrollEvents();
         expect(scrollEvents, hasLength(1));
         expect(scrollEvents.first.scrollDirection.dy,
             lessThan(0)); // Should scroll up
@@ -93,12 +90,12 @@ void main() {
 
       test('should handle arrow down keyboard event correctly', () async {
         // Arrange - Create a keyboard scroll event
-        final keyboardScrollEvent = DiagramEventUnion.scroll(
+        const keyboardScrollEvent = DiagramEventUnion.scroll(
           DiagramScroll(
             eventId: 'test-2',
             logicalPosition: Offset.zero,
             screenPosition: Offset.zero,
-            transformSnapshot: const Transform2D(
+            transformSnapshot: Transform2D(
                 scale: 1.0, translation: Offset.zero, rotation: 0.0),
             hitList: [],
             timestamp: Duration.zero,
@@ -109,7 +106,7 @@ void main() {
             scrollDelta: 50.0,
             scrollVelocity: 0.0,
             scrollDuration: Duration.zero,
-            scrollDirection: const Offset(
+            scrollDirection: Offset(
                 0, -1), // Should scroll up (view moves up, content moves down)
             isInertial: false,
             scrollCount: 1,
@@ -124,7 +121,7 @@ void main() {
 
         // Assert - Should receive the event
         expect(mockController.hasReceivedEvents, isTrue);
-        final scrollEvents = _extractScrollEvents();
+        final scrollEvents = extractScrollEvents();
         expect(scrollEvents, hasLength(1));
         expect(
             scrollEvents.first.scrollDirection.dy,
@@ -134,12 +131,12 @@ void main() {
 
       test('should handle arrow left keyboard event correctly', () async {
         // Arrange - Create a keyboard scroll event
-        final keyboardScrollEvent = DiagramEventUnion.scroll(
+        const keyboardScrollEvent = DiagramEventUnion.scroll(
           DiagramScroll(
             eventId: 'test-3',
             logicalPosition: Offset.zero,
             screenPosition: Offset.zero,
-            transformSnapshot: const Transform2D(
+            transformSnapshot: Transform2D(
                 scale: 1.0, translation: Offset.zero, rotation: 0.0),
             hitList: [],
             timestamp: Duration.zero,
@@ -150,7 +147,7 @@ void main() {
             scrollDelta: 50.0,
             scrollVelocity: 0.0,
             scrollDuration: Duration.zero,
-            scrollDirection: const Offset(1,
+            scrollDirection: Offset(1,
                 0), // Should scroll right (view moves right, content moves left)
             isInertial: false,
             scrollCount: 1,
@@ -165,7 +162,7 @@ void main() {
 
         // Assert - Should receive the event
         expect(mockController.hasReceivedEvents, isTrue);
-        final scrollEvents = _extractScrollEvents();
+        final scrollEvents = extractScrollEvents();
         expect(scrollEvents, hasLength(1));
         expect(
             scrollEvents.first.scrollDirection.dx,
@@ -175,12 +172,12 @@ void main() {
 
       test('should handle arrow right keyboard event correctly', () async {
         // Arrange - Create a keyboard scroll event
-        final keyboardScrollEvent = DiagramEventUnion.scroll(
+        const keyboardScrollEvent = DiagramEventUnion.scroll(
           DiagramScroll(
             eventId: 'test-4',
             logicalPosition: Offset.zero,
             screenPosition: Offset.zero,
-            transformSnapshot: const Transform2D(
+            transformSnapshot: Transform2D(
                 scale: 1.0, translation: Offset.zero, rotation: 0.0),
             hitList: [],
             timestamp: Duration.zero,
@@ -191,7 +188,7 @@ void main() {
             scrollDelta: 50.0,
             scrollVelocity: 0.0,
             scrollDuration: Duration.zero,
-            scrollDirection: const Offset(-1,
+            scrollDirection: Offset(-1,
                 0), // Should scroll left (view moves left, content moves right)
             isInertial: false,
             scrollCount: 1,
@@ -206,7 +203,7 @@ void main() {
 
         // Assert - Should receive the event
         expect(mockController.hasReceivedEvents, isTrue);
-        final scrollEvents = _extractScrollEvents();
+        final scrollEvents = extractScrollEvents();
         expect(scrollEvents, hasLength(1));
         expect(
             scrollEvents.first.scrollDirection.dx,

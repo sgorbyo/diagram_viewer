@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:diagram_viewer/diagram_viewer.dart';
 import '../interfaces/i_diagram_controller_test.dart';
@@ -20,7 +19,7 @@ void main() {
       testWidgets('should respect minZoom from configuration',
           (WidgetTester tester) async {
         // Arrange - Create configuration with specific minZoom
-        final config = DiagramConfiguration(
+        const config = DiagramConfiguration(
           minZoom: 0.5, // 50% minimum zoom
           maxZoom: 5.0,
         );
@@ -69,7 +68,7 @@ void main() {
       testWidgets('should respect maxZoom from configuration',
           (WidgetTester tester) async {
         // Arrange - Create configuration with specific maxZoom
-        final config = DiagramConfiguration(
+        const config = DiagramConfiguration(
           minZoom: 0.1,
           maxZoom: 3.0, // 300% maximum zoom
         );
@@ -161,9 +160,9 @@ void main() {
       testWidgets('should calculate minimum zoom to fit diagram in viewport',
           (WidgetTester tester) async {
         // Arrange - Large diagram that needs to fit in viewport
-        final largeExtent =
-            const Rect.fromLTWH(0, 0, 2000, 1500); // Large diagram
-        final config = DiagramConfiguration(
+        const largeExtent =
+            Rect.fromLTWH(0, 0, 2000, 1500); // Large diagram
+        const config = DiagramConfiguration(
           minZoom: 0.01, // Very low minimum to allow dynamic calculation
           maxZoom: 10.0,
         );
@@ -180,7 +179,7 @@ void main() {
         );
 
         // Send redraw with large extent
-        mockController.sendCommand(DiagramCommand.redraw(
+        mockController.sendCommand(const DiagramCommand.redraw(
           renderables: [],
           logicalExtent: largeExtent,
         ));
@@ -219,9 +218,9 @@ void main() {
       testWidgets('should prevent zoom smaller than fit-to-viewport minimum',
           (WidgetTester tester) async {
         // Arrange - Small diagram that doesn't need much zoom out
-        final smallExtent =
-            const Rect.fromLTWH(0, 0, 400, 300); // Small diagram
-        final config = DiagramConfiguration(
+        const smallExtent =
+            Rect.fromLTWH(0, 0, 400, 300); // Small diagram
+        const config = DiagramConfiguration(
           minZoom: 0.1, // Higher than dynamic minimum
           maxZoom: 10.0,
         );
@@ -238,7 +237,7 @@ void main() {
         );
 
         // Send redraw with small extent
-        mockController.sendCommand(DiagramCommand.redraw(
+        mockController.sendCommand(const DiagramCommand.redraw(
           renderables: [],
           logicalExtent: smallExtent,
         ));
@@ -278,8 +277,8 @@ void main() {
       testWidgets('should recalculate dynamic minimum zoom on window resize',
           (WidgetTester tester) async {
         // Arrange - Large diagram
-        final largeExtent = const Rect.fromLTWH(0, 0, 2000, 1500);
-        final config = DiagramConfiguration(
+        const largeExtent = Rect.fromLTWH(0, 0, 2000, 1500);
+        const config = DiagramConfiguration(
           minZoom: 0.01,
           maxZoom: 10.0,
         );
@@ -296,7 +295,7 @@ void main() {
         );
 
         // Send redraw with large extent
-        mockController.sendCommand(DiagramCommand.redraw(
+        mockController.sendCommand(const DiagramCommand.redraw(
           renderables: [],
           logicalExtent: largeExtent,
         ));
@@ -346,8 +345,8 @@ void main() {
           'should recalculate dynamic minimum when diagram extent changes',
           (WidgetTester tester) async {
         // Arrange - Start with small diagram
-        final smallExtent = const Rect.fromLTWH(0, 0, 400, 300);
-        final config = DiagramConfiguration(
+        const smallExtent = Rect.fromLTWH(0, 0, 400, 300);
+        const config = DiagramConfiguration(
           minZoom: 0.01,
           maxZoom: 10.0,
         );
@@ -364,15 +363,15 @@ void main() {
         );
 
         // Send redraw with small extent
-        mockController.sendCommand(DiagramCommand.redraw(
+        mockController.sendCommand(const DiagramCommand.redraw(
           renderables: [],
           logicalExtent: smallExtent,
         ));
         await tester.pump();
 
         // Act - Change to large diagram extent
-        final largeExtent = const Rect.fromLTWH(0, 0, 2000, 1500);
-        mockController.sendCommand(DiagramCommand.redraw(
+        const largeExtent = Rect.fromLTWH(0, 0, 2000, 1500);
+        mockController.sendCommand(const DiagramCommand.redraw(
           renderables: [],
           logicalExtent: largeExtent,
         ));
@@ -412,7 +411,7 @@ void main() {
       testWidgets('should respect zoom limits with keyboard controls',
           (WidgetTester tester) async {
         // Arrange
-        final config = DiagramConfiguration(
+        const config = DiagramConfiguration(
           minZoom: 0.5,
           maxZoom: 3.0,
         );
@@ -437,7 +436,7 @@ void main() {
       testWidgets('should respect zoom limits with keyboard zoom in',
           (WidgetTester tester) async {
         // Arrange
-        final config = DiagramConfiguration(
+        const config = DiagramConfiguration(
           minZoom: 0.5,
           maxZoom: 3.0,
         );
@@ -464,8 +463,8 @@ void main() {
       testWidgets('should handle zero-sized diagram extent',
           (WidgetTester tester) async {
         // Arrange - Zero-sized diagram
-        final zeroExtent = const Rect.fromLTWH(0, 0, 0, 0);
-        final config = DiagramConfiguration(
+        const zeroExtent = Rect.fromLTWH(0, 0, 0, 0);
+        const config = DiagramConfiguration(
           minZoom: 0.1,
           maxZoom: 10.0,
         );
@@ -482,7 +481,7 @@ void main() {
         );
 
         // Send redraw with zero extent
-        mockController.sendCommand(DiagramCommand.redraw(
+        mockController.sendCommand(const DiagramCommand.redraw(
           renderables: [],
           logicalExtent: zeroExtent,
         ));
@@ -520,8 +519,8 @@ void main() {
       testWidgets('should handle negative diagram extent',
           (WidgetTester tester) async {
         // Arrange - Negative extent (invalid but should be handled)
-        final negativeExtent = const Rect.fromLTWH(-100, -100, 200, 200);
-        final config = DiagramConfiguration(
+        const negativeExtent = Rect.fromLTWH(-100, -100, 200, 200);
+        const config = DiagramConfiguration(
           minZoom: 0.1,
           maxZoom: 10.0,
         );
@@ -538,7 +537,7 @@ void main() {
         );
 
         // Send redraw with negative extent
-        mockController.sendCommand(DiagramCommand.redraw(
+        mockController.sendCommand(const DiagramCommand.redraw(
           renderables: [],
           logicalExtent: negativeExtent,
         ));

@@ -16,9 +16,9 @@ void main() {
         'should center diagram horizontally when smaller than viewport width',
         (tester) async {
       // Arrange: Create a diagram smaller than viewport width
-      final smallDiagramExtent =
+      const smallDiagramExtent =
           Rect.fromLTWH(0, 0, 200, 600); // 200px wide, 600px tall
-      final viewportSize = Size(800, 600); // 800px wide viewport
+      const viewportSize = Size(800, 600); // 800px wide viewport
 
       mockController.logicalExtent = smallDiagramExtent;
       mockController.objects = [];
@@ -49,9 +49,9 @@ void main() {
         'should center diagram vertically when smaller than viewport height',
         (tester) async {
       // Arrange: Create a diagram smaller than viewport height
-      final smallDiagramExtent =
+      const smallDiagramExtent =
           Rect.fromLTWH(0, 0, 800, 200); // 800px wide, 200px tall
-      final viewportSize = Size(800, 600); // 600px tall viewport
+      const viewportSize = Size(800, 600); // 600px tall viewport
 
       mockController.logicalExtent = smallDiagramExtent;
       mockController.objects = [];
@@ -81,9 +81,9 @@ void main() {
         'should center diagram in both directions when smaller than viewport',
         (tester) async {
       // Arrange: Create a diagram smaller than viewport in both directions
-      final smallDiagramExtent =
-          const Rect.fromLTWH(0, 0, 200, 200); // 200px x 200px
-      final viewportSize = const Size(800, 600); // 800px x 600px viewport
+      const smallDiagramExtent =
+          Rect.fromLTWH(0, 0, 200, 200); // 200px x 200px
+      const viewportSize = Size(800, 600); // 800px x 600px viewport
 
       mockController.logicalExtent = smallDiagramExtent;
       mockController.objects = [];
@@ -129,7 +129,7 @@ class MockDiagramController extends Mock implements IDiagramController {
   DiagramConfiguration get configuration => const DiagramConfiguration();
 
   @override
-  Stream<DiagramCommand> get commandStream => Stream.empty();
+  Stream<DiagramCommand> get commandStream => const Stream.empty();
 
   @override
   Sink<DiagramEventUnion> get eventsSink =>

@@ -135,8 +135,7 @@ void main() {
 
       // Simulate a large pan gesture that should trigger elastic overscroll
       // We'll use the TransformBloc directly to test pan limits
-      final smallPanDelta =
-          const Offset(50.0, 0.0); // Small rightward pan first
+      const smallPanDelta = Offset(50.0, 0.0); // Small rightward pan first
 
       // Apply the pan directly through TransformBloc
       transformBloc!.add(TransformEvent.pan(
@@ -152,7 +151,7 @@ void main() {
       final afterSmallPan = transformBloc!.state.transform;
 
       // Now try a larger pan to test elastic overscroll
-      final largePanDelta = const Offset(200.0, 0.0); // Larger rightward pan
+      const largePanDelta = Offset(200.0, 0.0); // Larger rightward pan
 
       transformBloc!.add(TransformEvent.pan(
         delta: largePanDelta,
@@ -178,7 +177,7 @@ void main() {
       // For a 100x100 diagram in 400x300 viewport:
       // Normal limit: ~150px (400-100)/2
       // Elastic overscroll should allow some movement beyond this
-      final normalLimit = 150.0;
+      const normalLimit = 150.0;
       final elasticOverscroll = finalTransform.translation.dx - normalLimit;
 
       // The overscroll should be reasonable - not too far from expected center
@@ -240,8 +239,6 @@ void main() {
           reason: 'Diagram should be auto-centered horizontally. '
               'Expected: > 0px, Actual: ${initialTransform.translation.dx}px');
 
-      // TODO: Fix vertical auto-centering - currently not working
-      // For now, just verify horizontal centering works
       // Auto-centering status checked via expectations
 
       // The centering should be reasonable - not too far from expected center
@@ -256,14 +253,13 @@ void main() {
           reason: 'Horizontal centering should not be excessive. '
               'Expected: < 200px, Actual: ${initialTransform.translation.dx}px');
 
-      // TODO: Fix vertical auto-centering
-      // expect(initialTransform.translation.dy, greaterThanOrEqualTo(50),
-      //     reason: 'Vertical centering should be reasonable. '
-      //         'Expected: >= 50px, Actual: ${initialTransform.translation.dy}px');
+      expect(initialTransform.translation.dy, greaterThanOrEqualTo(50),
+          reason: 'Vertical centering should be reasonable. '
+              'Expected: >= 50px, Actual: ${initialTransform.translation.dy}px');
 
-      // expect(initialTransform.translation.dy, lessThan(150),
-      //     reason: 'Vertical centering should not be excessive. '
-      //         'Expected: < 150px, Actual: ${initialTransform.translation.dy}px');
+      expect(initialTransform.translation.dy, lessThan(150),
+          reason: 'Vertical centering should not be excessive. '
+              'Expected: < 150px, Actual: ${initialTransform.translation.dy}px');
     });
   });
 }

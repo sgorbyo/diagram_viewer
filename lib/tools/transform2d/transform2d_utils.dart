@@ -704,7 +704,7 @@ class Transform2DUtils {
     bool recenterSmallContent = false,
     double currentY = 0.0,
   }) {
-    final veryLarge = 1e9;
+    const veryLarge = 1e9;
     final leftProbe = Transform2DUtils.capTransformWithZoomLimits(
       transform:
           Transform2D(scale: scale, translation: Offset(-veryLarge, currentY)),
@@ -742,7 +742,7 @@ class Transform2DUtils {
     bool recenterSmallContent = false,
     double currentX = 0.0,
   }) {
-    final veryLarge = 1e9;
+    const veryLarge = 1e9;
     final topProbe = Transform2DUtils.capTransformWithZoomLimits(
       transform:
           Transform2D(scale: scale, translation: Offset(currentX, -veryLarge)),

@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:diagram_viewer/interfaces/interfaces.dart';
 import 'package:diagram_viewer/events/events.dart';
@@ -141,7 +139,7 @@ void main() {
 
     group('Configuration Defaults', () {
       test('should provide default configuration', () {
-        final defaultConfig = DiagramConfiguration.defaults;
+        const defaultConfig = DiagramConfiguration.defaults;
         expect(defaultConfig, isNotNull);
         expect(defaultConfig.backgroundColor, isA<Color>());
         expect(defaultConfig.edgeThreshold, isA<double>());
@@ -155,11 +153,11 @@ void main() {
         // Create a mock pointer event for testing
         // Create a mock pointer event for testing (not used directly)
 
-        final event = DiagramEventUnion.tap(
+        const event = DiagramEventUnion.tap(
           DiagramTap(
             eventId: 'test-1',
-            logicalPosition: const Offset(100, 100),
-            screenPosition: const Offset(200, 200),
+            logicalPosition: Offset(100, 100),
+            screenPosition: Offset(200, 200),
             transformSnapshot: Transform2D.identity,
             hitList: [],
             timestamp: Duration.zero,
@@ -178,7 +176,7 @@ void main() {
       test('should be able to send commands through stream', () {
         const command = DiagramCommand.redraw(
           renderables: [],
-          logicalExtent: const Rect.fromLTWH(0, 0, 1000, 1000),
+          logicalExtent: Rect.fromLTWH(0, 0, 1000, 1000),
         );
 
         expect(() => controller.sendCommand(command), returnsNormally);

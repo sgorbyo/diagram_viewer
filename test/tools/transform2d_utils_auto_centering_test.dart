@@ -8,10 +8,10 @@ void main() {
     test('should center diagram horizontally when smaller than viewport width',
         () {
       // Arrange: Diagram smaller than viewport width
-      final diagramRect =
+      const diagramRect =
           Rect.fromLTWH(0, 0, 200, 400); // 200px wide, 400px tall
-      final viewportSize = Size(800, 600); // 800px wide viewport
-      final transform = const Transform2D();
+      const viewportSize = Size(800, 600); // 800px wide viewport
+      const transform = Transform2D();
 
       // Act: Apply auto-centering
       final result = Transform2DUtils.capTransformWithZoomLimits(
@@ -35,10 +35,10 @@ void main() {
     test('should center diagram vertically when smaller than viewport height',
         () {
       // Arrange: Diagram smaller than viewport height
-      final diagramRect =
+      const diagramRect =
           Rect.fromLTWH(0, 0, 800, 200); // 800px wide, 200px tall
-      final viewportSize = Size(800, 600); // 600px tall viewport
-      final transform = const Transform2D();
+      const viewportSize = Size(800, 600); // 600px tall viewport
+      const transform = Transform2D();
 
       // Act: Apply auto-centering
       final result = Transform2DUtils.capTransformWithZoomLimits(
@@ -62,9 +62,9 @@ void main() {
     test('should center diagram in both directions when smaller than viewport',
         () {
       // Arrange: Diagram smaller than viewport in both directions
-      final diagramRect = Rect.fromLTWH(0, 0, 200, 200); // 200px x 200px
-      final viewportSize = Size(800, 600); // 800px x 600px viewport
-      final transform = const Transform2D();
+      const diagramRect = Rect.fromLTWH(0, 0, 200, 200); // 200px x 200px
+      const viewportSize = Size(800, 600); // 800px x 600px viewport
+      const transform = Transform2D();
 
       // Act: Apply auto-centering
       final result = Transform2DUtils.capTransformWithZoomLimits(
@@ -86,9 +86,9 @@ void main() {
 
     test('should maintain centering after zoom operations', () {
       // Arrange: Diagram smaller than viewport width
-      final diagramRect = Rect.fromLTWH(0, 0, 200, 400);
-      final viewportSize = Size(800, 600);
-      final transform = const Transform2D().applyZoom(2.0, Offset(400, 300));
+      const diagramRect = Rect.fromLTWH(0, 0, 200, 400);
+      const viewportSize = Size(800, 600);
+      final transform = const Transform2D().applyZoom(2.0, const Offset(400, 300));
 
       // Act: Apply auto-centering
       final result = Transform2DUtils.capTransformWithZoomLimits(
@@ -108,10 +108,10 @@ void main() {
 
     test('should not center when diagram is larger than viewport', () {
       // Arrange: Diagram larger than viewport
-      final diagramRect =
+      const diagramRect =
           Rect.fromLTWH(0, 0, 1000, 800); // Larger than viewport
-      final viewportSize = Size(800, 600);
-      final transform = const Transform2D();
+      const viewportSize = Size(800, 600);
+      const transform = Transform2D();
 
       // Act: Apply auto-centering
       final result = Transform2DUtils.capTransformWithZoomLimits(
@@ -133,9 +133,9 @@ void main() {
 
     test('should handle zero-sized diagram gracefully', () {
       // Arrange: Zero-sized diagram
-      final diagramRect = Rect.zero;
-      final viewportSize = Size(800, 600);
-      final transform = const Transform2D();
+      const diagramRect = Rect.zero;
+      const viewportSize = Size(800, 600);
+      const transform = Transform2D();
 
       // Act: Apply auto-centering
       final result = Transform2DUtils.capTransformWithZoomLimits(

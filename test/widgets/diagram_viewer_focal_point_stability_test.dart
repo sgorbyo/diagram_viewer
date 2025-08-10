@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:diagram_viewer/diagram_viewer.dart';
 import 'package:diagram_viewer/events/events.dart';
@@ -9,8 +8,8 @@ void main() {
   group('DiagramViewer Focal Point Stability', () {
     test('Transform2D should maintain focal point during zoom operations', () {
       // Arrange: Create a transform and focal point
-      final transform = const Transform2D();
-      final focalPoint = Offset(400, 300); // Screen coordinates
+      const transform = Transform2D();
+      const focalPoint = Offset(400, 300); // Screen coordinates
       final logicalFocalPoint = transform.physicalToLogical(focalPoint);
 
       // Act: Apply zoom operations
@@ -38,8 +37,8 @@ void main() {
         'Transform2D should maintain focal point during realistic touchpad zoom simulation',
         () {
       // Arrange: Create a transform and focal point
-      final transform = const Transform2D();
-      final focalPoint = Offset(400, 300); // Screen coordinates
+      const transform = Transform2D();
+      const focalPoint = Offset(400, 300); // Screen coordinates
       final logicalFocalPoint = transform.physicalToLogical(focalPoint);
 
       // Act: Simulate realistic touchpad zoom with incremental steps
@@ -63,8 +62,8 @@ void main() {
     test('Transform2D should maintain focal point during large zoom operations',
         () {
       // Arrange: Create a transform and focal point
-      final transform = const Transform2D();
-      final focalPoint = Offset(400, 300); // Screen coordinates
+      const transform = Transform2D();
+      const focalPoint = Offset(400, 300); // Screen coordinates
       final logicalFocalPoint = transform.physicalToLogical(focalPoint);
 
       // Act: Apply large zoom operations
@@ -90,15 +89,15 @@ void main() {
         () {
       // Arrange: Test different focal points
       final focalPoints = [
-        Offset(0, 0), // Top-left
-        Offset(400, 300), // Center
-        Offset(800, 600), // Bottom-right
-        Offset(200, 150), // Top-left quadrant
-        Offset(600, 450), // Bottom-right quadrant
+        const Offset(0, 0), // Top-left
+        const Offset(400, 300), // Center
+        const Offset(800, 600), // Bottom-right
+        const Offset(200, 150), // Top-left quadrant
+        const Offset(600, 450), // Bottom-right quadrant
       ];
 
       for (final focalPoint in focalPoints) {
-        final transform = const Transform2D();
+        const transform = Transform2D();
         final logicalFocalPoint = transform.physicalToLogical(focalPoint);
 
         // Act: Apply zoom operations

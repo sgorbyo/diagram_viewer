@@ -5,8 +5,8 @@ import 'package:diagram_viewer/tools/transform2d/transform2d_utils.dart';
 
 void main() {
   group('Transform2DUtils - Zoom limits', () {
-    final diagramRect = const Rect.fromLTWH(0, 0, 1000, 800);
-    final viewport = const Size(400, 300);
+    const diagramRect = Rect.fromLTWH(0, 0, 1000, 800);
+    const viewport = Size(400, 300);
 
     test('respects dynamic min zoom at rest (no dynamic overscroll)', () {
       final minFit = Transform2DUtils.scaleToFit(

@@ -244,10 +244,10 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
               _lastViewportSize = currentSize;
             }
 
-            return RawKeyboardListener(
+            return KeyboardListener(
               focusNode: _keyboardFocusNode,
               autofocus: true,
-              onKey: (event) => _handleKeyEvent(context, event),
+              onKeyEvent: (event) => _handleKeyEvent(context, event),
               child: Listener(
                 onPointerDown: (event) {
                   // Request focus when user taps
@@ -516,20 +516,20 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
   }
 
   /// Handle key events for keyboard interaction
-  void _handleKeyEvent(BuildContext context, RawKeyEvent event) {
+  void _handleKeyEvent(BuildContext context, KeyEvent event) {
     // Ensure we have focus before processing keyboard events
     if (!_keyboardFocusNode.hasFocus) {
       _keyboardFocusNode.requestFocus();
     }
 
-    if (event is RawKeyDownEvent) {
+    if (event is KeyDownEvent) {
       _pressedKeys.add(event.logicalKey);
       // Update the EventManagementBloc with the new pressed keys
       final eventBloc = context.read<EventManagementBloc>();
       eventBloc.add(EventManagementEvent.updateModifierKeys(
         keys: Set.from(_pressedKeys),
       ));
-    } else if (event is RawKeyUpEvent) {
+    } else if (event is KeyUpEvent) {
       _pressedKeys.remove(event.logicalKey);
       // Update the EventManagementBloc with the updated pressed keys
       final eventBloc = context.read<EventManagementBloc>();

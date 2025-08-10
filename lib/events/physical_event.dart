@@ -229,6 +229,7 @@ class PhysicalEvent with _$PhysicalEvent {
       );
 
   /// Returns the transform snapshot of this event.
+  @override
   Transform2D get transformSnapshot => when(
         pointer: (eventId,
                 logicalPosition,

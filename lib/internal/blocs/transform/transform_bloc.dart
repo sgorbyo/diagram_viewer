@@ -17,7 +17,7 @@ class TransformBloc extends Bloc<TransformEvent, TransformState> {
     required this.configuration,
     Rect? diagramRect,
     Size? viewportSize,
-  }) : super(TransformState.initial()) {
+  }) : super(const TransformState.initial()) {
     on<TransformEvent>(_onTransformEvent);
 
     // Apply initial bounds and auto-centering if provided
@@ -106,10 +106,10 @@ class TransformBloc extends Bloc<TransformEvent, TransformState> {
 
     _bounceTimer?.cancel();
     final totalMs = duration.inMilliseconds;
-    final frameMs = 16;
+    const frameMs = 16;
     final steps = (totalMs / frameMs).clamp(1, 240).round();
     var step = 0;
-    _bounceTimer = Timer.periodic(Duration(milliseconds: frameMs), (timer) {
+    _bounceTimer = Timer.periodic(const Duration(milliseconds: frameMs), (timer) {
       step++;
       final t = (step / steps).clamp(0.0, 1.0);
       // Use configurable easing curve for better perceived smoothness
@@ -249,7 +249,7 @@ class TransformBloc extends Bloc<TransformEvent, TransformState> {
     final currentState = state;
 
     // Apply auto-centering during initialization to fix coordinate offset
-    final initialTransform = const Transform2D();
+    const initialTransform = Transform2D();
     final autoCenteredTransform = Transform2DUtils.capTransformWithZoomLimits(
       transform: initialTransform,
       diagramRect: currentState.diagramRect,

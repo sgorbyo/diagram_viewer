@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:diagram_viewer/events/diagram_event_translator.dart';
 import 'package:diagram_viewer/events/physical_event.dart';
@@ -18,7 +17,7 @@ void main() {
 
     setUp(() {
       translator = DiagramEventTranslator();
-      testTransform = Transform2D(
+      testTransform = const Transform2D(
         scale: 1.0,
         translation: Offset.zero,
         rotation: 0.0,
@@ -29,7 +28,7 @@ void main() {
     group('Pointer Event Translation', () {
       test('should generate dragBegin on pointer start', () {
         // Arrange
-        final pointerDown = PointerDownEvent(
+        const pointerDown = PointerDownEvent(
           pointer: 1,
           position: Offset(100, 100),
           kind: PointerDeviceKind.touch,
@@ -37,8 +36,8 @@ void main() {
 
         final physicalEvent = PhysicalEvent.pointer(
           eventId: 'test-1',
-          logicalPosition: Offset(100, 100),
-          screenPosition: Offset(100, 100),
+          logicalPosition: const Offset(100, 100),
+          screenPosition: const Offset(100, 100),
           transformSnapshot: testTransform,
           hitList: testObjects,
           borderProximity: BorderProximity.none,
@@ -64,7 +63,7 @@ void main() {
           scroll: (event) => fail('Expected dragBegin, got scroll'),
           dragBegin: (event) {
             expect(event.eventId, equals('test-1'));
-            expect(event.logicalPosition, equals(Offset(100, 100)));
+            expect(event.logicalPosition, equals(const Offset(100, 100)));
             expect(event.hitList, equals(testObjects));
             expect(event.isOnObject, isFalse);
             expect(event.fingerCount, equals(1));
@@ -82,7 +81,7 @@ void main() {
       test('should generate dragContinue on pointer move with sufficient delta',
           () {
         // Arrange - First, start a drag
-        final pointerDown = PointerDownEvent(
+        const pointerDown = PointerDownEvent(
           pointer: 1,
           position: Offset(100, 100),
           kind: PointerDeviceKind.touch,
@@ -90,8 +89,8 @@ void main() {
 
         final startEvent = PhysicalEvent.pointer(
           eventId: 'test-1',
-          logicalPosition: Offset(100, 100),
-          screenPosition: Offset(100, 100),
+          logicalPosition: const Offset(100, 100),
+          screenPosition: const Offset(100, 100),
           transformSnapshot: testTransform,
           hitList: testObjects,
           borderProximity: BorderProximity.none,
@@ -107,7 +106,7 @@ void main() {
         translator.translate(startEvent);
 
         // Now move the pointer
-        final pointerMove = PointerMoveEvent(
+        const pointerMove = PointerMoveEvent(
           pointer: 1,
           position: Offset(110, 110),
           kind: PointerDeviceKind.touch,
@@ -115,14 +114,14 @@ void main() {
 
         final moveEvent = PhysicalEvent.pointer(
           eventId: 'test-2',
-          logicalPosition: Offset(110, 110),
-          screenPosition: Offset(110, 110),
+          logicalPosition: const Offset(110, 110),
+          screenPosition: const Offset(110, 110),
           transformSnapshot: testTransform,
           hitList: testObjects,
           borderProximity: BorderProximity.none,
           phase: InteractionPhase.update,
           rawEvent: pointerMove,
-          delta: Offset(10, 10),
+          delta: const Offset(10, 10),
           currentViewport: Rect.zero,
           pressedMouseButtons: {},
           pressedKeys: {},
@@ -142,9 +141,9 @@ void main() {
           dragBegin: (event) => fail('Expected dragContinue, got dragBegin'),
           dragContinue: (event) {
             expect(event.eventId, equals('test-2'));
-            expect(event.logicalPosition, equals(Offset(110, 110)));
-            expect(event.delta, equals(Offset(10, 10)));
-            expect(event.totalDelta, equals(Offset(10, 10)));
+            expect(event.logicalPosition, equals(const Offset(110, 110)));
+            expect(event.delta, equals(const Offset(10, 10)));
+            expect(event.totalDelta, equals(const Offset(10, 10)));
             expect(event.duration.inMilliseconds, greaterThanOrEqualTo(0));
           },
           dragEnd: (event) => fail('Expected dragContinue, got dragEnd'),
@@ -157,7 +156,7 @@ void main() {
 
       test('should generate dragEnd on pointer end after drag', () async {
         // Arrange - First, start a drag
-        final pointerDown = PointerDownEvent(
+        const pointerDown = PointerDownEvent(
           pointer: 1,
           position: Offset(100, 100),
           kind: PointerDeviceKind.touch,
@@ -165,8 +164,8 @@ void main() {
 
         final startEvent = PhysicalEvent.pointer(
           eventId: 'test-1',
-          logicalPosition: Offset(100, 100),
-          screenPosition: Offset(100, 100),
+          logicalPosition: const Offset(100, 100),
+          screenPosition: const Offset(100, 100),
           transformSnapshot: testTransform,
           hitList: testObjects,
           borderProximity: BorderProximity.none,
@@ -182,10 +181,10 @@ void main() {
         translator.translate(startEvent);
 
         // Add delay to ensure timing
-        await Future.delayed(Duration(milliseconds: 10));
+        await Future.delayed(const Duration(milliseconds: 10));
 
         // Move the pointer
-        final pointerMove = PointerMoveEvent(
+        const pointerMove = PointerMoveEvent(
           pointer: 1,
           position: Offset(110, 110),
           kind: PointerDeviceKind.touch,
@@ -193,14 +192,14 @@ void main() {
 
         final moveEvent = PhysicalEvent.pointer(
           eventId: 'test-2',
-          logicalPosition: Offset(110, 110),
-          screenPosition: Offset(110, 110),
+          logicalPosition: const Offset(110, 110),
+          screenPosition: const Offset(110, 110),
           transformSnapshot: testTransform,
           hitList: testObjects,
           borderProximity: BorderProximity.none,
           phase: InteractionPhase.update,
           rawEvent: pointerMove,
-          delta: Offset(10, 10),
+          delta: const Offset(10, 10),
           currentViewport: Rect.zero,
           pressedMouseButtons: {},
           pressedKeys: {},
@@ -210,10 +209,10 @@ void main() {
         translator.translate(moveEvent);
 
         // Add delay to ensure timing
-        await Future.delayed(Duration(milliseconds: 10));
+        await Future.delayed(const Duration(milliseconds: 10));
 
         // Now end the pointer
-        final pointerUp = PointerUpEvent(
+        const pointerUp = PointerUpEvent(
           pointer: 1,
           position: Offset(110, 110),
           kind: PointerDeviceKind.touch,
@@ -221,8 +220,8 @@ void main() {
 
         final endEvent = PhysicalEvent.pointer(
           eventId: 'test-3',
-          logicalPosition: Offset(110, 110),
-          screenPosition: Offset(110, 110),
+          logicalPosition: const Offset(110, 110),
+          screenPosition: const Offset(110, 110),
           transformSnapshot: testTransform,
           hitList: testObjects,
           borderProximity: BorderProximity.none,
@@ -249,8 +248,8 @@ void main() {
           dragContinue: (event) => fail('Expected dragEnd, got dragContinue'),
           dragEnd: (event) {
             expect(event.eventId, equals('test-3'));
-            expect(event.logicalPosition, equals(Offset(110, 110)));
-            expect(event.totalDelta, equals(Offset(10, 10)));
+            expect(event.logicalPosition, equals(const Offset(110, 110)));
+            expect(event.totalDelta, equals(const Offset(10, 10)));
             expect(event.totalDuration.inMilliseconds, greaterThan(0));
             expect(event.wasCancelled, isFalse);
           },
@@ -263,7 +262,7 @@ void main() {
       test('should generate tap on pointer end without sufficient movement',
           () async {
         // Arrange - Start a pointer event
-        final pointerDown = PointerDownEvent(
+        const pointerDown = PointerDownEvent(
           pointer: 1,
           position: Offset(100, 100),
           kind: PointerDeviceKind.touch,
@@ -271,8 +270,8 @@ void main() {
 
         final startEvent = PhysicalEvent.pointer(
           eventId: 'test-1',
-          logicalPosition: Offset(100, 100),
-          screenPosition: Offset(100, 100),
+          logicalPosition: const Offset(100, 100),
+          screenPosition: const Offset(100, 100),
           transformSnapshot: testTransform,
           hitList: testObjects,
           borderProximity: BorderProximity.none,
@@ -288,10 +287,10 @@ void main() {
         translator.translate(startEvent);
 
         // Add a small delay to simulate real timing
-        await Future.delayed(Duration(milliseconds: 10));
+        await Future.delayed(const Duration(milliseconds: 10));
 
         // End the pointer without significant movement
-        final pointerUp = PointerUpEvent(
+        const pointerUp = PointerUpEvent(
           pointer: 1,
           position: Offset(
               100.5, 100.5), // Very minimal movement (distance = 0.707 < 1.0)
@@ -300,8 +299,8 @@ void main() {
 
         final endEvent = PhysicalEvent.pointer(
           eventId: 'test-2',
-          logicalPosition: Offset(100.5, 100.5),
-          screenPosition: Offset(100.5, 100.5),
+          logicalPosition: const Offset(100.5, 100.5),
+          screenPosition: const Offset(100.5, 100.5),
           transformSnapshot: testTransform,
           hitList: testObjects,
           borderProximity: BorderProximity.none,
@@ -322,7 +321,7 @@ void main() {
         result!.when(
           tap: (event) {
             expect(event.eventId, equals('test-2'));
-            expect(event.logicalPosition, equals(Offset(100.5, 100.5)));
+            expect(event.logicalPosition, equals(const Offset(100.5, 100.5)));
             expect(event.hitList, equals(testObjects));
             expect(event.isOnObject, isFalse);
             expect(event.fingerCount, equals(1));
@@ -347,7 +346,7 @@ void main() {
         testObjects.add(mockObject);
 
         // Arrange - Start pointer on object
-        final pointerDown = PointerDownEvent(
+        const pointerDown = PointerDownEvent(
           pointer: 1,
           position: Offset(100, 100),
           kind: PointerDeviceKind.touch,
@@ -355,8 +354,8 @@ void main() {
 
         final startEvent = PhysicalEvent.pointer(
           eventId: 'test-1',
-          logicalPosition: Offset(100, 100),
-          screenPosition: Offset(100, 100),
+          logicalPosition: const Offset(100, 100),
+          screenPosition: const Offset(100, 100),
           transformSnapshot: testTransform,
           hitList: testObjects,
           borderProximity: BorderProximity.none,
@@ -396,7 +395,7 @@ void main() {
     group('Scroll Event Translation', () {
       test('should generate scroll event with velocity', () {
         // Arrange
-        final scrollEvent = PointerScrollEvent(
+        const scrollEvent = PointerScrollEvent(
           position: Offset(100, 100),
           scrollDelta: Offset(0, -10),
           kind: PointerDeviceKind.mouse,
@@ -405,8 +404,8 @@ void main() {
         // Act
         final result = translator.handleScrollEvent(
           'test-1',
-          Offset(100, 100),
-          Offset(100, 100),
+          const Offset(100, 100),
+          const Offset(100, 100),
           testTransform,
           testObjects,
           scrollEvent,
@@ -422,7 +421,7 @@ void main() {
             expect(event.eventId, equals('test-1'));
             expect(
                 event.scrollDelta, equals(10.0)); // Changed to absolute value
-            expect(event.scrollDirection, equals(Offset(0, -1)));
+            expect(event.scrollDirection, equals(const Offset(0, -1)));
             expect(event.isInertial, isFalse);
           },
           dragBegin: (event) => fail('Expected scroll, got dragBegin'),
@@ -438,7 +437,7 @@ void main() {
     group('Event State Management', () {
       test('should maintain state across event phases', () {
         // Arrange - Start event
-        final pointerDown = PointerDownEvent(
+        const pointerDown = PointerDownEvent(
           pointer: 1,
           position: Offset(100, 100),
           kind: PointerDeviceKind.touch,
@@ -446,8 +445,8 @@ void main() {
 
         final startEvent = PhysicalEvent.pointer(
           eventId: 'test-1',
-          logicalPosition: Offset(100, 100),
-          screenPosition: Offset(100, 100),
+          logicalPosition: const Offset(100, 100),
+          screenPosition: const Offset(100, 100),
           transformSnapshot: testTransform,
           hitList: testObjects,
           borderProximity: BorderProximity.none,
@@ -465,7 +464,7 @@ void main() {
         expect(startResult, isNotNull);
 
         // Move event
-        final pointerMove = PointerMoveEvent(
+        const pointerMove = PointerMoveEvent(
           pointer: 1,
           position: Offset(110, 110),
           kind: PointerDeviceKind.touch,
@@ -473,14 +472,14 @@ void main() {
 
         final moveEvent = PhysicalEvent.pointer(
           eventId: 'test-2',
-          logicalPosition: Offset(110, 110),
-          screenPosition: Offset(110, 110),
+          logicalPosition: const Offset(110, 110),
+          screenPosition: const Offset(110, 110),
           transformSnapshot: testTransform,
           hitList: testObjects,
           borderProximity: BorderProximity.none,
           phase: InteractionPhase.update,
           rawEvent: pointerMove,
-          delta: Offset(10, 10),
+          delta: const Offset(10, 10),
           currentViewport: Rect.zero,
           pressedMouseButtons: {},
           pressedKeys: {},
@@ -492,7 +491,7 @@ void main() {
         expect(moveResult, isNotNull);
 
         // End event
-        final pointerUp = PointerUpEvent(
+        const pointerUp = PointerUpEvent(
           pointer: 1,
           position: Offset(110, 110),
           kind: PointerDeviceKind.touch,
@@ -500,8 +499,8 @@ void main() {
 
         final endEvent = PhysicalEvent.pointer(
           eventId: 'test-3',
-          logicalPosition: Offset(110, 110),
-          screenPosition: Offset(110, 110),
+          logicalPosition: const Offset(110, 110),
+          screenPosition: const Offset(110, 110),
           transformSnapshot: testTransform,
           hitList: testObjects,
           borderProximity: BorderProximity.none,
@@ -561,7 +560,7 @@ void main() {
 
       test('should handle multiple concurrent events', () {
         // Arrange - Start first event
-        final pointer1Down = PointerDownEvent(
+        const pointer1Down = PointerDownEvent(
           pointer: 1,
           position: Offset(100, 100),
           kind: PointerDeviceKind.touch,
@@ -569,8 +568,8 @@ void main() {
 
         final event1 = PhysicalEvent.pointer(
           eventId: 'test-1',
-          logicalPosition: Offset(100, 100),
-          screenPosition: Offset(100, 100),
+          logicalPosition: const Offset(100, 100),
+          screenPosition: const Offset(100, 100),
           transformSnapshot: testTransform,
           hitList: testObjects,
           borderProximity: BorderProximity.none,
@@ -588,7 +587,7 @@ void main() {
         expect(result1, isNotNull);
 
         // Start second event
-        final pointer2Down = PointerDownEvent(
+        const pointer2Down = PointerDownEvent(
           pointer: 2,
           position: Offset(200, 200),
           kind: PointerDeviceKind.touch,
@@ -596,8 +595,8 @@ void main() {
 
         final event2 = PhysicalEvent.pointer(
           eventId: 'test-2',
-          logicalPosition: Offset(200, 200),
-          screenPosition: Offset(200, 200),
+          logicalPosition: const Offset(200, 200),
+          screenPosition: const Offset(200, 200),
           transformSnapshot: testTransform,
           hitList: testObjects,
           borderProximity: BorderProximity.none,
@@ -626,10 +625,10 @@ class _MockDiagramObject implements DiagramObjectEntity {
   String get id => 'mock-object';
 
   @override
-  Rect get logicalBounds => Rect.fromLTWH(50, 50, 100, 100);
+  Rect get logicalBounds => const Rect.fromLTWH(50, 50, 100, 100);
 
   @override
-  Offset get center => Offset(100, 100);
+  Offset get center => const Offset(100, 100);
 
   @override
   int get zOrder => 0;

@@ -1,12 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:diagram_viewer/events/events.dart';
-import 'package:diagram_viewer/events/transform_2d.dart';
-import 'package:diagram_viewer/events/diagram_event.dart';
-import 'package:diagram_viewer/events/mouse_button.dart';
-// Removed unused imports
-import '../../example/lib/controllers/example_diagram_controller.dart';
-import '../../example/lib/cerchio_entity.dart';
+import 'package:example/controllers/example_diagram_controller.dart';
+import 'package:example/cerchio_entity.dart';
 
 void main() {
   group('ExampleDiagramController', () {
@@ -135,19 +130,19 @@ void main() {
 
         // Act
         controller.eventsSink.add(
-          DiagramEventUnion.scroll(
+          const DiagramEventUnion.scroll(
             DiagramScroll(
               eventId: 'test-1',
               logicalPosition: testPosition,
               screenPosition: testPosition,
-              transformSnapshot: const Transform2D(),
+              transformSnapshot: Transform2D(),
               hitList: [],
-              timestamp: const Duration(milliseconds: 100),
+              timestamp: Duration(milliseconds: 100),
               metadata: {},
               scrollDelta: 10.0,
               scrollVelocity: 5.0,
-              scrollDuration: const Duration(milliseconds: 50),
-              scrollDirection: const Offset(0, 1),
+              scrollDuration: Duration(milliseconds: 50),
+              scrollDirection: Offset(0, 1),
               isInertial: false,
               scrollCount: 1,
             ),
@@ -164,14 +159,14 @@ void main() {
 
         // Act
         controller.eventsSink.add(
-          DiagramEventUnion.pinchBegin(
+          const DiagramEventUnion.pinchBegin(
             DiagramPinchBegin(
               eventId: 'test-1',
               logicalPosition: testPosition,
               screenPosition: testPosition,
-              transformSnapshot: const Transform2D(),
+              transformSnapshot: Transform2D(),
               hitList: [],
-              timestamp: const Duration(milliseconds: 100),
+              timestamp: Duration(milliseconds: 100),
               metadata: {},
               fingerCount: 2,
               focalPoint: testPosition,

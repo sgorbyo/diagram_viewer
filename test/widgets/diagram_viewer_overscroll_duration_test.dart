@@ -1,13 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
 import 'package:diagram_viewer/diagram_viewer.dart';
-import 'package:diagram_viewer/internal/blocs/transform/transform_bloc.dart';
 import 'package:diagram_viewer/internal/blocs/transform/transform_event.dart';
 
 void main() {
   group('Overscroll bounce respects configured duration', () {
     testWidgets('bounceBack runs for about configured 1000ms', (tester) async {
-      final config = const DiagramConfiguration(
+      const config = DiagramConfiguration(
         bounceDuration: Duration(milliseconds: 1000),
       );
       final bloc = TransformBloc(
@@ -21,8 +20,8 @@ void main() {
 
       // Move away within elastic window and freeze to avoid snap
       bloc.setFrozenDuringDrag(true);
-      bloc.add(TransformEvent.updateTransform(
-        transform: const Transform2D(
+      bloc.add(const TransformEvent.updateTransform(
+        transform: Transform2D(
           scale: 1.0,
           translation: Offset(230, 100),
           rotation: 0.0,

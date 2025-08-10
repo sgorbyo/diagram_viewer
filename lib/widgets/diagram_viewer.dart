@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:diagram_viewer/interfaces/interfaces.dart';
 import 'package:diagram_viewer/internal/blocs/blocs.dart';
-import 'package:diagram_viewer/internal/blocs/bloc_factory.dart';
 import 'package:diagram_viewer/widgets/diagram_viewer_content.dart';
 
 /// A widget that displays a diagram with interactive capabilities.

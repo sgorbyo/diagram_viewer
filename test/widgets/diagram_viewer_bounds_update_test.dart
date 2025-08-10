@@ -72,7 +72,7 @@ void main() {
     expect(transformBloc, isNotNull);
 
     // Send redraw with larger (but still smaller than viewport) extent 200x200
-    final newExtent = const Rect.fromLTWH(0, 0, 200, 200);
+    const newExtent = Rect.fromLTWH(0, 0, 200, 200);
     controller.updateExtentAndRedraw(newExtent);
 
     await tester.pumpAndSettle(const Duration(milliseconds: 10));

@@ -426,19 +426,19 @@ void main() {
         final objects = [
           MockDiagramObject(
             id: 'circle1',
-            center: Offset(100, 100),
+            center: const Offset(100, 100),
             radius: 50,
           ),
           MockDiagramObject(
             id: 'circle2',
-            center: Offset(200, 200),
+            center: const Offset(200, 200),
             radius: 30,
           ),
         ];
 
         // Test hit on circle1
         final hitResults1 = _performHitTesting(
-          Offset(120, 120), // Inside circle1
+          const Offset(120, 120), // Inside circle1
           transform,
           objects,
         );
@@ -447,7 +447,7 @@ void main() {
 
         // Test hit on circle2
         final hitResults2 = _performHitTesting(
-          Offset(210, 210), // Inside circle2
+          const Offset(210, 210), // Inside circle2
           transform,
           objects,
         );
@@ -456,7 +456,7 @@ void main() {
 
         // Test miss
         final hitResults3 = _performHitTesting(
-          Offset(300, 300), // Outside both circles
+          const Offset(300, 300), // Outside both circles
           transform,
           objects,
         );
@@ -468,7 +468,7 @@ void main() {
         final objects = [
           MockDiagramObject(
             id: 'circle1',
-            center: Offset(100, 100),
+            center: const Offset(100, 100),
             radius: 50,
           ),
         ];
@@ -476,7 +476,7 @@ void main() {
         // Physical point (240, 240) should map to logical point (120, 120)
         // which is inside the circle at (100, 100) with radius 50
         final hitResults = _performHitTesting(
-          Offset(240, 240), // Physical coordinates
+          const Offset(240, 240), // Physical coordinates
           transform,
           objects,
         );
@@ -490,7 +490,7 @@ void main() {
         final objects = [
           MockDiagramObject(
             id: 'circle1',
-            center: Offset(100, 100),
+            center: const Offset(100, 100),
             radius: 50,
           ),
         ];
@@ -498,7 +498,7 @@ void main() {
         // Physical point (150, 150) should map to logical point (100, 100)
         // which is at the center of the circle
         final hitResults = _performHitTesting(
-          Offset(150, 150), // Physical coordinates
+          const Offset(150, 150), // Physical coordinates
           transform,
           objects,
         );
@@ -515,7 +515,7 @@ void main() {
         final objects = [
           MockDiagramObject(
             id: 'circle1',
-            center: Offset(100, 100),
+            center: const Offset(100, 100),
             radius: 50,
           ),
         ];
@@ -523,7 +523,7 @@ void main() {
         // Physical point (300, 300) should map to logical point (100, 100)
         // ((300-100)/2, (300-100)/2) = (100, 100)
         final hitResults = _performHitTesting(
-          Offset(300, 300), // Physical coordinates
+          const Offset(300, 300), // Physical coordinates
           transform,
           objects,
         );
@@ -536,35 +536,35 @@ void main() {
       test('should test contains method with small radius', () {
         final object = MockCerchioEntity(
           id: 'small-circle',
-          center: Offset(100, 100),
+          center: const Offset(100, 100),
           radius: 10, // Small radius
         );
 
         // Test point inside circle
-        expect(object.contains(Offset(105, 105)), isTrue);
+        expect(object.contains(const Offset(105, 105)), isTrue);
 
         // Test point at edge of circle
-        expect(object.contains(Offset(110, 100)), isTrue);
+        expect(object.contains(const Offset(110, 100)), isTrue);
 
         // Test point outside circle
-        expect(object.contains(Offset(115, 115)), isFalse);
+        expect(object.contains(const Offset(115, 115)), isFalse);
       });
 
       test('should test contains method with larger radius', () {
         final object = MockCerchioEntity(
           id: 'large-circle',
-          center: Offset(200, 200),
+          center: const Offset(200, 200),
           radius: 50, // Larger radius
         );
 
         // Test point inside circle
-        expect(object.contains(Offset(220, 220)), isTrue);
+        expect(object.contains(const Offset(220, 220)), isTrue);
 
         // Test point at edge of circle
-        expect(object.contains(Offset(250, 200)), isTrue);
+        expect(object.contains(const Offset(250, 200)), isTrue);
 
         // Test point outside circle
-        expect(object.contains(Offset(260, 260)), isFalse);
+        expect(object.contains(const Offset(260, 260)), isFalse);
       });
 
       test('should test hit-testing with small circles', () {
@@ -572,14 +572,14 @@ void main() {
         final objects = [
           MockCerchioEntity(
             id: 'small-circle',
-            center: Offset(100, 100),
+            center: const Offset(100, 100),
             radius: 10, // Small radius
           ),
         ];
 
         // Test hit on small circle
         final hitResults = _performHitTesting(
-          Offset(105, 105), // Inside small circle
+          const Offset(105, 105), // Inside small circle
           transform,
           objects,
         );
@@ -588,7 +588,7 @@ void main() {
 
         // Test miss on small circle
         final missResults = _performHitTesting(
-          Offset(120, 120), // Outside small circle
+          const Offset(120, 120), // Outside small circle
           transform,
           objects,
         );
@@ -603,20 +603,20 @@ void main() {
 
         // Simulate CerchioEntity behavior (without MoveableNode)
         final position = Vector4(100, 200, 0, 1);
-        final radius = 50.0;
+        const radius = 50.0;
 
         // Center is calculated dynamically
         final center = Offset(position.x, position.y);
-        expect(center, equals(Offset(100, 200)));
+        expect(center, equals(const Offset(100, 200)));
 
         // Test contains method
-        final distance = (Offset(120, 220) - center).distance;
+        final distance = (const Offset(120, 220) - center).distance;
         final contains = distance <= radius;
         expect(contains, isTrue); // Point should be inside circle
 
         // Test with transform
         const transform = Transform2D(scale: 2.0, translation: Offset(50, 100));
-        final physicalPoint = Offset(290, 540); // Physical coordinates
+        const physicalPoint = Offset(290, 540); // Physical coordinates
         final logicalPoint = transform.physicalToLogical(physicalPoint);
 
         // Logical point should be (120, 220) which is inside the circle
@@ -649,8 +649,8 @@ void main() {
         // and causes taps to be interpreted as drags
 
         // Simulate a small movement during a click (1.5 pixels)
-        final startPosition = Offset(100, 100);
-        final endPosition = Offset(101.5, 101.5);
+        const startPosition = Offset(100, 100);
+        const endPosition = Offset(101.5, 101.5);
         final movement = (endPosition - startPosition).distance;
 
         // With current threshold of 1.0, this would be interpreted as a drag
@@ -680,21 +680,21 @@ void main() {
         // Simulate different scenarios
 
         // Scenario 1: Small movement, short time (should be tap)
-        final smallMovement = Offset(2.0, 2.0); // 2.83 pixels
-        final shortDuration = Duration(milliseconds: 100);
+        const smallMovement = Offset(2.0, 2.0); // 2.83 pixels
+        const shortDuration = Duration(milliseconds: 100);
 
         // With new logic: distance=2.83 < 3.0, velocity=28.3 < 50.0, time=100ms < 300ms
         // This should be a tap
 
         // Scenario 2: Small movement, long time (should be drag)
-        final longDuration = Duration(milliseconds: 400);
+        const longDuration = Duration(milliseconds: 400);
 
         // With new logic: distance=2.83 < 3.0, velocity=7.1 < 50.0, time=400ms > 300ms
         // This should be a drag due to time threshold
 
         // Scenario 3: Large movement, short time (should be drag)
-        final largeMovement = Offset(10.0, 10.0); // 14.14 pixels
-        final shortDuration2 = Duration(milliseconds: 100);
+        const largeMovement = Offset(10.0, 10.0); // 14.14 pixels
+        const shortDuration2 = Duration(milliseconds: 100);
 
         // With new logic: distance=14.14 > 3.0, velocity=141.4 > 50.0, time=100ms < 300ms
         // This should be a drag due to distance and velocity thresholds

@@ -11,9 +11,10 @@ import 'event_management_state.dart';
 /// Manages complex event states and isolation
 class EventManagementBloc
     extends Bloc<EventManagementEvent, EventManagementState> {
-  static const Duration _debounceTime = Duration(milliseconds: 16); // ~60 FPS
+  // Debounce window to avoid switching interaction types too quickly
+  final Duration _debounceTime; // default ~60 FPS
   DateTime? _lastEventTime;
-  Set<LogicalKeyboardKey> _pressedKeys = {};
+  final Set<LogicalKeyboardKey> _pressedKeys = {};
 
   // Stream controllers for PhysicalEvents
   final StreamController<PhysicalEvent> _physicalEventController =
@@ -25,7 +26,9 @@ class EventManagementBloc
   DiagramConfiguration? _configuration;
   Size? _viewportSize;
 
-  EventManagementBloc() : super(const EventManagementState.idle()) {
+  EventManagementBloc({Duration? debounceTime})
+      : _debounceTime = debounceTime ?? const Duration(milliseconds: 16),
+        super(const EventManagementState.idle()) {
     on<EventManagementEvent>((event, emit) {
       event.when(
         startPointerEvent:
@@ -318,7 +321,7 @@ class EventManagementBloc
       hitList: [], // Keyboard events don't have hit list
       borderProximity: BorderProximity.none,
       phase: InteractionPhase.start,
-      rawEvent: PointerDownEvent(position: Offset.zero), // Placeholder
+      rawEvent: const PointerDownEvent(position: Offset.zero), // Placeholder
       delta: null,
       currentViewport: _getCurrentViewport(),
       pressedMouseButtons: {}, // No mouse buttons for keyboard
@@ -367,7 +370,7 @@ class EventManagementBloc
         hitList: [], // Keyboard events don't have hit list
         borderProximity: BorderProximity.none,
         phase: InteractionPhase.start,
-        rawEvent: PointerDownEvent(position: Offset.zero), // Placeholder
+        rawEvent: const PointerDownEvent(position: Offset.zero), // Placeholder
         delta: null,
         currentViewport: _getCurrentViewport(),
         pressedMouseButtons: {}, // No mouse buttons for keyboard
@@ -392,7 +395,7 @@ class EventManagementBloc
           hitList: [], // Placeholder, needs actual hit results
           borderProximity: BorderProximity.none, // Placeholder
           phase: InteractionPhase.update,
-          rawEvent: PointerDownEvent(
+          rawEvent: const PointerDownEvent(
               position: Offset.zero), // Placeholder, needs actual raw event
           delta: null,
           currentViewport: _getCurrentViewport(),

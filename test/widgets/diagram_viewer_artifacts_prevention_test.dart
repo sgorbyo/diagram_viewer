@@ -60,23 +60,23 @@ void main() {
         );
 
         // Act - Test extreme extent changes that could cause artifacts
-        final smallExtent = const Rect.fromLTWH(0, 0, 100, 100);
-        final largeExtent = const Rect.fromLTWH(-1000, -1000, 3000, 3000);
-        final normalExtent = const Rect.fromLTWH(100, 100, 500, 500);
+        const smallExtent = Rect.fromLTWH(0, 0, 100, 100);
+        const largeExtent = Rect.fromLTWH(-1000, -1000, 3000, 3000);
+        const normalExtent = Rect.fromLTWH(100, 100, 500, 500);
 
-        mockController.sendCommand(DiagramCommand.redraw(
+        mockController.sendCommand(const DiagramCommand.redraw(
           renderables: [],
           logicalExtent: smallExtent,
         ));
         await tester.pump();
 
-        mockController.sendCommand(DiagramCommand.redraw(
+        mockController.sendCommand(const DiagramCommand.redraw(
           renderables: [],
           logicalExtent: largeExtent,
         ));
         await tester.pump();
 
-        mockController.sendCommand(DiagramCommand.redraw(
+        mockController.sendCommand(const DiagramCommand.redraw(
           renderables: [],
           logicalExtent: normalExtent,
         ));
@@ -201,17 +201,17 @@ void main() {
         );
 
         // Act - Simulate default pan/zoom operations with extent changes
-        final event = PhysicalEvent.pointer(
+        const event = PhysicalEvent.pointer(
           eventId: 'test-1',
-          logicalPosition: const Offset(100, 100),
-          screenPosition: const Offset(100, 100),
-          transformSnapshot: const Transform2D(),
+          logicalPosition: Offset(100, 100),
+          screenPosition: Offset(100, 100),
+          transformSnapshot: Transform2D(),
           hitList: [],
           borderProximity: BorderProximity.none,
           phase: InteractionPhase.update,
-          rawEvent: PointerMoveEvent(position: const Offset(100, 100)),
-          delta: const Offset(10, 10),
-          currentViewport: const Rect.fromLTWH(0, 0, 800, 600),
+          rawEvent: PointerMoveEvent(position: Offset(100, 100)),
+          delta: Offset(10, 10),
+          currentViewport: Rect.fromLTWH(0, 0, 800, 600),
           pressedMouseButtons: {},
           pressedKeys: {},
           activeInteraction: null,
@@ -219,13 +219,13 @@ void main() {
 
         // Send default pan/zoom command
         mockController
-            .sendCommand(DiagramCommand.applyDefaultPanZoom(origin: event));
+            .sendCommand(const DiagramCommand.applyDefaultPanZoom(origin: event));
         await tester.pump();
 
         // Change extent
-        mockController.sendCommand(DiagramCommand.redraw(
+        mockController.sendCommand(const DiagramCommand.redraw(
           renderables: [],
-          logicalExtent: const Rect.fromLTWH(50, 50, 400, 400),
+          logicalExtent: Rect.fromLTWH(50, 50, 400, 400),
         ));
         await tester.pump();
 
@@ -334,8 +334,8 @@ void main() {
         );
 
         // Act - Test zero-sized extent
-        final zeroExtent = const Rect.fromLTWH(0, 0, 0, 0);
-        mockController.sendCommand(DiagramCommand.redraw(
+        const zeroExtent = Rect.fromLTWH(0, 0, 0, 0);
+        mockController.sendCommand(const DiagramCommand.redraw(
           renderables: [],
           logicalExtent: zeroExtent,
         ));
@@ -359,8 +359,8 @@ void main() {
         );
 
         // Act - Test negative coordinates
-        final negativeExtent = const Rect.fromLTWH(-100, -100, 200, 200);
-        mockController.sendCommand(DiagramCommand.redraw(
+        const negativeExtent = Rect.fromLTWH(-100, -100, 200, 200);
+        mockController.sendCommand(const DiagramCommand.redraw(
           renderables: [],
           logicalExtent: negativeExtent,
         ));

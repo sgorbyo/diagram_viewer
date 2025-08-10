@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:diagram_viewer/diagram_viewer.dart';
 import '../interfaces/i_diagram_controller_test.dart';
@@ -280,13 +279,13 @@ void main() {
       testWidgets('should use custom configuration',
           (WidgetTester tester) async {
         // Arrange
-        final customConfig = DiagramConfiguration(
+        const customConfig = DiagramConfiguration(
           backgroundColor: Colors.green,
           edgeThreshold: 75.0,
           maxZoom: 8.0,
           minZoom: 0.2,
-          bounceDuration: const Duration(milliseconds: 500),
-          autoScrollInterval: const Duration(milliseconds: 32),
+          bounceDuration: Duration(milliseconds: 500),
+          autoScrollInterval: Duration(milliseconds: 32),
           autoScrollAcceleration: 2.5,
         );
 

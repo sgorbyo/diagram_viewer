@@ -43,7 +43,8 @@ void main() {
     late EventManagementBloc bloc;
 
     setUp(() {
-      bloc = EventManagementBloc();
+      bloc =
+          EventManagementBloc(debounceTime: const Duration(milliseconds: 500));
       // Configure dependencies
       bloc.configureDependencies(
         transformBloc: null,
@@ -61,14 +62,14 @@ void main() {
     });
 
     test('should transition to pointer active on startPointerEvent', () async {
-      final event = PointerDownEvent(
-        position: const Offset(100, 100),
+      const event = PointerDownEvent(
+        position: Offset(100, 100),
         pointer: 1,
       );
 
-      bloc.add(EventManagementEvent.startPointerEvent(
+      bloc.add(const EventManagementEvent.startPointerEvent(
         rawEvent: event,
-        logicalPosition: const Offset(50, 50),
+        logicalPosition: Offset(50, 50),
         hitResults: [],
         pressedKeys: {},
       ));
@@ -85,14 +86,14 @@ void main() {
       // Listen to physical events
       bloc.physicalEvents.listen(events.add);
 
-      final event = PointerDownEvent(
-        position: const Offset(100, 100),
+      const event = PointerDownEvent(
+        position: Offset(100, 100),
         pointer: 1,
       );
 
-      bloc.add(EventManagementEvent.startPointerEvent(
+      bloc.add(const EventManagementEvent.startPointerEvent(
         rawEvent: event,
-        logicalPosition: const Offset(50, 50),
+        logicalPosition: Offset(50, 50),
         hitResults: [],
         pressedKeys: {},
       ));
@@ -106,14 +107,14 @@ void main() {
 
     test('should enforce event isolation', () async {
       // Start a pointer event
-      final pointerEvent = PointerDownEvent(
-        position: const Offset(100, 100),
+      const pointerEvent = PointerDownEvent(
+        position: Offset(100, 100),
         pointer: 1,
       );
 
-      bloc.add(EventManagementEvent.startPointerEvent(
+      bloc.add(const EventManagementEvent.startPointerEvent(
         rawEvent: pointerEvent,
-        logicalPosition: const Offset(50, 50),
+        logicalPosition: Offset(50, 50),
         hitResults: [],
         pressedKeys: {},
       ));
@@ -169,14 +170,14 @@ void main() {
 
     test('should reset state correctly', () async {
       // Start a pointer event
-      final pointerEvent = PointerDownEvent(
-        position: const Offset(100, 100),
+      const pointerEvent = PointerDownEvent(
+        position: Offset(100, 100),
         pointer: 1,
       );
 
-      bloc.add(EventManagementEvent.startPointerEvent(
+      bloc.add(const EventManagementEvent.startPointerEvent(
         rawEvent: pointerEvent,
-        logicalPosition: const Offset(50, 50),
+        logicalPosition: Offset(50, 50),
         hitResults: [],
         pressedKeys: {},
       ));
@@ -230,8 +231,8 @@ void main() {
       // Listen to physical events
       bloc.physicalEvents.listen(events.add);
 
-      final event = PointerDownEvent(
-        position: const Offset(100, 100),
+      const event = PointerDownEvent(
+        position: Offset(100, 100),
         pointer: 1,
       );
 
@@ -292,14 +293,14 @@ void main() {
 
     test('should handle update modifier keys', () async {
       // Start a pointer event
-      final pointerEvent = PointerDownEvent(
-        position: const Offset(100, 100),
+      const pointerEvent = PointerDownEvent(
+        position: Offset(100, 100),
         pointer: 1,
       );
 
-      bloc.add(EventManagementEvent.startPointerEvent(
+      bloc.add(const EventManagementEvent.startPointerEvent(
         rawEvent: pointerEvent,
-        logicalPosition: const Offset(50, 50),
+        logicalPosition: Offset(50, 50),
         hitResults: [],
         pressedKeys: {},
       ));

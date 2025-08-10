@@ -41,7 +41,7 @@ class MockDiagramController implements IDiagramController {
       StreamController<DiagramEventUnion>().sink;
 
   @override
-  Stream<DiagramCommand> get commandStream => Stream.empty();
+  Stream<DiagramCommand> get commandStream => const Stream.empty();
 
   @override
   void dispose() {}
