@@ -63,6 +63,11 @@ mixin _$DiagramConfiguration {
   /// Defaults to 300 milliseconds.
   Duration get bounceDuration => throw _privateConstructorUsedError;
 
+  /// Curve of the elastic bounce-back animation.
+  ///
+  /// Controls the easing of the bounce-back. Defaults to easeOutCubic.
+  Curve get bounceCurve => throw _privateConstructorUsedError;
+
   /// Interval between auto-scroll steps.
   ///
   /// When auto-scrolling is active, this defines how frequently the
@@ -135,6 +140,10 @@ mixin _$DiagramConfiguration {
   /// Defaults to true.
   bool get enableAccessibility => throw _privateConstructorUsedError;
 
+  /// Enable verbose BLoC transitions logging for debugging.
+  /// Only used in debug builds; ignored in release.
+  bool get enableBlocDebugObserver => throw _privateConstructorUsedError;
+
   /// Create a copy of DiagramConfiguration
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -156,6 +165,7 @@ abstract class $DiagramConfigurationCopyWith<$Res> {
       double minZoom,
       double overscrollPixels,
       Duration bounceDuration,
+      Curve bounceCurve,
       Duration autoScrollInterval,
       double autoScrollAcceleration,
       bool enableTranslation,
@@ -165,7 +175,8 @@ abstract class $DiagramConfigurationCopyWith<$Res> {
       bool enableInertialScrolling,
       double inertialFriction,
       bool enableKeyboardShortcuts,
-      bool enableAccessibility});
+      bool enableAccessibility,
+      bool enableBlocDebugObserver});
 }
 
 /// @nodoc
@@ -191,6 +202,7 @@ class _$DiagramConfigurationCopyWithImpl<$Res,
     Object? minZoom = null,
     Object? overscrollPixels = null,
     Object? bounceDuration = null,
+    Object? bounceCurve = null,
     Object? autoScrollInterval = null,
     Object? autoScrollAcceleration = null,
     Object? enableTranslation = null,
@@ -201,6 +213,7 @@ class _$DiagramConfigurationCopyWithImpl<$Res,
     Object? inertialFriction = null,
     Object? enableKeyboardShortcuts = null,
     Object? enableAccessibility = null,
+    Object? enableBlocDebugObserver = null,
   }) {
     return _then(_value.copyWith(
       backgroundColor: null == backgroundColor
@@ -231,6 +244,10 @@ class _$DiagramConfigurationCopyWithImpl<$Res,
           ? _value.bounceDuration
           : bounceDuration // ignore: cast_nullable_to_non_nullable
               as Duration,
+      bounceCurve: null == bounceCurve
+          ? _value.bounceCurve
+          : bounceCurve // ignore: cast_nullable_to_non_nullable
+              as Curve,
       autoScrollInterval: null == autoScrollInterval
           ? _value.autoScrollInterval
           : autoScrollInterval // ignore: cast_nullable_to_non_nullable
@@ -271,6 +288,10 @@ class _$DiagramConfigurationCopyWithImpl<$Res,
           ? _value.enableAccessibility
           : enableAccessibility // ignore: cast_nullable_to_non_nullable
               as bool,
+      enableBlocDebugObserver: null == enableBlocDebugObserver
+          ? _value.enableBlocDebugObserver
+          : enableBlocDebugObserver // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -291,6 +312,7 @@ abstract class _$$DiagramConfigurationImplCopyWith<$Res>
       double minZoom,
       double overscrollPixels,
       Duration bounceDuration,
+      Curve bounceCurve,
       Duration autoScrollInterval,
       double autoScrollAcceleration,
       bool enableTranslation,
@@ -300,7 +322,8 @@ abstract class _$$DiagramConfigurationImplCopyWith<$Res>
       bool enableInertialScrolling,
       double inertialFriction,
       bool enableKeyboardShortcuts,
-      bool enableAccessibility});
+      bool enableAccessibility,
+      bool enableBlocDebugObserver});
 }
 
 /// @nodoc
@@ -323,6 +346,7 @@ class __$$DiagramConfigurationImplCopyWithImpl<$Res>
     Object? minZoom = null,
     Object? overscrollPixels = null,
     Object? bounceDuration = null,
+    Object? bounceCurve = null,
     Object? autoScrollInterval = null,
     Object? autoScrollAcceleration = null,
     Object? enableTranslation = null,
@@ -333,6 +357,7 @@ class __$$DiagramConfigurationImplCopyWithImpl<$Res>
     Object? inertialFriction = null,
     Object? enableKeyboardShortcuts = null,
     Object? enableAccessibility = null,
+    Object? enableBlocDebugObserver = null,
   }) {
     return _then(_$DiagramConfigurationImpl(
       backgroundColor: null == backgroundColor
@@ -363,6 +388,10 @@ class __$$DiagramConfigurationImplCopyWithImpl<$Res>
           ? _value.bounceDuration
           : bounceDuration // ignore: cast_nullable_to_non_nullable
               as Duration,
+      bounceCurve: null == bounceCurve
+          ? _value.bounceCurve
+          : bounceCurve // ignore: cast_nullable_to_non_nullable
+              as Curve,
       autoScrollInterval: null == autoScrollInterval
           ? _value.autoScrollInterval
           : autoScrollInterval // ignore: cast_nullable_to_non_nullable
@@ -403,6 +432,10 @@ class __$$DiagramConfigurationImplCopyWithImpl<$Res>
           ? _value.enableAccessibility
           : enableAccessibility // ignore: cast_nullable_to_non_nullable
               as bool,
+      enableBlocDebugObserver: null == enableBlocDebugObserver
+          ? _value.enableBlocDebugObserver
+          : enableBlocDebugObserver // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -418,6 +451,7 @@ class _$DiagramConfigurationImpl implements _DiagramConfiguration {
       this.minZoom = 0.1,
       this.overscrollPixels = 100.0,
       this.bounceDuration = const Duration(milliseconds: 300),
+      this.bounceCurve = Curves.easeOutCubic,
       this.autoScrollInterval = const Duration(milliseconds: 16),
       this.autoScrollAcceleration = 1.5,
       this.enableTranslation = true,
@@ -427,7 +461,8 @@ class _$DiagramConfigurationImpl implements _DiagramConfiguration {
       this.enableInertialScrolling = true,
       this.inertialFriction = 0.95,
       this.enableKeyboardShortcuts = true,
-      this.enableAccessibility = true});
+      this.enableAccessibility = true,
+      this.enableBlocDebugObserver = false});
 
   /// Background color of the diagram area.
   ///
@@ -489,6 +524,13 @@ class _$DiagramConfigurationImpl implements _DiagramConfiguration {
   @override
   @JsonKey()
   final Duration bounceDuration;
+
+  /// Curve of the elastic bounce-back animation.
+  ///
+  /// Controls the easing of the bounce-back. Defaults to easeOutCubic.
+  @override
+  @JsonKey()
+  final Curve bounceCurve;
 
   /// Interval between auto-scroll steps.
   ///
@@ -582,9 +624,15 @@ class _$DiagramConfigurationImpl implements _DiagramConfiguration {
   @JsonKey()
   final bool enableAccessibility;
 
+  /// Enable verbose BLoC transitions logging for debugging.
+  /// Only used in debug builds; ignored in release.
+  @override
+  @JsonKey()
+  final bool enableBlocDebugObserver;
+
   @override
   String toString() {
-    return 'DiagramConfiguration(backgroundColor: $backgroundColor, outsideColor: $outsideColor, edgeThreshold: $edgeThreshold, maxZoom: $maxZoom, minZoom: $minZoom, overscrollPixels: $overscrollPixels, bounceDuration: $bounceDuration, autoScrollInterval: $autoScrollInterval, autoScrollAcceleration: $autoScrollAcceleration, enableTranslation: $enableTranslation, enableScale: $enableScale, enableRotation: $enableRotation, clipContent: $clipContent, enableInertialScrolling: $enableInertialScrolling, inertialFriction: $inertialFriction, enableKeyboardShortcuts: $enableKeyboardShortcuts, enableAccessibility: $enableAccessibility)';
+    return 'DiagramConfiguration(backgroundColor: $backgroundColor, outsideColor: $outsideColor, edgeThreshold: $edgeThreshold, maxZoom: $maxZoom, minZoom: $minZoom, overscrollPixels: $overscrollPixels, bounceDuration: $bounceDuration, bounceCurve: $bounceCurve, autoScrollInterval: $autoScrollInterval, autoScrollAcceleration: $autoScrollAcceleration, enableTranslation: $enableTranslation, enableScale: $enableScale, enableRotation: $enableRotation, clipContent: $clipContent, enableInertialScrolling: $enableInertialScrolling, inertialFriction: $inertialFriction, enableKeyboardShortcuts: $enableKeyboardShortcuts, enableAccessibility: $enableAccessibility, enableBlocDebugObserver: $enableBlocDebugObserver)';
   }
 
   @override
@@ -604,6 +652,8 @@ class _$DiagramConfigurationImpl implements _DiagramConfiguration {
                 other.overscrollPixels == overscrollPixels) &&
             (identical(other.bounceDuration, bounceDuration) ||
                 other.bounceDuration == bounceDuration) &&
+            (identical(other.bounceCurve, bounceCurve) ||
+                other.bounceCurve == bounceCurve) &&
             (identical(other.autoScrollInterval, autoScrollInterval) ||
                 other.autoScrollInterval == autoScrollInterval) &&
             (identical(other.autoScrollAcceleration, autoScrollAcceleration) ||
@@ -625,29 +675,35 @@ class _$DiagramConfigurationImpl implements _DiagramConfiguration {
                     other.enableKeyboardShortcuts, enableKeyboardShortcuts) ||
                 other.enableKeyboardShortcuts == enableKeyboardShortcuts) &&
             (identical(other.enableAccessibility, enableAccessibility) ||
-                other.enableAccessibility == enableAccessibility));
+                other.enableAccessibility == enableAccessibility) &&
+            (identical(
+                    other.enableBlocDebugObserver, enableBlocDebugObserver) ||
+                other.enableBlocDebugObserver == enableBlocDebugObserver));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      backgroundColor,
-      outsideColor,
-      edgeThreshold,
-      maxZoom,
-      minZoom,
-      overscrollPixels,
-      bounceDuration,
-      autoScrollInterval,
-      autoScrollAcceleration,
-      enableTranslation,
-      enableScale,
-      enableRotation,
-      clipContent,
-      enableInertialScrolling,
-      inertialFriction,
-      enableKeyboardShortcuts,
-      enableAccessibility);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        backgroundColor,
+        outsideColor,
+        edgeThreshold,
+        maxZoom,
+        minZoom,
+        overscrollPixels,
+        bounceDuration,
+        bounceCurve,
+        autoScrollInterval,
+        autoScrollAcceleration,
+        enableTranslation,
+        enableScale,
+        enableRotation,
+        clipContent,
+        enableInertialScrolling,
+        inertialFriction,
+        enableKeyboardShortcuts,
+        enableAccessibility,
+        enableBlocDebugObserver
+      ]);
 
   /// Create a copy of DiagramConfiguration
   /// with the given fields replaced by the non-null parameter values.
@@ -669,6 +725,7 @@ abstract class _DiagramConfiguration implements DiagramConfiguration {
       final double minZoom,
       final double overscrollPixels,
       final Duration bounceDuration,
+      final Curve bounceCurve,
       final Duration autoScrollInterval,
       final double autoScrollAcceleration,
       final bool enableTranslation,
@@ -678,7 +735,8 @@ abstract class _DiagramConfiguration implements DiagramConfiguration {
       final bool enableInertialScrolling,
       final double inertialFriction,
       final bool enableKeyboardShortcuts,
-      final bool enableAccessibility}) = _$DiagramConfigurationImpl;
+      final bool enableAccessibility,
+      final bool enableBlocDebugObserver}) = _$DiagramConfigurationImpl;
 
   /// Background color of the diagram area.
   ///
@@ -733,6 +791,12 @@ abstract class _DiagramConfiguration implements DiagramConfiguration {
   /// Defaults to 300 milliseconds.
   @override
   Duration get bounceDuration;
+
+  /// Curve of the elastic bounce-back animation.
+  ///
+  /// Controls the easing of the bounce-back. Defaults to easeOutCubic.
+  @override
+  Curve get bounceCurve;
 
   /// Interval between auto-scroll steps.
   ///
@@ -815,6 +879,11 @@ abstract class _DiagramConfiguration implements DiagramConfiguration {
   /// Defaults to true.
   @override
   bool get enableAccessibility;
+
+  /// Enable verbose BLoC transitions logging for debugging.
+  /// Only used in debug builds; ignored in release.
+  @override
+  bool get enableBlocDebugObserver;
 
   /// Create a copy of DiagramConfiguration
   /// with the given fields replaced by the non-null parameter values.

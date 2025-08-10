@@ -30,3 +30,7 @@ export 'physical_event.dart';
 export 'diagram_command.dart';
 export 'transform_2d.dart';
 export 'border_proximity.dart';
+export 'hit_test_result.dart';
+export 'mouse_button.dart';
+export 'diagram_event.dart';
+export 'diagram_event_translator.dart';

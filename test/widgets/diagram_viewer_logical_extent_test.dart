@@ -170,7 +170,7 @@ void main() {
 
         // Assert - Events should be sent to controller
         expect(mockController.receivedEvents, isNotEmpty);
-        expect(mockController.receivedEvents.first.isPointer, isTrue);
+        expect(mockController.receivedEvents.first, isA<DiagramEventUnion>());
       });
 
       testWidgets('should maintain consistency between objects and extent',

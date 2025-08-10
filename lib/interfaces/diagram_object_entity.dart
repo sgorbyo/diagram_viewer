@@ -33,6 +33,15 @@ import 'package:equatable/equatable.dart';
 /// - The [id] should be unique within the diagram
 /// - The [zOrder] should determine the rendering order (higher = on top)
 ///
+/// ## Available Mixins
+///
+/// The following mixins are available to enhance diagram objects:
+///
+/// - **[MoveableNode]**: Provides movement capabilities with center position management
+///   and relative movement methods. Use this mixin when you need objects that
+///   can be moved around the diagram. The mixin adds a `center` property that
+///   represents the logical center position of the object.
+///
 /// ## Example Implementation
 ///
 /// ```dart
@@ -99,10 +108,6 @@ abstract class DiagramObjectEntity extends Equatable {
   /// not accounting for any transformation applied by the viewer.
   Rect get logicalBounds;
 
-  /// @deprecated Use [logicalBounds] instead for the new architecture
-  @Deprecated('Use logicalBounds instead')
-  Rect enclosingRect() => logicalBounds;
-
   /// Paints this object on the given canvas.
   ///
   /// This method is called by the DiagramViewer when the object needs to be drawn.
@@ -117,30 +122,17 @@ abstract class DiagramObjectEntity extends Equatable {
   /// @param canvas The canvas to paint on (already transformed to logical coordinates)
   void paint(Canvas canvas);
 
-  /// Renders the diagram object onto the provided canvas.
-  ///
-  /// This method is called by the DiagramViewer when the object needs to be drawn.
-  /// The canvas will already have any necessary transformation matrix applied
-  /// for the current view state (translation, scale, rotation).
-  ///
-  /// Implementation should:
-  /// - Draw all visual elements of the object
-  /// - Handle any object-specific styling or effects
-  /// - Consider performance optimizations for complex objects
-  ///
-  /// @param canvas The canvas onto which the object should render itself
-  /// @deprecated Use [paint] instead for the new architecture
-  @Deprecated('Use paint instead')
-  void printOnCanvas({required Canvas canvas}) {
-    // Default implementation: call the new method
-    paint(canvas);
-  }
-
   /// Returns the unique identifier for this object.
   ///
   /// This ID should be unique within the diagram and stable across updates.
   /// Default implementation uses the object's hash code.
   String get id => hashCode.toString();
+
+  /// Returns the center point of this object.
+  ///
+  /// This is the logical center point of the object in diagram coordinates.
+  /// Default implementation uses the center of logicalBounds.
+  Offset get center => logicalBounds.center;
 
   /// Returns the z-order (layer) of this object.
   ///

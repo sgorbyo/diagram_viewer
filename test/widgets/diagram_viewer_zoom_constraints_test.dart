@@ -53,6 +53,8 @@ void main() {
           scale: 0.5,
           rotation: 0.0,
           currentViewport: const Rect.fromLTWH(0, 0, 800, 600),
+          pressedKeys: {},
+          activeInteraction: null,
         );
 
         mockController.sendCommand(
@@ -100,6 +102,8 @@ void main() {
           scale: 2.0,
           rotation: 0.0,
           currentViewport: const Rect.fromLTWH(0, 0, 800, 600),
+          pressedKeys: {},
+          activeInteraction: null,
         );
 
         mockController.sendCommand(
@@ -140,6 +144,8 @@ void main() {
           scale: 0.1,
           rotation: 0.0,
           currentViewport: const Rect.fromLTWH(0, 0, 800, 600),
+          pressedKeys: {},
+          activeInteraction: null,
         );
 
         mockController.sendCommand(
@@ -197,6 +203,8 @@ void main() {
           scale: 0.3,
           rotation: 0.0,
           currentViewport: const Rect.fromLTWH(0, 0, 800, 600),
+          pressedKeys: {},
+          activeInteraction: null,
         );
 
         mockController.sendCommand(
@@ -253,6 +261,8 @@ void main() {
           scale: 0.1,
           rotation: 0.0,
           currentViewport: const Rect.fromLTWH(0, 0, 800, 600),
+          pressedKeys: {},
+          activeInteraction: null,
         );
 
         mockController.sendCommand(
@@ -314,6 +324,8 @@ void main() {
           scale: 0.5,
           rotation: 0.0,
           currentViewport: const Rect.fromLTWH(0, 0, 400, 300),
+          pressedKeys: {},
+          activeInteraction: null,
         );
 
         mockController.sendCommand(DiagramCommand.applyDefaultPanZoom(
@@ -383,6 +395,8 @@ void main() {
           scale: 0.3,
           rotation: 0.0,
           currentViewport: const Rect.fromLTWH(0, 0, 800, 600),
+          pressedKeys: {},
+          activeInteraction: null,
         );
 
         mockController.sendCommand(DiagramCommand.applyDefaultPanZoom(
@@ -491,6 +505,8 @@ void main() {
           scale: 0.5,
           rotation: 0.0,
           currentViewport: const Rect.fromLTWH(0, 0, 800, 600),
+          pressedKeys: {},
+          activeInteraction: null,
         );
 
         mockController
@@ -545,6 +561,8 @@ void main() {
           scale: 2.0,
           rotation: 0.0,
           currentViewport: const Rect.fromLTWH(0, 0, 800, 600),
+          pressedKeys: {},
+          activeInteraction: null,
         );
 
         mockController

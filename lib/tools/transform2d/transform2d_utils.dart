@@ -21,7 +21,9 @@ class Transform2DUtils {
   static const double minDynamicScale = 0.01;
   static const double maxDynamicScale = 11.0;
   static const double translationDynamicDelta = 50.0;
-  static double dynamicBorderWidth = 150.0;
+  static double dynamicBorderWidth = 80.0;
+  // Allow up to 10% zoom overscroll below dynamic min during active interaction
+  static const double zoomOverscrollFactor = 1.0;
   static const double respectBorder = 25.0;
   static const int epsilon = 7;
   static const double friction = 1333.0;
@@ -104,6 +106,8 @@ class Transform2DUtils {
     required bool dynamic,
     required double minZoom,
     required double maxZoom,
+    bool preserveCentering = false,
+    bool recenterSmallContent = true,
   }) {
     // Handle edge case: zero-sized diagram
     if (diagramRect.width <= 0 || diagramRect.height <= 0) {
@@ -131,13 +135,38 @@ class Transform2DUtils {
     }
 
     // First, calculate the dynamic minimum zoom based on diagram extent
-    final dynamicMinZoom = scaleToFit(
+    final scaleToFitValue = scaleToFit(
       contentRect: diagramRect,
       viewSize: size,
     );
 
-    // Use the higher of config minZoom or dynamic minZoom
-    final effectiveMinZoom = max(minZoom, dynamicMinZoom);
+    // Base minimum must ensure entire diagram is visible when interaction ends,
+    // but must NOT force zoom-in when content is smaller than the viewport.
+    // Clamp dynamic min to at most 1.0 in that case.
+    // Respect configuration minZoom and dynamic min to keep content visible.
+    // IMPORTANT: when preserveCentering is true, do not enforce scaleToFit; keep caller's scale.
+    // Compute baseMinZoom depending on context:
+    // - If preserving centering and content is larger/equal than viewport (scaleToFit <= 1): enforce dynamic min (fit)
+    // - If preserving centering and content is smaller (scaleToFit > 1): allow zooming out to config minZoom
+    // - Otherwise, use dynamic min when not preserving centering
+    double baseMinZoom;
+    if (preserveCentering) {
+      if (scaleToFitValue <= 1.0) {
+        baseMinZoom = max(minZoom, scaleToFitValue);
+      } else {
+        baseMinZoom = minZoom;
+      }
+    } else if (!dynamic) {
+      final dynamicMin = scaleToFitValue <= 1.0 ? scaleToFitValue : 1.0;
+      baseMinZoom = max(minZoom, dynamicMin);
+    } else {
+      final dynamicMin = min(scaleToFitValue, maxZoom);
+      baseMinZoom = max(minZoom, dynamicMin);
+    }
+    double effectiveMinZoom = baseMinZoom;
+    if (dynamic) {
+      effectiveMinZoom = baseMinZoom * zoomOverscrollFactor;
+    }
 
     // Cap the scale to zoom limits
     double cappedScale = transform.scale;
@@ -155,12 +184,200 @@ class Transform2DUtils {
       rotation: transform.rotation,
     );
 
-    // Then cap the translation using the existing logic
-    return capTransform(
-      transform: scaleCappedTransform,
-      diagramRect: diagramRect,
-      size: size,
+    if (preserveCentering) {
+      final transformToCap = recenterSmallContent
+          ? _applyAutoCentering(
+              transform: scaleCappedTransform,
+              diagramRect: diagramRect,
+              size: size,
+            )
+          : scaleCappedTransform;
+
+      return _capTransformPreservingCentering(
+        transform: transformToCap,
+        diagramRect: diagramRect,
+        size: size,
+        dynamic: dynamic,
+      );
+    } else {
+      // If content is smaller than viewport on any axis, apply centering-preserving capping directly
+      final scaledDiagramWidth = diagramRect.width * scaleCappedTransform.scale;
+      final scaledDiagramHeight =
+          diagramRect.height * scaleCappedTransform.scale;
+      final isSmallerHorizontally = scaledDiagramWidth < size.width;
+      final isSmallerVertically = scaledDiagramHeight < size.height;
+
+      if (isSmallerHorizontally || isSmallerVertically) {
+        if (recenterSmallContent) {
+          // Force exact centering when requested (utility behavior)
+          final centeredTransform = _applyAutoCentering(
+            transform: scaleCappedTransform,
+            diagramRect: diagramRect,
+            size: size,
+          );
+          return _capTransformPreservingCentering(
+            transform: centeredTransform,
+            diagramRect: diagramRect,
+            size: size,
+            dynamic: false,
+          );
+        } else {
+          // Preserve current position within elastic window (interactive behavior)
+          return _capTransformPreservingCentering(
+            transform: scaleCappedTransform,
+            diagramRect: diagramRect,
+            size: size,
+            dynamic: dynamic,
+          );
+        }
+      }
+
+      // Otherwise, do not auto-center; just cap translation within bounds
+      return capTransform(
+        transform: scaleCappedTransform,
+        diagramRect: diagramRect,
+        size: size,
+        dynamic: dynamic,
+      );
+    }
+  }
+
+  /// Applies auto-centering when the diagram is smaller than the viewport.
+  ///
+  /// This method ensures that when the diagram is smaller than the viewport
+  /// in any direction, it is automatically centered in that direction.
+  ///
+  /// [transform] - The current transform
+  /// [diagramRect] - The logical bounds of the diagram content
+  /// [size] - The viewport size
+  /// Returns a new Transform2D with auto-centering applied
+  static Transform2D _applyAutoCentering({
+    required Transform2D transform,
+    required Rect diagramRect,
+    required Size size,
+  }) {
+    // Calculate the scaled diagram size
+    final scaledDiagramWidth = diagramRect.width * transform.scale;
+    final scaledDiagramHeight = diagramRect.height * transform.scale;
+
+    double newTranslationX = transform.translation.dx;
+    double newTranslationY = transform.translation.dy;
+
+    // Auto-center horizontally if diagram is smaller than viewport width
+    if (scaledDiagramWidth <= size.width) {
+      final centerOffset = (size.width - scaledDiagramWidth) / 2;
+      // Shift by -left to bring content into view, then center it
+      newTranslationX = -diagramRect.left * transform.scale + centerOffset;
+    }
+
+    // Auto-center vertically if diagram is smaller than viewport height
+    if (scaledDiagramHeight <= size.height) {
+      final centerOffset = (size.height - scaledDiagramHeight) / 2;
+      // Shift by -top to bring content into view, then center it
+      newTranslationY = -diagramRect.top * transform.scale + centerOffset;
+    }
+
+    return Transform2D(
+      scale: transform.scale,
+      translation: Offset(newTranslationX, newTranslationY),
+      rotation: transform.rotation,
+    );
+  }
+
+  /// Caps a transform while preserving auto-centering for small diagrams.
+  ///
+  /// This method is similar to capTransform but preserves the centering
+  /// when the diagram is smaller than the viewport.
+  ///
+  /// [transform] - The current transform to cap
+  /// [diagramRect] - The logical bounds of the diagram content
+  /// [size] - The viewport size
+  /// [dynamic] - Whether to allow dynamic overscroll
+  /// Returns a new Transform2D that respects bounds while preserving centering
+  static Transform2D _capTransformPreservingCentering({
+    required Transform2D transform,
+    required Rect diagramRect,
+    required Size size,
+    required bool dynamic,
+  }) {
+    // Calculate the scaled diagram size
+    final scaledDiagramWidth = diagramRect.width * transform.scale;
+    final scaledDiagramHeight = diagramRect.height * transform.scale;
+
+    // Check if diagram is smaller than viewport in each direction
+    final isSmallerHorizontally = scaledDiagramWidth <= size.width;
+    final isSmallerVertically = scaledDiagramHeight <= size.height;
+
+    final minOffset = _minOffset(
+      scale: transform.scale,
+      contentRect: diagramRect,
       dynamic: dynamic,
+    );
+
+    final maxOffset = _maxOffset(
+      scale: transform.scale,
+      contentRect: diagramRect,
+      viewportSize: size,
+      dynamic: dynamic,
+    );
+
+    double newX = transform.translation.dx;
+    double newY = transform.translation.dy;
+
+    // Cap X translation
+    if (!isSmallerHorizontally) {
+      // Normal capping when content is larger than viewport
+      if (newX > minOffset.dx) {
+        newX = minOffset.dx;
+      }
+      if (newX < -maxOffset.dx) {
+        newX = -maxOffset.dx;
+      }
+    } else {
+      // When content is smaller
+      final centerOffsetX = (size.width - scaledDiagramWidth) / 2;
+      final centerTargetX = -diagramRect.left * transform.scale + centerOffsetX;
+      if (dynamic) {
+        // allow an elastic window around center
+        final minCenterX = centerTargetX - dynamicBorderWidth;
+        final maxCenterX = centerTargetX + dynamicBorderWidth;
+        if (newX < minCenterX) newX = minCenterX;
+        if (newX > maxCenterX) newX = maxCenterX;
+      } else {
+        // no elastic window: snap to exact center
+        newX = centerTargetX;
+      }
+    }
+
+    // Cap Y translation
+    if (!isSmallerVertically) {
+      // Normal capping when content is larger than viewport
+      if (newY > minOffset.dy) {
+        newY = minOffset.dy;
+      }
+      if (newY < -maxOffset.dy) {
+        newY = -maxOffset.dy;
+      }
+    } else {
+      // When content is smaller
+      final centerOffsetY = (size.height - scaledDiagramHeight) / 2;
+      final centerTargetY = -diagramRect.top * transform.scale + centerOffsetY;
+      if (dynamic) {
+        // allow an elastic window around center
+        final minCenterY = centerTargetY - dynamicBorderWidth;
+        final maxCenterY = centerTargetY + dynamicBorderWidth;
+        if (newY < minCenterY) newY = minCenterY;
+        if (newY > maxCenterY) newY = maxCenterY;
+      } else {
+        // no elastic window: snap to exact center
+        newY = centerTargetY;
+      }
+    }
+
+    return Transform2D(
+      scale: transform.scale,
+      translation: Offset(newX, newY),
+      rotation: transform.rotation,
     );
   }
 
@@ -177,6 +394,20 @@ class Transform2DUtils {
     required Size viewSize,
   }) {
     return min(
+      viewSize.width / contentRect.width,
+      viewSize.height / contentRect.height,
+    );
+  }
+
+  /// Returns the per-axis minimum scale factors needed to fit content into viewport.
+  ///
+  /// This mirrors the legacy minStaticScaleXY helper and is useful when
+  /// decisions must be taken per-axis (e.g., centering only on one axis).
+  static Offset minScaleXY({
+    required Rect contentRect,
+    required Size viewSize,
+  }) {
+    return Offset(
       viewSize.width / contentRect.width,
       viewSize.height / contentRect.height,
     );
@@ -458,6 +689,94 @@ class Transform2DUtils {
     );
 
     return dynamic ? baseRect.inflate(dynamicBorderWidth) : baseRect;
+  }
+
+  /// Computes the legal horizontal translation range for a given configuration.
+  ///
+  /// The range is computed by probing the capping logic itself, guaranteeing
+  /// consistency with [_capTransformPreservingCentering]/[capTransformWithZoomLimits].
+  static (double minX, double maxX) legalTranslationRangeX({
+    required double scale,
+    required Rect diagramRect,
+    required Size viewportSize,
+    required bool dynamic,
+    bool preserveCentering = false,
+    bool recenterSmallContent = false,
+    double currentY = 0.0,
+  }) {
+    final veryLarge = 1e9;
+    final leftProbe = Transform2DUtils.capTransformWithZoomLimits(
+      transform:
+          Transform2D(scale: scale, translation: Offset(-veryLarge, currentY)),
+      diagramRect: diagramRect,
+      size: viewportSize,
+      dynamic: dynamic,
+      minZoom: minimumScale,
+      maxZoom: maximumScale,
+      preserveCentering: preserveCentering,
+      recenterSmallContent: recenterSmallContent,
+    );
+    final rightProbe = Transform2DUtils.capTransformWithZoomLimits(
+      transform:
+          Transform2D(scale: scale, translation: Offset(veryLarge, currentY)),
+      diagramRect: diagramRect,
+      size: viewportSize,
+      dynamic: dynamic,
+      minZoom: minimumScale,
+      maxZoom: maximumScale,
+      preserveCentering: preserveCentering,
+      recenterSmallContent: recenterSmallContent,
+    );
+    final minX = min(leftProbe.translation.dx, rightProbe.translation.dx);
+    final maxX = max(leftProbe.translation.dx, rightProbe.translation.dx);
+    return (minX, maxX);
+  }
+
+  /// Computes the legal vertical translation range for a given configuration.
+  static (double minY, double maxY) legalTranslationRangeY({
+    required double scale,
+    required Rect diagramRect,
+    required Size viewportSize,
+    required bool dynamic,
+    bool preserveCentering = false,
+    bool recenterSmallContent = false,
+    double currentX = 0.0,
+  }) {
+    final veryLarge = 1e9;
+    final topProbe = Transform2DUtils.capTransformWithZoomLimits(
+      transform:
+          Transform2D(scale: scale, translation: Offset(currentX, -veryLarge)),
+      diagramRect: diagramRect,
+      size: viewportSize,
+      dynamic: dynamic,
+      minZoom: minimumScale,
+      maxZoom: maximumScale,
+      preserveCentering: preserveCentering,
+      recenterSmallContent: recenterSmallContent,
+    );
+    final bottomProbe = Transform2DUtils.capTransformWithZoomLimits(
+      transform:
+          Transform2D(scale: scale, translation: Offset(currentX, veryLarge)),
+      diagramRect: diagramRect,
+      size: viewportSize,
+      dynamic: dynamic,
+      minZoom: minimumScale,
+      maxZoom: maximumScale,
+      preserveCentering: preserveCentering,
+      recenterSmallContent: recenterSmallContent,
+    );
+    final minY = min(topProbe.translation.dy, bottomProbe.translation.dy);
+    final maxY = max(topProbe.translation.dy, bottomProbe.translation.dy);
+    return (minY, maxY);
+  }
+
+  /// Clamps the scale at gesture end using configuration limits.
+  static double clampScaleOnEnd({
+    required double proposedNewScale,
+    required double minZoom,
+    required double maxZoom,
+  }) {
+    return proposedNewScale.clamp(minZoom, maxZoom);
   }
 }
 

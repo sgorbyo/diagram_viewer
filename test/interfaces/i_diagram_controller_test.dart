@@ -10,15 +10,18 @@ import 'package:diagram_viewer/events/events.dart';
 class MockDiagramController implements IDiagramController {
   final StreamController<DiagramCommand> _commandController =
       StreamController<DiagramCommand>.broadcast();
-  final StreamController<PhysicalEvent> _eventController =
-      StreamController<PhysicalEvent>.broadcast();
+  final StreamController<DiagramEventUnion> _eventController =
+      StreamController<DiagramEventUnion>.broadcast();
 
   final List<DiagramObjectEntity> _objects;
-  final Rect _logicalExtent;
+  Rect _logicalExtent;
   final DiagramConfiguration _configuration;
 
   // Track received events for testing
-  final List<PhysicalEvent> _receivedEvents = [];
+  final List<DiagramEventUnion> _receivedEvents = [];
+
+  // Track received transforms for testing limits
+  Transform2D? _lastReceivedTransform;
 
   MockDiagramController({
     List<DiagramObjectEntity>? objects,
@@ -29,7 +32,24 @@ class MockDiagramController implements IDiagramController {
         _configuration = configuration ?? DiagramConfiguration.defaults {
     // Listen to events for testing
     _eventController.stream.listen((event) {
+      print('MockDiagramController: Received event: ${event.runtimeType}');
       _receivedEvents.add(event);
+    });
+
+    // Listen to commands to track transforms
+    _commandController.stream.listen((command) {
+      command.when(
+        setTransform: (transform) {
+          _lastReceivedTransform = transform;
+        },
+        applyDefaultPanZoom: (_) {},
+        redraw: (_, __) {},
+        elasticBounceBack: (targetTransform, _) {
+          _lastReceivedTransform = targetTransform;
+        },
+        autoScrollStep: (_, __) {},
+        stopAutoScroll: () {},
+      );
     });
   }
 
@@ -37,7 +57,7 @@ class MockDiagramController implements IDiagramController {
   Stream<DiagramCommand> get commandStream => _commandController.stream;
 
   @override
-  StreamSink<PhysicalEvent> get eventsSink => _eventController.sink;
+  Sink<DiagramEventUnion> get eventsSink => _eventController.sink;
 
   @override
   Rect get logicalExtent => _logicalExtent;
@@ -63,8 +83,17 @@ class MockDiagramController implements IDiagramController {
     _commandController.add(command);
   }
 
+  // New helper methods for limit testing
+  void setMockLogicalExtent(Rect extent) {
+    _logicalExtent = extent;
+  }
+
+  Transform2D get lastReceivedTransform =>
+      _lastReceivedTransform ?? Transform2D.identity;
+
   // Testing helpers
-  List<PhysicalEvent> get receivedEvents => List.unmodifiable(_receivedEvents);
+  List<DiagramEventUnion> get receivedEvents =>
+      List.unmodifiable(_receivedEvents);
 
   void clearReceivedEvents() {
     _receivedEvents.clear();
@@ -91,7 +120,7 @@ void main() {
       });
 
       test('should provide eventsSink', () {
-        expect(controller.eventsSink, isA<StreamSink<PhysicalEvent>>());
+        expect(controller.eventsSink, isA<Sink<DiagramEventUnion>>());
       });
 
       test('should provide logicalExtent', () {
@@ -130,17 +159,21 @@ void main() {
           kind: PointerDeviceKind.mouse,
         );
 
-        final event = PhysicalEvent.pointer(
-          eventId: 'test-1',
-          logicalPosition: const Offset(100, 100),
-          screenPosition: const Offset(200, 200),
-          transformSnapshot: Transform2D.identity,
-          hitList: [],
-          borderProximity: BorderProximity.none,
-          phase: InteractionPhase.start,
-          rawEvent: mockPointerEvent,
-          delta: Offset.zero,
-          currentViewport: const Rect.fromLTWH(0, 0, 800, 600),
+        final event = DiagramEventUnion.tap(
+          DiagramTap(
+            eventId: 'test-1',
+            logicalPosition: const Offset(100, 100),
+            screenPosition: const Offset(200, 200),
+            transformSnapshot: Transform2D.identity,
+            hitList: [],
+            timestamp: Duration.zero,
+            metadata: {},
+            fingerCount: 1,
+            mouseButton: null,
+            isOnObject: false,
+            pressDuration: Duration.zero,
+            velocity: Offset.zero,
+          ),
         );
 
         expect(() => controller.eventsSink.add(event), returnsNormally);

@@ -17,12 +17,11 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$PhysicalEvent {
   String get eventId => throw _privateConstructorUsedError;
-  Offset get logicalPosition => throw _privateConstructorUsedError;
   Transform2D get transformSnapshot => throw _privateConstructorUsedError;
-  List<DiagramObjectEntity> get hitList => throw _privateConstructorUsedError;
-  BorderProximity get borderProximity => throw _privateConstructorUsedError;
   Object get rawEvent => throw _privateConstructorUsedError;
   Rect get currentViewport => throw _privateConstructorUsedError;
+  Set<LogicalKeyboardKey> get pressedKeys => throw _privateConstructorUsedError;
+  InteractionType? get activeInteraction => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
@@ -35,7 +34,10 @@ mixin _$PhysicalEvent {
             InteractionPhase phase,
             PointerEvent rawEvent,
             Offset? delta,
-            Rect currentViewport)
+            Rect currentViewport,
+            Set<MouseButton> pressedMouseButtons,
+            Set<LogicalKeyboardKey> pressedKeys,
+            InteractionType? activeInteraction)
         pointer,
     required TResult Function(
             String eventId,
@@ -48,17 +50,17 @@ mixin _$PhysicalEvent {
             Object rawEvent,
             double? scale,
             double? rotation,
-            Rect currentViewport)
+            Rect currentViewport,
+            Set<LogicalKeyboardKey> pressedKeys,
+            InteractionType? activeInteraction)
         gesture,
     required TResult Function(
             String eventId,
-            Offset logicalPosition,
             Transform2D transformSnapshot,
-            List<DiagramObjectEntity> hitList,
-            BorderProximity borderProximity,
             KeyEvent rawEvent,
             Set<LogicalKeyboardKey> pressedKeys,
-            Rect currentViewport)
+            Rect currentViewport,
+            InteractionType? activeInteraction)
         keyboard,
   }) =>
       throw _privateConstructorUsedError;
@@ -74,7 +76,10 @@ mixin _$PhysicalEvent {
             InteractionPhase phase,
             PointerEvent rawEvent,
             Offset? delta,
-            Rect currentViewport)?
+            Rect currentViewport,
+            Set<MouseButton> pressedMouseButtons,
+            Set<LogicalKeyboardKey> pressedKeys,
+            InteractionType? activeInteraction)?
         pointer,
     TResult? Function(
             String eventId,
@@ -87,17 +92,17 @@ mixin _$PhysicalEvent {
             Object rawEvent,
             double? scale,
             double? rotation,
-            Rect currentViewport)?
+            Rect currentViewport,
+            Set<LogicalKeyboardKey> pressedKeys,
+            InteractionType? activeInteraction)?
         gesture,
     TResult? Function(
             String eventId,
-            Offset logicalPosition,
             Transform2D transformSnapshot,
-            List<DiagramObjectEntity> hitList,
-            BorderProximity borderProximity,
             KeyEvent rawEvent,
             Set<LogicalKeyboardKey> pressedKeys,
-            Rect currentViewport)?
+            Rect currentViewport,
+            InteractionType? activeInteraction)?
         keyboard,
   }) =>
       throw _privateConstructorUsedError;
@@ -113,7 +118,10 @@ mixin _$PhysicalEvent {
             InteractionPhase phase,
             PointerEvent rawEvent,
             Offset? delta,
-            Rect currentViewport)?
+            Rect currentViewport,
+            Set<MouseButton> pressedMouseButtons,
+            Set<LogicalKeyboardKey> pressedKeys,
+            InteractionType? activeInteraction)?
         pointer,
     TResult Function(
             String eventId,
@@ -126,17 +134,17 @@ mixin _$PhysicalEvent {
             Object rawEvent,
             double? scale,
             double? rotation,
-            Rect currentViewport)?
+            Rect currentViewport,
+            Set<LogicalKeyboardKey> pressedKeys,
+            InteractionType? activeInteraction)?
         gesture,
     TResult Function(
             String eventId,
-            Offset logicalPosition,
             Transform2D transformSnapshot,
-            List<DiagramObjectEntity> hitList,
-            BorderProximity borderProximity,
             KeyEvent rawEvent,
             Set<LogicalKeyboardKey> pressedKeys,
-            Rect currentViewport)?
+            Rect currentViewport,
+            InteractionType? activeInteraction)?
         keyboard,
     required TResult orElse(),
   }) =>
@@ -179,14 +187,12 @@ abstract class $PhysicalEventCopyWith<$Res> {
   @useResult
   $Res call(
       {String eventId,
-      Offset logicalPosition,
       Transform2D transformSnapshot,
-      List<DiagramObjectEntity> hitList,
-      BorderProximity borderProximity,
-      Rect currentViewport});
+      Rect currentViewport,
+      Set<LogicalKeyboardKey> pressedKeys,
+      InteractionType? activeInteraction});
 
   $Transform2DCopyWith<$Res> get transformSnapshot;
-  $BorderProximityCopyWith<$Res> get borderProximity;
 }
 
 /// @nodoc
@@ -205,37 +211,32 @@ class _$PhysicalEventCopyWithImpl<$Res, $Val extends PhysicalEvent>
   @override
   $Res call({
     Object? eventId = null,
-    Object? logicalPosition = null,
     Object? transformSnapshot = null,
-    Object? hitList = null,
-    Object? borderProximity = null,
     Object? currentViewport = null,
+    Object? pressedKeys = null,
+    Object? activeInteraction = freezed,
   }) {
     return _then(_value.copyWith(
       eventId: null == eventId
           ? _value.eventId
           : eventId // ignore: cast_nullable_to_non_nullable
               as String,
-      logicalPosition: null == logicalPosition
-          ? _value.logicalPosition
-          : logicalPosition // ignore: cast_nullable_to_non_nullable
-              as Offset,
       transformSnapshot: null == transformSnapshot
           ? _value.transformSnapshot
           : transformSnapshot // ignore: cast_nullable_to_non_nullable
               as Transform2D,
-      hitList: null == hitList
-          ? _value.hitList
-          : hitList // ignore: cast_nullable_to_non_nullable
-              as List<DiagramObjectEntity>,
-      borderProximity: null == borderProximity
-          ? _value.borderProximity
-          : borderProximity // ignore: cast_nullable_to_non_nullable
-              as BorderProximity,
       currentViewport: null == currentViewport
           ? _value.currentViewport
           : currentViewport // ignore: cast_nullable_to_non_nullable
               as Rect,
+      pressedKeys: null == pressedKeys
+          ? _value.pressedKeys
+          : pressedKeys // ignore: cast_nullable_to_non_nullable
+              as Set<LogicalKeyboardKey>,
+      activeInteraction: freezed == activeInteraction
+          ? _value.activeInteraction
+          : activeInteraction // ignore: cast_nullable_to_non_nullable
+              as InteractionType?,
     ) as $Val);
   }
 
@@ -246,16 +247,6 @@ class _$PhysicalEventCopyWithImpl<$Res, $Val extends PhysicalEvent>
   $Transform2DCopyWith<$Res> get transformSnapshot {
     return $Transform2DCopyWith<$Res>(_value.transformSnapshot, (value) {
       return _then(_value.copyWith(transformSnapshot: value) as $Val);
-    });
-  }
-
-  /// Create a copy of PhysicalEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $BorderProximityCopyWith<$Res> get borderProximity {
-    return $BorderProximityCopyWith<$Res>(_value.borderProximity, (value) {
-      return _then(_value.copyWith(borderProximity: value) as $Val);
     });
   }
 }
@@ -278,11 +269,13 @@ abstract class _$$PointerPhysicalEventImplCopyWith<$Res>
       InteractionPhase phase,
       PointerEvent rawEvent,
       Offset? delta,
-      Rect currentViewport});
+      Rect currentViewport,
+      Set<MouseButton> pressedMouseButtons,
+      Set<LogicalKeyboardKey> pressedKeys,
+      InteractionType? activeInteraction});
 
   @override
   $Transform2DCopyWith<$Res> get transformSnapshot;
-  @override
   $BorderProximityCopyWith<$Res> get borderProximity;
 }
 
@@ -309,6 +302,9 @@ class __$$PointerPhysicalEventImplCopyWithImpl<$Res>
     Object? rawEvent = null,
     Object? delta = freezed,
     Object? currentViewport = null,
+    Object? pressedMouseButtons = null,
+    Object? pressedKeys = null,
+    Object? activeInteraction = freezed,
   }) {
     return _then(_$PointerPhysicalEventImpl(
       eventId: null == eventId
@@ -351,7 +347,29 @@ class __$$PointerPhysicalEventImplCopyWithImpl<$Res>
           ? _value.currentViewport
           : currentViewport // ignore: cast_nullable_to_non_nullable
               as Rect,
+      pressedMouseButtons: null == pressedMouseButtons
+          ? _value._pressedMouseButtons
+          : pressedMouseButtons // ignore: cast_nullable_to_non_nullable
+              as Set<MouseButton>,
+      pressedKeys: null == pressedKeys
+          ? _value._pressedKeys
+          : pressedKeys // ignore: cast_nullable_to_non_nullable
+              as Set<LogicalKeyboardKey>,
+      activeInteraction: freezed == activeInteraction
+          ? _value.activeInteraction
+          : activeInteraction // ignore: cast_nullable_to_non_nullable
+              as InteractionType?,
     ));
+  }
+
+  /// Create a copy of PhysicalEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $BorderProximityCopyWith<$Res> get borderProximity {
+    return $BorderProximityCopyWith<$Res>(_value.borderProximity, (value) {
+      return _then(_value.copyWith(borderProximity: value));
+    });
   }
 }
 
@@ -368,8 +386,13 @@ class _$PointerPhysicalEventImpl extends PointerPhysicalEvent {
       required this.phase,
       required this.rawEvent,
       this.delta,
-      required this.currentViewport})
+      required this.currentViewport,
+      required final Set<MouseButton> pressedMouseButtons,
+      required final Set<LogicalKeyboardKey> pressedKeys,
+      required this.activeInteraction})
       : _hitList = hitList,
+        _pressedMouseButtons = pressedMouseButtons,
+        _pressedKeys = pressedKeys,
         super._();
 
   @override
@@ -398,10 +421,29 @@ class _$PointerPhysicalEventImpl extends PointerPhysicalEvent {
   final Offset? delta;
   @override
   final Rect currentViewport;
+  final Set<MouseButton> _pressedMouseButtons;
+  @override
+  Set<MouseButton> get pressedMouseButtons {
+    if (_pressedMouseButtons is EqualUnmodifiableSetView)
+      return _pressedMouseButtons;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableSetView(_pressedMouseButtons);
+  }
+
+  final Set<LogicalKeyboardKey> _pressedKeys;
+  @override
+  Set<LogicalKeyboardKey> get pressedKeys {
+    if (_pressedKeys is EqualUnmodifiableSetView) return _pressedKeys;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableSetView(_pressedKeys);
+  }
+
+  @override
+  final InteractionType? activeInteraction;
 
   @override
   String toString() {
-    return 'PhysicalEvent.pointer(eventId: $eventId, logicalPosition: $logicalPosition, screenPosition: $screenPosition, transformSnapshot: $transformSnapshot, hitList: $hitList, borderProximity: $borderProximity, phase: $phase, rawEvent: $rawEvent, delta: $delta, currentViewport: $currentViewport)';
+    return 'PhysicalEvent.pointer(eventId: $eventId, logicalPosition: $logicalPosition, screenPosition: $screenPosition, transformSnapshot: $transformSnapshot, hitList: $hitList, borderProximity: $borderProximity, phase: $phase, rawEvent: $rawEvent, delta: $delta, currentViewport: $currentViewport, pressedMouseButtons: $pressedMouseButtons, pressedKeys: $pressedKeys, activeInteraction: $activeInteraction)';
   }
 
   @override
@@ -424,7 +466,13 @@ class _$PointerPhysicalEventImpl extends PointerPhysicalEvent {
                 other.rawEvent == rawEvent) &&
             (identical(other.delta, delta) || other.delta == delta) &&
             (identical(other.currentViewport, currentViewport) ||
-                other.currentViewport == currentViewport));
+                other.currentViewport == currentViewport) &&
+            const DeepCollectionEquality()
+                .equals(other._pressedMouseButtons, _pressedMouseButtons) &&
+            const DeepCollectionEquality()
+                .equals(other._pressedKeys, _pressedKeys) &&
+            (identical(other.activeInteraction, activeInteraction) ||
+                other.activeInteraction == activeInteraction));
   }
 
   @override
@@ -439,7 +487,10 @@ class _$PointerPhysicalEventImpl extends PointerPhysicalEvent {
       phase,
       rawEvent,
       delta,
-      currentViewport);
+      currentViewport,
+      const DeepCollectionEquality().hash(_pressedMouseButtons),
+      const DeepCollectionEquality().hash(_pressedKeys),
+      activeInteraction);
 
   /// Create a copy of PhysicalEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -464,7 +515,10 @@ class _$PointerPhysicalEventImpl extends PointerPhysicalEvent {
             InteractionPhase phase,
             PointerEvent rawEvent,
             Offset? delta,
-            Rect currentViewport)
+            Rect currentViewport,
+            Set<MouseButton> pressedMouseButtons,
+            Set<LogicalKeyboardKey> pressedKeys,
+            InteractionType? activeInteraction)
         pointer,
     required TResult Function(
             String eventId,
@@ -477,21 +531,33 @@ class _$PointerPhysicalEventImpl extends PointerPhysicalEvent {
             Object rawEvent,
             double? scale,
             double? rotation,
-            Rect currentViewport)
+            Rect currentViewport,
+            Set<LogicalKeyboardKey> pressedKeys,
+            InteractionType? activeInteraction)
         gesture,
     required TResult Function(
             String eventId,
-            Offset logicalPosition,
             Transform2D transformSnapshot,
-            List<DiagramObjectEntity> hitList,
-            BorderProximity borderProximity,
             KeyEvent rawEvent,
             Set<LogicalKeyboardKey> pressedKeys,
-            Rect currentViewport)
+            Rect currentViewport,
+            InteractionType? activeInteraction)
         keyboard,
   }) {
-    return pointer(eventId, logicalPosition, screenPosition, transformSnapshot,
-        hitList, borderProximity, phase, rawEvent, delta, currentViewport);
+    return pointer(
+        eventId,
+        logicalPosition,
+        screenPosition,
+        transformSnapshot,
+        hitList,
+        borderProximity,
+        phase,
+        rawEvent,
+        delta,
+        currentViewport,
+        pressedMouseButtons,
+        pressedKeys,
+        activeInteraction);
   }
 
   @override
@@ -507,7 +573,10 @@ class _$PointerPhysicalEventImpl extends PointerPhysicalEvent {
             InteractionPhase phase,
             PointerEvent rawEvent,
             Offset? delta,
-            Rect currentViewport)?
+            Rect currentViewport,
+            Set<MouseButton> pressedMouseButtons,
+            Set<LogicalKeyboardKey> pressedKeys,
+            InteractionType? activeInteraction)?
         pointer,
     TResult? Function(
             String eventId,
@@ -520,17 +589,17 @@ class _$PointerPhysicalEventImpl extends PointerPhysicalEvent {
             Object rawEvent,
             double? scale,
             double? rotation,
-            Rect currentViewport)?
+            Rect currentViewport,
+            Set<LogicalKeyboardKey> pressedKeys,
+            InteractionType? activeInteraction)?
         gesture,
     TResult? Function(
             String eventId,
-            Offset logicalPosition,
             Transform2D transformSnapshot,
-            List<DiagramObjectEntity> hitList,
-            BorderProximity borderProximity,
             KeyEvent rawEvent,
             Set<LogicalKeyboardKey> pressedKeys,
-            Rect currentViewport)?
+            Rect currentViewport,
+            InteractionType? activeInteraction)?
         keyboard,
   }) {
     return pointer?.call(
@@ -543,7 +612,10 @@ class _$PointerPhysicalEventImpl extends PointerPhysicalEvent {
         phase,
         rawEvent,
         delta,
-        currentViewport);
+        currentViewport,
+        pressedMouseButtons,
+        pressedKeys,
+        activeInteraction);
   }
 
   @override
@@ -559,7 +631,10 @@ class _$PointerPhysicalEventImpl extends PointerPhysicalEvent {
             InteractionPhase phase,
             PointerEvent rawEvent,
             Offset? delta,
-            Rect currentViewport)?
+            Rect currentViewport,
+            Set<MouseButton> pressedMouseButtons,
+            Set<LogicalKeyboardKey> pressedKeys,
+            InteractionType? activeInteraction)?
         pointer,
     TResult Function(
             String eventId,
@@ -572,17 +647,17 @@ class _$PointerPhysicalEventImpl extends PointerPhysicalEvent {
             Object rawEvent,
             double? scale,
             double? rotation,
-            Rect currentViewport)?
+            Rect currentViewport,
+            Set<LogicalKeyboardKey> pressedKeys,
+            InteractionType? activeInteraction)?
         gesture,
     TResult Function(
             String eventId,
-            Offset logicalPosition,
             Transform2D transformSnapshot,
-            List<DiagramObjectEntity> hitList,
-            BorderProximity borderProximity,
             KeyEvent rawEvent,
             Set<LogicalKeyboardKey> pressedKeys,
-            Rect currentViewport)?
+            Rect currentViewport,
+            InteractionType? activeInteraction)?
         keyboard,
     required TResult orElse(),
   }) {
@@ -597,7 +672,10 @@ class _$PointerPhysicalEventImpl extends PointerPhysicalEvent {
           phase,
           rawEvent,
           delta,
-          currentViewport);
+          currentViewport,
+          pressedMouseButtons,
+          pressedKeys,
+          activeInteraction);
     }
     return orElse();
   }
@@ -639,28 +717,29 @@ class _$PointerPhysicalEventImpl extends PointerPhysicalEvent {
 
 abstract class PointerPhysicalEvent extends PhysicalEvent {
   const factory PointerPhysicalEvent(
-      {required final String eventId,
-      required final Offset logicalPosition,
-      required final Offset screenPosition,
-      required final Transform2D transformSnapshot,
-      required final List<DiagramObjectEntity> hitList,
-      required final BorderProximity borderProximity,
-      required final InteractionPhase phase,
-      required final PointerEvent rawEvent,
-      final Offset? delta,
-      required final Rect currentViewport}) = _$PointerPhysicalEventImpl;
+          {required final String eventId,
+          required final Offset logicalPosition,
+          required final Offset screenPosition,
+          required final Transform2D transformSnapshot,
+          required final List<DiagramObjectEntity> hitList,
+          required final BorderProximity borderProximity,
+          required final InteractionPhase phase,
+          required final PointerEvent rawEvent,
+          final Offset? delta,
+          required final Rect currentViewport,
+          required final Set<MouseButton> pressedMouseButtons,
+          required final Set<LogicalKeyboardKey> pressedKeys,
+          required final InteractionType? activeInteraction}) =
+      _$PointerPhysicalEventImpl;
   const PointerPhysicalEvent._() : super._();
 
   @override
   String get eventId;
-  @override
   Offset get logicalPosition;
   Offset get screenPosition;
   @override
   Transform2D get transformSnapshot;
-  @override
   List<DiagramObjectEntity> get hitList;
-  @override
   BorderProximity get borderProximity;
   InteractionPhase get phase;
   @override
@@ -668,6 +747,11 @@ abstract class PointerPhysicalEvent extends PhysicalEvent {
   Offset? get delta;
   @override
   Rect get currentViewport;
+  Set<MouseButton> get pressedMouseButtons;
+  @override
+  Set<LogicalKeyboardKey> get pressedKeys;
+  @override
+  InteractionType? get activeInteraction;
 
   /// Create a copy of PhysicalEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -696,11 +780,12 @@ abstract class _$$GesturePhysicalEventImplCopyWith<$Res>
       Object rawEvent,
       double? scale,
       double? rotation,
-      Rect currentViewport});
+      Rect currentViewport,
+      Set<LogicalKeyboardKey> pressedKeys,
+      InteractionType? activeInteraction});
 
   @override
   $Transform2DCopyWith<$Res> get transformSnapshot;
-  @override
   $BorderProximityCopyWith<$Res> get borderProximity;
 }
 
@@ -728,6 +813,8 @@ class __$$GesturePhysicalEventImplCopyWithImpl<$Res>
     Object? scale = freezed,
     Object? rotation = freezed,
     Object? currentViewport = null,
+    Object? pressedKeys = null,
+    Object? activeInteraction = freezed,
   }) {
     return _then(_$GesturePhysicalEventImpl(
       eventId: null == eventId
@@ -771,7 +858,25 @@ class __$$GesturePhysicalEventImplCopyWithImpl<$Res>
           ? _value.currentViewport
           : currentViewport // ignore: cast_nullable_to_non_nullable
               as Rect,
+      pressedKeys: null == pressedKeys
+          ? _value._pressedKeys
+          : pressedKeys // ignore: cast_nullable_to_non_nullable
+              as Set<LogicalKeyboardKey>,
+      activeInteraction: freezed == activeInteraction
+          ? _value.activeInteraction
+          : activeInteraction // ignore: cast_nullable_to_non_nullable
+              as InteractionType?,
     ));
+  }
+
+  /// Create a copy of PhysicalEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $BorderProximityCopyWith<$Res> get borderProximity {
+    return $BorderProximityCopyWith<$Res>(_value.borderProximity, (value) {
+      return _then(_value.copyWith(borderProximity: value));
+    });
   }
 }
 
@@ -789,8 +894,11 @@ class _$GesturePhysicalEventImpl extends GesturePhysicalEvent {
       required this.rawEvent,
       this.scale,
       this.rotation,
-      required this.currentViewport})
+      required this.currentViewport,
+      required final Set<LogicalKeyboardKey> pressedKeys,
+      required this.activeInteraction})
       : _hitList = hitList,
+        _pressedKeys = pressedKeys,
         super._();
 
   @override
@@ -821,10 +929,20 @@ class _$GesturePhysicalEventImpl extends GesturePhysicalEvent {
   final double? rotation;
   @override
   final Rect currentViewport;
+  final Set<LogicalKeyboardKey> _pressedKeys;
+  @override
+  Set<LogicalKeyboardKey> get pressedKeys {
+    if (_pressedKeys is EqualUnmodifiableSetView) return _pressedKeys;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableSetView(_pressedKeys);
+  }
+
+  @override
+  final InteractionType? activeInteraction;
 
   @override
   String toString() {
-    return 'PhysicalEvent.gesture(eventId: $eventId, logicalPosition: $logicalPosition, screenPosition: $screenPosition, transformSnapshot: $transformSnapshot, hitList: $hitList, borderProximity: $borderProximity, phase: $phase, rawEvent: $rawEvent, scale: $scale, rotation: $rotation, currentViewport: $currentViewport)';
+    return 'PhysicalEvent.gesture(eventId: $eventId, logicalPosition: $logicalPosition, screenPosition: $screenPosition, transformSnapshot: $transformSnapshot, hitList: $hitList, borderProximity: $borderProximity, phase: $phase, rawEvent: $rawEvent, scale: $scale, rotation: $rotation, currentViewport: $currentViewport, pressedKeys: $pressedKeys, activeInteraction: $activeInteraction)';
   }
 
   @override
@@ -848,7 +966,11 @@ class _$GesturePhysicalEventImpl extends GesturePhysicalEvent {
             (identical(other.rotation, rotation) ||
                 other.rotation == rotation) &&
             (identical(other.currentViewport, currentViewport) ||
-                other.currentViewport == currentViewport));
+                other.currentViewport == currentViewport) &&
+            const DeepCollectionEquality()
+                .equals(other._pressedKeys, _pressedKeys) &&
+            (identical(other.activeInteraction, activeInteraction) ||
+                other.activeInteraction == activeInteraction));
   }
 
   @override
@@ -864,7 +986,9 @@ class _$GesturePhysicalEventImpl extends GesturePhysicalEvent {
       const DeepCollectionEquality().hash(rawEvent),
       scale,
       rotation,
-      currentViewport);
+      currentViewport,
+      const DeepCollectionEquality().hash(_pressedKeys),
+      activeInteraction);
 
   /// Create a copy of PhysicalEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -889,7 +1013,10 @@ class _$GesturePhysicalEventImpl extends GesturePhysicalEvent {
             InteractionPhase phase,
             PointerEvent rawEvent,
             Offset? delta,
-            Rect currentViewport)
+            Rect currentViewport,
+            Set<MouseButton> pressedMouseButtons,
+            Set<LogicalKeyboardKey> pressedKeys,
+            InteractionType? activeInteraction)
         pointer,
     required TResult Function(
             String eventId,
@@ -902,17 +1029,17 @@ class _$GesturePhysicalEventImpl extends GesturePhysicalEvent {
             Object rawEvent,
             double? scale,
             double? rotation,
-            Rect currentViewport)
+            Rect currentViewport,
+            Set<LogicalKeyboardKey> pressedKeys,
+            InteractionType? activeInteraction)
         gesture,
     required TResult Function(
             String eventId,
-            Offset logicalPosition,
             Transform2D transformSnapshot,
-            List<DiagramObjectEntity> hitList,
-            BorderProximity borderProximity,
             KeyEvent rawEvent,
             Set<LogicalKeyboardKey> pressedKeys,
-            Rect currentViewport)
+            Rect currentViewport,
+            InteractionType? activeInteraction)
         keyboard,
   }) {
     return gesture(
@@ -926,7 +1053,9 @@ class _$GesturePhysicalEventImpl extends GesturePhysicalEvent {
         rawEvent,
         scale,
         rotation,
-        currentViewport);
+        currentViewport,
+        pressedKeys,
+        activeInteraction);
   }
 
   @override
@@ -942,7 +1071,10 @@ class _$GesturePhysicalEventImpl extends GesturePhysicalEvent {
             InteractionPhase phase,
             PointerEvent rawEvent,
             Offset? delta,
-            Rect currentViewport)?
+            Rect currentViewport,
+            Set<MouseButton> pressedMouseButtons,
+            Set<LogicalKeyboardKey> pressedKeys,
+            InteractionType? activeInteraction)?
         pointer,
     TResult? Function(
             String eventId,
@@ -955,17 +1087,17 @@ class _$GesturePhysicalEventImpl extends GesturePhysicalEvent {
             Object rawEvent,
             double? scale,
             double? rotation,
-            Rect currentViewport)?
+            Rect currentViewport,
+            Set<LogicalKeyboardKey> pressedKeys,
+            InteractionType? activeInteraction)?
         gesture,
     TResult? Function(
             String eventId,
-            Offset logicalPosition,
             Transform2D transformSnapshot,
-            List<DiagramObjectEntity> hitList,
-            BorderProximity borderProximity,
             KeyEvent rawEvent,
             Set<LogicalKeyboardKey> pressedKeys,
-            Rect currentViewport)?
+            Rect currentViewport,
+            InteractionType? activeInteraction)?
         keyboard,
   }) {
     return gesture?.call(
@@ -979,7 +1111,9 @@ class _$GesturePhysicalEventImpl extends GesturePhysicalEvent {
         rawEvent,
         scale,
         rotation,
-        currentViewport);
+        currentViewport,
+        pressedKeys,
+        activeInteraction);
   }
 
   @override
@@ -995,7 +1129,10 @@ class _$GesturePhysicalEventImpl extends GesturePhysicalEvent {
             InteractionPhase phase,
             PointerEvent rawEvent,
             Offset? delta,
-            Rect currentViewport)?
+            Rect currentViewport,
+            Set<MouseButton> pressedMouseButtons,
+            Set<LogicalKeyboardKey> pressedKeys,
+            InteractionType? activeInteraction)?
         pointer,
     TResult Function(
             String eventId,
@@ -1008,17 +1145,17 @@ class _$GesturePhysicalEventImpl extends GesturePhysicalEvent {
             Object rawEvent,
             double? scale,
             double? rotation,
-            Rect currentViewport)?
+            Rect currentViewport,
+            Set<LogicalKeyboardKey> pressedKeys,
+            InteractionType? activeInteraction)?
         gesture,
     TResult Function(
             String eventId,
-            Offset logicalPosition,
             Transform2D transformSnapshot,
-            List<DiagramObjectEntity> hitList,
-            BorderProximity borderProximity,
             KeyEvent rawEvent,
             Set<LogicalKeyboardKey> pressedKeys,
-            Rect currentViewport)?
+            Rect currentViewport,
+            InteractionType? activeInteraction)?
         keyboard,
     required TResult orElse(),
   }) {
@@ -1034,7 +1171,9 @@ class _$GesturePhysicalEventImpl extends GesturePhysicalEvent {
           rawEvent,
           scale,
           rotation,
-          currentViewport);
+          currentViewport,
+          pressedKeys,
+          activeInteraction);
     }
     return orElse();
   }
@@ -1076,29 +1215,29 @@ class _$GesturePhysicalEventImpl extends GesturePhysicalEvent {
 
 abstract class GesturePhysicalEvent extends PhysicalEvent {
   const factory GesturePhysicalEvent(
-      {required final String eventId,
-      required final Offset logicalPosition,
-      required final Offset screenPosition,
-      required final Transform2D transformSnapshot,
-      required final List<DiagramObjectEntity> hitList,
-      required final BorderProximity borderProximity,
-      required final InteractionPhase phase,
-      required final Object rawEvent,
-      final double? scale,
-      final double? rotation,
-      required final Rect currentViewport}) = _$GesturePhysicalEventImpl;
+          {required final String eventId,
+          required final Offset logicalPosition,
+          required final Offset screenPosition,
+          required final Transform2D transformSnapshot,
+          required final List<DiagramObjectEntity> hitList,
+          required final BorderProximity borderProximity,
+          required final InteractionPhase phase,
+          required final Object rawEvent,
+          final double? scale,
+          final double? rotation,
+          required final Rect currentViewport,
+          required final Set<LogicalKeyboardKey> pressedKeys,
+          required final InteractionType? activeInteraction}) =
+      _$GesturePhysicalEventImpl;
   const GesturePhysicalEvent._() : super._();
 
   @override
   String get eventId;
-  @override
   Offset get logicalPosition;
   Offset get screenPosition;
   @override
   Transform2D get transformSnapshot;
-  @override
   List<DiagramObjectEntity> get hitList;
-  @override
   BorderProximity get borderProximity;
   InteractionPhase get phase;
   @override
@@ -1107,6 +1246,10 @@ abstract class GesturePhysicalEvent extends PhysicalEvent {
   double? get rotation;
   @override
   Rect get currentViewport;
+  @override
+  Set<LogicalKeyboardKey> get pressedKeys;
+  @override
+  InteractionType? get activeInteraction;
 
   /// Create a copy of PhysicalEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -1127,18 +1270,14 @@ abstract class _$$KeyboardPhysicalEventImplCopyWith<$Res>
   @useResult
   $Res call(
       {String eventId,
-      Offset logicalPosition,
       Transform2D transformSnapshot,
-      List<DiagramObjectEntity> hitList,
-      BorderProximity borderProximity,
       KeyEvent rawEvent,
       Set<LogicalKeyboardKey> pressedKeys,
-      Rect currentViewport});
+      Rect currentViewport,
+      InteractionType? activeInteraction});
 
   @override
   $Transform2DCopyWith<$Res> get transformSnapshot;
-  @override
-  $BorderProximityCopyWith<$Res> get borderProximity;
 }
 
 /// @nodoc
@@ -1155,35 +1294,21 @@ class __$$KeyboardPhysicalEventImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? eventId = null,
-    Object? logicalPosition = null,
     Object? transformSnapshot = null,
-    Object? hitList = null,
-    Object? borderProximity = null,
     Object? rawEvent = null,
     Object? pressedKeys = null,
     Object? currentViewport = null,
+    Object? activeInteraction = freezed,
   }) {
     return _then(_$KeyboardPhysicalEventImpl(
       eventId: null == eventId
           ? _value.eventId
           : eventId // ignore: cast_nullable_to_non_nullable
               as String,
-      logicalPosition: null == logicalPosition
-          ? _value.logicalPosition
-          : logicalPosition // ignore: cast_nullable_to_non_nullable
-              as Offset,
       transformSnapshot: null == transformSnapshot
           ? _value.transformSnapshot
           : transformSnapshot // ignore: cast_nullable_to_non_nullable
               as Transform2D,
-      hitList: null == hitList
-          ? _value._hitList
-          : hitList // ignore: cast_nullable_to_non_nullable
-              as List<DiagramObjectEntity>,
-      borderProximity: null == borderProximity
-          ? _value.borderProximity
-          : borderProximity // ignore: cast_nullable_to_non_nullable
-              as BorderProximity,
       rawEvent: null == rawEvent
           ? _value.rawEvent
           : rawEvent // ignore: cast_nullable_to_non_nullable
@@ -1196,6 +1321,10 @@ class __$$KeyboardPhysicalEventImplCopyWithImpl<$Res>
           ? _value.currentViewport
           : currentViewport // ignore: cast_nullable_to_non_nullable
               as Rect,
+      activeInteraction: freezed == activeInteraction
+          ? _value.activeInteraction
+          : activeInteraction // ignore: cast_nullable_to_non_nullable
+              as InteractionType?,
     ));
   }
 }
@@ -1205,33 +1334,18 @@ class __$$KeyboardPhysicalEventImplCopyWithImpl<$Res>
 class _$KeyboardPhysicalEventImpl extends KeyboardPhysicalEvent {
   const _$KeyboardPhysicalEventImpl(
       {required this.eventId,
-      required this.logicalPosition,
       required this.transformSnapshot,
-      required final List<DiagramObjectEntity> hitList,
-      required this.borderProximity,
       required this.rawEvent,
       required final Set<LogicalKeyboardKey> pressedKeys,
-      required this.currentViewport})
-      : _hitList = hitList,
-        _pressedKeys = pressedKeys,
+      required this.currentViewport,
+      required this.activeInteraction})
+      : _pressedKeys = pressedKeys,
         super._();
 
   @override
   final String eventId;
   @override
-  final Offset logicalPosition;
-  @override
   final Transform2D transformSnapshot;
-  final List<DiagramObjectEntity> _hitList;
-  @override
-  List<DiagramObjectEntity> get hitList {
-    if (_hitList is EqualUnmodifiableListView) return _hitList;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_hitList);
-  }
-
-  @override
-  final BorderProximity borderProximity;
   @override
   final KeyEvent rawEvent;
   final Set<LogicalKeyboardKey> _pressedKeys;
@@ -1244,10 +1358,12 @@ class _$KeyboardPhysicalEventImpl extends KeyboardPhysicalEvent {
 
   @override
   final Rect currentViewport;
+  @override
+  final InteractionType? activeInteraction;
 
   @override
   String toString() {
-    return 'PhysicalEvent.keyboard(eventId: $eventId, logicalPosition: $logicalPosition, transformSnapshot: $transformSnapshot, hitList: $hitList, borderProximity: $borderProximity, rawEvent: $rawEvent, pressedKeys: $pressedKeys, currentViewport: $currentViewport)';
+    return 'PhysicalEvent.keyboard(eventId: $eventId, transformSnapshot: $transformSnapshot, rawEvent: $rawEvent, pressedKeys: $pressedKeys, currentViewport: $currentViewport, activeInteraction: $activeInteraction)';
   }
 
   @override
@@ -1256,32 +1372,27 @@ class _$KeyboardPhysicalEventImpl extends KeyboardPhysicalEvent {
         (other.runtimeType == runtimeType &&
             other is _$KeyboardPhysicalEventImpl &&
             (identical(other.eventId, eventId) || other.eventId == eventId) &&
-            (identical(other.logicalPosition, logicalPosition) ||
-                other.logicalPosition == logicalPosition) &&
             (identical(other.transformSnapshot, transformSnapshot) ||
                 other.transformSnapshot == transformSnapshot) &&
-            const DeepCollectionEquality().equals(other._hitList, _hitList) &&
-            (identical(other.borderProximity, borderProximity) ||
-                other.borderProximity == borderProximity) &&
             (identical(other.rawEvent, rawEvent) ||
                 other.rawEvent == rawEvent) &&
             const DeepCollectionEquality()
                 .equals(other._pressedKeys, _pressedKeys) &&
             (identical(other.currentViewport, currentViewport) ||
-                other.currentViewport == currentViewport));
+                other.currentViewport == currentViewport) &&
+            (identical(other.activeInteraction, activeInteraction) ||
+                other.activeInteraction == activeInteraction));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       eventId,
-      logicalPosition,
       transformSnapshot,
-      const DeepCollectionEquality().hash(_hitList),
-      borderProximity,
       rawEvent,
       const DeepCollectionEquality().hash(_pressedKeys),
-      currentViewport);
+      currentViewport,
+      activeInteraction);
 
   /// Create a copy of PhysicalEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -1305,7 +1416,10 @@ class _$KeyboardPhysicalEventImpl extends KeyboardPhysicalEvent {
             InteractionPhase phase,
             PointerEvent rawEvent,
             Offset? delta,
-            Rect currentViewport)
+            Rect currentViewport,
+            Set<MouseButton> pressedMouseButtons,
+            Set<LogicalKeyboardKey> pressedKeys,
+            InteractionType? activeInteraction)
         pointer,
     required TResult Function(
             String eventId,
@@ -1318,21 +1432,21 @@ class _$KeyboardPhysicalEventImpl extends KeyboardPhysicalEvent {
             Object rawEvent,
             double? scale,
             double? rotation,
-            Rect currentViewport)
+            Rect currentViewport,
+            Set<LogicalKeyboardKey> pressedKeys,
+            InteractionType? activeInteraction)
         gesture,
     required TResult Function(
             String eventId,
-            Offset logicalPosition,
             Transform2D transformSnapshot,
-            List<DiagramObjectEntity> hitList,
-            BorderProximity borderProximity,
             KeyEvent rawEvent,
             Set<LogicalKeyboardKey> pressedKeys,
-            Rect currentViewport)
+            Rect currentViewport,
+            InteractionType? activeInteraction)
         keyboard,
   }) {
-    return keyboard(eventId, logicalPosition, transformSnapshot, hitList,
-        borderProximity, rawEvent, pressedKeys, currentViewport);
+    return keyboard(eventId, transformSnapshot, rawEvent, pressedKeys,
+        currentViewport, activeInteraction);
   }
 
   @override
@@ -1348,7 +1462,10 @@ class _$KeyboardPhysicalEventImpl extends KeyboardPhysicalEvent {
             InteractionPhase phase,
             PointerEvent rawEvent,
             Offset? delta,
-            Rect currentViewport)?
+            Rect currentViewport,
+            Set<MouseButton> pressedMouseButtons,
+            Set<LogicalKeyboardKey> pressedKeys,
+            InteractionType? activeInteraction)?
         pointer,
     TResult? Function(
             String eventId,
@@ -1361,21 +1478,21 @@ class _$KeyboardPhysicalEventImpl extends KeyboardPhysicalEvent {
             Object rawEvent,
             double? scale,
             double? rotation,
-            Rect currentViewport)?
+            Rect currentViewport,
+            Set<LogicalKeyboardKey> pressedKeys,
+            InteractionType? activeInteraction)?
         gesture,
     TResult? Function(
             String eventId,
-            Offset logicalPosition,
             Transform2D transformSnapshot,
-            List<DiagramObjectEntity> hitList,
-            BorderProximity borderProximity,
             KeyEvent rawEvent,
             Set<LogicalKeyboardKey> pressedKeys,
-            Rect currentViewport)?
+            Rect currentViewport,
+            InteractionType? activeInteraction)?
         keyboard,
   }) {
-    return keyboard?.call(eventId, logicalPosition, transformSnapshot, hitList,
-        borderProximity, rawEvent, pressedKeys, currentViewport);
+    return keyboard?.call(eventId, transformSnapshot, rawEvent, pressedKeys,
+        currentViewport, activeInteraction);
   }
 
   @override
@@ -1391,7 +1508,10 @@ class _$KeyboardPhysicalEventImpl extends KeyboardPhysicalEvent {
             InteractionPhase phase,
             PointerEvent rawEvent,
             Offset? delta,
-            Rect currentViewport)?
+            Rect currentViewport,
+            Set<MouseButton> pressedMouseButtons,
+            Set<LogicalKeyboardKey> pressedKeys,
+            InteractionType? activeInteraction)?
         pointer,
     TResult Function(
             String eventId,
@@ -1404,23 +1524,23 @@ class _$KeyboardPhysicalEventImpl extends KeyboardPhysicalEvent {
             Object rawEvent,
             double? scale,
             double? rotation,
-            Rect currentViewport)?
+            Rect currentViewport,
+            Set<LogicalKeyboardKey> pressedKeys,
+            InteractionType? activeInteraction)?
         gesture,
     TResult Function(
             String eventId,
-            Offset logicalPosition,
             Transform2D transformSnapshot,
-            List<DiagramObjectEntity> hitList,
-            BorderProximity borderProximity,
             KeyEvent rawEvent,
             Set<LogicalKeyboardKey> pressedKeys,
-            Rect currentViewport)?
+            Rect currentViewport,
+            InteractionType? activeInteraction)?
         keyboard,
     required TResult orElse(),
   }) {
     if (keyboard != null) {
-      return keyboard(eventId, logicalPosition, transformSnapshot, hitList,
-          borderProximity, rawEvent, pressedKeys, currentViewport);
+      return keyboard(eventId, transformSnapshot, rawEvent, pressedKeys,
+          currentViewport, activeInteraction);
     }
     return orElse();
   }
@@ -1462,31 +1582,27 @@ class _$KeyboardPhysicalEventImpl extends KeyboardPhysicalEvent {
 
 abstract class KeyboardPhysicalEvent extends PhysicalEvent {
   const factory KeyboardPhysicalEvent(
-      {required final String eventId,
-      required final Offset logicalPosition,
-      required final Transform2D transformSnapshot,
-      required final List<DiagramObjectEntity> hitList,
-      required final BorderProximity borderProximity,
-      required final KeyEvent rawEvent,
-      required final Set<LogicalKeyboardKey> pressedKeys,
-      required final Rect currentViewport}) = _$KeyboardPhysicalEventImpl;
+          {required final String eventId,
+          required final Transform2D transformSnapshot,
+          required final KeyEvent rawEvent,
+          required final Set<LogicalKeyboardKey> pressedKeys,
+          required final Rect currentViewport,
+          required final InteractionType? activeInteraction}) =
+      _$KeyboardPhysicalEventImpl;
   const KeyboardPhysicalEvent._() : super._();
 
   @override
   String get eventId;
   @override
-  Offset get logicalPosition;
-  @override
   Transform2D get transformSnapshot;
   @override
-  List<DiagramObjectEntity> get hitList;
-  @override
-  BorderProximity get borderProximity;
-  @override
   KeyEvent get rawEvent;
+  @override
   Set<LogicalKeyboardKey> get pressedKeys;
   @override
   Rect get currentViewport;
+  @override
+  InteractionType? get activeInteraction;
 
   /// Create a copy of PhysicalEvent
   /// with the given fields replaced by the non-null parameter values.

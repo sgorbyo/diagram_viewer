@@ -2,16 +2,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:diagram_viewer/diagram_viewer.dart';
-import 'package:diagram_viewer/interfaces/interfaces.dart';
-import 'package:diagram_viewer/events/events.dart';
 import '../interfaces/i_diagram_controller_test.dart';
 
 /// Test controller that tracks initialization calls
 class InitializationTestController implements IDiagramController {
   final StreamController<DiagramCommand> _commandController =
       StreamController<DiagramCommand>.broadcast();
-  final StreamController<PhysicalEvent> _eventController =
-      StreamController<PhysicalEvent>.broadcast();
+  final StreamController<DiagramEventUnion> _eventController =
+      StreamController<DiagramEventUnion>.broadcast();
 
   final List<TestDiagramObject> _objects;
   final Rect _logicalExtent;
@@ -28,13 +26,13 @@ class InitializationTestController implements IDiagramController {
     DiagramConfiguration? configuration,
   })  : _objects = objects ?? [],
         _logicalExtent = logicalExtent ?? const Rect.fromLTWH(0, 0, 1000, 1000),
-        _configuration = configuration ?? DiagramConfiguration.defaults;
+        _configuration = configuration ?? const DiagramConfiguration();
 
   @override
   Stream<DiagramCommand> get commandStream => _commandController.stream;
 
   @override
-  StreamSink<PhysicalEvent> get eventsSink => _eventController.sink;
+  Sink<DiagramEventUnion> get eventsSink => _eventController.sink;
 
   @override
   Rect get logicalExtent {

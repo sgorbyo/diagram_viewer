@@ -21,3 +21,4 @@
 export 'i_diagram_controller.dart';
 export 'diagram_configuration.dart';
 export 'diagram_object_entity.dart';
+export 'moveable_node.dart';

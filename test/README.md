@@ -1,160 +1,249 @@
-# Test Suite - Diagram Viewer
+# Test Suite Documentation
 
-Questa directory contiene tutti i test per il package `diagram_viewer`, organizzati secondo una struttura speculare a quella di `lib`.
+## Overview
 
-## Struttura dei Test
+This test suite is designed to prevent regression bugs in the `diagram_viewer` package, particularly focusing on scroll functionality and user interactions.
 
+## Test Categories
+
+### 1. Widget Tests (`test/widgets/`)
+
+#### `diagram_viewer_scroll_test.dart`
+**Purpose**: Tests scroll functionality to prevent regression bugs.
+
+**Key Test Areas**:
+- **Mouse Scroll Tests**: Verifies mouse wheel/trackpad scroll events are captured
+- **Keyboard Navigation Tests**: Tests arrow keys, page up/down, home/end navigation
+- **Drag on Empty Area Tests**: Ensures drag on empty space scrolls the diagram
+- **Object Movement Tests**: Verifies objects can be moved and IDs are preserved
+- **Transform Command Tests**: Ensures keyboard events are handled without crashing
+- **Redraw Command Tests**: Verifies redraw commands work correctly
+- **Regression Prevention Tests**: Tests multiple interactions and rapid key presses
+
+**Critical Test Cases**:
+```dart
+// Keyboard navigation
+await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
+
+// Object ID preservation
+final initialIds = testObjects.map((obj) => obj.id).toList();
+// ... interactions ...
+final finalIds = testObjects.map((obj) => obj.id).toList();
+expect(finalIds, equals(initialIds));
 ```
-test/
-├── README.md                           # Questo file
-├── test_config.dart                    # Configurazione globale dei test
-├── diagram_viewer_test.dart            # Test per DiagramViewer widget
-├── diagram_object_entity_test.dart     # Test per DiagramObjectEntity
-├── diagram_content_repository_test.dart # Test per DiagramContentRepository
-├── integration/                        # Test di integrazione
-│   ├── diagram_viewer_integration_test.dart
-│   └── bloc_communication_test.dart
-├── example/                            # Test specifici per esempio
-│   └── example_integration_test.dart
-└── presentation/                       # Struttura speculare a lib/presentation
-    ├── bloc/
-    │   ├── diagram_object/
-    │   │   └── diagram_object_bloc_test.dart
-    │   └── scrolling/
-    │       └── scrolling_bloc_test.dart
-    └── widgets/
-        └── scrolling_view_test.dart
+
+### 2. Integration Tests (`test/integration/`)
+
+#### `diagram_viewer_scroll_integration_test.dart`
+**Purpose**: Tests how different scroll types work together.
+
+**Key Test Areas**:
+- **Scroll Functionality Integration**: Tests all scroll types without conflicts
+- **State Consistency**: Ensures state remains consistent across scroll types
+- **Event Order**: Verifies events are processed in correct order
+- **Heavy Load**: Tests performance under heavy scroll load
+- **Mixed Interactions**: Tests scroll and object interactions together
+- **Command Flow**: Verifies appropriate commands are sent
+
+## Regression Prevention Strategy
+
+### 1. Critical Functionality Tests
+
+These tests must pass to ensure core functionality works:
+
+#### Scroll Functionality
+- ✅ Mouse wheel/trackpad scroll
+- ✅ Keyboard arrow key navigation
+- ✅ Page up/down navigation
+- ✅ Home/end navigation
+- ✅ Drag on empty area scrolls diagram
+
+#### Object Management
+- ✅ Objects can be moved
+- ✅ Object IDs are preserved during movement
+- ✅ Objects don't move when dragging on empty area
+
+#### Event Flow
+- ✅ Events reach the controller
+- ✅ Controller sends appropriate commands
+- ✅ Widget remains functional after interactions
+
+### 2. Performance Tests
+
+#### Heavy Load Testing
+```dart
+// Simulate heavy scroll load
+for (int i = 0; i < 20; i++) {
+  await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
+  await tester.pump();
+  await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
+  await tester.pump();
+}
 ```
 
-## Come Eseguire i Test dall'IDE
+#### Rapid Interaction Testing
+```dart
+// Test rapid key presses
+for (int i = 0; i < 10; i++) {
+  await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
+  await tester.pump();
+}
+```
 
-### VS Code / Cursor
+### 3. Architecture Compliance Tests
 
-1. **Apri la palette dei comandi** (`Cmd+Shift+P` su macOS)
-2. **Seleziona "Debug: Start Debugging"** o premi `F5`
-3. **Scegli una delle configurazioni di test**:
-   - `Run All Tests` - Esegue tutti i test
-   - `Run Unit Tests` - Solo test unitari
-   - `Run Integration Tests` - Solo test di integrazione
-   - `Run Example Tests` - Solo test dell'esempio
-   - `Run BLoC Tests` - Solo test dei BLoC
-   - `Run Widget Tests` - Solo test dei widget
-   - `Run DiagramViewer Tests` - Test specifici per DiagramViewer
-   - `Run Entity Tests` - Test per le entità
-   - `Run Repository Tests` - Test per il repository
+#### Diagrammer-Controller Pattern
+- ✅ All events reach the controller
+- ✅ Controller decides how to handle events
+- ✅ Controller sends commands back to DiagramViewer
+- ✅ No direct event processing in DiagramViewer
 
-### Test Explorer
+#### Event Isolation
+- ✅ Only one interaction type active at a time
+- ✅ Modifier keys update current event state
+- ✅ No interference between different event types
 
-1. **Apri il Test Explorer** (icona del foglio con il segno di spunta)
-2. **Espandi la struttura dei test**
-3. **Clicca su un test specifico** per eseguirlo
-4. **Usa i controlli per eseguire gruppi di test**
+## Running Tests
 
-### Debug di Test Specifici
-
-1. **Apri il file di test** che vuoi debuggare
-2. **Metti un breakpoint** nel test
-3. **Clicca su "Run Test"** accanto al test specifico
-4. **Il debugger si fermerà** al breakpoint
-
-## Esecuzione da Terminale
-
+### Individual Test Files
 ```bash
-# Tutti i test
+# Run scroll tests
+flutter test test/widgets/diagram_viewer_scroll_test.dart
+
+# Run integration tests
+flutter test test/integration/diagram_viewer_scroll_integration_test.dart
+```
+
+### All Tests
+```bash
+# Run all tests
 flutter test
 
-# Test specifici
-flutter test test/diagram_viewer_test.dart
-flutter test test/integration/
-flutter test test/example/
-
-# Test con coverage
+# Run with coverage
 flutter test --coverage
-
-# Test con output dettagliato
-flutter test --reporter=expanded
-
-# Test con timeout personalizzato
-flutter test --timeout=60s
 ```
 
-## Tipologie di Test
-
-### Unit Tests
-- **Posizione**: File nella root di `test/` e `test/presentation/`
-- **Scopo**: Testare singole unità di codice
-- **Esempi**: BLoC, entità, repository
-
-### Integration Tests
-- **Posizione**: `test/integration/`
-- **Scopo**: Testare l'interazione tra componenti
-- **Esempi**: Comunicazione tra BLoC, flusso completo
-
-### Example Tests
-- **Posizione**: `test/example/`
-- **Scopo**: Riprodurre scenari dell'app di esempio
-- **Esempi**: Problemi specifici, workflow utente
-
-### Widget Tests
-- **Posizione**: `test/presentation/widgets/`
-- **Scopo**: Testare componenti UI
-- **Esempi**: Rendering, interazioni utente
-
-## Configurazione
-
-### Test Config (`test_config.dart`)
-Contiene configurazioni globali per i test:
-- Timeout predefiniti
-- Dimensioni viewport standard
-- Oggetti di test predefiniti
-- Utility comuni
-
-### VS Code Settings (`.vscode/settings.json`)
-Configurazioni per l'esperienza di testing nell'IDE:
-- Test runner: `flutter_test`
-- Reporter: `expanded`
-- Coverage: abilitato
-- Test explorer: abilitato
-
-## Debugging
-
-### Problemi Comuni
-
-1. **"program does not exist"**
-   - Verifica che il file di test esista
-   - Controlla il percorso in `launch.json`
-
-2. **Test che falliscono**
-   - Usa `--reporter=expanded` per output dettagliato
-   - Aggiungi `print()` per debug
-   - Usa breakpoints per ispezionare lo stato
-
-3. **Timeout nei test**
-   - Aumenta il timeout con `--timeout=60s`
-   - Verifica le operazioni asincrone
-   - Usa `await tester.pumpAndSettle()` per widget test
-
-### Best Practices
-
-1. **Organizzazione**: Mantieni la struttura speculare
-2. **Naming**: Usa nomi descrittivi per i test
-3. **Isolamento**: Ogni test deve essere indipendente
-4. **Mocking**: Usa mock consistenti
-5. **Coverage**: Mantieni alta copertura dei test
-
-## Comandi Utili
-
+### Specific Test Groups
 ```bash
-# Genera coverage report
-flutter test --coverage
-genhtml coverage/lcov.info -o coverage/html
+# Run only keyboard navigation tests
+flutter test --plain-name "Keyboard Navigation Tests"
 
-# Test con watch mode (ri-esegue automaticamente)
-flutter test --watch
+# Run only regression prevention tests
+flutter test --plain-name "Regression Prevention"
+```
 
-# Test specifici con pattern
-flutter test --name="DiagramViewer"
+## Test Maintenance
 
-# Test con verbose output
-flutter test --verbose
-``` 
+### When Adding New Features
+
+1. **Add Unit Tests**: Create specific tests for new functionality
+2. **Add Integration Tests**: Test how new features work with existing ones
+3. **Update Regression Tests**: Ensure new features don't break existing ones
+4. **Update Documentation**: Document new test cases
+
+### When Fixing Bugs
+
+1. **Add Regression Test**: Create a test that would have caught the bug
+2. **Verify Fix**: Ensure the new test passes with the fix
+3. **Run All Tests**: Ensure no other functionality is broken
+4. **Update Documentation**: Document the bug and fix
+
+### Test Data
+
+#### Mock Objects
+```dart
+TestDiagramObject(
+  bounds: const Rect.fromLTWH(100, 100, 50, 50),
+  color: Colors.red,
+  id: 'test-1',
+)
+```
+
+#### Mock Controller
+```dart
+MockDiagramController mockController = MockDiagramController();
+mockController.addObject(testObject);
+```
+
+## Common Issues and Solutions
+
+### 1. Keyboard Events Not Received
+**Problem**: `hasReceivedEvents` returns false
+**Solution**: Ensure widget has focus
+```dart
+await tester.tap(find.byType(DiagramViewer));
+await tester.pump();
+```
+
+### 2. Test Timeouts
+**Problem**: Tests take too long or hang
+**Solution**: Add proper `pump()` calls and timeouts
+```dart
+await tester.pump();
+await tester.pump(const Duration(milliseconds: 100));
+```
+
+### 3. Widget Not Found
+**Problem**: `find.byType(DiagramViewer)` returns nothing
+**Solution**: Ensure widget is properly wrapped
+```dart
+MaterialApp(
+  home: Scaffold(
+    body: DiagramViewer(controller: mockController),
+  ),
+)
+```
+
+## Performance Guidelines
+
+### Test Execution Time
+- Individual tests should complete in < 1 second
+- Integration tests should complete in < 5 seconds
+- Full test suite should complete in < 30 seconds
+
+### Memory Usage
+- Tests should not cause memory leaks
+- Mock objects should be properly disposed
+- Stream subscriptions should be closed
+
+### Test Reliability
+- Tests should be deterministic
+- Avoid timing-dependent assertions
+- Use proper setup and teardown
+
+## Future Enhancements
+
+### Planned Test Additions
+1. **Visual Regression Tests**: Screenshot comparison tests
+2. **Performance Benchmarks**: FPS and memory usage tests
+3. **Accessibility Tests**: Screen reader and keyboard navigation tests
+4. **Cross-Platform Tests**: Platform-specific behavior tests
+
+### Test Infrastructure Improvements
+1. **Test Data Factories**: Reusable test object creation
+2. **Custom Matchers**: Domain-specific assertions
+3. **Test Utilities**: Common test operations
+4. **CI/CD Integration**: Automated test execution
+
+## Contributing to Tests
+
+### Test Writing Guidelines
+1. **Arrange-Act-Assert**: Follow the AAA pattern
+2. **Descriptive Names**: Use clear, descriptive test names
+3. **Single Responsibility**: Each test should test one thing
+4. **Independent Tests**: Tests should not depend on each other
+5. **Fast Execution**: Tests should run quickly
+
+### Test Documentation
+1. **Purpose**: Document what each test verifies
+2. **Setup**: Explain test data and conditions
+3. **Assertions**: Document expected outcomes
+4. **Edge Cases**: Test boundary conditions
+
+### Code Review Checklist
+- [ ] Tests cover the main functionality
+- [ ] Tests cover edge cases
+- [ ] Tests are independent and reliable
+- [ ] Tests follow naming conventions
+- [ ] Tests include proper assertions
+- [ ] Tests handle cleanup properly 

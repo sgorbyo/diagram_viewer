@@ -76,6 +76,11 @@ class DiagramConfiguration with _$DiagramConfiguration {
     /// Defaults to 300 milliseconds.
     @Default(Duration(milliseconds: 300)) Duration bounceDuration,
 
+    /// Curve of the elastic bounce-back animation.
+    ///
+    /// Controls the easing of the bounce-back. Defaults to easeOutCubic.
+    @Default(Curves.easeOutCubic) Curve bounceCurve,
+
     /// Interval between auto-scroll steps.
     ///
     /// When auto-scrolling is active, this defines how frequently the
@@ -147,6 +152,10 @@ class DiagramConfiguration with _$DiagramConfiguration {
     /// are enabled. When false, accessibility features are disabled.
     /// Defaults to true.
     @Default(true) bool enableAccessibility,
+
+    /// Enable verbose BLoC transitions logging for debugging.
+    /// Only used in debug builds; ignored in release.
+    @Default(false) bool enableBlocDebugObserver,
   }) = _DiagramConfiguration;
 
   /// Creates a default configuration suitable for most diagram types.

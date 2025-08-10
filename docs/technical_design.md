@@ -1,529 +1,327 @@
 # Technical Design
 
-## Architecture Overview
+## Overview
 
-This document describes the technical implementation of the **Diagrammer-Controller architecture** where:
+This document outlines the technical implementation strategy for the `diagram_viewer` package, focusing on the Diagrammer-Controller architecture, event system, and component responsibilities.
 
-- **Diagrammer**: The rendering engine/widget that handles UI events, hit-testing, and rendering
-- **Controller**: The business logic component that interprets events and sends commands to the Diagrammer
+## Architecture Components
 
-## Core Components
+### EventManagementBloc
 
-### Transform2D
+The `EventManagementBloc` is a critical component that manages complex event states and isolation:
+
+#### **Purpose**
+- Manages interaction state isolation (pointer, gesture, keyboard)
+- Enforces event type isolation rules
+- Handles debouncing and timing
+- Enriches events with context (hit-testing, modifier keys)
+- Provides PhysicalEvent stream to controller
+
+#### **Key Features**
+- **Event Isolation**: Only one interaction type active at a time
+- **Debouncing**: 16ms debounce time for ~60 FPS performance
+- **State Management**: Tracks active interactions and modifier keys
+- **Event Enrichment**: Adds hit-testing results and context
+
+#### **States**
 ```dart
 @freezed
-class Transform2D with _$Transform2D {
-  const factory Transform2D({
-    required double scale,
-    required Offset translation,
-    @Default(0.0) double rotation,
-  }) = _Transform2D;
-
-  Matrix4 toMatrix4() {
-    return Matrix4.identity()
-      ..translate(translation.dx, translation.dy)
-      ..scale(scale)
-      ..rotateZ(rotation);
-  }
-
-  Transform2D applyZoom(double factor, Offset focalPoint) {
-    final newScale = scale * factor;
-    final scaleChange = factor - 1.0;
-    final newTranslation = translation - focalPoint * scaleChange;
-    
-    return copyWith(
-      scale: newScale,
-      translation: newTranslation,
-    );
-  }
-
-  Transform2D applyPan(Offset delta) {
-    return copyWith(
-      translation: translation + delta,
-    );
-  }
-
-  Offset logicalToPhysical(Offset logical) {
-    final matrix = toMatrix4();
-    final vector = Vector4(logical.dx, logical.dy, 0, 1);
-    final transformed = matrix.transform(vector);
-    return Offset(transformed.x, transformed.y);
-  }
-
-  Offset physicalToLogical(Offset physical) {
-    final matrix = toMatrix4().inverted();
-    final vector = Vector4(physical.dx, physical.dy, 0, 1);
-    final transformed = matrix.transform(vector);
-    return Offset(transformed.x, transformed.y);
-  }
+class EventManagementState with _$EventManagementState {
+  const factory EventManagementState.idle() = IdleState;
+  const factory EventManagementState.pointerActive({...}) = PointerActiveState;
+  const factory EventManagementState.gestureActive({...}) = GestureActiveState;
+  const factory EventManagementState.keyboardActive({...}) = KeyboardActiveState;
 }
 ```
 
-### Renderable Interface
+#### **Events**
 ```dart
-abstract class Renderable {
-  /// Logical bounds of the renderable in diagram coordinates
+@freezed
+class EventManagementEvent with _$EventManagementEvent {
+  const factory EventManagementEvent.startPointerEvent({...}) = StartPointerEvent;
+  const factory EventManagementEvent.updatePointerEvent({...}) = UpdatePointerEvent;
+  const factory EventManagementEvent.endPointerEvent({...}) = EndPointerEvent;
+  const factory EventManagementEvent.startGestureEvent({...}) = StartGestureEvent;
+  const factory EventManagementEvent.updateGestureEvent({...}) = UpdateGestureEvent;
+  const factory EventManagementEvent.endGestureEvent({...}) = EndGestureEvent;
+  const factory EventManagementEvent.startKeyboardEvent({...}) = StartKeyboardEvent;
+  const factory EventManagementEvent.updateModifierKeys({...}) = UpdateModifierKeys;
+  const factory EventManagementEvent.resetState() = ResetState;
+}
+```
+
+#### **Integration**
+- Used by `DiagramViewerContent` for event routing
+- Provides `Stream<PhysicalEvent>` for controller communication
+- Manages event isolation and state transitions
+
+### Widget Architecture
+
+The package uses a clean widget architecture:
+
+#### **DiagramViewer**
+- Main entry point widget
+- Sets up BLoC providers
+- Manages widget lifecycle
+- Located in `lib/widgets/diagram_viewer.dart`
+
+#### **DiagramViewerContent**
+- Handles UI event capture and routing
+- Manages PhysicalEvent enrichment
+- Communicates with controller
+- Located in `lib/widgets/diagram_viewer_content.dart`
+
+#### **DiagramPainter**
+- Custom painter for diagram rendering
+- Applies transformations and draws objects
+- Located in `lib/widgets/diagram_painter.dart`
+
+### PhysicalEvent Enhancement
+
+The `PhysicalEvent` system has been enhanced with new fields:
+
+#### **New Fields**
+- `pressedMouseButtons`: Set of currently pressed mouse buttons
+- `pressedKeys`: Set of currently pressed keyboard keys  
+- `activeInteraction`: Type of active interaction (if any)
+- `hitResults`: Ordered list of hit objects with distance information
+
+#### **Event Isolation Rule**
+- Only one interaction type (pointer, gesture, keyboard) can be active at a time
+- Modifier keys update the current event state, don't create new events
+- Global keyboard events handled by application, not DiagramViewer
+
+#### **HitTestResult**
+```dart
+@freezed
+class HitTestResult with _$HitTestResult {
+  const factory HitTestResult({
+    required DiagramObjectEntity object,
+    required double distanceFromCenter,
+    required Offset hitPoint,
+  }) = _HitTestResult;
+}
+```
+
+### BLoC Architecture
+
+The package uses multiple BLoCs for different responsibilities:
+
+#### **TransformBloc**
+- Manages overall Transform2D state
+- Coordinates between ZoomBloc and PanBloc
+- Handles transform capping and limits
+
+#### **ZoomBloc** 
+- Handles zoom operations (mouse wheel, pinch)
+- Manages elastic zoom and bounce-back
+- Enforces zoom limits and overscroll behavior
+
+#### **PanBloc**
+- Handles pan operations (drag, keyboard)
+- Manages auto-centering logic
+- Enforces pan limits and bounds
+
+#### **EventManagementBloc**
+- Manages complex event states and isolation
+- Enriches events with context and hit-testing
+- Provides PhysicalEvent stream to controller
+
+### DiagramObjectEntity Interface
+
+The `DiagramObjectEntity` interface provides a unified contract for all diagram objects:
+
+```dart
+abstract class DiagramObjectEntity extends Equatable {
+  /// Logical bounds of the object in diagram coordinates
   Rect get logicalBounds;
+  
+  /// Center point of the object in diagram coordinates
+  Offset get center;
   
   /// Z-order for painting and hit-testing (higher values paint on top)
   int get zOrder;
   
-  /// Paint the renderable on the provided canvas with the given transform
-  void paint(Canvas canvas, Transform2D transform);
+  /// Paint the object on the provided canvas
+  void paint(Canvas canvas);
   
-  /// Check if the renderable contains the given logical point
+  /// Check if the object contains the given logical point
   bool contains(Offset logicalPoint);
   
-  /// Get the renderable's unique identifier
+  /// Get the object's unique identifier
   String get id;
+  
+  /// Check if the object is visible
+  bool get isVisible;
+  
+  /// Check if the object is interactive
+  bool get isInteractive;
 }
 ```
 
-## Event System
+#### **Key Features**
+- **Self-measurement**: `logicalBounds` provides the object's bounding rectangle
+- **Center calculation**: `center` provides the logical center point (defaults to `logicalBounds.center`)
+- **Self-rendering**: `paint` method handles all drawing operations
+- **Hit-testing**: `contains` method for interaction detection
+- **Identity**: `id` provides unique identification
+- **Layering**: `zOrder` determines rendering order
+- **Visibility**: `isVisible` controls object visibility
+- **Interaction**: `isInteractive` controls interaction capability
 
-### Physical Events (Diagrammer → Controller)
+## Event Flow
+
+### **1. Event Capture**
 ```dart
-@freezed
-class PhysicalEvent with _$PhysicalEvent {
-  const factory PhysicalEvent.pointer({
-    required String eventId,
-    required Offset logicalPosition,
-    required Offset screenPosition,
-    required Transform2D transformSnapshot,
-    required List<Renderable> hitList,
-    required BorderProximity borderProximity,
-    required InteractionPhase phase,
-    required PointerEvent rawEvent,
-    Offset? delta,
-  }) = PointerPhysicalEvent;
+// DiagramViewerContent captures UI events
+onPointerDown: (event) => _handlePointerDown(context, event)
+```
 
-  const factory PhysicalEvent.gesture({
-    required String eventId,
-    required Offset logicalPosition,
-    required Offset screenPosition,
-    required Transform2D transformSnapshot,
-    required List<Renderable> hitList,
-    required BorderProximity borderProximity,
-    required InteractionPhase phase,
-    required GestureEvent rawEvent,
-    double? scale,
-    double? rotation,
-  }) = GesturePhysicalEvent;
+### **2. Event Enrichment**
+```dart
+// Perform hit-testing and convert coordinates
+final hitResults = _performHitTesting(event.position, currentTransform);
+final logicalPosition = currentTransform.physicalToLogical(event.position);
+```
 
-  const factory PhysicalEvent.keyboard({
-    required String eventId,
-    required Offset logicalPosition,
-    required Transform2D transformSnapshot,
-    required List<Renderable> hitList,
-    required BorderProximity borderProximity,
-    required KeyEvent rawEvent,
-    required Set<LogicalKeyboardKey> pressedKeys,
-  }) = KeyboardPhysicalEvent;
-}
+### **3. Event Management**
+```dart
+// Send to EventManagementBloc for state management
+eventBloc.add(EventManagementEvent.startPointerEvent(
+  rawEvent: event,
+  logicalPosition: logicalPosition,
+  hitResults: hitResults,
+));
+```
 
-@freezed
-class BorderProximity with _$BorderProximity {
-  const factory BorderProximity({
-    required bool isNearLeft,
-    required bool isNearRight,
-    required bool isNearTop,
-    required bool isNearBottom,
-    required double distanceFromEdge,
-    @Default(50.0) double threshold,
-  }) = _BorderProximity;
+### **4. PhysicalEvent Generation**
+```dart
+// EventManagementBloc generates enriched PhysicalEvent
+_emitPhysicalEvent(PhysicalEvent.pointer(
+  eventId: eventId,
+  logicalPosition: logicalPosition,
+  hitResults: hitResults,
+  pressedMouseButtons: _extractMouseButtons(rawEvent),
+  pressedKeys: _getCurrentPressedKeys(),
+  activeInteraction: InteractionType.pointer,
+));
+```
 
-  bool get isNearAnyBorder => 
-    isNearLeft || isNearRight || isNearTop || isNearBottom;
-}
+### **5. Controller Communication**
+```dart
+// Controller receives PhysicalEvent and decides action
+controller.handlePhysicalEvent(physicalEvent);
+```
 
-enum InteractionPhase {
-  start,
-  update,
-  end,
-  cancel,
+## Implementation Details
+
+### **Event Isolation Logic**
+```dart
+bool canStartNewEvent(InteractionType eventType) {
+  final currentState = state;
+  
+  // If no active interaction, always OK
+  if (currentState is IdleState) return true;
+  
+  // If same type of event, always OK
+  if (_getCurrentInteractionType() == eventType) return true;
+  
+  // If enough time has passed, OK
+  if (_lastEventTime != null && 
+      DateTime.now().difference(_lastEventTime!) > _debounceTime) {
+    return true;
+  }
+  
+  return false; // Block different event type
 }
 ```
 
-### Hit-Testing Engine
+### **Hit-Testing Implementation**
 ```dart
-class HitTestEngine {
-  final List<Renderable> renderables;
+List<HitTestResult> _performHitTesting(Offset screenPosition, Transform2D transform) {
+  final logicalPosition = transform.physicalToLogical(screenPosition);
+  final results = <HitTestResult>[];
   
-  HitTestEngine(this.renderables);
-  
-  /// Perform hit-testing at the given logical point
-  List<Renderable> hitTest(Offset logicalPoint) {
-    final hits = <Renderable>[];
-    
-    // Sort by z-order (highest first) for proper hit-testing
-    final sorted = List<Renderable>.from(renderables)
-      ..sort((a, b) => b.zOrder.compareTo(a.zOrder));
-    
-    for (final renderable in sorted) {
-      if (renderable.contains(logicalPoint)) {
-        hits.add(renderable);
-      }
+  for (final object in controller.objects) {
+    if (object.isVisible && object.contains(logicalPosition)) {
+      final center = object.logicalBounds.center;
+      final distance = (logicalPosition - center).distance;
+      
+      results.add(HitTestResult(
+        object: object,
+        distanceFromCenter: distance,
+        hitPoint: logicalPosition,
+      ));
     }
-    
-    return hits;
   }
   
-  /// Get all renderables in the given logical rectangle
-  List<Renderable> hitTestRect(Rect logicalRect) {
-    return renderables.where((r) => 
-      r.logicalBounds.overlaps(logicalRect)
-    ).toList();
-  }
+  // Sort by distance from center (closest first)
+  results.sort((a, b) => a.distanceFromCenter.compareTo(b.distanceFromCenter));
+  
+  return results;
 }
 ```
 
-## Command System (Controller → Diagrammer)
-
+### **Modifier Key Handling**
 ```dart
-@freezed
-class DiagramCommand with _$DiagramCommand {
-  /// Execute default pan/zoom behavior for the given event
-  const factory DiagramCommand.applyDefaultPanZoom({
-    required PhysicalEvent origin,
-  }) = ApplyDefaultPanZoomCommand;
-
-  /// Apply specific transformation matrix
-  const factory DiagramCommand.setTransform({
-    required Transform2D transform,
-  }) = SetTransformCommand;
-
-  /// Update visualization with new renderables and extent
-  const factory DiagramCommand.redraw({
-    required List<Renderable> renderables,
-    required Rect logicalExtent,
-  }) = RedrawCommand;
-
-  /// Return to valid bounds with animation
-  const factory DiagramCommand.elasticBounceBack({
-    required Transform2D targetTransform,
-    @Default(Duration(milliseconds: 300)) Duration duration,
-  }) = ElasticBounceBackCommand;
-
-  /// Execute incremental scroll with specified velocity
-  const factory DiagramCommand.autoScrollStep({
-    required Offset velocity,
-    @Default(Duration(milliseconds: 16)) Duration stepDuration,
-  }) = AutoScrollStepCommand;
-
-  /// Stop any ongoing auto-scroll
-  const factory DiagramCommand.stopAutoScroll() = StopAutoScrollCommand;
-}
-```
-
-## Diagrammer Implementation
-
-### DiagrammerWidget
-```dart
-class DiagrammerWidget extends StatefulWidget {
-  final Stream<DiagramCommand> commandStream;
-  final Sink<PhysicalEvent> eventsSink;
-  final List<Renderable> initialRenderables;
-  final Rect initialLogicalExtent;
-  final DiagrammerConfiguration configuration;
-
-  const DiagrammerWidget({
-    required this.commandStream,
-    required this.eventsSink,
-    required this.initialRenderables,
-    required this.initialLogicalExtent,
-    required this.configuration,
-    super.key,
-  });
-
-  @override
-  State<DiagrammerWidget> createState() => _DiagrammerWidgetState();
-}
-
-class _DiagrammerWidgetState extends State<DiagrammerWidget>
-    with TickerProviderStateMixin {
-  late Transform2D _transform;
-  late List<Renderable> _renderables;
-  late Rect _logicalExtent;
-  late HitTestEngine _hitTestEngine;
+void _handleUpdateModifierKeys(Set<LogicalKeyboardKey> keys, Emitter<EventManagementState> emit) {
+  final currentState = state;
   
-  // Controllers for animations
-  late AnimationController _bounceController;
-  late AnimationController _autoScrollController;
-  
-  @override
-  void initState() {
-    super.initState();
-    _transform = const Transform2D(scale: 1.0, translation: Offset.zero);
-    _renderables = widget.initialRenderables;
-    _logicalExtent = widget.initialLogicalExtent;
-    _hitTestEngine = HitTestEngine(_renderables);
+  // Update state based on current interaction type
+  if (currentState is PointerActiveState) {
+    emit(currentState.copyWith(pressedKeys: keys));
     
-    _setupAnimations();
-    _setupCommandListener();
+    // Emit updated pointer event (NOT new keyboard event)
+    _emitPhysicalEvent(PhysicalEvent.pointer(...));
   }
-  
-  void _setupAnimations() {
-    _bounceController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 300),
-    );
-    
-    _autoScrollController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 16),
-    );
-  }
-  
-  void _setupCommandListener() {
-    widget.commandStream.listen(_handleCommand);
-  }
-  
-  void _handleCommand(DiagramCommand command) {
-    command.when(
-      applyDefaultPanZoom: _handleApplyDefaultPanZoom,
-      setTransform: _handleSetTransform,
-      redraw: _handleRedraw,
-      elasticBounceBack: _handleElasticBounceBack,
-      autoScrollStep: _handleAutoScrollStep,
-      stopAutoScroll: _handleStopAutoScroll,
-    );
-  }
-  
-  void _handleApplyDefaultPanZoom(PhysicalEvent origin) {
-    // Implement default pan/zoom behavior based on event type
-    origin.when(
-      pointer: (eventId, logicalPosition, screenPosition, transformSnapshot, 
-                hitList, borderProximity, phase, rawEvent, delta) {
-        if (delta != null) {
-          _transform = _transform.applyPan(delta);
-          _constrainTransform();
-        }
-      },
-      gesture: (eventId, logicalPosition, screenPosition, transformSnapshot,
-                hitList, borderProximity, phase, rawEvent, scale, rotation) {
-        if (scale != null) {
-          _transform = _transform.applyZoom(scale, logicalPosition);
-          _constrainTransform();
-        }
-      },
-      keyboard: (eventId, logicalPosition, transformSnapshot, hitList,
-                 borderProximity, rawEvent, pressedKeys) {
-        // Handle keyboard shortcuts for pan/zoom
-      },
-    );
-    
-    setState(() {});
-  }
-  
-  void _handleSetTransform(Transform2D transform) {
-    _transform = transform;
-    _constrainTransform();
-    setState(() {});
-  }
-  
-  void _handleRedraw(List<Renderable> renderables, Rect logicalExtent) {
-    _renderables = renderables;
-    _logicalExtent = logicalExtent;
-    _hitTestEngine = HitTestEngine(_renderables);
-    setState(() {});
-  }
-  
-  void _constrainTransform() {
-    // Implement transform constraints based on logical extent
-    // and configuration limits
-  }
-  
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onPanUpdate: _handlePanUpdate,
-      onScaleUpdate: _handleScaleUpdate,
-      onTapDown: _handleTapDown,
-      child: CustomPaint(
-        painter: DiagramPainter(
-          transform: _transform,
-          renderables: _renderables,
-          configuration: widget.configuration,
-        ),
-        size: Size.infinite,
-      ),
-    );
-  }
-  
-  void _handlePanUpdate(DragUpdateDetails details) {
-    final logicalPosition = _transform.physicalToLogical(details.localPosition);
-    final hitList = _hitTestEngine.hitTest(logicalPosition);
-    final borderProximity = _calculateBorderProximity(details.localPosition);
-    
-    final event = PhysicalEvent.pointer(
-      eventId: _generateEventId(),
-      logicalPosition: logicalPosition,
-      screenPosition: details.localPosition,
-      transformSnapshot: _transform,
-      hitList: hitList,
-      borderProximity: borderProximity,
-      phase: InteractionPhase.update,
-      rawEvent: details, // Simplified for example
-      delta: details.delta,
-    );
-    
-    widget.eventsSink.add(event);
-  }
-  
-  BorderProximity _calculateBorderProximity(Offset screenPosition) {
-    // Calculate proximity to viewport edges
-    final size = context.size ?? Size.zero;
-    final threshold = widget.configuration.edgeThreshold;
-    
-    return BorderProximity(
-      isNearLeft: screenPosition.dx < threshold,
-      isNearRight: screenPosition.dx > size.width - threshold,
-      isNearTop: screenPosition.dy < threshold,
-      isNearBottom: screenPosition.dy > size.height - threshold,
-      distanceFromEdge: _calculateMinDistance(screenPosition, size),
-      threshold: threshold,
-    );
-  }
-  
-  String _generateEventId() => 
-    DateTime.now().microsecondsSinceEpoch.toString();
-}
-```
-
-### DiagramPainter
-```dart
-class DiagramPainter extends CustomPainter {
-  final Transform2D transform;
-  final List<Renderable> renderables;
-  final DiagrammerConfiguration configuration;
-
-  DiagramPainter({
-    required this.transform,
-    required this.renderables,
-    required this.configuration,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    // Paint background
-    _paintBackground(canvas, size);
-    
-    // Apply transform
-    canvas.save();
-    canvas.transform(transform.toMatrix4().storage);
-    
-    // Paint renderables in z-order
-    final sorted = List<Renderable>.from(renderables)
-      ..sort((a, b) => a.zOrder.compareTo(b.zOrder));
-    
-    for (final renderable in sorted) {
-      renderable.paint(canvas, transform);
-    }
-    
-    canvas.restore();
-  }
-  
-  void _paintBackground(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = configuration.backgroundColor
-      ..style = PaintingStyle.fill;
-    
-    canvas.drawRect(Offset.zero & size, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant DiagramPainter oldDelegate) {
-    return transform != oldDelegate.transform ||
-           renderables != oldDelegate.renderables ||
-           configuration != oldDelegate.configuration;
-  }
-}
-```
-
-## Configuration
-
-### DiagrammerConfiguration
-```dart
-@freezed
-class DiagrammerConfiguration with _$DiagrammerConfiguration {
-  const factory DiagrammerConfiguration({
-    @Default(Colors.white) Color backgroundColor,
-    @Default(50.0) double edgeThreshold,
-    @Default(10.0) double maxZoom,
-    @Default(0.1) double minZoom,
-    @Default(100.0) double overscrollPixels,
-    @Default(Duration(milliseconds: 300)) Duration bounceDuration,
-    @Default(Duration(milliseconds: 16)) Duration autoScrollInterval,
-    @Default(1.5) double autoScrollAcceleration,
-  }) = _DiagrammerConfiguration;
-}
-```
-
-## Example Use Cases
-
-### Case 1: Object Dragging with Auto-scroll
-```dart
-class Controller {
-  void handlePhysicalEvent(PhysicalEvent event) {
-    event.when(
-      pointer: (eventId, logicalPosition, screenPosition, transformSnapshot,
-                hitList, borderProximity, phase, rawEvent, delta) {
-        if (hitList.isNotEmpty && borderProximity.isNearAnyBorder) {
-          // Object is being dragged near edge - start auto-scroll
-          final velocity = _calculateAutoScrollVelocity(borderProximity);
-          _sendCommand(DiagramCommand.autoScrollStep(velocity: velocity));
-        } else if (hitList.isNotEmpty) {
-          // Object manipulation - update model and redraw
-          _updateObjectPosition(hitList.first, logicalPosition);
-          _sendRedrawCommand();
-        } else {
-          // No object hit - apply default pan behavior
-          _sendCommand(DiagramCommand.applyDefaultPanZoom(origin: event));
-        }
-      },
-      gesture: (eventId, logicalPosition, screenPosition, transformSnapshot,
-                hitList, borderProximity, phase, rawEvent, scale, rotation) {
-        // Handle gesture events (zoom, rotation)
-        _sendCommand(DiagramCommand.applyDefaultPanZoom(origin: event));
-      },
-      keyboard: (eventId, logicalPosition, transformSnapshot, hitList,
-                 borderProximity, rawEvent, pressedKeys) {
-        // Handle keyboard shortcuts
-      },
-    );
-  }
-}
-```
-
-### Case 2: Model Update and Redraw
-```dart
-class Controller {
-  void updateModel(List<Renderable> newRenderables) {
-    // Update internal model
-    _model.updateRenderables(newRenderables);
-    
-    // Calculate new logical extent
-    final newExtent = _calculateLogicalExtent(newRenderables);
-    
-    // Send redraw command
-    _sendCommand(DiagramCommand.redraw(
-      renderables: newRenderables,
-      logicalExtent: newExtent,
-    ));
-  }
+  // Don't create separate keyboard events
 }
 ```
 
 ## Performance Considerations
 
-### Frame Budget Management
-- Target: ≤ 16ms per frame (60fps)
-- Implement frame-coalescing for high-frequency events
-- Use efficient hit-testing algorithms
-- Optimize renderable sorting and painting
+### **60 FPS Target**
+- Debounce time: 16ms for ~60 FPS
+- Efficient hit-testing with early termination
+- Optimized event routing and state management
 
-### Memory Management
-- Proper disposal of animation controllers
-- Stream subscription management
-- Efficient renderable list updates
-- Spatial indexing for large diagram sets (future enhancement)
+### **Memory Management**
+- Proper stream disposal in BLoC lifecycle
+- Efficient event enrichment without unnecessary allocations
+- Smart object filtering based on viewport
+
+### **Rendering Optimization**
+- Transform2D applied once to Canvas
+- Z-order sorting for proper layering
+- Viewport-based object filtering
+
+## Testing Strategy
+
+### **EventManagementBloc Tests**
+- Unit tests for state transitions
+- Event isolation rule verification
+- Debouncing behavior validation
+- PhysicalEvent generation tests
+
+### **Integration Tests**
+- End-to-end event flow testing
+- Controller communication verification
+- Performance benchmarks
+- Cross-platform compatibility tests
+
+## Extensibility
+
+### **New Event Types**
+- Extend `EventManagementEvent` with new event types
+- Add corresponding state handling
+- Update isolation rules as needed
+
+### **Custom Hit-Testing**
+- Override `_performHitTesting` for custom logic
+- Implement spatial indexing for large diagrams
+- Add object-specific hit-testing rules
+
+### **Controller Integration**
+- Implement `IDiagramController` interface
+- Handle PhysicalEvents and emit DiagramCommands
+- Add custom business logic and state management

@@ -212,6 +212,9 @@ void main() {
           rawEvent: PointerMoveEvent(position: const Offset(100, 100)),
           delta: const Offset(10, 10),
           currentViewport: const Rect.fromLTWH(0, 0, 800, 600),
+          pressedMouseButtons: {},
+          pressedKeys: {},
+          activeInteraction: null,
         );
 
         // Send default pan/zoom command

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:diagram_viewer/events/physical_event.dart';
+import 'package:diagram_viewer/events/diagram_event.dart';
 import 'package:diagram_viewer/events/diagram_command.dart';
 import 'package:diagram_viewer/interfaces/diagram_configuration.dart';
 import 'package:diagram_viewer/interfaces/diagram_object_entity.dart';
@@ -9,7 +10,7 @@ import 'package:diagram_viewer/interfaces/diagram_object_entity.dart';
 ///
 /// This interface defines the contract between the DiagramViewer (rendering engine)
 /// and the client's business logic (Controller). The client is responsible for:
-/// - Interpreting physical events from the DiagramViewer
+/// - Interpreting logical diagram events from the DiagramViewer
 /// - Making business logic decisions
 /// - Sending commands back to the DiagramViewer
 /// - Managing the diagram's logical extent
@@ -29,7 +30,7 @@ import 'package:diagram_viewer/interfaces/diagram_object_entity.dart';
 ///
 /// When implementing this interface:
 ///
-/// 1. **Event Interpretation**: Receive PhysicalEvents from DiagramViewer and
+/// 1. **Event Interpretation**: Receive DiagramEventUnion from DiagramViewer and
 ///    interpret them based on your business logic
 /// 2. **Command Generation**: Send appropriate DiagramCommands back to DiagramViewer
 ///    based on your interpretation
@@ -42,18 +43,18 @@ import 'package:diagram_viewer/interfaces/diagram_object_entity.dart';
 /// ```dart
 /// class MyDiagramController implements IDiagramController {
 ///   final _commandController = StreamController<DiagramCommand>.broadcast();
-///   final _eventSink = StreamController<PhysicalEvent>();
+///   final _eventSink = StreamController<DiagramEventUnion>();
 ///   final List<MyDiagramObject> _objects = [];
 ///
 ///   MyDiagramController() {
-///     _eventSink.stream.listen(_handlePhysicalEvent);
+///     _eventSink.stream.listen(_handleDiagramEvent);
 ///   }
 ///
 ///   @override
 ///   Stream<DiagramCommand> get commandStream => _commandController.stream;
 ///
 ///   @override
-///   Sink<PhysicalEvent> get eventsSink => _eventSink;
+///   Sink<DiagramEventUnion> get eventsSink => _eventSink;
 ///
 ///   @override
 ///   Rect get logicalExtent => _calculateExtent();
@@ -65,28 +66,63 @@ import 'package:diagram_viewer/interfaces/diagram_object_entity.dart';
 ///     maxZoom: 10.0,
 ///   );
 ///
-///   void _handlePhysicalEvent(PhysicalEvent event) {
+///   void _handleDiagramEvent(DiagramEventUnion event) {
 ///     event.when(
-///       pointer: (eventId, logicalPosition, screenPosition, transformSnapshot,
-///                 hitList, borderProximity, phase, rawEvent, delta) {
-///         if (hitList.isNotEmpty) {
-///           // Object manipulation - update model and redraw
-///           _updateObjectPosition(hitList.first, logicalPosition);
-///           _sendRedrawCommand();
+///       tap: (event) {
+///         if (event.isOnObject) {
+///           // Object selection
+///           _selectObject(event.hitList.first);
 ///         } else {
-///           // No object hit - apply default pan behavior
-///           _commandController.add(DiagramCommand.applyDefaultPanZoom(origin: event));
+///           // Background tap - deselect
+///           _deselectAll();
+///         }
+///         _sendRedrawCommand();
+///       },
+///       dragBegin: (event) {
+///         if (event.isOnObject) {
+///           // Start object drag
+///           _startObjectDrag(event.hitList.first);
 ///         }
 ///       },
-///       gesture: (eventId, logicalPosition, screenPosition, transformSnapshot,
-///                 hitList, borderProximity, phase, rawEvent, scale, rotation) {
-///         // Handle gesture events (zoom, rotation)
-///         _commandController.add(DiagramCommand.applyDefaultPanZoom(origin: event));
+///       dragContinue: (event) {
+///         if (event.isOnObject) {
+///           // Continue object drag
+///           _updateObjectPosition(event.hitList.first, event.logicalPosition);
+///         } else {
+///           // Background pan
+///           _applyPan(event.delta);
+///         }
+///         _sendRedrawCommand();
 ///       },
-///       keyboard: (eventId, logicalPosition, transformSnapshot, hitList,
-///                  borderProximity, rawEvent, pressedKeys) {
-///         // Handle keyboard shortcuts
+///       dragEnd: (event) {
+///         if (event.isOnObject) {
+///           // End object drag
+///           _endObjectDrag();
+///         }
+///         _sendRedrawCommand();
 ///       },
+///       scroll: (event) {
+///         // Handle scroll with inertia
+///         _applyScroll(event.scrollDelta, event.scrollVelocity);
+///         _sendRedrawCommand();
+///       },
+///       pinchBegin: (event) {
+///         // Start zoom/rotate
+///         _startPinch(event.focalPoint);
+///       },
+///       pinchContinue: (event) {
+///         // Continue zoom/rotate
+///         _applyPinch(event.scale, event.rotation, event.focalPoint);
+///         _sendRedrawCommand();
+///       },
+///       pinchEnd: (event) {
+///         // End zoom/rotate
+///         _endPinch();
+///         _sendRedrawCommand();
+///       },
+///       // Handle other events...
+///       doubleTap: (event) => _handleDoubleTap(event),
+///       longPress: (event) => _handleLongPress(event),
 ///     );
 ///   }
 ///
@@ -117,16 +153,16 @@ abstract class IDiagramController {
   /// - StopAutoScroll: Stop ongoing auto-scroll
   Stream<DiagramCommand> get commandStream;
 
-  /// Sink for physical events from the DiagramViewer to the Controller.
+  /// Sink for logical diagram events from the DiagramViewer to the Controller.
   ///
-  /// The DiagramViewer sends enriched physical events through this sink.
+  /// The DiagramViewer sends translated logical events through this sink.
   /// Each event contains:
   /// - Logical coordinates (converted from screen coordinates)
   /// - Transform snapshot at the time of the event
   /// - Hit-test results (list of objects at the event location)
-  /// - Border proximity information
-  /// - Event phase (start, update, end)
-  Sink<PhysicalEvent> get eventsSink;
+  /// - Event-specific data (velocity, duration, etc.)
+  /// - Event type (tap, drag, pinch, scroll, etc.)
+  Sink<DiagramEventUnion> get eventsSink;
 
   /// The logical extent of the diagram in diagram coordinates.
   ///

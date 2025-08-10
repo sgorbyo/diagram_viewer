@@ -1,14 +1,14 @@
 import 'dart:ui';
 import 'package:diagram_viewer/interfaces/diagram_object_entity.dart';
-import 'package:vector_math/vector_math.dart';
 
 class CerchioEntity extends DiagramObjectEntity {
-  final Vector4 position;
+  @override
+  final Offset center;
   final double radius;
   final String _id;
 
   CerchioEntity({
-    required this.position,
+    required this.center,
     required this.radius,
     required String id,
   }) : _id = id;
@@ -18,7 +18,7 @@ class CerchioEntity extends DiagramObjectEntity {
 
   @override
   Rect get logicalBounds => Rect.fromCenter(
-        center: Offset(position.x, position.y),
+        center: center,
         width: radius * 2,
         height: radius * 2,
       );
@@ -26,8 +26,6 @@ class CerchioEntity extends DiagramObjectEntity {
   @override
   void paint(Canvas canvas) {
     // Usa coordinate logiche direttamente (canvas già trasformato)
-    final center = Offset(position.x, position.y);
-
     final path = Path()
       ..addOval(Rect.fromCircle(
         center: center, // ← Coordinate logiche!
@@ -44,18 +42,20 @@ class CerchioEntity extends DiagramObjectEntity {
 
   @override
   bool contains(Offset point) {
-    return (point - Offset(position.x, position.y)).distance <= radius;
+    final distance = (point - center).distance;
+    final contains = distance <= radius;
+    print(
+        'Click on point: $point, my center is $center, contains: $contains, distance is $distance ');
+    return contains;
   }
 
   @override
-  List<Object?> get props => [_id, position, radius];
+  List<Object?> get props => [_id, center, radius];
 
   // Deprecated methods for backward compatibility
-  @override
   @Deprecated('Use logicalBounds instead')
   Rect enclosingRect() => logicalBounds;
 
-  @override
   @Deprecated('Use paint instead')
   void printOnCanvas({required Canvas canvas}) {
     final paint = Paint()

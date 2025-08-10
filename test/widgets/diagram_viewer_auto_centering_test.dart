@@ -3,14 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:diagram_viewer/diagram_viewer.dart';
-import 'package:diagram_viewer/interfaces/interfaces.dart';
-import 'package:diagram_viewer/events/events.dart';
-import 'package:diagram_viewer/tools/transform2d/transform2d_utils.dart';
-
-import '../test_config.dart';
 
 void main() {
-  group('DiagramViewer Auto-Centering', () {
+  group('DiagramViewer Auto Centering', () {
     late MockDiagramController mockController;
 
     setUp(() {
@@ -22,7 +17,7 @@ void main() {
         (tester) async {
       // Arrange: Create a diagram smaller than viewport width
       final smallDiagramExtent =
-          Rect.fromLTWH(0, 0, 200, 400); // 200px wide, 400px tall
+          Rect.fromLTWH(0, 0, 200, 600); // 200px wide, 600px tall
       final viewportSize = Size(800, 600); // 800px wide viewport
 
       mockController.logicalExtent = smallDiagramExtent;
@@ -36,7 +31,7 @@ void main() {
               height: viewportSize.height,
               child: DiagramViewer(
                 controller: mockController,
-                configuration: DiagramConfiguration.defaults,
+                configuration: const DiagramConfiguration(),
               ),
             ),
           ),
@@ -69,7 +64,7 @@ void main() {
               height: viewportSize.height,
               child: DiagramViewer(
                 controller: mockController,
-                configuration: DiagramConfiguration.defaults,
+                configuration: const DiagramConfiguration(),
               ),
             ),
           ),
@@ -86,8 +81,9 @@ void main() {
         'should center diagram in both directions when smaller than viewport',
         (tester) async {
       // Arrange: Create a diagram smaller than viewport in both directions
-      final smallDiagramExtent = Rect.fromLTWH(0, 0, 200, 200); // 200px x 200px
-      final viewportSize = Size(800, 600); // 800px x 600px viewport
+      final smallDiagramExtent =
+          const Rect.fromLTWH(0, 0, 200, 200); // 200px x 200px
+      final viewportSize = const Size(800, 600); // 800px x 600px viewport
 
       mockController.logicalExtent = smallDiagramExtent;
       mockController.objects = [];
@@ -100,7 +96,7 @@ void main() {
               height: viewportSize.height,
               child: DiagramViewer(
                 controller: mockController,
-                configuration: DiagramConfiguration.defaults,
+                configuration: const DiagramConfiguration(),
               ),
             ),
           ),
@@ -130,12 +126,17 @@ class MockDiagramController extends Mock implements IDiagramController {
   set objects(List<DiagramObjectEntity> value) => _objects = value;
 
   @override
-  DiagramConfiguration get configuration => DiagramConfiguration.defaults;
+  DiagramConfiguration get configuration => const DiagramConfiguration();
 
   @override
   Stream<DiagramCommand> get commandStream => Stream.empty();
 
   @override
-  StreamSink<PhysicalEvent> get eventsSink =>
-      StreamController<PhysicalEvent>().sink;
+  Sink<DiagramEventUnion> get eventsSink =>
+      StreamController<DiagramEventUnion>().sink;
+
+  @override
+  void dispose() {
+    // Mock implementation
+  }
 }

@@ -93,10 +93,10 @@ class Transform2D with _$Transform2D {
   Transform2D applyZoom(double factor, Offset focalPoint) {
     final newScale = scale * factor;
 
-    // Formula based on the working implementation from Transform2DConverter.scale()
-    // Adapted for applying zoom to an existing transform
-    // The key insight is: newTranslation = translation + focalPoint * (scale - newScale)
-    final newTranslation = translation + focalPoint * (scale - newScale);
+    // Formula based on the working implementation from the previous version
+    // The key insight is: newTranslation = translation + focalPoint * (1 - factor) * scale
+    // This ensures the focal point remains stationary during zoom when applying to existing transform
+    final newTranslation = translation + focalPoint * (1 - factor) * scale;
 
     return copyWith(
       scale: newScale,

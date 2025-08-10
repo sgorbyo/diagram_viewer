@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:diagram_viewer/events/transform_2d.dart';
 import 'package:diagram_viewer/events/border_proximity.dart';
+import 'package:diagram_viewer/events/mouse_button.dart';
 import 'package:diagram_viewer/interfaces/diagram_object_entity.dart';
 
 part 'physical_event.freezed.dart';
@@ -24,9 +25,16 @@ enum InteractionPhase {
   end,
 }
 
+/// Type of active interaction
+enum InteractionType {
+  pointer,
+  gesture,
+  keyboard,
+}
+
 /// A unified physical event that represents user interactions with the diagram.
 ///
-/// This sealed class unifies similar physical events across different platforms
+/// This sealed class unifies similar physical events from different platforms
 /// (mobile and desktop) into logical events that the Controller can interpret.
 /// The DiagramViewer enriches these events with:
 /// - Logical coordinates (converted from screen coordinates)
@@ -34,6 +42,8 @@ enum InteractionPhase {
 /// - Hit-test results (list of objects at the event location)
 /// - Border proximity information
 /// - Event phase (start, update, end)
+/// - Pressed mouse buttons and keyboard keys
+/// - Active interaction type
 ///
 /// ## Architecture
 ///
@@ -53,7 +63,8 @@ enum InteractionPhase {
 /// // Handle a pointer event
 /// event.when(
 ///   pointer: (eventId, logicalPosition, screenPosition, transformSnapshot,
-///             hitList, borderProximity, phase, rawEvent, delta) {
+///             hitList, borderProximity, phase, rawEvent, delta, currentViewport,
+///             pressedMouseButtons, pressedKeys, activeInteraction) {
 ///     if (hitList.isNotEmpty) {
 ///       // Object manipulation
 ///       _handleObjectDrag(hitList.first, logicalPosition);
@@ -63,12 +74,13 @@ enum InteractionPhase {
 ///     }
 ///   },
 ///   gesture: (eventId, logicalPosition, screenPosition, transformSnapshot,
-///             hitList, borderProximity, phase, rawEvent, scale, rotation) {
+///             hitList, borderProximity, phase, rawEvent, scale, rotation, currentViewport,
+///             pressedKeys, activeInteraction) {
 ///     // Handle zoom/rotation
 ///     _commandController.add(DiagramCommand.applyDefaultPanZoom(origin: event));
 ///   },
-///   keyboard: (eventId, logicalPosition, transformSnapshot, hitList,
-///              borderProximity, rawEvent, pressedKeys) {
+///   keyboard: (eventId, transformSnapshot, rawEvent, pressedKeys, currentViewport,
+///              activeInteraction) {
 ///     // Handle keyboard shortcuts
 ///     _handleKeyboardShortcut(pressedKeys);
 ///   },
@@ -78,7 +90,7 @@ enum InteractionPhase {
 class PhysicalEvent with _$PhysicalEvent {
   const PhysicalEvent._();
 
-  /// Pointer event (mouse/touch).
+  /// Pointer event (mouse/touch) with enhanced information.
   ///
   /// Represents mouse or touch pointer events including:
   /// - Mouse down/move/up
@@ -95,6 +107,9 @@ class PhysicalEvent with _$PhysicalEvent {
   /// [rawEvent] - Original Flutter pointer event
   /// [delta] - Movement delta (for move events)
   /// [currentViewport] - Current visible area in logical coordinates
+  /// [pressedMouseButtons] - Set of currently pressed mouse buttons
+  /// [pressedKeys] - Set of currently pressed keyboard keys
+  /// [activeInteraction] - Type of active interaction (if any)
   const factory PhysicalEvent.pointer({
     required String eventId,
     required Offset logicalPosition,
@@ -106,9 +121,12 @@ class PhysicalEvent with _$PhysicalEvent {
     required PointerEvent rawEvent,
     Offset? delta,
     required Rect currentViewport,
+    required Set<MouseButton> pressedMouseButtons,
+    required Set<LogicalKeyboardKey> pressedKeys,
+    required InteractionType? activeInteraction,
   }) = PointerPhysicalEvent;
 
-  /// Gesture event (multi-touch).
+  /// Gesture event (multi-touch) with enhanced information.
   ///
   /// Represents multi-touch gesture events including:
   /// - Pinch to zoom
@@ -126,6 +144,8 @@ class PhysicalEvent with _$PhysicalEvent {
   /// [scale] - Scale factor (for pinch gestures)
   /// [rotation] - Rotation angle in radians (for rotation gestures)
   /// [currentViewport] - Current visible area in logical coordinates
+  /// [pressedKeys] - Set of currently pressed keyboard keys
+  /// [activeInteraction] - Type of active interaction (if any)
   const factory PhysicalEvent.gesture({
     required String eventId,
     required Offset logicalPosition,
@@ -138,9 +158,11 @@ class PhysicalEvent with _$PhysicalEvent {
     double? scale,
     double? rotation,
     required Rect currentViewport,
+    required Set<LogicalKeyboardKey> pressedKeys,
+    required InteractionType? activeInteraction,
   }) = GesturePhysicalEvent;
 
-  /// Keyboard event.
+  /// Keyboard event (standalone - no position/hit-testing).
   ///
   /// Represents keyboard events including:
   /// - Key down/up
@@ -148,22 +170,18 @@ class PhysicalEvent with _$PhysicalEvent {
   /// - Modifier keys
   ///
   /// [eventId] - Unique identifier for this event
-  /// [logicalPosition] - Current logical position (if applicable)
   /// [transformSnapshot] - Transform at the time of the event
-  /// [hitList] - List of objects at the current position
-  /// [borderProximity] - Proximity to diagram borders
   /// [rawEvent] - Original Flutter key event
   /// [pressedKeys] - Set of currently pressed keys
   /// [currentViewport] - Current visible area in logical coordinates
+  /// [activeInteraction] - Type of active interaction (if any)
   const factory PhysicalEvent.keyboard({
     required String eventId,
-    required Offset logicalPosition,
     required Transform2D transformSnapshot,
-    required List<DiagramObjectEntity> hitList,
-    required BorderProximity borderProximity,
     required KeyEvent rawEvent,
     required Set<LogicalKeyboardKey> pressedKeys,
     required Rect currentViewport,
+    required InteractionType? activeInteraction,
   }) = KeyboardPhysicalEvent;
 
   /// Returns true if this event is a pointer event.
@@ -187,7 +205,10 @@ class PhysicalEvent with _$PhysicalEvent {
                 phase,
                 rawEvent,
                 delta,
-                currentViewport) =>
+                currentViewport,
+                pressedMouseButtons,
+                pressedKeys,
+                activeInteraction) =>
             logicalPosition,
         gesture: (eventId,
                 logicalPosition,
@@ -199,11 +220,13 @@ class PhysicalEvent with _$PhysicalEvent {
                 rawEvent,
                 scale,
                 rotation,
-                currentViewport) =>
+                currentViewport,
+                pressedKeys,
+                activeInteraction) =>
             logicalPosition,
-        keyboard: (eventId, logicalPosition, transformSnapshot, hitList,
-                borderProximity, rawEvent, pressedKeys, currentViewport) =>
-            logicalPosition,
+        keyboard: (eventId, transformSnapshot, rawEvent, pressedKeys,
+                currentViewport, activeInteraction) =>
+            Offset.zero, // Keyboard events don't have logical position
       );
 
   /// Returns the transform snapshot of this event.
@@ -218,7 +241,10 @@ class PhysicalEvent with _$PhysicalEvent {
                 phase,
                 rawEvent,
                 delta,
-                currentViewport) =>
+                currentViewport,
+                pressedMouseButtons,
+                pressedKeys,
+                activeInteraction) =>
             transformSnapshot,
         gesture: (eventId,
                 logicalPosition,
@@ -230,10 +256,12 @@ class PhysicalEvent with _$PhysicalEvent {
                 rawEvent,
                 scale,
                 rotation,
-                currentViewport) =>
+                currentViewport,
+                pressedKeys,
+                activeInteraction) =>
             transformSnapshot,
-        keyboard: (eventId, logicalPosition, transformSnapshot, hitList,
-                borderProximity, rawEvent, pressedKeys, currentViewport) =>
+        keyboard: (eventId, transformSnapshot, rawEvent, pressedKeys,
+                currentViewport, activeInteraction) =>
             transformSnapshot,
       );
 
@@ -249,7 +277,10 @@ class PhysicalEvent with _$PhysicalEvent {
                 phase,
                 rawEvent,
                 delta,
-                currentViewport) =>
+                currentViewport,
+                pressedMouseButtons,
+                pressedKeys,
+                activeInteraction) =>
             hitList,
         gesture: (eventId,
                 logicalPosition,
@@ -261,11 +292,13 @@ class PhysicalEvent with _$PhysicalEvent {
                 rawEvent,
                 scale,
                 rotation,
-                currentViewport) =>
+                currentViewport,
+                pressedKeys,
+                activeInteraction) =>
             hitList,
-        keyboard: (eventId, logicalPosition, transformSnapshot, hitList,
-                borderProximity, rawEvent, pressedKeys, currentViewport) =>
-            hitList,
+        keyboard: (eventId, transformSnapshot, rawEvent, pressedKeys,
+                currentViewport, activeInteraction) =>
+            [], // Keyboard events don't have hit list
       );
 
   /// Returns the border proximity of this event.
@@ -280,7 +313,10 @@ class PhysicalEvent with _$PhysicalEvent {
                 phase,
                 rawEvent,
                 delta,
-                currentViewport) =>
+                currentViewport,
+                pressedMouseButtons,
+                pressedKeys,
+                activeInteraction) =>
             borderProximity,
         gesture: (eventId,
                 logicalPosition,
@@ -292,11 +328,13 @@ class PhysicalEvent with _$PhysicalEvent {
                 rawEvent,
                 scale,
                 rotation,
-                currentViewport) =>
+                currentViewport,
+                pressedKeys,
+                activeInteraction) =>
             borderProximity,
-        keyboard: (eventId, logicalPosition, transformSnapshot, hitList,
-                borderProximity, rawEvent, pressedKeys, currentViewport) =>
-            borderProximity,
+        keyboard: (eventId, transformSnapshot, rawEvent, pressedKeys,
+                currentViewport, activeInteraction) =>
+            BorderProximity.none, // Keyboard events don't have border proximity
       );
 
   /// Returns true if this event has any objects in its hit list.

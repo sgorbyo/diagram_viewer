@@ -9,15 +9,15 @@ import '../interfaces/i_diagram_controller_test.dart';
 class IntegrationTestController implements IDiagramController {
   final StreamController<DiagramCommand> _commandController =
       StreamController<DiagramCommand>.broadcast();
-  final StreamController<PhysicalEvent> _eventController =
-      StreamController<PhysicalEvent>.broadcast();
+  final StreamController<DiagramEventUnion> _eventController =
+      StreamController<DiagramEventUnion>.broadcast();
 
   final List<TestDiagramObject> _objects;
   final Rect _logicalExtent;
   final DiagramConfiguration _configuration;
 
   // Track received events for testing
-  final List<PhysicalEvent> _receivedEvents = [];
+  final List<DiagramEventUnion> _receivedEvents = [];
   final List<DiagramCommand> _sentCommands = [];
 
   IntegrationTestController({
@@ -34,41 +34,53 @@ class IntegrationTestController implements IDiagramController {
     _eventController.stream.listen(_handlePhysicalEvent);
   }
 
-  void _handlePhysicalEvent(PhysicalEvent event) {
+  void _handlePhysicalEvent(DiagramEventUnion event) {
     _receivedEvents.add(event);
 
     event.when(
-      pointer: (eventId, logicalPosition, screenPosition, transformSnapshot,
-          hitList, borderProximity, phase, rawEvent, delta, currentViewport) {
-        if (hitList.isNotEmpty) {
-          // Object manipulation - update model and redraw
-          _updateObjectPosition(hitList.first, logicalPosition);
-          _sendRedrawCommand();
-        } else {
-          // No object hit - apply default pan behavior
-          _sendDefaultBehaviorCommand(event);
-        }
-      },
-      gesture: (eventId,
-          logicalPosition,
-          screenPosition,
-          transformSnapshot,
-          hitList,
-          borderProximity,
-          phase,
-          rawEvent,
-          scale,
-          rotation,
-          currentViewport) {
-        // Handle gesture events (zoom, rotation)
-        _sendDefaultBehaviorCommand(event);
-      },
-      keyboard: (eventId, logicalPosition, transformSnapshot, hitList,
-          borderProximity, rawEvent, pressedKeys, currentViewport) {
-        // Handle keyboard shortcuts
-        if (pressedKeys.contains(LogicalKeyboardKey.space)) {
+      tap: (tapEvent) {
+        // Handle tap events
+        if (tapEvent.hitList.isNotEmpty) {
+          _updateObjectPosition(
+              tapEvent.hitList.first, tapEvent.logicalPosition);
           _sendRedrawCommand();
         }
+      },
+      doubleTap: (doubleTapEvent) {
+        // Handle double tap events
+        _sendRedrawCommand();
+      },
+      longPress: (longPressEvent) {
+        // Handle long press events
+        _sendRedrawCommand();
+      },
+      scroll: (scrollEvent) {
+        // Handle scroll events
+        _sendRedrawCommand();
+      },
+      dragBegin: (dragBeginEvent) {
+        // Handle drag begin events
+        _sendRedrawCommand();
+      },
+      dragContinue: (dragContinueEvent) {
+        // Handle drag continue events
+        _sendRedrawCommand();
+      },
+      dragEnd: (dragEndEvent) {
+        // Handle drag end events
+        _sendRedrawCommand();
+      },
+      pinchBegin: (pinchBeginEvent) {
+        // Handle pinch begin events
+        _sendRedrawCommand();
+      },
+      pinchContinue: (pinchContinueEvent) {
+        // Handle pinch continue events
+        _sendRedrawCommand();
+      },
+      pinchEnd: (pinchEndEvent) {
+        // Handle pinch end events
+        _sendRedrawCommand();
       },
     );
   }
@@ -88,17 +100,16 @@ class IntegrationTestController implements IDiagramController {
     _commandController.add(command);
   }
 
-  void _sendDefaultBehaviorCommand(PhysicalEvent event) {
-    final command = DiagramCommand.applyDefaultPanZoom(origin: event);
-    _sentCommands.add(command);
-    _commandController.add(command);
+  void _sendDefaultBehaviorCommand(DiagramEventUnion event) {
+    // For testing purposes, we'll just send a redraw command
+    _sendRedrawCommand();
   }
 
   @override
   Stream<DiagramCommand> get commandStream => _commandController.stream;
 
   @override
-  StreamSink<PhysicalEvent> get eventsSink => _eventController.sink;
+  Sink<DiagramEventUnion> get eventsSink => _eventController.sink;
 
   @override
   Rect get logicalExtent => _logicalExtent;
@@ -120,7 +131,8 @@ class IntegrationTestController implements IDiagramController {
     _objects.add(object);
   }
 
-  List<PhysicalEvent> get receivedEvents => List.unmodifiable(_receivedEvents);
+  List<DiagramEventUnion> get receivedEvents =>
+      List.unmodifiable(_receivedEvents);
   List<DiagramCommand> get sentCommands => List.unmodifiable(_sentCommands);
 }
 
@@ -223,8 +235,21 @@ void main() {
         // Assert
         expect(controller.receivedEvents.length, greaterThan(0));
 
-        final firstEvent = controller.receivedEvents.first;
-        expect(firstEvent.isPointer, isTrue);
+        final lastEvent = controller.receivedEvents.last;
+        bool isTapEvent = false;
+        lastEvent.when(
+          tap: (event) => isTapEvent = true,
+          doubleTap: (event) => isTapEvent = false,
+          longPress: (event) => isTapEvent = false,
+          scroll: (event) => isTapEvent = false,
+          dragBegin: (event) => isTapEvent = false,
+          dragContinue: (event) => isTapEvent = false,
+          dragEnd: (event) => isTapEvent = false,
+          pinchBegin: (event) => isTapEvent = false,
+          pinchContinue: (event) => isTapEvent = false,
+          pinchEnd: (event) => isTapEvent = false,
+        );
+        expect(isTapEvent, isTrue);
       });
 
       testWidgets('should send appropriate commands for different events',

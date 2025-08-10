@@ -16,7 +16,7 @@ The package implements a **Diagrammer-Controller architecture** where:
 - The package must capture UI events (pointer, touch, wheel, keyboard) and enrich them with:
   - Logical coordinates (converted from screen coordinates)
   - Transform snapshot at the time of the event
-  - Hit-test results (list of Renderable objects at the event location)
+  - Hit-test results (list of DiagramObjectEntity objects at the event location)
   - Border proximity information (configurable threshold)
   - Event phase (start, update, end)
 
@@ -35,16 +35,16 @@ The package implements a **Diagrammer-Controller architecture** where:
 
 ### Hit-Testing Responsibility
 - The package must perform internal hit-testing:
-  - Expose `hitTest(Point) → List<Renderable>` functionality
+  - Expose `hitTest(Point) → List<DiagramObjectEntity>` functionality
   - Handle computational costs of hit-testing internally
   - Include hit-test results in every physical event sent to the controller
-  - Sort Renderables by z-order for proper hit-testing
+  - Sort DiagramObjectEntity objects by z-order for proper hit-testing
 
 ### Command System (Controller → Diagrammer)
 - The package must support commands from the controller:
   1. **ApplyDefaultPanZoom**: Execute default pan/zoom behavior for an event
   2. **SetTransform**: Apply specific transformation matrix
-  3. **Redraw**: Update visualization with new Renderable list and logical extent
+  3. **Redraw**: Update visualization with new DiagramObjectEntity list and logical extent
   4. **ElasticBounceBack**: Return to valid bounds with animation
   5. **AutoScrollStep**: Execute incremental scroll with specified velocity
 
@@ -64,10 +64,10 @@ The package implements a **Diagrammer-Controller architecture** where:
 
 ## Diagram Space Management
 
-### Renderable Management
+### DiagramObjectEntity Management
 - The package must:
-  - Maintain a list of Renderable objects
-  - Sort Renderables by z-order before painting
+  - Maintain a list of DiagramObjectEntity objects
+  - Sort DiagramObjectEntity objects by z-order before painting
   - Provide a unified interface for objects to draw themselves
   - Handle the rendering pipeline with transformed canvas
 
@@ -76,7 +76,7 @@ The package implements a **Diagrammer-Controller architecture** where:
   - Calculate and manage the logical diagram area based on content
   - Communicate logical dimensions to the package via commands
   - Include appropriate padding around content
-  - Ensure boundaries are never smaller than configured minimum size
+  - Ensure boundaries are never smaller than configured minimum size (512x512)
 
 - The package must:
   - Accept and respect boundaries provided by the controller
@@ -95,50 +95,112 @@ The package implements a **Diagrammer-Controller architecture** where:
   - Support configurable edge detection thresholds
   - Handle scroll momentum and damping
 
+## Interaction State Management
+
+### Gesture Concurrency Rules
+- **Scale beats Pan**: Multi-touch gestures prioritize scale over pan
+- **Object-Drag overrides View-Pan**: When objects are hit, object dragging takes priority
+- **LongPress activates LassoSelecting**: In empty areas, long press activates selection mode
+- **Modifier keys rewire Scroll**: Ctrl/Cmd + scroll = zoom instead of pan
+
+### Interaction States
+- **Idle**: No active interaction
+- **Panning**: Viewport pan in progress
+- **Zooming**: Zoom operation in progress
+- **ObjectDragging**: Object manipulation in progress
+
+### State Management Requirements
+- The package must implement a semaphore system to ensure stable interactions
+- Once an interaction starts, all subsequent events must be handled directly by the viewer until the interaction ends
+- This prevents other operations from interfering with active interactions
+- Limits must be reapplied at interaction end
+
+## Zoom Constraints and Elastic Behavior
+
+### Zoom Limits
+- **Configurable Limits**: minZoom and maxZoom from DiagramConfiguration
+- **Dynamic Min Zoom**: Calculated to ensure entire diagram is visible
+- **Minimum Size**: 512x512 minimum diagram size even if empty
+- **Continuous Enforcement**: Limits must be enforced on initial load, window resize, diagram area changes, and user interactions
+
+### Elastic Overscroll
+- **Pan Overscroll**: Allow temporary panning beyond diagram bounds (150px)
+- **Zoom Overscroll**: Allow temporary zooming beyond min/max limits during active interaction
+- **Bounce-back Animation**: Smooth animation back to valid limits when interaction ends
+- **Background Visibility**: Show background when over-bounds to indicate overscroll
+
+### Zoom Blocking
+- When at normal zoom limits and not in overscroll state, further zoom events must be blocked
+- Overscroll state allows temporary zooming beyond limits
+- Bounce-back animation returns to strict limits after interaction ends
+
+## Auto-Centering Behavior
+
+### Centering Requirements
+- When the diagram does not occupy the full width or height of the available space, the offset in that direction must be set to ensure the diagram remains centered
+- This shows an equal amount of background on both sides
+- Centering must be applied during transform capping operations
+- Centering must be preserved when applying translation limits
+
 ## Performance Requirements
 
 ### Rendering Performance
-- The package must maintain ≤ 16 ms/frame (≈60 fps) on recent desktop/tablet devices
-- Implement efficient hit-testing algorithms
-- Support frame-coalescing for high-frequency events
-- Handle overscroll/overzoom with spring animations
+- **60 FPS Target**: ≤ 16ms per frame for smooth interactions
+- **Optimized Rendering**: Apply Transform2D once to Canvas instead of per object
+- **Efficient Hit-Testing**: Spatial indexing for large diagrams (hundreds to thousands of objects)
+- **Memory Management**: Proper stream disposal and BLoC lifecycle
 
-### Memory Management
-- The package must implement proper stream ownership and disposal
-- Support BLoC disposal policies for dynamic sub-components
-- Handle memory-efficient rendering of large diagram sets
-
-## Interaction State Management
-
-### Interaction Semaphore System
-The package must implement a semaphore system to ensure stable interactions:
-
-- **Once a pinch/pan interaction starts**, all subsequent events must be handled directly by the DiagramViewer until completion
-- **No other operations can be activated** during an active interaction
-- **Controllers are notified** of interaction start/end but cannot interrupt ongoing interactions
-- **This ensures focal point stability** and prevents event interference
-
-### Interaction State Tracking
-The package must maintain interaction state:
-- **Idle**: No active interaction, events are delegated to the controller
-- **Panning**: Pan interaction in progress, all events handled directly
-- **Zooming**: Zoom interaction in progress, all events handled directly
-- **PanAndZoom**: Combined interaction in progress, all events handled directly
-
-### Event Flow During Interactions
-- **Before interaction**: Events → Controller → Decision → Command → DiagramViewer
-- **During active interaction**: Events → DiagramViewer (direct handling) → Controller (notification only)
-- **After interaction**: Events → Controller → Decision → Command → DiagramViewer
-
-### Implementation Requirements
-- The package must track active interaction IDs to prevent conflicts
-- Interaction state must be reset when the active interaction ends
-- The semaphore system must be enforced by the DiagramViewer itself, not by controllers
-- This rule applies to all controllers and is a fundamental requirement for stable interactions
+### Communication Optimization
+- **Viewport Sharing**: Include current viewport in PhysicalEvents for efficient object filtering
+- **Reduced Data Transfer**: Minimize object list passing during redraw operations
+- **Event Throttling**: Throttle high-frequency events to maintain performance budget
 
 ## Accessibility and Input Diversity
-- The package must support:
-  - Keyboard shortcuts with cross-platform mapping
-  - Touch, mouse, and trackpad input
-  - Screen reader compatibility (best-effort)
-  - Configurable input sensitivity and thresholds
+
+### Input Support
+- **Keyboard**: Full keyboard navigation and shortcuts
+- **Touch**: Multi-touch gestures and touch-optimized interactions
+- **Mouse**: Mouse wheel zoom, drag operations, and context menus
+- **Trackpad**: Pinch-to-zoom and multi-finger gestures
+- **Screen Reader**: Best-effort accessibility support
+
+### Cross-Platform Consistency
+- **Unified Events**: Same logical events across all platforms
+- **Platform-Specific Optimizations**: Optimize for each platform's input methods
+- **Gesture Mapping**: Consistent gesture behavior across platforms
+
+## Testing Requirements
+
+### Test-Driven Development
+- Write failing tests first to demonstrate problems
+- Implement code to make tests pass
+- Refactor while maintaining test coverage
+
+### Test Categories
+- **Unit Tests**: Individual component behavior
+- **Integration Tests**: BLoC communication and event flow
+- **Widget Tests**: UI interaction and rendering
+- **Performance Tests**: 60 FPS requirement validation
+- **Cross-Platform Tests**: Ensure consistent behavior across platforms
+
+## Extensibility Requirements
+
+### Controller Independence
+- Different diagram types (ERD, Genogram, STD) must use the same Diagrammer
+- Controllers must be implementable without modifying the package
+- Clear interfaces must be defined for controller implementation
+
+### Event System Extensibility
+- Extensible event types for custom interactions
+- Support for custom event enrichment
+- Plugin architecture for custom event handlers
+
+### Command System Extensibility
+- Extensible command types for custom behaviors
+- Support for custom command execution
+- Plugin architecture for custom commands
+
+### Object System Extensibility
+- Unified interface for custom diagram objects
+- Support for custom rendering and hit-testing
+- Plugin architecture for custom object types
