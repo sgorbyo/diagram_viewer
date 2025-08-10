@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:diagram_viewer/events/physical_event.dart';
+// Removed unused import
 import 'package:diagram_viewer/events/diagram_event.dart';
 import 'package:diagram_viewer/events/diagram_command.dart';
 import 'package:diagram_viewer/interfaces/diagram_configuration.dart';

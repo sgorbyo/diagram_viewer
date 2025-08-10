@@ -33,6 +33,7 @@ class TransformBloc extends Bloc<TransformEvent, TransformState> {
         recenterSmallContent: true,
       );
 
+      // ignore: invalid_use_of_visible_for_testing_member
       emit(TransformState.initial(
         transform: autoCenteredTransform,
         diagramRect: diagramRect,
@@ -94,6 +95,7 @@ class TransformBloc extends Bloc<TransformEvent, TransformState> {
 
     // Immediate snap if zero duration
     if (duration == Duration.zero) {
+      // ignore: invalid_use_of_visible_for_testing_member
       emit(TransformState.updated(
         transform: target,
         diagramRect: current.diagramRect,
@@ -125,6 +127,7 @@ class TransformBloc extends Bloc<TransformEvent, TransformState> {
         rotation: interpRotation,
       );
 
+      // ignore: invalid_use_of_visible_for_testing_member
       emit(TransformState.updated(
         transform: interp,
         diagramRect: current.diagramRect,
@@ -275,7 +278,7 @@ class TransformBloc extends Bloc<TransformEvent, TransformState> {
     final currentTransform = currentState.transform;
 
     // Recenter only if not frozen during drag
-    final shouldRecenter = !_isFrozen;
+    // final shouldRecenter = !_isFrozen; // not used
 
     Transform2D effectiveTransform = currentTransform;
 

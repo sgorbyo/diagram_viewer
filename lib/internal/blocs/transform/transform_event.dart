@@ -33,4 +33,6 @@ class TransformEvent with _$TransformEvent {
     required Rect diagramRect,
     required Size viewportSize,
   }) = _UpdateDiagramBounds;
+
+  // (no extra constructors)
 }

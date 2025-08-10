@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:diagram_viewer/interfaces/interfaces.dart';
 import 'package:diagram_viewer/events/events.dart';
-import 'package:diagram_viewer/tools/transform2d/transform2d.dart';
+// Removed unused import
 
 /// Test diagram controller that implements the proper architecture
 ///
@@ -57,23 +57,17 @@ class TestDiagramController implements IDiagramController {
   /// - Model mutation (custom logic)
   /// - Default behavior (pan/zoom)
   void _handleDiagramEvent(DiagramEventUnion event) {
-    print('TestDiagramController: Received event: ${event.runtimeType}');
-
     // For testing pan limits, we simulate default pan/zoom behavior
     // by directly setting transforms based on the events
 
     event.when(
       tap: (event) {
-        print('TestDiagramController: tap event');
         // No action needed for tap
       },
       dragBegin: (event) {
-        print('TestDiagramController: dragBegin event');
         _isDraggingObject = true;
       },
       dragContinue: (event) {
-        print(
-            'TestDiagramController: dragContinue event - delta: ${event.delta}');
         // If dragging an object, do not pan the viewer
         if (!_isDraggingObject) {
           final currentTransform = event.transformSnapshot;
@@ -84,11 +78,9 @@ class TestDiagramController implements IDiagramController {
         }
       },
       dragEnd: (event) {
-        print('TestDiagramController: dragEnd event');
         _isDraggingObject = false;
       },
       scroll: (event) {
-        print('TestDiagramController: scroll event');
         // Handle scroll with delta
         final currentTransform = event.transformSnapshot;
         final scrollDelta = event.scrollDelta;
@@ -103,11 +95,9 @@ class TestDiagramController implements IDiagramController {
             .add(DiagramCommand.setTransform(transform: newTransform));
       },
       pinchBegin: (event) {
-        print('TestDiagramController: pinchBegin event');
         // No action needed for begin
       },
       pinchContinue: (event) {
-        print('TestDiagramController: pinchContinue event');
         // Handle zoom with scale
         final currentTransform = event.transformSnapshot;
         final scale = event.scale;
@@ -118,15 +108,12 @@ class TestDiagramController implements IDiagramController {
             .add(DiagramCommand.setTransform(transform: newTransform));
       },
       pinchEnd: (event) {
-        print('TestDiagramController: pinchEnd event');
         // No action needed for end
       },
       doubleTap: (event) {
-        print('TestDiagramController: doubleTap event');
         // No action needed for double tap
       },
       longPress: (event) {
-        print('TestDiagramController: longPress event');
         // No action needed for long press
       },
     );

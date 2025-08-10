@@ -26,7 +26,6 @@ class TestDiagramObject extends DiagramObjectEntity {
     canvas.drawRect(bounds, paint);
   }
 
-  @override
   Rect enclosingRect() => bounds;
 
   @override

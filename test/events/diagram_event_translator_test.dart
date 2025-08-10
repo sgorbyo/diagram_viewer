@@ -7,7 +7,7 @@ import 'package:diagram_viewer/events/physical_event.dart';
 import 'package:diagram_viewer/events/diagram_event.dart';
 import 'package:diagram_viewer/events/transform_2d.dart';
 import 'package:diagram_viewer/events/border_proximity.dart';
-import 'package:diagram_viewer/events/mouse_button.dart';
+// Removed unused import
 import 'package:diagram_viewer/interfaces/diagram_object_entity.dart';
 
 void main() {
@@ -650,10 +650,8 @@ class _MockDiagramObject implements DiagramObjectEntity {
     // Mock painting implementation
   }
 
-  @override
   Rect enclosingRect() => logicalBounds;
 
-  @override
   void printOnCanvas({required Canvas canvas}) {
     paint(canvas);
   }

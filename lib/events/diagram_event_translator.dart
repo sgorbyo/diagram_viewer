@@ -13,7 +13,8 @@ class DiagramEventTranslator {
   final Map<String, _EventState> _activeEvents = {};
   final List<_ScrollEvent> _recentScrollEvents = [];
   final Duration _scrollVelocityWindow = const Duration(milliseconds: 100);
-  final Duration _scrollVelocityThreshold = const Duration(milliseconds: 50);
+  // Unused: retained for potential future use
+  // final Duration _scrollVelocityThreshold = const Duration(milliseconds: 50);
 
   /// Translate a PhysicalEvent to DiagramEventUnion
   DiagramEventUnion? translate(PhysicalEvent physicalEvent) {
@@ -479,10 +480,10 @@ class DiagramEventTranslator {
     // Determine which direction has the larger delta
     final absX = rawEvent.scrollDelta.dx.abs();
     final absY = rawEvent.scrollDelta.dy.abs();
-    
+
     double scrollDelta;
     Offset scrollDirection;
-    
+
     if (absX > absY) {
       // Horizontal scroll
       scrollDelta = absX;

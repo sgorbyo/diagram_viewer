@@ -5,9 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:diagram_viewer/widgets/diagram_viewer_content.dart';
 import 'package:diagram_viewer/interfaces/interfaces.dart';
 import 'package:diagram_viewer/internal/blocs/blocs.dart';
-import 'package:diagram_viewer/internal/blocs/event_management/event_management_event.dart';
-import 'package:diagram_viewer/internal/blocs/event_management/event_management_state.dart';
-import 'package:diagram_viewer/events/events.dart';
+// Removed unused imports
+// Removed unused import
 import '../interfaces/i_diagram_controller_test.dart';
 
 class MockDiagramObject extends DiagramObjectEntity {
@@ -433,7 +432,7 @@ void main() {
       testWidgets('should send diagram events to controller',
           (WidgetTester tester) async {
         // Arrange
-        final events = <DiagramEventUnion>[];
+        // events captured via controller in integration tests
         // Note: We can't easily test the eventsSink.stream in this context
         // The controller integration is tested in integration tests
 

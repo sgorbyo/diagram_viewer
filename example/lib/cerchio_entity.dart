@@ -44,8 +44,6 @@ class CerchioEntity extends DiagramObjectEntity {
   bool contains(Offset point) {
     final distance = (point - center).distance;
     final contains = distance <= radius;
-    print(
-        'Click on point: $point, my center is $center, contains: $contains, distance is $distance ');
     return contains;
   }
 

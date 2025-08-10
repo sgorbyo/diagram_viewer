@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:diagram_viewer/diagram_viewer.dart';
-import 'package:diagram_viewer/events/events.dart';
-import 'package:diagram_viewer/interfaces/interfaces.dart';
+// Removed unused import
+// Removed unused import
 import '../interfaces/i_diagram_controller_test.dart';
 
 /// TDD Tests for keyboard focus and responsiveness
@@ -51,9 +51,7 @@ void main() {
 
       // Check for scroll events (keyboard navigation)
       final scrollEvents = mockController.receivedEvents
-          .where((event) =>
-              event is DiagramEventUnion &&
-              event.maybeWhen(
+          .where((event) => event.maybeWhen(
                 scroll: (_) => true,
                 orElse: () => false,
               ))
@@ -97,9 +95,7 @@ void main() {
 
       // Assert - Should receive all keyboard events
       final scrollEvents = mockController.receivedEvents
-          .where((event) =>
-              event is DiagramEventUnion &&
-              event.maybeWhen(
+          .where((event) => event.maybeWhen(
                 scroll: (_) => true,
                 orElse: () => false,
               ))
@@ -138,9 +134,7 @@ void main() {
 
       // Assert - Should handle repeat events gracefully
       final scrollEvents = mockController.receivedEvents
-          .where((event) =>
-              event is DiagramEventUnion &&
-              event.maybeWhen(
+          .where((event) => event.maybeWhen(
                 scroll: (_) => true,
                 orElse: () => false,
               ))

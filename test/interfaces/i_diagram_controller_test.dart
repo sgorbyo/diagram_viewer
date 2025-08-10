@@ -32,7 +32,6 @@ class MockDiagramController implements IDiagramController {
         _configuration = configuration ?? DiagramConfiguration.defaults {
     // Listen to events for testing
     _eventController.stream.listen((event) {
-      print('MockDiagramController: Received event: ${event.runtimeType}');
       _receivedEvents.add(event);
     });
 
@@ -154,10 +153,7 @@ void main() {
     group('Event Handling', () {
       test('should be able to send events through sink', () {
         // Create a mock pointer event for testing
-        final mockPointerEvent = PointerDownEvent(
-          position: const Offset(200, 200),
-          kind: PointerDeviceKind.mouse,
-        );
+        // Create a mock pointer event for testing (not used directly)
 
         final event = DiagramEventUnion.tap(
           DiagramTap(

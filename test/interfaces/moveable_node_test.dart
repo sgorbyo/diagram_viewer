@@ -4,6 +4,7 @@ import 'package:diagram_viewer/interfaces/diagram_object_entity.dart';
 import 'package:diagram_viewer/interfaces/moveable_node.dart';
 
 /// A simple test implementation of DiagramObjectEntity with MoveableNode
+// ignore: must_be_immutable
 class TestMoveableObject extends DiagramObjectEntity with MoveableNode {
   final Offset _originalPosition;
   final double size;

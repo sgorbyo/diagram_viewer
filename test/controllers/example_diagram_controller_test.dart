@@ -3,9 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:diagram_viewer/events/events.dart';
 import 'package:diagram_viewer/events/transform_2d.dart';
 import 'package:diagram_viewer/events/diagram_event.dart';
-import 'package:diagram_viewer/interfaces/diagram_object_entity.dart';
 import 'package:diagram_viewer/events/mouse_button.dart';
-import 'package:vector_math/vector_math.dart';
+// Removed unused imports
 import '../../example/lib/controllers/example_diagram_controller.dart';
 import '../../example/lib/cerchio_entity.dart';
 

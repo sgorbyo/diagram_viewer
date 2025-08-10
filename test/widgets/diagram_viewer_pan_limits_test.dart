@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:diagram_viewer/diagram_viewer.dart';
-import 'package:diagram_viewer/internal/blocs/transform/transform_state.dart';
 import 'package:diagram_viewer/internal/blocs/transform/transform_event.dart';
 import 'test_diagram_controller.dart';
 
@@ -63,7 +61,6 @@ void main() {
 
       // Get initial transform state
       final initialTransform = transformBloc!.state.transform;
-      print('Initial transform: ${initialTransform.translation}');
 
       // Act - Drag in two steps and measure during drag (before release)
       final gesture = await tester.startGesture(
@@ -71,7 +68,6 @@ void main() {
       );
       await gesture.moveBy(const Offset(200, 0));
       await tester.pump(const Duration(milliseconds: 16));
-      final mid1 = transformBloc!.state.transform.translation.dx;
       await gesture.moveBy(const Offset(300, 0));
       await tester.pump(const Duration(milliseconds: 16));
       final mid2 = transformBloc!.state.transform.translation.dx;
@@ -136,7 +132,6 @@ void main() {
 
       // Get initial transform state
       final initialTransform = transformBloc!.state.transform;
-      print('Initial transform: ${initialTransform.translation}');
 
       // Simulate a large pan gesture that should trigger elastic overscroll
       // We'll use the TransformBloc directly to test pan limits
@@ -155,7 +150,6 @@ void main() {
 
       // Get the transform state after small pan
       final afterSmallPan = transformBloc!.state.transform;
-      print('Transform after small pan: ${afterSmallPan.translation}');
 
       // Now try a larger pan to test elastic overscroll
       final largePanDelta = const Offset(200.0, 0.0); // Larger rightward pan
@@ -171,12 +165,10 @@ void main() {
 
       // Get the final transform state
       final finalTransform = transformBloc!.state.transform;
-      print('Final transform after large pan: ${finalTransform.translation}');
 
       // First, verify that some pan movement occurred
       final totalMovement =
           finalTransform.translation.dx - initialTransform.translation.dx;
-      print('Total movement: ${totalMovement}px');
 
       expect(totalMovement, greaterThan(0),
           reason: 'Pan should allow some movement. '
@@ -238,7 +230,6 @@ void main() {
 
       // Get initial transform state
       final initialTransform = transformBloc!.state.transform;
-      print('Initial transform: ${initialTransform.translation}');
 
       // The diagram should be auto-centered when bounds are set
       // For a 100x100 diagram in 400x300 viewport, it should be centered
@@ -251,8 +242,7 @@ void main() {
 
       // TODO: Fix vertical auto-centering - currently not working
       // For now, just verify horizontal centering works
-      print(
-          'Auto-centering status: Horizontal=${initialTransform.translation.dx}px, Vertical=${initialTransform.translation.dy}px');
+      // Auto-centering status checked via expectations
 
       // The centering should be reasonable - not too far from expected center
       // For 100x100 diagram in 400x300 viewport:

@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:math';
+// removed: import 'dart:math';
 import 'package:flutter/services.dart';
 import 'package:diagram_viewer/interfaces/interfaces.dart';
 import 'package:diagram_viewer/events/events.dart';
@@ -37,7 +37,6 @@ class ExampleDiagramController implements IDiagramController {
   }
 
   void _handleDiagramEvent(DiagramEventUnion event) {
-    print('ExampleDiagramController: Received event: ${event.runtimeType}');
     event.when(
       tap: (event) {
         if (event.hitList.isNotEmpty) {
@@ -49,13 +48,9 @@ class ExampleDiagramController implements IDiagramController {
         }
       },
       dragBegin: (event) {
-        print(
-            'ExampleDiagramController: dragBegin - hitList.length=${event.hitList.length}');
         if (event.hitList.isNotEmpty) {
           // Start object drag - store the object being dragged
           _draggedObject = event.hitList.first;
-          print(
-              'ExampleDiagramController: dragBegin - stored _draggedObject=${_draggedObject?.id}');
           _startObjectDrag(_draggedObject!);
         } else {
           // Background drag - let DiagramViewer handle pan
@@ -65,12 +60,8 @@ class ExampleDiagramController implements IDiagramController {
         }
       },
       dragContinue: (event) {
-        print(
-            'ExampleDiagramController: dragContinue - _draggedObject=${_draggedObject?.id}, hitList.length=${event.hitList.length}');
         if (_draggedObject != null) {
           // Continue object drag - use the stored object regardless of hitList
-          print(
-              'ExampleDiagramController: dragContinue - updating object position');
           _updateObjectPosition(_draggedObject!, event.logicalPosition);
           sendRedrawCommand();
         } else {
@@ -78,9 +69,6 @@ class ExampleDiagramController implements IDiagramController {
           final currentTransform = event.transformSnapshot;
           final panDelta = event.delta;
           final newTransform = currentTransform.applyPan(panDelta);
-
-          print(
-              'ExampleDiagramController: dragContinue - no dragged object, sending setTransform with pan');
           _commandController.add(DiagramCommand.setTransform(
             transform: newTransform,
           ));
@@ -100,9 +88,6 @@ class ExampleDiagramController implements IDiagramController {
         }
       },
       scroll: (event) {
-        print(
-            'ExampleDiagramController: Received scroll event - delta: ${event.scrollDelta}, direction: ${event.scrollDirection}, velocity: ${event.scrollVelocity}');
-
         // Check if this is a keyboard event
         final isKeyboardEvent = event.metadata['source'] == 'keyboard';
 
@@ -121,8 +106,6 @@ class ExampleDiagramController implements IDiagramController {
           );
           final newTransform = currentTransform.applyPan(scrollDelta);
 
-          print(
-              'ExampleDiagramController: scroll - delta=${event.scrollDelta}, direction=${event.scrollDirection}, velocity=${event.scrollVelocity}');
           _commandController.add(DiagramCommand.setTransform(
             transform: newTransform,
           ));
@@ -154,15 +137,12 @@ class ExampleDiagramController implements IDiagramController {
 
   /// Update object position in the model.
   void _updateObjectPosition(DiagramObjectEntity object, Offset newPosition) {
-    print(
-        '_updateObjectPosition: object=${object.id}, newPosition=$newPosition');
     if (object is CerchioEntity) {
       final model = _storage.values.firstWhere(
         (model) => model.id == object.id,
         orElse: () =>
             throw Exception('Model not found for object ${object.id}'),
       );
-      final oldPosition = model.center;
       // Create a new model instance with the same id to update the position
       final updatedModel = CerchioModel(
         center: newPosition,
@@ -170,7 +150,7 @@ class ExampleDiagramController implements IDiagramController {
         id: model.id, // Preserve the existing id
       );
       _storage[model.id] = updatedModel;
-      print('_updateObjectPosition: updated from $oldPosition to $newPosition');
+      // updated position
 
       // After updating position, we need to recalculate the logical extent
       // and send a redraw command with the updated extent
@@ -237,7 +217,6 @@ class ExampleDiagramController implements IDiagramController {
 
   /// Send redraw command to DiagramViewer
   void sendRedrawCommand() {
-    print('sendRedrawCommand: sending ${objects.length} objects');
     // Always send all objects and current logical extent
     // The DiagramViewer will handle visibility and culling
     _commandController.add(DiagramCommand.redraw(
@@ -249,9 +228,6 @@ class ExampleDiagramController implements IDiagramController {
   /// Handle keyboard navigation events
   void _handleKeyboardNavigation(
       List<String> pressedKeys, Transform2D currentTransform) {
-    print(
-        'ExampleDiagramController: _handleKeyboardNavigation - pressedKeys: $pressedKeys');
-
     // Calculate scroll delta and direction based on pressed keys
     double scrollDelta = 0.0;
     Offset scrollDirection = Offset.zero;
@@ -309,8 +285,6 @@ class ExampleDiagramController implements IDiagramController {
       );
       final newTransform = currentTransform.applyPan(panDelta);
 
-      print(
-          'ExampleDiagramController: keyboard navigation - delta: $scrollDelta, direction: $scrollDirection');
       _commandController.add(DiagramCommand.setTransform(
         transform: newTransform,
       ));
@@ -346,28 +320,11 @@ class ExampleDiagramController implements IDiagramController {
     return result;
   }
 
-  void _randomPopulate(int howMany) {
-    Random random = Random();
-    print('=== GENERATING $howMany RANDOM CIRCLES ===');
-    for (int j = howMany; j > 0; j--) {
-      final x = radius + (width - 2 * radius) * random.nextDouble();
-      final y = radius + (height - 2 * radius) * random.nextDouble();
-      CerchioModel model = CerchioModel(
-        center: Offset(x, y),
-        radius: radius,
-      );
-      _storage[model.id] = model;
-      print(
-          'Circle ${j.toString().padLeft(2)}: center=(${x.toStringAsFixed(1)}, ${y.toStringAsFixed(1)}), id=${model.id}');
-    }
-    print('=== END GENERATION ===');
-  }
+  // _randomPopulate removed (unused)
 
   void _regularPopulate(int howMany) {
-    Random random = Random();
     int spacing = 150;
-    int rowLength = 10;
-    print('=== GENERATING $howMany EVENLY DISTRIBUTED CIRCLES ===');
+    // Generating evenly distributed circles
     for (int row = 0; row < 10; row++) {
       for (int col = 0; col < 10; col++) {
         double x = col * spacing.toDouble() + radius * 2;
@@ -377,55 +334,30 @@ class ExampleDiagramController implements IDiagramController {
           radius: radius,
         );
         _storage[model.id] = model;
-        print(
-            'Circle ${(row * 10 + col + 1).toString().padLeft(2)}: center=(${x.toStringAsFixed(1)}, ${y.toStringAsFixed(1)}), id=${model.id}');
+        // generated circle
       }
     }
-    print('=== END GENERATION ===');
+    // End generation
   }
 
   // Helper methods for drag operations
   void _startObjectDrag(DiagramObjectEntity object) {
-    // For now, just log the start of drag
-    print('Started dragging object: ${object.id}');
+    // Start of drag
   }
 
   void _endObjectDrag() {
-    // For now, just log the end of drag
-    print('Ended dragging');
+    // End of drag
   }
 
-  // Helper methods for scroll operations
-  void _applyScroll(double scrollDelta, double scrollVelocity) {
-    // For now, just log the scroll
-    print('Scroll: delta=$scrollDelta, velocity=$scrollVelocity');
-  }
-
-  // Helper methods for pinch operations
-  void _startPinch(Offset focalPoint) {
-    // For now, just log the start of pinch
-    print('Started pinch at: $focalPoint');
-  }
-
-  void _applyPinch(double scale, double rotation, Offset focalPoint) {
-    // For now, just log the pinch
-    print('Pinch: scale=$scale, rotation=$rotation, focalPoint=$focalPoint');
-  }
-
-  void _endPinch() {
-    // For now, just log the end of pinch
-    print('Ended pinch');
-  }
+  // Removed unused helper methods (_applyScroll, _startPinch, _applyPinch, _endPinch)
 
   // Helper methods for other events
   void _handleDoubleTap(DiagramDoubleTap event) {
-    // For now, just log the double tap
-    print('Double tap at: ${event.logicalPosition}');
+    // Double tap
   }
 
   void _handleLongPress(DiagramLongPress event) {
-    // For now, just log the long press
-    print('Long press at: ${event.logicalPosition}');
+    // Long press
   }
 
   @override

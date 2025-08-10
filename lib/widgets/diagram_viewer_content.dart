@@ -11,8 +11,7 @@ import 'package:diagram_viewer/internal/blocs/event_management/event_management_
 import 'package:diagram_viewer/internal/blocs/event_management/event_management_event.dart';
 import 'package:diagram_viewer/internal/blocs/transform/transform_state.dart';
 import 'package:diagram_viewer/internal/blocs/transform/transform_event.dart';
-import 'package:diagram_viewer/internal/blocs/pan/pan_event.dart';
-import 'package:diagram_viewer/internal/blocs/pan/pan_event.dart';
+// removed duplicate/unused imports
 import 'diagram_painter.dart';
 
 /// Content widget for DiagramViewer that handles:
@@ -52,6 +51,7 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
     super.initState();
     // Set up listener for PhysicalEvents from EventManagementBloc
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Setup subscriptions after first frame
       final eventBloc = context.read<EventManagementBloc>();
       _physicalEventSubscription =
           eventBloc.physicalEvents.listen((physicalEvent) {
@@ -69,19 +69,15 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
         command.when(
           applyDefaultPanZoom: (origin) {
             // Forward to EventManagementBloc for default pan/zoom behavior
-            final eventBloc = context.read<EventManagementBloc>();
             // Convert the PhysicalEvent back to the appropriate event type
-            if (origin is PhysicalEvent) {
-              // The EventManagementBloc will handle the default pan/zoom behavior
-              _handlePhysicalEventForDefaultBehavior(origin);
-            }
+            // The EventManagementBloc will handle the default pan/zoom behavior
+            _handlePhysicalEventForDefaultBehavior(origin);
           },
           setTransform: (transform) {
             final transformBloc = context.read<TransformBloc>();
             // During an active pointer drag, we let the viewer handle pan internally
             final eventBloc = context.read<EventManagementBloc>();
-            final isPointerActive = eventBloc.state is PointerActiveState;
-            if (isPointerActive) {
+            if (eventBloc.state is PointerActiveState) {
               return;
             }
             final state = transformBloc.state;
@@ -131,15 +127,10 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
           },
           autoScrollStep: (velocity, stepDuration) {
             // Forward to PanBloc for auto-scroll
-            final panBloc = context.read<PanBloc>();
-            // Note: PanBloc might not have auto-scroll events, so we'll use TransformBloc
-            final transformBloc = context.read<TransformBloc>();
-            // For now, we'll handle auto-scroll through transform updates
+            // Auto-scroll not yet implemented at PanBloc level; reserved for future use
           },
           stopAutoScroll: () {
-            // Stop auto-scroll - handled by TransformBloc
-            final transformBloc = context.read<TransformBloc>();
-            // For now, we'll handle this through transform updates
+            // Stop auto-scroll - reserved for future use
           },
         );
       });
@@ -227,7 +218,19 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
                 if (!mounted) return;
                 final transformBloc = context.read<TransformBloc>();
                 final eventBloc = context.read<EventManagementBloc>();
-                final isPointerActive = eventBloc.state is PointerActiveState;
+                final isPointerActive = eventBloc.state.maybeWhen(
+                  pointerActive: (
+                    String eventId,
+                    Set<MouseButton> pressedMouseButtons,
+                    Set<LogicalKeyboardKey> pressedKeys,
+                    DateTime startTime,
+                    Offset startPosition,
+                    Offset lastPosition,
+                    List<DiagramObjectEntity> lastHitList,
+                  ) =>
+                      true,
+                  orElse: () => false,
+                );
                 if (isPointerActive) {
                   transformBloc.setFrozenDuringDrag(true);
                 }

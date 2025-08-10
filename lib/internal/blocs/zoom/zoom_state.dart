@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:diagram_viewer/events/events.dart';
+// Removed unused import
 
 part 'zoom_state.freezed.dart';
 

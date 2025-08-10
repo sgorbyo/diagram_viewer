@@ -469,10 +469,7 @@ class EventManagementBloc
     return Rect.zero; // Fallback
   }
 
-  Offset _getLogicalPosition(Offset screenPosition) {
-    // Convert screen position to logical position
-    return screenPosition; // Simplified for now
-  }
+  // Removed unused helper _getLogicalPosition
 
   Offset _getScreenPosition(Object? rawEvent) {
     // Extract screen position from raw event

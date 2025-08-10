@@ -7,8 +7,7 @@ class DebugBlocObserver extends BlocObserver {
   void onTransition(Bloc bloc, Transition transition) {
     super.onTransition(bloc, transition);
     if (kDebugMode) {
-      // ignore: avoid_print
-      print(
+      debugPrint(
           '${bloc.runtimeType} ${transition.currentState.runtimeType} (${transition.event.runtimeType}) -> ${transition.nextState.runtimeType}');
     }
   }

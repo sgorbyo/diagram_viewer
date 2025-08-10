@@ -100,10 +100,7 @@ class IntegrationTestController implements IDiagramController {
     _commandController.add(command);
   }
 
-  void _sendDefaultBehaviorCommand(DiagramEventUnion event) {
-    // For testing purposes, we'll just send a redraw command
-    _sendRedrawCommand();
-  }
+  // Removed unused helper _sendDefaultBehaviorCommand
 
   @override
   Stream<DiagramCommand> get commandStream => _commandController.stream;

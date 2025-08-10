@@ -39,8 +39,6 @@ void main() {
     // Helper method to extract scroll events
     List<DiagramScroll> _extractScrollEvents() {
       return mockController.receivedEvents
-          .where((event) => event is DiagramEventUnion)
-          .map((event) => event as DiagramEventUnion)
           .where((event) => event.maybeWhen(
                 scroll: (_) => true,
                 orElse: () => false,
@@ -208,4 +206,4 @@ void main() {
       });
     });
   });
-} 
+}

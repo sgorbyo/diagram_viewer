@@ -1,13 +1,9 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:diagram_viewer/diagram_viewer.dart';
-import 'package:diagram_viewer/interfaces/interfaces.dart';
 import 'package:diagram_viewer/events/events.dart';
-import 'package:diagram_viewer/tools/transform2d/transform2d_utils.dart';
 
-import '../test_config.dart';
+// Removed unused imports
 
 void main() {
   group('DiagramViewer Focal Point Stability', () {

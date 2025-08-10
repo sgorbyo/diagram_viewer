@@ -194,7 +194,6 @@ class PhysicalEvent with _$PhysicalEvent {
   bool get isKeyboard => this is KeyboardPhysicalEvent;
 
   /// Returns the logical position of this event.
-  @override
   Offset get logicalPosition => when(
         pointer: (eventId,
                 logicalPosition,
@@ -230,7 +229,6 @@ class PhysicalEvent with _$PhysicalEvent {
       );
 
   /// Returns the transform snapshot of this event.
-  @override
   Transform2D get transformSnapshot => when(
         pointer: (eventId,
                 logicalPosition,
@@ -266,7 +264,6 @@ class PhysicalEvent with _$PhysicalEvent {
       );
 
   /// Returns the hit list of this event.
-  @override
   List<DiagramObjectEntity> get hitList => when(
         pointer: (eventId,
                 logicalPosition,
@@ -302,7 +299,6 @@ class PhysicalEvent with _$PhysicalEvent {
       );
 
   /// Returns the border proximity of this event.
-  @override
   BorderProximity get borderProximity => when(
         pointer: (eventId,
                 logicalPosition,

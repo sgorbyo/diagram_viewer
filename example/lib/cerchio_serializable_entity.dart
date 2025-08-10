@@ -14,6 +14,7 @@ import 'package:diagram_viewer/interfaces/moveable_node.dart';
 /// - **Serialization**: Supports JSON serialization/deserialization
 /// - **Center Tracking**: The center position is included in serialization
 /// - **State Restoration**: Can restore state from serialized data
+// ignore: must_be_immutable
 class CerchioSerializableEntity extends DiagramObjectEntity with MoveableNode {
   final Offset _originalCenter;
   final double radius;

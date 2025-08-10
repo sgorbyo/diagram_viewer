@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:diagram_viewer/diagram_viewer.dart';
 import 'package:diagram_viewer/events/events.dart';
 import 'package:diagram_viewer/interfaces/interfaces.dart';
-import 'package:diagram_viewer/tools/tools.dart';
+// Removed unused import
 import '../interfaces/i_diagram_controller_test.dart';
 
 /// Tests for keyboard direction issues
@@ -39,8 +39,6 @@ void main() {
     // Helper method to extract scroll events
     List<DiagramScroll> _extractScrollEvents() {
       return mockController.receivedEvents
-          .where((event) => event is DiagramEventUnion)
-          .map((event) => event as DiagramEventUnion)
           .where((event) => event.maybeWhen(
                 scroll: (_) => true,
                 orElse: () => false,
@@ -83,12 +81,7 @@ void main() {
         // Wait for event processing
         await Future.delayed(const Duration(milliseconds: 10));
 
-        // Debug logging
-        print('Events count: ${mockController.receivedEvents.length}');
-        print('Has received events: ${mockController.hasReceivedEvents}');
-        for (final event in mockController.receivedEvents) {
-          print('Event: ${event.runtimeType}');
-        }
+        // Debug logging removed
 
         // Assert - Should receive the event
         expect(mockController.hasReceivedEvents, isTrue);

@@ -13,6 +13,7 @@ import 'package:diagram_viewer/interfaces/moveable_node.dart';
 /// - **Position Tracking**: Maintains original position and current offset
 /// - **Hit Testing**: Proper hit testing that accounts for movement
 /// - **Rendering**: Renders at the current position
+// ignore: must_be_immutable
 class CerchioMoveableEntity extends DiagramObjectEntity with MoveableNode {
   final double radius;
   final String _id;

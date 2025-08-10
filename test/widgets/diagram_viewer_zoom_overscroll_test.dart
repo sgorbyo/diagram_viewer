@@ -43,8 +43,7 @@ class MockDiagramController implements IDiagramController {
   Sink<DiagramEventUnion> get eventsSink =>
       StreamController<DiagramEventUnion>().sink;
 
-  @override
-  Stream<DiagramCommand> get commands => Stream.empty();
+  // Removed legacy getter 'commands'
 
   @override
   void dispose() {}
