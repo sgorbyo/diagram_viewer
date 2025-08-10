@@ -47,6 +47,7 @@ The package implements a **Diagrammer-Controller architecture** where:
   3. **Redraw**: Update visualization with new DiagramObjectEntity list and logical extent
   4. **ElasticBounceBack**: Return to valid bounds with animation
   5. **AutoScrollStep**: Execute incremental scroll with specified velocity
+  6. **StopAutoScroll**: Immediately stop any ongoing auto-scroll
 
 ### Event Flow and Control
 - The package must:
@@ -94,6 +95,7 @@ The package implements a **Diagrammer-Controller architecture** where:
   - Execute auto-scroll commands from the controller
   - Support configurable edge detection thresholds
   - Handle scroll momentum and damping
+  - Expose a way to stop auto-scroll promptly upon `StopAutoScroll`
 
 ## Interaction State Management
 
@@ -163,6 +165,10 @@ The package implements a **Diagrammer-Controller architecture** where:
 - **Mouse**: Mouse wheel zoom, drag operations, and context menus
 - **Trackpad**: Pinch-to-zoom and multi-finger gestures
 - **Screen Reader**: Best-effort accessibility support
+
+### Debuggability and Testability
+- The package must optionally enable BLoC transition logging when `enableBlocDebugObserver` is true in `DiagramConfiguration`.
+- A `TestableDiagramViewer` widget must expose internal BLoCs for tests via an optional `onBlocsCreated` callback.
 
 ### Cross-Platform Consistency
 - **Unified Events**: Same logical events across all platforms

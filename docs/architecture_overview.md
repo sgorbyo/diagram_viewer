@@ -43,6 +43,7 @@ class Transform2D {
 - **Unified Events**: Platform-agnostic events (pointer, gesture, keyboard)
 - **Enriched Context**: Logical coordinates, hit-test results, border proximity
 - **Event Phases**: Start, update, end for continuous interactions
+- **Edge Proximity Metrics**: Normalized distance and qualitative bands for edge-driven behaviors
 
 ### **Diagram Commands (Controller → Diagrammer)**
 - **ApplyDefaultPanZoom**: Execute default pan/zoom behavior
@@ -50,6 +51,7 @@ class Transform2D {
 - **Redraw**: Update visualization with new objects
 - **ElasticBounceBack**: Return to valid bounds with animation
 - **AutoScrollStep**: Execute incremental scroll
+- **StopAutoScroll**: Stop ongoing auto-scroll immediately
 
 ## Component Responsibilities
 
@@ -153,4 +155,9 @@ User Gesture → Diagrammer (enrichment) → Controller (interpretation) → Com
 - **Integration Tests**: BLoC communication
 - **Widget Tests**: UI interaction and rendering
 - **Performance Tests**: 60 FPS requirement validation
+
+## Testing and Debugging Support
+
+- **Debug Observer**: Optional BLoC transition logging via `DiagramConfiguration.enableBlocDebugObserver`
+- **Testable Widget**: `TestableDiagramViewer` exposes internal BLoCs via `onBlocsCreated` for tests
 

@@ -43,6 +43,10 @@ lib/
 └── main.dart                      # Entry point
 ```
 
+### Test-Driven Development (Default)
+- Always follow TDD by default: write a failing test first, then implement code, then refactor.
+- Only deviate from TDD when explicitly requested by the user in the conversation.
+
 ### flutter_bloc Implementation
 - Use Bloc for complex event-driven logic state management
 - Implement properly typed Events and States for each Bloc
@@ -163,6 +167,7 @@ extension EitherExtensions<L, R> on Either<L, R> {
 - Use mocks for dependencies with mockito or mocktail
 - Follow Given-When-Then pattern for test structure
 - Aim for high test coverage of domain and data layers
+- Adopt TDD by default: start with a failing test before any code change unless the user explicitly asks otherwise.
 
 ### Performance Considerations
 - Use const constructors for immutable widgets
@@ -438,6 +443,7 @@ Refer to official Flutter and flutter_bloc documentation for more detailed imple
 - Implement canConnectWith() for connection validation
 
 ### Testing Strategy
+- TDD is the default workflow: introduce a failing test first, then implement and refactor; skip only if the user explicitly requests otherwise.
 - Test BLoC state transitions with bloc_test
 - Mock DiagramContentRepository for unit tests
 - Test geometric operations with known input/output pairs

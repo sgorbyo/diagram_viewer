@@ -65,6 +65,10 @@ The package uses a clean widget architecture:
 - Manages widget lifecycle
 - Located in `lib/widgets/diagram_viewer.dart`
 
+##### Testable Variant
+- `TestableDiagramViewer` exposes internal BLoCs via `onBlocsCreated` for testing
+- Useful for asserting transform/zoom/pan behavior in integration tests
+
 #### **DiagramViewerContent**
 - Handles UI event capture and routing
 - Manages PhysicalEvent enrichment
@@ -85,6 +89,7 @@ The `PhysicalEvent` system has been enhanced with new fields:
 - `pressedKeys`: Set of currently pressed keyboard keys  
 - `activeInteraction`: Type of active interaction (if any)
 - `hitResults`: Ordered list of hit objects with distance information
+- `borderProximity`: Includes normalized distance and qualitative helpers for edge behaviors
 
 #### **Event Isolation Rule**
 - Only one interaction type (pointer, gesture, keyboard) can be active at a time
@@ -107,10 +112,12 @@ class HitTestResult with _$HitTestResult {
 
 The package uses multiple BLoCs for different responsibilities:
 
-#### **TransformBloc**
+#### **TransformBloc** 
 - Manages overall Transform2D state
 - Coordinates between ZoomBloc and PanBloc
 - Handles transform capping and limits
+- Supports freeze during drag to allow elastic window, with deferred bounce-back
+- Provides `bounceBack(Duration)` animation using configurable `bounceCurve`
 
 #### **ZoomBloc** 
 - Handles zoom operations (mouse wheel, pinch)
@@ -325,3 +332,21 @@ void _handleUpdateModifierKeys(Set<LogicalKeyboardKey> keys, Emitter<EventManage
 - Implement `IDiagramController` interface
 - Handle PhysicalEvents and emit DiagramCommands
 - Add custom business logic and state management
+
+## Configuration Reference
+
+Key options in `DiagramConfiguration` used by the implementation:
+- `overscrollPixels`: controls elastic margins beyond bounds
+- `bounceDuration` and `bounceCurve`: tune bounce-back animation
+- `enableBlocDebugObserver`: enable verbose BLoC logging in debug
+- Presets: `touchOptimized`, `desktopOptimized`
+
+## Command Set
+
+Implemented commands from controller to viewer:
+- `ApplyDefaultPanZoom`
+- `SetTransform`
+- `Redraw`
+- `ElasticBounceBack`
+- `AutoScrollStep`
+- `StopAutoScroll`
