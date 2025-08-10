@@ -187,6 +187,31 @@ extension EitherExtensions<L, R> on Either<L, R> {
 - Implement proper null safety
 - Use value objects for domain-specific types
 
+### Documentation Synchronization & Consistency
+- Always keep the documentation in `docs/` up to date with code changes. The key documents are:
+  - `docs/architecture_overview.md`
+  - `docs/functional_requirements.md`
+  - `docs/technical_design.md`
+- Before implementing changes, skim the relevant sections in `docs/` and ensure your design aligns with them.
+- When behavior, APIs, limits, or states change, update the relevant `docs/` files in the same PR as the code change. Do not defer documentation updates.
+- During reviews, explicitly verify that the code and tests reflect the documented behavior. If you find mismatches, either:
+  - adjust the code/tests to match the docs, or
+  - update the docs to match the intended behavior.
+  In both cases, clearly state the resolution in the PR description.
+- If an inconsistency is discovered but cannot be resolved immediately, open an issue titled "Docs/Code inconsistency: <area>" with concrete pointers (file paths, sections, code references) and link it from the PR.
+- Tests should act as executable documentation. If a document describes expected behavior (e.g., pan limits, auto-centering), ensure there are corresponding tests that assert it.
+- Include a short "Documentation impact" note in each PR summarizing:
+  - which `docs/` sections were reviewed
+  - which were updated (with links)
+  - any known follow-ups
+
+Documentation consistency checklist (apply per PR):
+- [ ] Architecture/design aligns with `docs/architecture_overview.md`
+- [ ] Behavior/limits match `docs/functional_requirements.md`
+- [ ] Implementation details are reflected in `docs/technical_design.md`
+- [ ] Tests exist/updated to cover the documented behavior
+- [ ] PR description includes "Documentation impact" and links to changed sections
+
 ## Implementation Examples
 
 ### Use Case Implementation
