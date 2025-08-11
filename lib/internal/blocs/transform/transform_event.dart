@@ -4,6 +4,8 @@ import 'package:diagram_viewer/events/events.dart';
 
 part 'transform_event.freezed.dart';
 
+enum InteractionKind { pan, zoom, other }
+
 /// Events for transform operations
 @freezed
 class TransformEvent with _$TransformEvent {

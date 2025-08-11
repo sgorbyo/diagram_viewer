@@ -12,6 +12,7 @@ class TransformBloc extends Bloc<TransformEvent, TransformState> {
   final DiagramConfiguration configuration;
   Timer? _bounceTimer;
   bool _needsBounceBack = false;
+  InteractionKind _lastInteractionKind = InteractionKind.other;
 
   TransformBloc({
     required this.configuration,
@@ -53,31 +54,9 @@ class TransformBloc extends Bloc<TransformEvent, TransformState> {
   void bounceBack(Duration duration) {
     final current = state;
     final start = current.transform;
-    // Compute explicit centering when content is smaller on any axis
-    final scaledWidth = current.diagramRect.width * start.scale;
-    final scaledHeight = current.diagramRect.height * start.scale;
-    final isSmallerH = scaledWidth < current.viewportSize.width;
-    final isSmallerV = scaledHeight < current.viewportSize.height;
-
-    double tx = start.translation.dx;
-    double ty = start.translation.dy;
-    if (isSmallerH) {
-      tx = (current.viewportSize.width - scaledWidth) / 2;
-    }
-    if (isSmallerV) {
-      ty = (current.viewportSize.height - scaledHeight) / 2;
-    }
-    final centered = Transform2D(
-      scale: start.scale,
-      translation: Offset(
-        -current.diagramRect.left * start.scale + tx,
-        -current.diagramRect.top * start.scale + ty,
-      ),
-      rotation: start.rotation,
-    );
-    // Final target through capping to respect limits on large-content axes
-    final target = Transform2DUtils.capTransformWithZoomLimits(
-      transform: centered,
+    // Compute strict (non-dynamic) clamped transform
+    final strict = Transform2DUtils.capTransformWithZoomLimits(
+      transform: start,
       diagramRect: current.diagramRect,
       size: current.viewportSize,
       dynamic: false,
@@ -85,6 +64,100 @@ class TransformBloc extends Bloc<TransformEvent, TransformState> {
       maxZoom: configuration.maxZoom,
       preserveCentering: true,
       recenterSmallContent: false,
+    );
+
+    // Compute relaxed (dynamic) clamped transform that represents the elastic window
+    // Note: we derive the relaxed window bounds directly below for small-content cases,
+    // so we don't need the full relaxed transform here.
+
+    // Determine per-axis correction policy
+    // Heuristic: if last interaction was zoom, recenter small-content axes.
+    // If last was pan, preserve non-violating axes within dynamic window.
+    const double epsilon = 0.5;
+    final scaledWidth = current.diagramRect.width * start.scale;
+    final scaledHeight = current.diagramRect.height * start.scale;
+    final isSmallerH = scaledWidth <= current.viewportSize.width;
+    final isSmallerV = scaledHeight <= current.viewportSize.height;
+
+    // Per-axis correction decisions
+    bool xNeedsCorrection;
+    if (isSmallerH) {
+      if (_lastInteractionKind == InteractionKind.zoom) {
+        xNeedsCorrection = true; // recenter after zoom
+      } else {
+        // pan case: correct only if outside dynamic window
+        final centerOffsetX = (current.viewportSize.width - scaledWidth) / 2;
+        final centerTargetX =
+            -current.diagramRect.left * start.scale + centerOffsetX;
+        final minCenterX = centerTargetX - Transform2DUtils.dynamicBorderWidth;
+        final maxCenterX = centerTargetX + Transform2DUtils.dynamicBorderWidth;
+        xNeedsCorrection = start.translation.dx <= minCenterX + epsilon ||
+            start.translation.dx >= maxCenterX - epsilon;
+      }
+    } else {
+      xNeedsCorrection =
+          (start.translation.dx - strict.translation.dx).abs() > epsilon;
+    }
+
+    bool yNeedsCorrection;
+    if (isSmallerV) {
+      if (_lastInteractionKind == InteractionKind.zoom) {
+        yNeedsCorrection = true; // recenter after zoom
+      } else {
+        final centerOffsetY = (current.viewportSize.height - scaledHeight) / 2;
+        final centerTargetY =
+            -current.diagramRect.top * start.scale + centerOffsetY;
+        final minCenterY = centerTargetY - Transform2DUtils.dynamicBorderWidth;
+        final maxCenterY = centerTargetY + Transform2DUtils.dynamicBorderWidth;
+        yNeedsCorrection = start.translation.dy <= minCenterY + epsilon ||
+            start.translation.dy >= maxCenterY - epsilon;
+      }
+    } else {
+      yNeedsCorrection =
+          (start.translation.dy - strict.translation.dy).abs() > epsilon;
+    }
+
+    // For zoom interactions: recenter all small-content axes
+    if (_lastInteractionKind == InteractionKind.zoom) {
+      if (isSmallerH) xNeedsCorrection = true;
+      if (isSmallerV) yNeedsCorrection = true;
+    }
+
+    // If any axis needs correction, snap small-content axes to center when they are only slightly off
+    final bool anyCorrection = xNeedsCorrection || yNeedsCorrection;
+    if (anyCorrection) {
+      const double smallCenterSnapThreshold = 3.0;
+      if (isSmallerH) {
+        final centerOffsetX = (current.viewportSize.width - scaledWidth) / 2;
+        final centerTargetX =
+            -current.diagramRect.left * start.scale + centerOffsetX;
+        final devX = (start.translation.dx - centerTargetX).abs();
+        if (!xNeedsCorrection && devX <= smallCenterSnapThreshold) {
+          xNeedsCorrection = true;
+        }
+      }
+      if (isSmallerV) {
+        final centerOffsetY = (current.viewportSize.height - scaledHeight) / 2;
+        final centerTargetY =
+            -current.diagramRect.top * start.scale + centerOffsetY;
+        final devY = (start.translation.dy - centerTargetY).abs();
+        if (!yNeedsCorrection && devY <= smallCenterSnapThreshold) {
+          yNeedsCorrection = true;
+        }
+      }
+    }
+
+    // Only correct the axes that violated limits (or need recentering); keep the others as-is
+    final Offset targetTranslation = Offset(
+      xNeedsCorrection ? strict.translation.dx : start.translation.dx,
+      yNeedsCorrection ? strict.translation.dy : start.translation.dy,
+    );
+
+    // Preserve current scale and rotation for pan-only corrections
+    final target = Transform2D(
+      scale: start.scale,
+      translation: targetTranslation,
+      rotation: start.rotation,
     );
 
     // If already at target, nothing to animate
@@ -109,7 +182,8 @@ class TransformBloc extends Bloc<TransformEvent, TransformState> {
     const frameMs = 16;
     final steps = (totalMs / frameMs).clamp(1, 240).round();
     var step = 0;
-    _bounceTimer = Timer.periodic(const Duration(milliseconds: frameMs), (timer) {
+    _bounceTimer =
+        Timer.periodic(const Duration(milliseconds: frameMs), (timer) {
       step++;
       final t = (step / steps).clamp(0.0, 1.0);
       // Use configurable easing curve for better perceived smoothness
@@ -147,15 +221,19 @@ class TransformBloc extends Bloc<TransformEvent, TransformState> {
         _updateTransform(transform, emit);
       },
       zoom: (scale, focalPoint, currentTransform) {
+        _lastInteractionKind = InteractionKind.zoom;
         _handleZoom(scale, focalPoint, currentTransform, emit);
       },
       pan: (delta, currentTransform) {
+        _lastInteractionKind = InteractionKind.pan;
         _handlePan(delta, currentTransform, emit);
       },
       reset: () {
+        _lastInteractionKind = InteractionKind.other;
         _reset(emit);
       },
       updateDiagramBounds: (diagramRect, viewportSize) {
+        _lastInteractionKind = InteractionKind.other;
         _updateDiagramBounds(diagramRect, viewportSize, emit);
       },
     );
