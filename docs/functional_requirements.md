@@ -97,6 +97,41 @@ The package implements a **Diagrammer-Controller architecture** where:
   - Handle scroll momentum and damping
   - Expose a way to stop auto-scroll promptly upon `StopAutoScroll`
 
+### Inertial Scrolling
+
+- Objective: When a pan ends with sufficient velocity, scrolling must continue with inertia in the same direction, progressively slowing down due to friction until it stops or hits bounds.
+- Trigger:
+  - Pointer drag end on empty area with velocity above a configurable threshold.
+  - (Optional, future) Aggregated velocity from repeated directional key presses.
+- Initial velocity estimation:
+  - Compute initial velocity v0 = (vx0, vy0) from the last ~50–100 ms of pointer deltas.
+  - Activate only when |v0| >= `minInertialVelocity` (configurable).
+- Motion model:
+  - Per-frame integration (~16 ms) with velocity decay: v(t+Δt) = v(t) * exp(-k * Δt), where k is derived from `inertialFriction`.
+  - Position update: p(t+Δt) = p(t) + v(t) * Δt.
+  - Maximum duration: `maxInertialDuration` (configurable) to avoid very long runs.
+  - Stop when |v(t)| < `minStopVelocity`.
+- Bounds and overscroll:
+  - While inertia is active, apply dynamic capping with elastic window (same behavior as active pan).
+  - When inertia ends and transform is outside strict bounds, trigger bounce-back using `bounceDuration` and `bounceCurve`.
+- Axis independence:
+  - Inertia is applied per-axis; one axis may stop earlier or hit bounds while the other continues.
+- Cancellation:
+  - Inertia stops immediately upon new user input (pointer down, pinch/zoom, key), or when `StopAutoScroll` command is received.
+  - Any `SetTransform`/`ApplyDefaultPanZoom` interrupts inertia.
+- Configuration (DiagramConfiguration):
+  - `enableInertialScrolling: bool` (default true)
+  - `inertialFriction: double` (friction coefficient)
+  - `minInertialVelocity: double` (px/s)
+  - `minStopVelocity: double` (px/s)
+  - `maxInertialDuration: Duration`
+  - Reuse: `overscrollPixels`, `bounceDuration`, `bounceCurve`.
+- Acceptance criteria:
+  - After a fast pan end with |v0| >= threshold, translation continues in the same direction and slows according to friction, stopping within `maxInertialDuration` or when |v| < `minStopVelocity`.
+  - Inertia respects bounds with elastic window and ends with bounce-back if needed.
+  - Any new input interrupts inertia within one frame (≤16 ms).
+  - Per-axis behavior is preserved.
+
 ## Interaction State Management
 
 ### Gesture Concurrency Rules

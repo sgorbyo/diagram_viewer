@@ -350,3 +350,33 @@ Implemented commands from controller to viewer:
 - `ElasticBounceBack`
 - `AutoScrollStep`
 - `StopAutoScroll`
+
+## Inertial Scrolling Design
+
+### Overview
+- When a pan ends with sufficient velocity, continue scrolling with inertia, applying friction over time until the motion stops or hits bounds.
+
+### Velocity Estimation
+- Estimate initial velocity v0 from the last ~50–100 ms of pointer deltas; per-axis components (vx0, vy0).
+- Trigger only if |v0| >= `minInertialVelocity`.
+
+### Motion Integration
+- Run a per-frame tick (~16 ms):
+  - v(t+Δt) = v(t) * exp(-k * Δt); k from `inertialFriction`.
+  - p(t+Δt) = p(t) + v(t) * Δt.
+- Stop on `|v| < minStopVelocity` or `elapsed > maxInertialDuration`.
+
+### Bounds Handling
+- During inertia, apply dynamic bounds capping with elastic window.
+- On end, if transform is out of strict bounds, trigger bounce-back.
+
+### Cancellation
+- Immediately stop inertia on any new input or on `StopAutoScroll`.
+- Any `SetTransform`/`ApplyDefaultPanZoom` cancels inertia.
+
+### Configuration
+- `enableInertialScrolling` (bool), `inertialFriction` (double), `minInertialVelocity` (double), `minStopVelocity` (double), `maxInertialDuration` (Duration).
+
+### Testing
+- Unit tests for velocity decay and stopping conditions.
+- Widget tests simulating a fast drag release; verify continued motion and eventual stop/bounce.
