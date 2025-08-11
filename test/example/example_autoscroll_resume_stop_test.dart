@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:diagram_viewer/events/events.dart';
 import 'package:diagram_viewer/interfaces/interfaces.dart';
+// ignore: avoid_relative_lib_imports
 import '../../example/lib/controllers/example_diagram_controller.dart';
 
 class _FakeEntity extends DiagramObjectEntity {
@@ -134,17 +135,17 @@ void main() {
           reason: 'Expected AutoScrollStep after re-entering edge');
 
       // End drag → controller should also stop autoscroll
-      controller.eventsSink.add(DiagramEventUnion.dragEnd(DiagramDragEnd(
+      controller.eventsSink.add(const DiagramEventUnion.dragEnd(DiagramDragEnd(
         eventId: 'e-end',
         logicalPosition: Offset.zero,
-        screenPosition: const Offset(0, 0),
-        transformSnapshot: const Transform2D(),
-        hitList: const [],
+        screenPosition: Offset(0, 0),
+        transformSnapshot: Transform2D(),
+        hitList: [],
         timestamp: Duration.zero,
-        metadata: const {},
-        totalDelta: const Offset(0, 0),
-        totalDuration: const Duration(milliseconds: 80),
-        finalVelocity: const Offset(0, 0),
+        metadata: {},
+        totalDelta: Offset(0, 0),
+        totalDuration: Duration(milliseconds: 80),
+        finalVelocity: Offset(0, 0),
         wasCancelled: false,
       )));
       await Future.delayed(const Duration(milliseconds: 1));

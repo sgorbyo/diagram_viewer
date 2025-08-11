@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:diagram_viewer/events/events.dart';
 import 'package:diagram_viewer/interfaces/interfaces.dart';
+// ignore: avoid_relative_lib_imports
 import '../../example/lib/controllers/example_diagram_controller.dart';
 
 class _FakeEntity extends DiagramObjectEntity {

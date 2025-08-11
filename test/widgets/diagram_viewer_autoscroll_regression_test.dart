@@ -4,6 +4,7 @@ import 'package:diagram_viewer/widgets/diagram_viewer.dart';
 import 'package:diagram_viewer/events/events.dart';
 import 'package:diagram_viewer/internal/blocs/blocs.dart';
 import 'package:diagram_viewer/interfaces/interfaces.dart';
+// ignore: avoid_relative_lib_imports
 import '../../example/lib/controllers/example_diagram_controller.dart';
 
 class _FakeEntity extends DiagramObjectEntity {
@@ -35,11 +36,11 @@ void main() {
 
     // Capture blocs (kept for future assertions)
     // ignore: unused_local_variable
-    TransformBloc? _transformBloc;
+    TransformBloc? transformBlocCaptured;
     // ignore: unused_local_variable
-    PanBloc? _panBloc;
+    PanBloc? panBlocCaptured;
     // ignore: unused_local_variable
-    ZoomBloc? _zoomBloc;
+    ZoomBloc? zoomBlocCaptured;
 
     await tester.pumpWidget(MaterialApp(
       home: Scaffold(
@@ -49,9 +50,9 @@ void main() {
           child: TestableDiagramViewer(
             controller: controller,
             onBlocsCreated: (tBloc, pBloc, zBloc) {
-              _transformBloc = tBloc;
-              _panBloc = pBloc;
-              _zoomBloc = zBloc;
+              transformBlocCaptured = tBloc;
+              panBlocCaptured = pBloc;
+              zoomBlocCaptured = zBloc;
             },
           ),
         ),
@@ -137,17 +138,17 @@ void main() {
     await tester.pump(const Duration(milliseconds: 100));
 
     // Termina il drag per fermare l'autoscroll residuo ed evitare timer vivi
-    controller.eventsSink.add(DiagramEventUnion.dragEnd(DiagramDragEnd(
+    controller.eventsSink.add(const DiagramEventUnion.dragEnd(DiagramDragEnd(
       eventId: 'e-end',
       logicalPosition: Offset.zero,
-      screenPosition: const Offset(0, 0),
-      transformSnapshot: const Transform2D(),
-      hitList: const [],
+      screenPosition: Offset(0, 0),
+      transformSnapshot: Transform2D(),
+      hitList: [],
       timestamp: Duration.zero,
-      metadata: const {},
-      totalDelta: const Offset(0, 0),
-      totalDuration: const Duration(milliseconds: 100),
-      finalVelocity: const Offset(0, 0),
+      metadata: {},
+      totalDelta: Offset(0, 0),
+      totalDuration: Duration(milliseconds: 100),
+      finalVelocity: Offset(0, 0),
       wasCancelled: false,
     )));
     await tester.pump(const Duration(milliseconds: 16));
