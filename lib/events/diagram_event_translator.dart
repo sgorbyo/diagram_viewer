@@ -94,6 +94,7 @@ class DiagramEventTranslator {
           rawEvent,
           delta,
           eventKey,
+          borderProximity,
         );
 
       case InteractionPhase.end:
@@ -268,6 +269,7 @@ class DiagramEventTranslator {
     PointerEvent rawEvent,
     Offset? delta,
     String eventKey,
+    BorderProximity borderProximity,
   ) {
     final state = _activeEvents[eventKey];
     if (state == null) {
@@ -287,7 +289,17 @@ class DiagramEventTranslator {
           transformSnapshot: transformSnapshot,
           hitList: hitList,
           timestamp: duration,
-          metadata: {},
+          metadata: {
+            'borderProximity': {
+              'isNearLeft': borderProximity.isNearLeft,
+              'isNearRight': borderProximity.isNearRight,
+              'isNearTop': borderProximity.isNearTop,
+              'isNearBottom': borderProximity.isNearBottom,
+              'distanceFromEdge': borderProximity.distanceFromEdge,
+              'threshold': borderProximity.threshold,
+              'normalizedDistance': borderProximity.normalizedDistance,
+            },
+          },
           delta: delta,
           totalDelta: totalDelta,
           duration: duration,

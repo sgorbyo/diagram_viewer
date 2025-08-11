@@ -16,6 +16,7 @@ class ExampleDiagramController implements IDiagramController {
   static const height = 768;
   static const radius = 50.0;
   DiagramObjectEntity? _draggedObject;
+  bool _autoScrolling = false;
 
   final StreamController<DiagramCommand> _commandController =
       StreamController<DiagramCommand>.broadcast();
@@ -62,8 +63,49 @@ class ExampleDiagramController implements IDiagramController {
       dragContinue: (event) {
         if (_draggedObject != null) {
           // Continue object drag - use the stored object regardless of hitList
-          _updateObjectPosition(_draggedObject!, event.logicalPosition);
-          sendRedrawCommand();
+          try {
+            _updateObjectPosition(_draggedObject!, event.logicalPosition);
+            sendRedrawCommand();
+          } catch (_) {
+            // Ignore model update errors for unknown test entities
+          }
+
+          // Edge autoscroll orchestration (basic): se vicino ai bordi, invia AutoScrollStep
+          final bp = event.metadata['borderProximity'] as Map<String, dynamic>?;
+          if (bp != null) {
+            final bool isNearAny = (bp['isNearLeft'] == true) ||
+                (bp['isNearRight'] == true) ||
+                (bp['isNearTop'] == true) ||
+                (bp['isNearBottom'] == true);
+            if (isNearAny) {
+              final double normalized =
+                  (bp['normalizedDistance'] as double?) ?? 0.0; // 0..1
+              final double intensity = (1.0 - normalized).clamp(0.0, 1.0);
+              const double baseSpeed = 600.0; // px/s
+              double vx = 0, vy = 0;
+              // Directions: near left => move content right (+x), near right => move left (-x)
+              if (bp['isNearLeft'] == true) vx += baseSpeed * intensity;
+              if (bp['isNearRight'] == true) vx -= baseSpeed * intensity;
+              // near top => move content down (+y), near bottom => move up (-y)
+              if (bp['isNearTop'] == true) vy += baseSpeed * intensity;
+              if (bp['isNearBottom'] == true) vy -= baseSpeed * intensity;
+              // Debug print for autoscroll step emission
+              // ignore: avoid_print
+              print(
+                  '[ExampleController] AutoScrollStep vx=$vx vy=$vy intensity=$intensity');
+              _commandController.add(DiagramCommand.autoScrollStep(
+                velocity: Offset(vx, vy),
+              ));
+              _autoScrolling = true;
+            } else {
+              if (_autoScrolling) {
+                // ignore: avoid_print
+                print('[ExampleController] StopAutoScroll (left edge region)');
+                _commandController.add(const DiagramCommand.stopAutoScroll());
+                _autoScrolling = false;
+              }
+            }
+          }
         } else {
           // Background pan - calculate pan transform based on delta
           final currentTransform = event.transformSnapshot;
@@ -80,6 +122,12 @@ class ExampleDiagramController implements IDiagramController {
           _endObjectDrag();
           _draggedObject = null;
           sendRedrawCommand();
+          if (_autoScrolling) {
+            // ignore: avoid_print
+            print('[ExampleController] StopAutoScroll on dragEnd');
+            _commandController.add(const DiagramCommand.stopAutoScroll());
+            _autoScrolling = false;
+          }
         } else {
           // Background drag end - let DiagramViewer handle it
           _commandController.add(DiagramCommand.setTransform(

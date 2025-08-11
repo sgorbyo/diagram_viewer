@@ -42,6 +42,9 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
   final Set<LogicalKeyboardKey> _pressedKeys = {};
   StreamSubscription<PhysicalEvent>? _physicalEventSubscription;
   StreamSubscription<DiagramCommand>? _commandSubscription;
+  Timer? _autoScrollTimer;
+  Offset _autoScrollVelocity = Offset.zero;
+  bool _autoScrollActive = false;
   Size _lastViewportSize = Size.zero;
   bool _wasMultiTouchGesture = false;
   bool _draggingOnObject = false;
@@ -126,16 +129,63 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
                 TransformEvent.updateTransform(transform: targetTransform));
           },
           autoScrollStep: (velocity, stepDuration) {
-            // Forward to PanBloc for auto-scroll
-            // Auto-scroll not yet implemented at PanBloc level; reserved for future use
+            // Start or update auto-scroll loop driven by controller commands
+            _autoScrollVelocity = velocity;
+            final interval = widget.configuration.autoScrollInterval;
+            // If velocity is near zero, stop the loop
+            if (_autoScrollVelocity.dx.abs() < 0.0001 &&
+                _autoScrollVelocity.dy.abs() < 0.0001) {
+              // ignore: avoid_print
+              print('[Viewer] stop auto-scroll due to ~zero velocity');
+              _autoScrollTimer?.cancel();
+              _autoScrollTimer = null;
+              _autoScrollActive = false;
+              return;
+            }
+            // If already running, do not recreate the timer
+            if (_autoScrollActive && _autoScrollTimer != null) return;
+            _autoScrollTimer?.cancel();
+            _autoScrollActive = true;
+            _autoScrollTimer = Timer.periodic(interval, (_) {
+              if (!mounted) return;
+              final transformBloc = context.read<TransformBloc>();
+              final currentTransform = transformBloc.state.transform;
+              final dtSeconds = interval.inMilliseconds / 1000.0;
+              final delta = Offset(
+                _autoScrollVelocity.dx * dtSeconds,
+                _autoScrollVelocity.dy * dtSeconds,
+              );
+              // ignore: avoid_print
+              print('[Viewer] auto-scroll tick delta=$delta');
+              // If external stop was requested while looping
+              if (!_autoScrollActive) {
+                // ignore: avoid_print
+                print(
+                    '[Viewer] timer observed _autoScrollActive=false, cancelling');
+                _autoScrollTimer?.cancel();
+                _autoScrollTimer = null;
+                return;
+              }
+              transformBloc.add(TransformEvent.pan(
+                delta: delta,
+                currentTransform: currentTransform,
+              ));
+            });
           },
           stopAutoScroll: () {
-            // Stop auto-scroll - reserved for future use
+            // ignore: avoid_print
+            print('[Viewer] stopAutoScroll command received');
+            _autoScrollTimer?.cancel();
+            _autoScrollTimer = null;
+            _autoScrollVelocity = Offset.zero;
+            _autoScrollActive = false;
           },
         );
       });
     });
   }
+
+  // (removed duplicate dispose override; we already dispose at bottom)
 
   /// Handle PhysicalEvent for default pan/zoom behavior
   void _handlePhysicalEventForDefaultBehavior(PhysicalEvent event) {
@@ -234,11 +284,19 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
                 if (isPointerActive) {
                   transformBloc.setFrozenDuringDrag(true);
                 }
+                // Update bounds in TransformBloc
                 transformBloc.add(
                   TransformEvent.updateDiagramBounds(
                     diagramRect: widget.controller.logicalExtent,
                     viewportSize: currentSize,
                   ),
+                );
+
+                // Keep EventManagementBloc dependencies in sync with latest viewport
+                eventBloc.configureDependencies(
+                  transformBloc: transformBloc,
+                  configuration: widget.configuration,
+                  viewportSize: currentSize,
                 );
               });
               _lastViewportSize = currentSize;
@@ -287,6 +345,11 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
   /// Handle pointer down events
   void _handlePointerDown(
       BuildContext context, PointerDownEvent event, double topPadding) {
+    // Any new input should stop auto-scroll
+    _autoScrollTimer?.cancel();
+    _autoScrollTimer = null;
+    _autoScrollVelocity = Offset.zero;
+    _autoScrollActive = false;
     final eventBloc = context.read<EventManagementBloc>();
     final transformBloc = context.read<TransformBloc>();
     final currentTransform = transformBloc.state.transform;
@@ -356,6 +419,11 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
 
   /// Handle pointer up events
   void _handlePointerUp(BuildContext context, PointerUpEvent event) {
+    // Stop auto-scroll on pointer up
+    _autoScrollTimer?.cancel();
+    _autoScrollTimer = null;
+    _autoScrollVelocity = Offset.zero;
+    _autoScrollActive = false;
     final eventBloc = context.read<EventManagementBloc>();
 
     // Send to EventManagementBloc
@@ -377,6 +445,11 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
   /// Handle pointer signal events (mouse wheel)
   void _handlePointerSignal(
       BuildContext context, PointerSignalEvent event, double topPadding) {
+    // Stop auto-scroll on new pointer signal
+    _autoScrollTimer?.cancel();
+    _autoScrollTimer = null;
+    _autoScrollVelocity = Offset.zero;
+    _autoScrollActive = false;
     if (event is PointerScrollEvent) {
       final transformBloc = context.read<TransformBloc>();
       final currentTransform = transformBloc.state.transform;
@@ -413,6 +486,11 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
   /// Handle scale start events
   void _handleScaleStart(
       BuildContext context, ScaleStartDetails details, double topPadding) {
+    // Stop auto-scroll on new gesture
+    _autoScrollTimer?.cancel();
+    _autoScrollTimer = null;
+    _autoScrollVelocity = Offset.zero;
+    _autoScrollActive = false;
     final eventBloc = context.read<EventManagementBloc>();
     final transformBloc = context.read<TransformBloc>();
     final currentTransform = transformBloc.state.transform;
@@ -517,6 +595,11 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
 
   /// Handle key events for keyboard interaction
   void _handleKeyEvent(BuildContext context, KeyEvent event) {
+    // Stop auto-scroll on keyboard activity
+    _autoScrollTimer?.cancel();
+    _autoScrollActive = false;
+    _autoScrollTimer = null;
+    _autoScrollVelocity = Offset.zero;
     // Ensure we have focus before processing keyboard events
     if (!_keyboardFocusNode.hasFocus) {
       _keyboardFocusNode.requestFocus();
@@ -566,6 +649,7 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
 
   @override
   void dispose() {
+    _autoScrollTimer?.cancel();
     _physicalEventSubscription?.cancel();
     _commandSubscription?.cancel();
     _keyboardFocusNode.dispose();

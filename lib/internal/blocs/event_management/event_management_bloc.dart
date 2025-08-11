@@ -479,8 +479,49 @@ class EventManagementBloc
     return Offset.zero; // Simplified for now
   }
 
-  BorderProximity _getBorderProximity(Offset screenPosition) =>
-      BorderProximity.none; // Placeholder
+  BorderProximity _getBorderProximity(Offset screenPosition) {
+    // Require viewport size and configuration
+    if (_viewportSize == null || _configuration == null) {
+      return BorderProximity.none;
+    }
+
+    final threshold = _configuration!.edgeThreshold;
+    final width = _viewportSize!.width;
+    final height = _viewportSize!.height;
+
+    // Distances to edges
+    final left = screenPosition.dx;
+    final right = (width - screenPosition.dx).clamp(0.0, double.infinity);
+    final top = screenPosition.dy;
+    final bottom = (height - screenPosition.dy).clamp(0.0, double.infinity);
+
+    final isNearLeft = left <= threshold;
+    final isNearRight = right <= threshold;
+    final isNearTop = top <= threshold;
+    final isNearBottom = bottom <= threshold;
+
+    // If not near any, return none with infinity distance
+    if (!isNearLeft && !isNearRight && !isNearTop && !isNearBottom) {
+      return BorderProximity.none.copyWith(threshold: threshold);
+    }
+
+    final distances = <double>[
+      if (isNearLeft) left else double.infinity,
+      if (isNearRight) right else double.infinity,
+      if (isNearTop) top else double.infinity,
+      if (isNearBottom) bottom else double.infinity,
+    ];
+    final minDistance = distances.reduce((a, b) => a < b ? a : b);
+
+    return BorderProximity(
+      isNearLeft: isNearLeft,
+      isNearRight: isNearRight,
+      isNearTop: isNearTop,
+      isNearBottom: isNearBottom,
+      distanceFromEdge: minDistance,
+      threshold: threshold,
+    );
+  }
 
   double? _extractScale(Object rawEvent) {
     // Extract scale from gesture event
