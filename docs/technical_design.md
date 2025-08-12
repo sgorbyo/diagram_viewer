@@ -90,6 +90,33 @@ The `PhysicalEvent` system has been enhanced with new fields:
 - `activeInteraction`: Type of active interaction (if any)
 - `hitResults`: Ordered list of hit objects with distance information
 - `borderProximity`: Includes normalized distance and qualitative helpers for edge behaviors
+### In‑App Drag & Drop (Target) – Technical Notes
+
+- Architecture
+  - A top overlay `DragTarget` layer is added inside `DiagramViewerContent` spanning the viewport.
+  - While hovering/dragging, events map global/screen offsets to logical via `Transform2D.physicalToLogical`.
+  - New PhysicalEvent union cases carry DnD enter/over/leave/drop with positions and data previews.
+
+- Event Isolation
+  - DnD target events coexist with pointer/gesture events; isolation rules remain intact (DnD does not hijack ongoing gestures by default).
+
+- Ghost Overlay (optional)
+  - Implemented as a lightweight overlay widget controlled by commands: `ShowDragOverlay`, `UpdateDragOverlay`, `HideDragOverlay`.
+  - Disabled by default; no system cursor on mobile (commands are no-op on cursor there).
+
+- Controller Contract
+  - Controller starts the in‑app DnD (source) and supplies `application/json` payload (opaque to the Diagrammer).
+  - The Diagrammer forwards previews and final data; the Controller decides effects and updates the model on drop.
+
+- Configuration (future)
+  - `enableInAppDnD: bool` (default true)
+  - `dragGhostOpacity: double` (default 0.8)
+  - `dragCursorBehavior: enum { system, custom, none }`
+
+Border Proximity details:
+- Computed in `EventManagementBloc` using `viewportSize` and `DiagramConfiguration.edgeThreshold`.
+- Provides flags for the four edges, raw distance, and a normalized distance (0 near edge → 1 far outside threshold).
+- Injected into `dragContinue` events via `metadata['borderProximity']`.
 
 #### **Event Isolation Rule**
 - Only one interaction type (pointer, gesture, keyboard) can be active at a time
@@ -128,6 +155,12 @@ The package uses multiple BLoCs for different responsibilities:
 - Handles pan operations (drag, keyboard)
 - Manages auto-centering logic
 - Enforces pan limits and bounds
+
+#### **AutoScroll (current implementation)**
+- Orchestration lives in the example controller based on `borderProximity`.
+- Execution is in `DiagramViewerContent` with a `Timer.periodic` loop driven by `autoScrollInterval` from configuration.
+- Immediate stop on `StopAutoScroll` or any new user input.
+- One widget-level E2E autoscroll test is temporarily marked `skip` while stabilizing timer-driven flows.
 
 #### **EventManagementBloc**
 - Manages complex event states and isolation
@@ -334,6 +367,24 @@ void _handleUpdateModifierKeys(Set<LogicalKeyboardKey> keys, Emitter<EventManage
 - Add custom business logic and state management
 
 ## Configuration Reference
+
+Example configuration:
+
+```dart
+final config = DiagramConfiguration(
+  backgroundColor: Colors.white,
+  edgeThreshold: 50.0,
+  minZoom: 0.1,
+  maxZoom: 10.0,
+  overscrollPixels: 100.0,
+  bounceDuration: Duration(milliseconds: 300),
+  bounceCurve: Curves.easeOutCubic,
+  autoScrollInterval: Duration(milliseconds: 16), // ~60 FPS
+  autoScrollAcceleration: 1.5,
+  enableInertialScrolling: true,
+  inertialFriction: 0.95,
+);
+```
 
 Key options in `DiagramConfiguration` used by the implementation:
 - `overscrollPixels`: controls elastic margins beyond bounds

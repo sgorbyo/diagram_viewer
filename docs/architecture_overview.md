@@ -44,6 +44,10 @@ class Transform2D {
 - **Enriched Context**: Logical coordinates, hit-test results, border proximity
 - **Event Phases**: Start, update, end for continuous interactions
 - **Edge Proximity Metrics**: Normalized distance and qualitative bands for edge-driven behaviors
+- **In‑App Drag & Drop (Target)**: DragTargetEnter/Over/Leave/Drop with screen/logical positions and data previews
+
+Notes:
+- Border proximity is currently computed in `EventManagementBloc` using the viewport and `edgeThreshold`, and included in pointer drag events (update phase) via metadata.
 
 ### **Diagram Commands (Controller → Diagrammer)**
 - **ApplyDefaultPanZoom**: Execute default pan/zoom behavior
@@ -52,6 +56,10 @@ class Transform2D {
 - **ElasticBounceBack**: Return to valid bounds with animation
 - **AutoScrollStep**: Execute incremental scroll
 - **StopAutoScroll**: Stop ongoing auto-scroll immediately
+
+Autoscroll execution contract (current):
+- The controller decides when to autoscroll (based on border proximity) and emits `AutoScrollStep` with a velocity vector; it must emit `StopAutoScroll` when leaving the edge region or on drag end.
+- The Diagrammer executes autoscroll with a periodic tick (per `autoScrollInterval`) integrating `velocity * dt`, and immediately cancels on `StopAutoScroll` or on new user input.
 
 ## Component Responsibilities
 
@@ -62,14 +70,20 @@ class Transform2D {
 - Rendering pipeline with z-order sorting
 - Default pan/zoom behaviors
 - Performance optimization (60 FPS target)
+- Execute `AutoScrollStep`/`StopAutoScroll` commands with a timer-based loop
+- Expose an in‑app drag target layer; convert screen to logical coordinates; execute DnD visual feedback commands
 
 ### **Controller Responsibilities**
 - Business logic interpretation
 - Model state management
 - Object selection and manipulation
 - Auto-scroll orchestration
+- Start in‑app DnD (source in external widgets), handle DnD target events, command visual feedback, and perform final model updates on drop
 - Diagram extent calculation
 - State machine coordination (BLoCs)
+
+Planned consolidation:
+- An internal `AutoScrollService` may consolidate the orchestration in the future to reduce duplication across controllers.
 
 ## Data Flow
 
@@ -160,4 +174,7 @@ User Gesture → Diagrammer (enrichment) → Controller (interpretation) → Com
 
 - **Debug Observer**: Optional BLoC transition logging via `DiagramConfiguration.enableBlocDebugObserver`
 - **Testable Widget**: `TestableDiagramViewer` exposes internal BLoCs via `onBlocsCreated` for tests
+
+Known limitations (current):
+- One widget-level autoscroll end-to-end test is temporarily skipped while stabilizing timer-driven flows.
 

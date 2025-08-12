@@ -87,15 +87,51 @@ The package implements a **Diagrammer-Controller architecture** where:
 
 ### Auto-scrolling Behavior
 - The controller must:
-  - Orchestrate auto-scroll when objects approach diagram edges
-  - Configure auto-scroll parameters (speed inversely proportional to distance)
-  - Send AutoScrollStep commands to the package
+  - Orchestrate auto-scroll when objects approach diagram edges, using `borderProximity` provided in PhysicalEvents
+  - Configure auto-scroll parameters (inverse speed vs. distance, curve/easing)
+  - Send `AutoScrollStep` with a velocity vector and `StopAutoScroll` when leaving the edge threshold or on drag end
 
 - The package must:
-  - Execute auto-scroll commands from the controller
-  - Support configurable edge detection thresholds
-  - Handle scroll momentum and damping
-  - Expose a way to stop auto-scroll promptly upon `StopAutoScroll`
+  - Execute auto-scroll commands with a periodic tick based on `DiagramConfiguration.autoScrollInterval`
+  - Support configurable edge detection thresholds via `DiagramConfiguration.edgeThreshold`
+  - Integrate velocity per tick and apply it via `TransformBloc`
+  - Stop immediately on `StopAutoScroll` or on any new user input
+
+### In‑App Drag & Drop (Target)
+
+- Scope and Platforms
+  - The Diagrammer must act as an in‑app drag-and-drop target on Android, iOS, Web, macOS, Windows, and Linux.
+  - Only in‑app DnD (within the Flutter application). Cross‑app OS‑level DnD is out of scope.
+
+- Controller responsibilities (Source lives outside the Diagrammer)
+  - Initiate a drag operation from external widgets within the same app, providing an `application/json` payload (schema owned by the controller).
+  - Handle business rules during drag (accept/reject, allowed effects) and perform the final model update on drop.
+  - Drive visual feedback via commands (cursor/effect where applicable, optional ghost overlay).
+
+- Diagrammer responsibilities
+  - Expose a drag target layer that emits continuous target events until drop/end.
+  - Enrich DnD events with both screen and logical positions.
+  - Execute controller commands for visual feedback (cursor/effect where supported, ghost overlay if enabled).
+
+- Supported payloads
+  - `application/json` from the controller; the Diagrammer treats the payload as opaque and forwards it.
+
+- Physical Events (Diagrammer → Controller)
+  - `DragTargetEnter(dataPreview, screenPosition, logicalPosition)`
+  - `DragTargetOver(dataPreview, screenPosition, logicalPosition)`
+  - `DragTargetLeave()`
+  - `DragTargetDrop(data, screenPosition, logicalPosition)`
+
+- Commands (Controller → Diagrammer)
+  - `SetCursor(effect | notAllowed)` (desktop/web; no-op on mobile)
+  - `ShowDragOverlay(ghostSpec, position)`
+  - `UpdateDragOverlay(position)`
+  - `HideDragOverlay()`
+
+- Acceptance criteria
+  - Starting an in‑app drag from an external widget yields continuous Over events to the Diagrammer while hovering; releasing results in a Drop event carrying the original JSON.
+  - Visual feedback (cursor/effect where supported, ghost overlay) updates within one frame after relevant commands.
+  - Positions are accurate in both screen and logical coordinates.
 
 ### Inertial Scrolling
 

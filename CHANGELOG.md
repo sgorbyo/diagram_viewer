@@ -1,5 +1,15 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+- Autoscroll (beta):
+  - Controller-driven orchestration using `borderProximity` metadata
+  - Viewer executes `AutoScrollStep` via timer; immediate `StopAutoScroll` support
+  - Known: one widget E2E test is temporarily skipped while stabilizing timer-driven flows
+- Border proximity: computation enabled in `EventManagementBloc` and propagated to drag events
+- Docs: Updated architecture, technical design, and functional requirements for autoscroll contract and border proximity
+
 ## 0.0.1
 
 Initial release of the diagram_viewer package.
