@@ -475,8 +475,23 @@ class EventManagementBloc
   // Removed unused helper _getLogicalPosition
 
   Offset _getScreenPosition(Object? rawEvent) {
-    // Extract screen position from raw event
-    return Offset.zero; // Simplified for now
+    // Pointer events carry absolute screen coordinates
+    if (rawEvent is PointerEvent) {
+      return rawEvent.position;
+    }
+    // Scale (pinch/trackpad) gestures expose focalPoint in screen coordinates
+    if (rawEvent is ScaleStartDetails) {
+      return rawEvent.focalPoint;
+    }
+    if (rawEvent is ScaleUpdateDetails) {
+      return rawEvent.focalPoint;
+    }
+    if (rawEvent is ScaleEndDetails) {
+      // No focalPoint on end; cannot infer reliably without extra state
+      return Offset.zero;
+    }
+    // Fallback for unknown types
+    return Offset.zero;
   }
 
   BorderProximity _getBorderProximity(Offset screenPosition) {
@@ -524,13 +539,17 @@ class EventManagementBloc
   }
 
   double? _extractScale(Object rawEvent) {
-    // Extract scale from gesture event
-    return null; // Simplified for now
+    if (rawEvent is ScaleUpdateDetails) {
+      return rawEvent.scale;
+    }
+    return null;
   }
 
   double? _extractRotation(Object rawEvent) {
-    // Extract rotation from gesture event
-    return null; // Simplified for now
+    if (rawEvent is ScaleUpdateDetails) {
+      return rawEvent.rotation;
+    }
+    return null;
   }
 
   void _emitPhysicalEvent(PhysicalEvent event) {

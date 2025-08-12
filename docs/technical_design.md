@@ -90,6 +90,11 @@ The `PhysicalEvent` system has been enhanced with new fields:
 - `activeInteraction`: Type of active interaction (if any)
 - `hitResults`: Ordered list of hit objects with distance information
 - `borderProximity`: Includes normalized distance and qualitative helpers for edge behaviors
+
+##### Screen position extraction (pointer/touch/trackpad)
+- Pointer events: screen position comes from `PointerEvent.position`.
+- Gesture (pinch/trackpad) events: screen position comes from `Scale*Details.focalPoint` during start/update.
+- Gesture end has no reliable focal point; a neutral `Offset.zero` is used unless additional state is introduced.
 ### In‑App Drag & Drop (Target) – Technical Notes
 
 - Architecture
