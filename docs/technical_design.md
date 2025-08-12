@@ -160,7 +160,7 @@ The package uses multiple BLoCs for different responsibilities:
 - Orchestration lives in the example controller based on `borderProximity`.
 - Execution is in `DiagramViewerContent` with a `Timer.periodic` loop driven by `autoScrollInterval` from configuration.
 - Immediate stop on `StopAutoScroll` or any new user input.
-- One widget-level E2E autoscroll test is temporarily marked `skip` while stabilizing timer-driven flows.
+- Widget-level E2E autoscroll test stabilized and active.
 
 #### **EventManagementBloc**
 - Manages complex event states and isolation

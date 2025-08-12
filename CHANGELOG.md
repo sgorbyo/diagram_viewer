@@ -6,9 +6,12 @@
 - Autoscroll (beta):
   - Controller-driven orchestration using `borderProximity` metadata
   - Viewer executes `AutoScrollStep` via timer; immediate `StopAutoScroll` support
-  - Known: one widget E2E test is temporarily skipped while stabilizing timer-driven flows
+  - E2E widget autoscroll test stabilized and enabled
 - Border proximity: computation enabled in `EventManagementBloc` and propagated to drag events
 - Docs: Updated architecture, technical design, and functional requirements for autoscroll contract and border proximity
+
+### Changed
+- Removed temporary debug logs from runtime code; kept optional `DebugBlocObserver` behind configuration
 
 ## 0.0.1
 

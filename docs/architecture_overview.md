@@ -176,5 +176,5 @@ User Gesture → Diagrammer (enrichment) → Controller (interpretation) → Com
 - **Testable Widget**: `TestableDiagramViewer` exposes internal BLoCs via `onBlocsCreated` for tests
 
 Known limitations (current):
-- One widget-level autoscroll end-to-end test is temporarily skipped while stabilizing timer-driven flows.
+// None specific to autoscroll tests; timer-driven flows stabilized.
 
