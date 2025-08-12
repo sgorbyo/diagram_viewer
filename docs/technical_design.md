@@ -158,8 +158,8 @@ The package uses multiple BLoCs for different responsibilities:
 
 #### **AutoScroll (current implementation)**
 - Orchestration lives in the example controller based on `borderProximity`.
-- Execution is in `DiagramViewerContent` with a `Timer.periodic` loop driven by `autoScrollInterval` from configuration.
-- Immediate stop on `StopAutoScroll` or any new user input.
+- Execution is encapsulated by an internal `AutoScrollService` used by `DiagramViewerContent`, which runs a timer-driven loop at `autoScrollInterval` integrating `velocity * dt` and dispatching pan deltas to `TransformBloc`.
+- Immediate stop on `StopAutoScroll` or any new user input (pointer/gesture/keyboard) via the service.
 - Widget-level E2E autoscroll test stabilized and active.
 
 #### **EventManagementBloc**
