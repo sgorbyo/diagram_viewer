@@ -302,9 +302,6 @@ class TransformBloc extends Bloc<TransformEvent, TransformState> {
     Transform2D currentTransform,
     Emitter<TransformState> emit,
   ) {
-    // ignore: avoid_print
-    print(
-        '[TransformBloc] pan delta=$delta from=${currentTransform.translation}');
     final newTransform = currentTransform.applyPan(delta);
     final currentState = state;
 
@@ -319,8 +316,6 @@ class TransformBloc extends Bloc<TransformEvent, TransformState> {
       recenterSmallContent: false,
     );
 
-    // ignore: avoid_print
-    print('[TransformBloc] new translation=${finalTransform.translation}');
     emit(TransformState.updated(
       transform: finalTransform,
       diagramRect: currentState.diagramRect,

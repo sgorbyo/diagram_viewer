@@ -135,8 +135,6 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
             // If velocity is near zero, stop the loop
             if (_autoScrollVelocity.dx.abs() < 0.0001 &&
                 _autoScrollVelocity.dy.abs() < 0.0001) {
-              // ignore: avoid_print
-              print('[Viewer] stop auto-scroll due to ~zero velocity');
               _autoScrollTimer?.cancel();
               _autoScrollTimer = null;
               _autoScrollActive = false;
@@ -155,13 +153,8 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
                 _autoScrollVelocity.dx * dtSeconds,
                 _autoScrollVelocity.dy * dtSeconds,
               );
-              // ignore: avoid_print
-              print('[Viewer] auto-scroll tick delta=$delta');
               // If external stop was requested while looping
               if (!_autoScrollActive) {
-                // ignore: avoid_print
-                print(
-                    '[Viewer] timer observed _autoScrollActive=false, cancelling');
                 _autoScrollTimer?.cancel();
                 _autoScrollTimer = null;
                 return;
@@ -173,8 +166,6 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
             });
           },
           stopAutoScroll: () {
-            // ignore: avoid_print
-            print('[Viewer] stopAutoScroll command received');
             _autoScrollTimer?.cancel();
             _autoScrollTimer = null;
             _autoScrollVelocity = Offset.zero;

@@ -119,6 +119,9 @@ class DiagramCommand with _$DiagramCommand {
   /// dragged or when it moves away from the viewport edges.
   const factory DiagramCommand.stopAutoScroll() = StopAutoScrollCommand;
 
+  // In-App Drag & Drop (Target) feedback commands (reserved names)
+  // Placeholders intentionally omitted to avoid generating new union cases now.
+
   /// Returns true if this command is an ApplyDefaultPanZoom command.
   bool get isApplyDefaultPanZoom => this is ApplyDefaultPanZoomCommand;
 

@@ -89,18 +89,12 @@ class ExampleDiagramController implements IDiagramController {
               // near top => move content down (+y), near bottom => move up (-y)
               if (bp['isNearTop'] == true) vy += baseSpeed * intensity;
               if (bp['isNearBottom'] == true) vy -= baseSpeed * intensity;
-              // Debug print for autoscroll step emission
-              // ignore: avoid_print
-              print(
-                  '[ExampleController] AutoScrollStep vx=$vx vy=$vy intensity=$intensity');
               _commandController.add(DiagramCommand.autoScrollStep(
                 velocity: Offset(vx, vy),
               ));
               _autoScrolling = true;
             } else {
               if (_autoScrolling) {
-                // ignore: avoid_print
-                print('[ExampleController] StopAutoScroll (left edge region)');
                 _commandController.add(const DiagramCommand.stopAutoScroll());
                 _autoScrolling = false;
               }
@@ -123,8 +117,6 @@ class ExampleDiagramController implements IDiagramController {
           _draggedObject = null;
           sendRedrawCommand();
           if (_autoScrolling) {
-            // ignore: avoid_print
-            print('[ExampleController] StopAutoScroll on dragEnd');
             _commandController.add(const DiagramCommand.stopAutoScroll());
             _autoScrolling = false;
           }

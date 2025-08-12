@@ -60,6 +60,12 @@ void main() {
     ));
     await tester.pump();
 
+    // Snapshot initial translation from TransformBloc
+    expect(transformBlocCaptured, isNotNull,
+        reason: 'TransformBloc should be captured by TestableDiagramViewer');
+    final double initialTx =
+        transformBlocCaptured!.state.transform.translation.dx;
+
     // Simula drag su oggetto: inviamo prima un dragBegin con hitList non vuoto
 
     controller.eventsSink.add(DiagramEventUnion.dragBegin(DiagramDragBegin(
@@ -114,6 +120,16 @@ void main() {
       await tester.pump(const Duration(milliseconds: 16));
     }
 
+    // Attendi un micro-frame per processare eventuali eventi BLoC
+    await tester.pump();
+
+    // Verifica che l'autoscroll a destra (vicino al bordo destro) muova il contenuto verso sinistra (tx diminuisce)
+    final double afterRightEdgeTx =
+        transformBlocCaptured!.state.transform.translation.dx;
+    expect(afterRightEdgeTx, lessThan(initialTx),
+        reason:
+            'Near right edge → velocity.x negativa → translation.x deve diminuire');
+
     // Allontanati (no edge) per 2 tick: deve arrivare StopAutoScroll
     for (int i = 0; i < 2; i++) {
       controller.eventsSink.add(dragWith({
@@ -128,6 +144,10 @@ void main() {
       await tester.pump(const Duration(milliseconds: 16));
     }
 
+    // Valore di riferimento dopo lo stop
+    final double afterStopTx =
+        transformBlocCaptured!.state.transform.translation.dx;
+
     // Rientra nel bordo: deve ri-partire AutoScrollStep
     for (int i = 0; i < 3; i++) {
       controller.eventsSink.add(dragWith(bpRight(0.2)));
@@ -136,6 +156,13 @@ void main() {
 
     // Attendi un frame extra per far scorrere eventuali tick del timer
     await tester.pump(const Duration(milliseconds: 100));
+
+    // Dopo il periodo di stop, l'autoscroll deve essere ripreso e continuare a diminuire tx
+    final double afterResumeTx =
+        transformBlocCaptured!.state.transform.translation.dx;
+    expect(afterResumeTx, lessThan(afterStopTx),
+        reason:
+            'Dopo il resume vicino al bordo destro, tx deve continuare a diminuire');
 
     // Termina il drag per fermare l'autoscroll residuo ed evitare timer vivi
     controller.eventsSink.add(const DiagramEventUnion.dragEnd(DiagramDragEnd(
@@ -153,7 +180,10 @@ void main() {
     )));
     await tester.pump(const Duration(milliseconds: 16));
 
-    await sub.cancel();
+    // Cancel subscription without awaiting to avoid potential hangs in broadcast streams
+    // (no further events are needed beyond this point)
+    // ignore: discarded_futures
+    sub.cancel();
 
     // Verifiche qualitative sui comandi emessi
     final hadAutoScrollFirst =
@@ -172,6 +202,6 @@ void main() {
     // Dispose controller and unmount the viewer to ensure all timers and streams close
     controller.dispose();
     await tester.pumpWidget(const SizedBox());
-    await tester.pump(const Duration(milliseconds: 50));
-  }, skip: true, timeout: const Timeout(Duration(seconds: 20)));
+    await tester.pump(const Duration(milliseconds: 200));
+  }, timeout: const Timeout(Duration(seconds: 20)));
 }
