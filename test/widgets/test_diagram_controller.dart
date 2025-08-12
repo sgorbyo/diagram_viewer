@@ -110,6 +110,35 @@ class TestDiagramController implements IDiagramController {
       pinchEnd: (event) {
         // No action needed for end
       },
+      dragTargetEnter: (
+        String eventId,
+        Object dataPreview,
+        Offset screenPosition,
+        Offset logicalPosition,
+        Transform2D transformSnapshot,
+        Duration timestamp,
+      ) {},
+      dragTargetOver: (
+        String eventId,
+        Object dataPreview,
+        Offset screenPosition,
+        Offset logicalPosition,
+        Transform2D transformSnapshot,
+        Duration timestamp,
+      ) {},
+      dragTargetLeave: (
+        String eventId,
+        Transform2D transformSnapshot,
+        Duration timestamp,
+      ) {},
+      dragTargetDrop: (
+        String eventId,
+        Object data,
+        Offset screenPosition,
+        Offset logicalPosition,
+        Transform2D transformSnapshot,
+        Duration timestamp,
+      ) {},
       doubleTap: (event) {
         // No action needed for double tap
       },

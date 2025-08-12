@@ -44,6 +44,9 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
   StreamSubscription<PhysicalEvent>? _physicalEventSubscription;
   StreamSubscription<DiagramCommand>? _commandSubscription;
   final AutoScrollService _autoScroll = AutoScrollService();
+  bool _dragOverlayVisible = false;
+  Offset _dragOverlayLocalPosition = Offset.zero; // local to viewer
+  Object? _dragOverlaySpec;
   Size _lastViewportSize = Size.zero;
   bool _wasMultiTouchGesture = false;
   bool _draggingOnObject = false;
@@ -145,6 +148,29 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
           },
           stopAutoScroll: () {
             _autoScroll.stop();
+          },
+          showDragOverlay: (ghostSpec, position) {
+            // Convert global position to local (viewer space)
+            final box = context.findRenderObject() as RenderBox?;
+            final local = box != null ? box.globalToLocal(position) : position;
+            setState(() {
+              _dragOverlayVisible = true;
+              _dragOverlaySpec = ghostSpec;
+              _dragOverlayLocalPosition = local;
+            });
+          },
+          updateDragOverlay: (position) {
+            final box = context.findRenderObject() as RenderBox?;
+            final local = box != null ? box.globalToLocal(position) : position;
+            setState(() {
+              _dragOverlayLocalPosition = local;
+            });
+          },
+          hideDragOverlay: () {
+            setState(() {
+              _dragOverlayVisible = false;
+              _dragOverlaySpec = null;
+            });
           },
         );
       });
@@ -283,22 +309,121 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
                 onPointerUp: (event) => _handlePointerUp(context, event),
                 onPointerSignal: (event) =>
                     _handlePointerSignal(context, event, appBarHeight),
-                child: GestureDetector(
-                  onScaleStart: (details) =>
-                      _handleScaleStart(context, details, appBarHeight),
-                  onScaleUpdate: (details) =>
-                      _handleScaleUpdate(context, details, appBarHeight),
-                  onScaleEnd: (details) => _handleScaleEnd(context, details),
-                  child: CustomPaint(
-                    painter: DiagramPainter(
-                      transform: transformState.transform,
-                      objects: widget.controller.objects,
-                      logicalExtent: widget.controller.logicalExtent,
-                      configuration: widget.configuration,
-                      debug: widget.debug,
+                child: Stack(
+                  children: [
+                    GestureDetector(
+                      onScaleStart: (details) =>
+                          _handleScaleStart(context, details, appBarHeight),
+                      onScaleUpdate: (details) =>
+                          _handleScaleUpdate(context, details, appBarHeight),
+                      onScaleEnd: (details) =>
+                          _handleScaleEnd(context, details),
+                      child: CustomPaint(
+                        painter: DiagramPainter(
+                          transform: transformState.transform,
+                          objects: widget.controller.objects,
+                          logicalExtent: widget.controller.logicalExtent,
+                          configuration: widget.configuration,
+                          debug: widget.debug,
+                        ),
+                        size: Size.infinite,
+                      ),
                     ),
-                    size: Size.infinite,
-                  ),
+                    // DnD ghost overlay and DragTarget layer
+                    Positioned.fill(
+                      child: DragTarget<Map<String, dynamic>>(
+                        onWillAccept: (data) => true,
+                        onAcceptWithDetails: (details) {
+                          final globalPos = details.offset;
+                          final box = context.findRenderObject() as RenderBox?;
+                          final localPos = box != null
+                              ? box.globalToLocal(globalPos)
+                              : globalPos;
+                          final logicalPos = transformState.transform
+                              .physicalToLogical(localPos);
+                          widget.controller.eventsSink.add(
+                            DiagramEventUnion.dragTargetDrop(
+                              eventId: UniqueKey().toString(),
+                              data: details.data,
+                              screenPosition: globalPos,
+                              logicalPosition: logicalPos,
+                              transformSnapshot: transformState.transform,
+                              timestamp: Duration(
+                                  milliseconds:
+                                      DateTime.now().millisecondsSinceEpoch),
+                            ),
+                          );
+                          widget.controller.eventsSink.add(
+                            DiagramEventUnion.dragTargetLeave(
+                              eventId: UniqueKey().toString(),
+                              transformSnapshot: transformState.transform,
+                              timestamp: Duration(
+                                  milliseconds:
+                                      DateTime.now().millisecondsSinceEpoch),
+                            ),
+                          );
+                          // Hide overlay on drop
+                          setState(() {
+                            _dragOverlayVisible = false;
+                            _dragOverlaySpec = null;
+                          });
+                        },
+                        onMove: (details) {
+                          final globalPos = details.offset;
+                          final box = context.findRenderObject() as RenderBox?;
+                          final localPos = box != null
+                              ? box.globalToLocal(globalPos)
+                              : globalPos;
+                          final logicalPos = transformState.transform
+                              .physicalToLogical(localPos);
+                          widget.controller.eventsSink.add(
+                            DiagramEventUnion.dragTargetOver(
+                              eventId: UniqueKey().toString(),
+                              dataPreview: details.data,
+                              screenPosition: globalPos,
+                              logicalPosition: logicalPos,
+                              transformSnapshot: transformState.transform,
+                              timestamp: Duration(
+                                  milliseconds:
+                                      DateTime.now().millisecondsSinceEpoch),
+                            ),
+                          );
+                          // Move overlay to cursor
+                          setState(() {
+                            _dragOverlayVisible = true;
+                            _dragOverlaySpec = details.data;
+                            _dragOverlayLocalPosition = localPos;
+                          });
+                        },
+                        onLeave: (data) {
+                          widget.controller.eventsSink.add(
+                            DiagramEventUnion.dragTargetLeave(
+                              eventId: UniqueKey().toString(),
+                              transformSnapshot: transformState.transform,
+                              timestamp: Duration(
+                                  milliseconds:
+                                      DateTime.now().millisecondsSinceEpoch),
+                            ),
+                          );
+                          setState(() {
+                            _dragOverlayVisible = false;
+                            _dragOverlaySpec = null;
+                          });
+                        },
+                        builder: (context, candidate, rejected) {
+                          if (!_dragOverlayVisible) return const SizedBox();
+                          // Simple ghost: small translucent circle at screen position
+                          return IgnorePointer(
+                            child: CustomSingleChildLayout(
+                              delegate: _OverlayPositionDelegate(
+                                  _dragOverlayLocalPosition),
+                              child: _GhostWidget(spec: _dragOverlaySpec),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ),
             );
@@ -605,5 +730,41 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
     _commandSubscription?.cancel();
     _keyboardFocusNode.dispose();
     super.dispose();
+  }
+}
+
+class _OverlayPositionDelegate extends SingleChildLayoutDelegate {
+  final Offset position; // screen-space
+  const _OverlayPositionDelegate(this.position);
+
+  @override
+  Offset getPositionForChild(Size size, Size childSize) {
+    final dx = (position.dx - childSize.width / 2).clamp(0.0, size.width);
+    final dy = (position.dy - childSize.height / 2).clamp(0.0, size.height);
+    return Offset(dx, dy);
+  }
+
+  @override
+  bool shouldRelayout(covariant _OverlayPositionDelegate oldDelegate) {
+    return oldDelegate.position != position;
+  }
+}
+
+class _GhostWidget extends StatelessWidget {
+  final Object? spec;
+  const _GhostWidget({required this.spec});
+
+  @override
+  Widget build(BuildContext context) {
+    // Minimal translucent circle; could be enhanced using spec
+    return Container(
+      width: 24,
+      height: 24,
+      decoration: BoxDecoration(
+        color: Colors.blue.withOpacity(0.3),
+        shape: BoxShape.circle,
+        border: Border.all(color: Colors.blueAccent.withOpacity(0.6)),
+      ),
+    );
   }
 }

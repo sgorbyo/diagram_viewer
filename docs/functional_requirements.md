@@ -48,6 +48,9 @@ The package implements a **Diagrammer-Controller architecture** where:
   4. **ElasticBounceBack**: Return to valid bounds with animation
   5. **AutoScrollStep**: Execute incremental scroll with specified velocity
   6. **StopAutoScroll**: Immediately stop any ongoing auto-scroll
+  7. **ShowDragOverlay**: Show an optional ghost overlay at a given pointer position
+  8. **UpdateDragOverlay**: Update the ghost overlay position
+  9. **HideDragOverlay**: Hide the ghost overlay
 
 ### Event Flow and Control
 - The package must:
@@ -110,7 +113,7 @@ The package implements a **Diagrammer-Controller architecture** where:
 
 - Diagrammer responsibilities
   - Expose a drag target layer that emits continuous target events until drop/end.
-  - Enrich DnD events with both screen and logical positions.
+  - Enrich DnD events with both screen and logical positions (global→local→logical mapping).
   - Execute controller commands for visual feedback (cursor/effect where supported, ghost overlay if enabled).
 
 - Supported payloads

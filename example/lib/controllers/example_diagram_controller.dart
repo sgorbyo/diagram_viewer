@@ -169,6 +169,53 @@ class ExampleDiagramController implements IDiagramController {
           transform: event.transformSnapshot,
         ));
       },
+      dragTargetEnter: (
+        String eventId,
+        Object dataPreview,
+        Offset screenPosition,
+        Offset logicalPosition,
+        Transform2D transformSnapshot,
+        Duration timestamp,
+      ) {
+        // Show ghost at pointer position
+        _commandController.add(DiagramCommand.showDragOverlay(
+          ghostSpec: dataPreview,
+          position: screenPosition,
+        ));
+      },
+      dragTargetOver: (
+        String eventId,
+        Object dataPreview,
+        Offset screenPosition,
+        Offset logicalPosition,
+        Transform2D transformSnapshot,
+        Duration timestamp,
+      ) {
+        // Update ghost position
+        _commandController.add(DiagramCommand.updateDragOverlay(
+          position: screenPosition,
+        ));
+      },
+      dragTargetLeave: (
+        String eventId,
+        Transform2D transformSnapshot,
+        Duration timestamp,
+      ) {
+        // Hide ghost when leaving
+        _commandController.add(const DiagramCommand.hideDragOverlay());
+      },
+      dragTargetDrop: (
+        String eventId,
+        Object data,
+        Offset screenPosition,
+        Offset logicalPosition,
+        Transform2D transformSnapshot,
+        Duration timestamp,
+      ) {
+        // Hide ghost on drop
+        _commandController.add(const DiagramCommand.hideDragOverlay());
+        // Example: could parse JSON and create object here in future
+      },
       // Handle other events with default behavior
       doubleTap: (event) => _handleDoubleTap(event),
       longPress: (event) => _handleLongPress(event),

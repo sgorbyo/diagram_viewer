@@ -44,7 +44,7 @@ class Transform2D {
 - **Enriched Context**: Logical coordinates, hit-test results, border proximity
 - **Event Phases**: Start, update, end for continuous interactions
 - **Edge Proximity Metrics**: Normalized distance and qualitative bands for edge-driven behaviors
-- **In‑App Drag & Drop (Target)**: DragTargetEnter/Over/Leave/Drop with screen/logical positions and data previews
+- **In‑App Drag & Drop (Target)**: DragTargetEnter/Over/Leave/Drop with screen/logical positions and data previews (global→local→logical mapping)
 
 Notes:
 - Border proximity is currently computed in `EventManagementBloc` using the viewport and `edgeThreshold`, and included in pointer drag events (update phase) via metadata.
@@ -56,6 +56,7 @@ Notes:
 - **ElasticBounceBack**: Return to valid bounds with animation
 - **AutoScrollStep**: Execute incremental scroll
 - **StopAutoScroll**: Stop ongoing auto-scroll immediately
+- **ShowDragOverlay / UpdateDragOverlay / HideDragOverlay**: optional ghost overlay control during DnD
 
 Autoscroll execution contract (current):
 - The controller decides when to autoscroll (based on border proximity) and emits `AutoScrollStep` with a velocity vector; it must emit `StopAutoScroll` when leaving the edge region or on drag end.

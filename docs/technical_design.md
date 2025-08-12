@@ -99,7 +99,7 @@ The `PhysicalEvent` system has been enhanced with new fields:
 
 - Architecture
   - A top overlay `DragTarget` layer is added inside `DiagramViewerContent` spanning the viewport.
-  - While hovering/dragging, events map global/screen offsets to logical via `Transform2D.physicalToLogical`.
+  - While hovering/dragging, events map global/screen offsets to logical via `RenderBox.globalToLocal` → `Transform2D.physicalToLogical`.
   - New PhysicalEvent union cases carry DnD enter/over/leave/drop with positions and data previews.
 
 - Event Isolation
@@ -107,7 +107,8 @@ The `PhysicalEvent` system has been enhanced with new fields:
 
 - Ghost Overlay (optional)
   - Implemented as a lightweight overlay widget controlled by commands: `ShowDragOverlay`, `UpdateDragOverlay`, `HideDragOverlay`.
-  - Disabled by default; no system cursor on mobile (commands are no-op on cursor there).
+  - Overlay positions are tracked in local (viewer) coordinates for accurate placement.
+  - No system cursor on mobile (cursor-related commands would be no-op there).
 
 - Controller Contract
   - Controller starts the in‑app DnD (source) and supplies `application/json` payload (opaque to the Diagrammer).
@@ -406,6 +407,9 @@ Implemented commands from controller to viewer:
 - `ElasticBounceBack`
 - `AutoScrollStep`
 - `StopAutoScroll`
+- `ShowDragOverlay(ghostSpec, position)`
+- `UpdateDragOverlay(position)`
+- `HideDragOverlay()`
 
 ## Inertial Scrolling Design
 

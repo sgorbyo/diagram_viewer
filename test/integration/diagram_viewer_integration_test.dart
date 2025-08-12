@@ -81,6 +81,35 @@ class IntegrationTestController implements IDiagramController {
         // Handle pinch end events
         _sendRedrawCommand();
       },
+      dragTargetEnter: (
+        String eventId,
+        Object dataPreview,
+        Offset screenPosition,
+        Offset logicalPosition,
+        Transform2D transformSnapshot,
+        Duration timestamp,
+      ) {},
+      dragTargetOver: (
+        String eventId,
+        Object dataPreview,
+        Offset screenPosition,
+        Offset logicalPosition,
+        Transform2D transformSnapshot,
+        Duration timestamp,
+      ) {},
+      dragTargetLeave: (
+        String eventId,
+        Transform2D transformSnapshot,
+        Duration timestamp,
+      ) {},
+      dragTargetDrop: (
+        String eventId,
+        Object data,
+        Offset screenPosition,
+        Offset logicalPosition,
+        Transform2D transformSnapshot,
+        Duration timestamp,
+      ) {},
     );
   }
 
@@ -244,6 +273,39 @@ void main() {
           pinchBegin: (event) => isTapEvent = false,
           pinchContinue: (event) => isTapEvent = false,
           pinchEnd: (event) => isTapEvent = false,
+          dragTargetEnter: (
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+          ) =>
+              isTapEvent = false,
+          dragTargetOver: (
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+          ) =>
+              isTapEvent = false,
+          dragTargetLeave: (
+            String eventId,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+          ) =>
+              isTapEvent = false,
+          dragTargetDrop: (
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+          ) =>
+              isTapEvent = false,
         );
         expect(isTapEvent, isTrue);
       });

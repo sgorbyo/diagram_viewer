@@ -220,4 +220,38 @@ class DiagramEventUnion with _$DiagramEventUnion {
   const factory DiagramEventUnion.pinchContinue(DiagramPinchContinue event) =
       _PinchContinue;
   const factory DiagramEventUnion.pinchEnd(DiagramPinchEnd event) = _PinchEnd;
+
+  // In‑App Drag & Drop (Target) events
+  const factory DiagramEventUnion.dragTargetEnter({
+    required String eventId,
+    required Object dataPreview,
+    required Offset screenPosition,
+    required Offset logicalPosition,
+    required Transform2D transformSnapshot,
+    required Duration timestamp,
+  }) = _DragTargetEnter;
+
+  const factory DiagramEventUnion.dragTargetOver({
+    required String eventId,
+    required Object dataPreview,
+    required Offset screenPosition,
+    required Offset logicalPosition,
+    required Transform2D transformSnapshot,
+    required Duration timestamp,
+  }) = _DragTargetOver;
+
+  const factory DiagramEventUnion.dragTargetLeave({
+    required String eventId,
+    required Transform2D transformSnapshot,
+    required Duration timestamp,
+  }) = _DragTargetLeave;
+
+  const factory DiagramEventUnion.dragTargetDrop({
+    required String eventId,
+    required Object data,
+    required Offset screenPosition,
+    required Offset logicalPosition,
+    required Transform2D transformSnapshot,
+    required Duration timestamp,
+  }) = _DragTargetDrop;
 }

@@ -3879,7 +3879,6 @@ abstract class _DiagramPinchEnd implements DiagramPinchEnd {
 
 /// @nodoc
 mixin _$DiagramEventUnion {
-  Object get event => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(DiagramTap event) tap,
@@ -3892,6 +3891,33 @@ mixin _$DiagramEventUnion {
     required TResult Function(DiagramPinchBegin event) pinchBegin,
     required TResult Function(DiagramPinchContinue event) pinchContinue,
     required TResult Function(DiagramPinchEnd event) pinchEnd,
+    required TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetEnter,
+    required TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetOver,
+    required TResult Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)
+        dragTargetLeave,
+    required TResult Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetDrop,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -3906,6 +3932,33 @@ mixin _$DiagramEventUnion {
     TResult? Function(DiagramPinchBegin event)? pinchBegin,
     TResult? Function(DiagramPinchContinue event)? pinchContinue,
     TResult? Function(DiagramPinchEnd event)? pinchEnd,
+    TResult? Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetEnter,
+    TResult? Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetOver,
+    TResult? Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)?
+        dragTargetLeave,
+    TResult? Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetDrop,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -3920,6 +3973,33 @@ mixin _$DiagramEventUnion {
     TResult Function(DiagramPinchBegin event)? pinchBegin,
     TResult Function(DiagramPinchContinue event)? pinchContinue,
     TResult Function(DiagramPinchEnd event)? pinchEnd,
+    TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetEnter,
+    TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetOver,
+    TResult Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)?
+        dragTargetLeave,
+    TResult Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetDrop,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -3935,6 +4015,10 @@ mixin _$DiagramEventUnion {
     required TResult Function(_PinchBegin value) pinchBegin,
     required TResult Function(_PinchContinue value) pinchContinue,
     required TResult Function(_PinchEnd value) pinchEnd,
+    required TResult Function(_DragTargetEnter value) dragTargetEnter,
+    required TResult Function(_DragTargetOver value) dragTargetOver,
+    required TResult Function(_DragTargetLeave value) dragTargetLeave,
+    required TResult Function(_DragTargetDrop value) dragTargetDrop,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -3949,6 +4033,10 @@ mixin _$DiagramEventUnion {
     TResult? Function(_PinchBegin value)? pinchBegin,
     TResult? Function(_PinchContinue value)? pinchContinue,
     TResult? Function(_PinchEnd value)? pinchEnd,
+    TResult? Function(_DragTargetEnter value)? dragTargetEnter,
+    TResult? Function(_DragTargetOver value)? dragTargetOver,
+    TResult? Function(_DragTargetLeave value)? dragTargetLeave,
+    TResult? Function(_DragTargetDrop value)? dragTargetDrop,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -3963,6 +4051,10 @@ mixin _$DiagramEventUnion {
     TResult Function(_PinchBegin value)? pinchBegin,
     TResult Function(_PinchContinue value)? pinchContinue,
     TResult Function(_PinchEnd value)? pinchEnd,
+    TResult Function(_DragTargetEnter value)? dragTargetEnter,
+    TResult Function(_DragTargetOver value)? dragTargetOver,
+    TResult Function(_DragTargetLeave value)? dragTargetLeave,
+    TResult Function(_DragTargetDrop value)? dragTargetDrop,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -4077,6 +4169,33 @@ class _$TapImpl implements _Tap {
     required TResult Function(DiagramPinchBegin event) pinchBegin,
     required TResult Function(DiagramPinchContinue event) pinchContinue,
     required TResult Function(DiagramPinchEnd event) pinchEnd,
+    required TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetEnter,
+    required TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetOver,
+    required TResult Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)
+        dragTargetLeave,
+    required TResult Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetDrop,
   }) {
     return tap(event);
   }
@@ -4094,6 +4213,33 @@ class _$TapImpl implements _Tap {
     TResult? Function(DiagramPinchBegin event)? pinchBegin,
     TResult? Function(DiagramPinchContinue event)? pinchContinue,
     TResult? Function(DiagramPinchEnd event)? pinchEnd,
+    TResult? Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetEnter,
+    TResult? Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetOver,
+    TResult? Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)?
+        dragTargetLeave,
+    TResult? Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetDrop,
   }) {
     return tap?.call(event);
   }
@@ -4111,6 +4257,33 @@ class _$TapImpl implements _Tap {
     TResult Function(DiagramPinchBegin event)? pinchBegin,
     TResult Function(DiagramPinchContinue event)? pinchContinue,
     TResult Function(DiagramPinchEnd event)? pinchEnd,
+    TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetEnter,
+    TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetOver,
+    TResult Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)?
+        dragTargetLeave,
+    TResult Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetDrop,
     required TResult orElse(),
   }) {
     if (tap != null) {
@@ -4132,6 +4305,10 @@ class _$TapImpl implements _Tap {
     required TResult Function(_PinchBegin value) pinchBegin,
     required TResult Function(_PinchContinue value) pinchContinue,
     required TResult Function(_PinchEnd value) pinchEnd,
+    required TResult Function(_DragTargetEnter value) dragTargetEnter,
+    required TResult Function(_DragTargetOver value) dragTargetOver,
+    required TResult Function(_DragTargetLeave value) dragTargetLeave,
+    required TResult Function(_DragTargetDrop value) dragTargetDrop,
   }) {
     return tap(this);
   }
@@ -4149,6 +4326,10 @@ class _$TapImpl implements _Tap {
     TResult? Function(_PinchBegin value)? pinchBegin,
     TResult? Function(_PinchContinue value)? pinchContinue,
     TResult? Function(_PinchEnd value)? pinchEnd,
+    TResult? Function(_DragTargetEnter value)? dragTargetEnter,
+    TResult? Function(_DragTargetOver value)? dragTargetOver,
+    TResult? Function(_DragTargetLeave value)? dragTargetLeave,
+    TResult? Function(_DragTargetDrop value)? dragTargetDrop,
   }) {
     return tap?.call(this);
   }
@@ -4166,6 +4347,10 @@ class _$TapImpl implements _Tap {
     TResult Function(_PinchBegin value)? pinchBegin,
     TResult Function(_PinchContinue value)? pinchContinue,
     TResult Function(_PinchEnd value)? pinchEnd,
+    TResult Function(_DragTargetEnter value)? dragTargetEnter,
+    TResult Function(_DragTargetOver value)? dragTargetOver,
+    TResult Function(_DragTargetLeave value)? dragTargetLeave,
+    TResult Function(_DragTargetDrop value)? dragTargetDrop,
     required TResult orElse(),
   }) {
     if (tap != null) {
@@ -4178,7 +4363,6 @@ class _$TapImpl implements _Tap {
 abstract class _Tap implements DiagramEventUnion {
   const factory _Tap(final DiagramTap event) = _$TapImpl;
 
-  @override
   DiagramTap get event;
 
   /// Create a copy of DiagramEventUnion
@@ -4278,6 +4462,33 @@ class _$DoubleTapImpl implements _DoubleTap {
     required TResult Function(DiagramPinchBegin event) pinchBegin,
     required TResult Function(DiagramPinchContinue event) pinchContinue,
     required TResult Function(DiagramPinchEnd event) pinchEnd,
+    required TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetEnter,
+    required TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetOver,
+    required TResult Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)
+        dragTargetLeave,
+    required TResult Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetDrop,
   }) {
     return doubleTap(event);
   }
@@ -4295,6 +4506,33 @@ class _$DoubleTapImpl implements _DoubleTap {
     TResult? Function(DiagramPinchBegin event)? pinchBegin,
     TResult? Function(DiagramPinchContinue event)? pinchContinue,
     TResult? Function(DiagramPinchEnd event)? pinchEnd,
+    TResult? Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetEnter,
+    TResult? Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetOver,
+    TResult? Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)?
+        dragTargetLeave,
+    TResult? Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetDrop,
   }) {
     return doubleTap?.call(event);
   }
@@ -4312,6 +4550,33 @@ class _$DoubleTapImpl implements _DoubleTap {
     TResult Function(DiagramPinchBegin event)? pinchBegin,
     TResult Function(DiagramPinchContinue event)? pinchContinue,
     TResult Function(DiagramPinchEnd event)? pinchEnd,
+    TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetEnter,
+    TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetOver,
+    TResult Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)?
+        dragTargetLeave,
+    TResult Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetDrop,
     required TResult orElse(),
   }) {
     if (doubleTap != null) {
@@ -4333,6 +4598,10 @@ class _$DoubleTapImpl implements _DoubleTap {
     required TResult Function(_PinchBegin value) pinchBegin,
     required TResult Function(_PinchContinue value) pinchContinue,
     required TResult Function(_PinchEnd value) pinchEnd,
+    required TResult Function(_DragTargetEnter value) dragTargetEnter,
+    required TResult Function(_DragTargetOver value) dragTargetOver,
+    required TResult Function(_DragTargetLeave value) dragTargetLeave,
+    required TResult Function(_DragTargetDrop value) dragTargetDrop,
   }) {
     return doubleTap(this);
   }
@@ -4350,6 +4619,10 @@ class _$DoubleTapImpl implements _DoubleTap {
     TResult? Function(_PinchBegin value)? pinchBegin,
     TResult? Function(_PinchContinue value)? pinchContinue,
     TResult? Function(_PinchEnd value)? pinchEnd,
+    TResult? Function(_DragTargetEnter value)? dragTargetEnter,
+    TResult? Function(_DragTargetOver value)? dragTargetOver,
+    TResult? Function(_DragTargetLeave value)? dragTargetLeave,
+    TResult? Function(_DragTargetDrop value)? dragTargetDrop,
   }) {
     return doubleTap?.call(this);
   }
@@ -4367,6 +4640,10 @@ class _$DoubleTapImpl implements _DoubleTap {
     TResult Function(_PinchBegin value)? pinchBegin,
     TResult Function(_PinchContinue value)? pinchContinue,
     TResult Function(_PinchEnd value)? pinchEnd,
+    TResult Function(_DragTargetEnter value)? dragTargetEnter,
+    TResult Function(_DragTargetOver value)? dragTargetOver,
+    TResult Function(_DragTargetLeave value)? dragTargetLeave,
+    TResult Function(_DragTargetDrop value)? dragTargetDrop,
     required TResult orElse(),
   }) {
     if (doubleTap != null) {
@@ -4379,7 +4656,6 @@ class _$DoubleTapImpl implements _DoubleTap {
 abstract class _DoubleTap implements DiagramEventUnion {
   const factory _DoubleTap(final DiagramDoubleTap event) = _$DoubleTapImpl;
 
-  @override
   DiagramDoubleTap get event;
 
   /// Create a copy of DiagramEventUnion
@@ -4479,6 +4755,33 @@ class _$LongPressImpl implements _LongPress {
     required TResult Function(DiagramPinchBegin event) pinchBegin,
     required TResult Function(DiagramPinchContinue event) pinchContinue,
     required TResult Function(DiagramPinchEnd event) pinchEnd,
+    required TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetEnter,
+    required TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetOver,
+    required TResult Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)
+        dragTargetLeave,
+    required TResult Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetDrop,
   }) {
     return longPress(event);
   }
@@ -4496,6 +4799,33 @@ class _$LongPressImpl implements _LongPress {
     TResult? Function(DiagramPinchBegin event)? pinchBegin,
     TResult? Function(DiagramPinchContinue event)? pinchContinue,
     TResult? Function(DiagramPinchEnd event)? pinchEnd,
+    TResult? Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetEnter,
+    TResult? Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetOver,
+    TResult? Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)?
+        dragTargetLeave,
+    TResult? Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetDrop,
   }) {
     return longPress?.call(event);
   }
@@ -4513,6 +4843,33 @@ class _$LongPressImpl implements _LongPress {
     TResult Function(DiagramPinchBegin event)? pinchBegin,
     TResult Function(DiagramPinchContinue event)? pinchContinue,
     TResult Function(DiagramPinchEnd event)? pinchEnd,
+    TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetEnter,
+    TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetOver,
+    TResult Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)?
+        dragTargetLeave,
+    TResult Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetDrop,
     required TResult orElse(),
   }) {
     if (longPress != null) {
@@ -4534,6 +4891,10 @@ class _$LongPressImpl implements _LongPress {
     required TResult Function(_PinchBegin value) pinchBegin,
     required TResult Function(_PinchContinue value) pinchContinue,
     required TResult Function(_PinchEnd value) pinchEnd,
+    required TResult Function(_DragTargetEnter value) dragTargetEnter,
+    required TResult Function(_DragTargetOver value) dragTargetOver,
+    required TResult Function(_DragTargetLeave value) dragTargetLeave,
+    required TResult Function(_DragTargetDrop value) dragTargetDrop,
   }) {
     return longPress(this);
   }
@@ -4551,6 +4912,10 @@ class _$LongPressImpl implements _LongPress {
     TResult? Function(_PinchBegin value)? pinchBegin,
     TResult? Function(_PinchContinue value)? pinchContinue,
     TResult? Function(_PinchEnd value)? pinchEnd,
+    TResult? Function(_DragTargetEnter value)? dragTargetEnter,
+    TResult? Function(_DragTargetOver value)? dragTargetOver,
+    TResult? Function(_DragTargetLeave value)? dragTargetLeave,
+    TResult? Function(_DragTargetDrop value)? dragTargetDrop,
   }) {
     return longPress?.call(this);
   }
@@ -4568,6 +4933,10 @@ class _$LongPressImpl implements _LongPress {
     TResult Function(_PinchBegin value)? pinchBegin,
     TResult Function(_PinchContinue value)? pinchContinue,
     TResult Function(_PinchEnd value)? pinchEnd,
+    TResult Function(_DragTargetEnter value)? dragTargetEnter,
+    TResult Function(_DragTargetOver value)? dragTargetOver,
+    TResult Function(_DragTargetLeave value)? dragTargetLeave,
+    TResult Function(_DragTargetDrop value)? dragTargetDrop,
     required TResult orElse(),
   }) {
     if (longPress != null) {
@@ -4580,7 +4949,6 @@ class _$LongPressImpl implements _LongPress {
 abstract class _LongPress implements DiagramEventUnion {
   const factory _LongPress(final DiagramLongPress event) = _$LongPressImpl;
 
-  @override
   DiagramLongPress get event;
 
   /// Create a copy of DiagramEventUnion
@@ -4680,6 +5048,33 @@ class _$ScrollImpl implements _Scroll {
     required TResult Function(DiagramPinchBegin event) pinchBegin,
     required TResult Function(DiagramPinchContinue event) pinchContinue,
     required TResult Function(DiagramPinchEnd event) pinchEnd,
+    required TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetEnter,
+    required TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetOver,
+    required TResult Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)
+        dragTargetLeave,
+    required TResult Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetDrop,
   }) {
     return scroll(event);
   }
@@ -4697,6 +5092,33 @@ class _$ScrollImpl implements _Scroll {
     TResult? Function(DiagramPinchBegin event)? pinchBegin,
     TResult? Function(DiagramPinchContinue event)? pinchContinue,
     TResult? Function(DiagramPinchEnd event)? pinchEnd,
+    TResult? Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetEnter,
+    TResult? Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetOver,
+    TResult? Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)?
+        dragTargetLeave,
+    TResult? Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetDrop,
   }) {
     return scroll?.call(event);
   }
@@ -4714,6 +5136,33 @@ class _$ScrollImpl implements _Scroll {
     TResult Function(DiagramPinchBegin event)? pinchBegin,
     TResult Function(DiagramPinchContinue event)? pinchContinue,
     TResult Function(DiagramPinchEnd event)? pinchEnd,
+    TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetEnter,
+    TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetOver,
+    TResult Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)?
+        dragTargetLeave,
+    TResult Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetDrop,
     required TResult orElse(),
   }) {
     if (scroll != null) {
@@ -4735,6 +5184,10 @@ class _$ScrollImpl implements _Scroll {
     required TResult Function(_PinchBegin value) pinchBegin,
     required TResult Function(_PinchContinue value) pinchContinue,
     required TResult Function(_PinchEnd value) pinchEnd,
+    required TResult Function(_DragTargetEnter value) dragTargetEnter,
+    required TResult Function(_DragTargetOver value) dragTargetOver,
+    required TResult Function(_DragTargetLeave value) dragTargetLeave,
+    required TResult Function(_DragTargetDrop value) dragTargetDrop,
   }) {
     return scroll(this);
   }
@@ -4752,6 +5205,10 @@ class _$ScrollImpl implements _Scroll {
     TResult? Function(_PinchBegin value)? pinchBegin,
     TResult? Function(_PinchContinue value)? pinchContinue,
     TResult? Function(_PinchEnd value)? pinchEnd,
+    TResult? Function(_DragTargetEnter value)? dragTargetEnter,
+    TResult? Function(_DragTargetOver value)? dragTargetOver,
+    TResult? Function(_DragTargetLeave value)? dragTargetLeave,
+    TResult? Function(_DragTargetDrop value)? dragTargetDrop,
   }) {
     return scroll?.call(this);
   }
@@ -4769,6 +5226,10 @@ class _$ScrollImpl implements _Scroll {
     TResult Function(_PinchBegin value)? pinchBegin,
     TResult Function(_PinchContinue value)? pinchContinue,
     TResult Function(_PinchEnd value)? pinchEnd,
+    TResult Function(_DragTargetEnter value)? dragTargetEnter,
+    TResult Function(_DragTargetOver value)? dragTargetOver,
+    TResult Function(_DragTargetLeave value)? dragTargetLeave,
+    TResult Function(_DragTargetDrop value)? dragTargetDrop,
     required TResult orElse(),
   }) {
     if (scroll != null) {
@@ -4781,7 +5242,6 @@ class _$ScrollImpl implements _Scroll {
 abstract class _Scroll implements DiagramEventUnion {
   const factory _Scroll(final DiagramScroll event) = _$ScrollImpl;
 
-  @override
   DiagramScroll get event;
 
   /// Create a copy of DiagramEventUnion
@@ -4881,6 +5341,33 @@ class _$DragBeginImpl implements _DragBegin {
     required TResult Function(DiagramPinchBegin event) pinchBegin,
     required TResult Function(DiagramPinchContinue event) pinchContinue,
     required TResult Function(DiagramPinchEnd event) pinchEnd,
+    required TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetEnter,
+    required TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetOver,
+    required TResult Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)
+        dragTargetLeave,
+    required TResult Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetDrop,
   }) {
     return dragBegin(event);
   }
@@ -4898,6 +5385,33 @@ class _$DragBeginImpl implements _DragBegin {
     TResult? Function(DiagramPinchBegin event)? pinchBegin,
     TResult? Function(DiagramPinchContinue event)? pinchContinue,
     TResult? Function(DiagramPinchEnd event)? pinchEnd,
+    TResult? Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetEnter,
+    TResult? Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetOver,
+    TResult? Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)?
+        dragTargetLeave,
+    TResult? Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetDrop,
   }) {
     return dragBegin?.call(event);
   }
@@ -4915,6 +5429,33 @@ class _$DragBeginImpl implements _DragBegin {
     TResult Function(DiagramPinchBegin event)? pinchBegin,
     TResult Function(DiagramPinchContinue event)? pinchContinue,
     TResult Function(DiagramPinchEnd event)? pinchEnd,
+    TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetEnter,
+    TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetOver,
+    TResult Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)?
+        dragTargetLeave,
+    TResult Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetDrop,
     required TResult orElse(),
   }) {
     if (dragBegin != null) {
@@ -4936,6 +5477,10 @@ class _$DragBeginImpl implements _DragBegin {
     required TResult Function(_PinchBegin value) pinchBegin,
     required TResult Function(_PinchContinue value) pinchContinue,
     required TResult Function(_PinchEnd value) pinchEnd,
+    required TResult Function(_DragTargetEnter value) dragTargetEnter,
+    required TResult Function(_DragTargetOver value) dragTargetOver,
+    required TResult Function(_DragTargetLeave value) dragTargetLeave,
+    required TResult Function(_DragTargetDrop value) dragTargetDrop,
   }) {
     return dragBegin(this);
   }
@@ -4953,6 +5498,10 @@ class _$DragBeginImpl implements _DragBegin {
     TResult? Function(_PinchBegin value)? pinchBegin,
     TResult? Function(_PinchContinue value)? pinchContinue,
     TResult? Function(_PinchEnd value)? pinchEnd,
+    TResult? Function(_DragTargetEnter value)? dragTargetEnter,
+    TResult? Function(_DragTargetOver value)? dragTargetOver,
+    TResult? Function(_DragTargetLeave value)? dragTargetLeave,
+    TResult? Function(_DragTargetDrop value)? dragTargetDrop,
   }) {
     return dragBegin?.call(this);
   }
@@ -4970,6 +5519,10 @@ class _$DragBeginImpl implements _DragBegin {
     TResult Function(_PinchBegin value)? pinchBegin,
     TResult Function(_PinchContinue value)? pinchContinue,
     TResult Function(_PinchEnd value)? pinchEnd,
+    TResult Function(_DragTargetEnter value)? dragTargetEnter,
+    TResult Function(_DragTargetOver value)? dragTargetOver,
+    TResult Function(_DragTargetLeave value)? dragTargetLeave,
+    TResult Function(_DragTargetDrop value)? dragTargetDrop,
     required TResult orElse(),
   }) {
     if (dragBegin != null) {
@@ -4982,7 +5535,6 @@ class _$DragBeginImpl implements _DragBegin {
 abstract class _DragBegin implements DiagramEventUnion {
   const factory _DragBegin(final DiagramDragBegin event) = _$DragBeginImpl;
 
-  @override
   DiagramDragBegin get event;
 
   /// Create a copy of DiagramEventUnion
@@ -5082,6 +5634,33 @@ class _$DragContinueImpl implements _DragContinue {
     required TResult Function(DiagramPinchBegin event) pinchBegin,
     required TResult Function(DiagramPinchContinue event) pinchContinue,
     required TResult Function(DiagramPinchEnd event) pinchEnd,
+    required TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetEnter,
+    required TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetOver,
+    required TResult Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)
+        dragTargetLeave,
+    required TResult Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetDrop,
   }) {
     return dragContinue(event);
   }
@@ -5099,6 +5678,33 @@ class _$DragContinueImpl implements _DragContinue {
     TResult? Function(DiagramPinchBegin event)? pinchBegin,
     TResult? Function(DiagramPinchContinue event)? pinchContinue,
     TResult? Function(DiagramPinchEnd event)? pinchEnd,
+    TResult? Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetEnter,
+    TResult? Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetOver,
+    TResult? Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)?
+        dragTargetLeave,
+    TResult? Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetDrop,
   }) {
     return dragContinue?.call(event);
   }
@@ -5116,6 +5722,33 @@ class _$DragContinueImpl implements _DragContinue {
     TResult Function(DiagramPinchBegin event)? pinchBegin,
     TResult Function(DiagramPinchContinue event)? pinchContinue,
     TResult Function(DiagramPinchEnd event)? pinchEnd,
+    TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetEnter,
+    TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetOver,
+    TResult Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)?
+        dragTargetLeave,
+    TResult Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetDrop,
     required TResult orElse(),
   }) {
     if (dragContinue != null) {
@@ -5137,6 +5770,10 @@ class _$DragContinueImpl implements _DragContinue {
     required TResult Function(_PinchBegin value) pinchBegin,
     required TResult Function(_PinchContinue value) pinchContinue,
     required TResult Function(_PinchEnd value) pinchEnd,
+    required TResult Function(_DragTargetEnter value) dragTargetEnter,
+    required TResult Function(_DragTargetOver value) dragTargetOver,
+    required TResult Function(_DragTargetLeave value) dragTargetLeave,
+    required TResult Function(_DragTargetDrop value) dragTargetDrop,
   }) {
     return dragContinue(this);
   }
@@ -5154,6 +5791,10 @@ class _$DragContinueImpl implements _DragContinue {
     TResult? Function(_PinchBegin value)? pinchBegin,
     TResult? Function(_PinchContinue value)? pinchContinue,
     TResult? Function(_PinchEnd value)? pinchEnd,
+    TResult? Function(_DragTargetEnter value)? dragTargetEnter,
+    TResult? Function(_DragTargetOver value)? dragTargetOver,
+    TResult? Function(_DragTargetLeave value)? dragTargetLeave,
+    TResult? Function(_DragTargetDrop value)? dragTargetDrop,
   }) {
     return dragContinue?.call(this);
   }
@@ -5171,6 +5812,10 @@ class _$DragContinueImpl implements _DragContinue {
     TResult Function(_PinchBegin value)? pinchBegin,
     TResult Function(_PinchContinue value)? pinchContinue,
     TResult Function(_PinchEnd value)? pinchEnd,
+    TResult Function(_DragTargetEnter value)? dragTargetEnter,
+    TResult Function(_DragTargetOver value)? dragTargetOver,
+    TResult Function(_DragTargetLeave value)? dragTargetLeave,
+    TResult Function(_DragTargetDrop value)? dragTargetDrop,
     required TResult orElse(),
   }) {
     if (dragContinue != null) {
@@ -5184,7 +5829,6 @@ abstract class _DragContinue implements DiagramEventUnion {
   const factory _DragContinue(final DiagramDragContinue event) =
       _$DragContinueImpl;
 
-  @override
   DiagramDragContinue get event;
 
   /// Create a copy of DiagramEventUnion
@@ -5284,6 +5928,33 @@ class _$DragEndImpl implements _DragEnd {
     required TResult Function(DiagramPinchBegin event) pinchBegin,
     required TResult Function(DiagramPinchContinue event) pinchContinue,
     required TResult Function(DiagramPinchEnd event) pinchEnd,
+    required TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetEnter,
+    required TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetOver,
+    required TResult Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)
+        dragTargetLeave,
+    required TResult Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetDrop,
   }) {
     return dragEnd(event);
   }
@@ -5301,6 +5972,33 @@ class _$DragEndImpl implements _DragEnd {
     TResult? Function(DiagramPinchBegin event)? pinchBegin,
     TResult? Function(DiagramPinchContinue event)? pinchContinue,
     TResult? Function(DiagramPinchEnd event)? pinchEnd,
+    TResult? Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetEnter,
+    TResult? Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetOver,
+    TResult? Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)?
+        dragTargetLeave,
+    TResult? Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetDrop,
   }) {
     return dragEnd?.call(event);
   }
@@ -5318,6 +6016,33 @@ class _$DragEndImpl implements _DragEnd {
     TResult Function(DiagramPinchBegin event)? pinchBegin,
     TResult Function(DiagramPinchContinue event)? pinchContinue,
     TResult Function(DiagramPinchEnd event)? pinchEnd,
+    TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetEnter,
+    TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetOver,
+    TResult Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)?
+        dragTargetLeave,
+    TResult Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetDrop,
     required TResult orElse(),
   }) {
     if (dragEnd != null) {
@@ -5339,6 +6064,10 @@ class _$DragEndImpl implements _DragEnd {
     required TResult Function(_PinchBegin value) pinchBegin,
     required TResult Function(_PinchContinue value) pinchContinue,
     required TResult Function(_PinchEnd value) pinchEnd,
+    required TResult Function(_DragTargetEnter value) dragTargetEnter,
+    required TResult Function(_DragTargetOver value) dragTargetOver,
+    required TResult Function(_DragTargetLeave value) dragTargetLeave,
+    required TResult Function(_DragTargetDrop value) dragTargetDrop,
   }) {
     return dragEnd(this);
   }
@@ -5356,6 +6085,10 @@ class _$DragEndImpl implements _DragEnd {
     TResult? Function(_PinchBegin value)? pinchBegin,
     TResult? Function(_PinchContinue value)? pinchContinue,
     TResult? Function(_PinchEnd value)? pinchEnd,
+    TResult? Function(_DragTargetEnter value)? dragTargetEnter,
+    TResult? Function(_DragTargetOver value)? dragTargetOver,
+    TResult? Function(_DragTargetLeave value)? dragTargetLeave,
+    TResult? Function(_DragTargetDrop value)? dragTargetDrop,
   }) {
     return dragEnd?.call(this);
   }
@@ -5373,6 +6106,10 @@ class _$DragEndImpl implements _DragEnd {
     TResult Function(_PinchBegin value)? pinchBegin,
     TResult Function(_PinchContinue value)? pinchContinue,
     TResult Function(_PinchEnd value)? pinchEnd,
+    TResult Function(_DragTargetEnter value)? dragTargetEnter,
+    TResult Function(_DragTargetOver value)? dragTargetOver,
+    TResult Function(_DragTargetLeave value)? dragTargetLeave,
+    TResult Function(_DragTargetDrop value)? dragTargetDrop,
     required TResult orElse(),
   }) {
     if (dragEnd != null) {
@@ -5385,7 +6122,6 @@ class _$DragEndImpl implements _DragEnd {
 abstract class _DragEnd implements DiagramEventUnion {
   const factory _DragEnd(final DiagramDragEnd event) = _$DragEndImpl;
 
-  @override
   DiagramDragEnd get event;
 
   /// Create a copy of DiagramEventUnion
@@ -5485,6 +6221,33 @@ class _$PinchBeginImpl implements _PinchBegin {
     required TResult Function(DiagramPinchBegin event) pinchBegin,
     required TResult Function(DiagramPinchContinue event) pinchContinue,
     required TResult Function(DiagramPinchEnd event) pinchEnd,
+    required TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetEnter,
+    required TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetOver,
+    required TResult Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)
+        dragTargetLeave,
+    required TResult Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetDrop,
   }) {
     return pinchBegin(event);
   }
@@ -5502,6 +6265,33 @@ class _$PinchBeginImpl implements _PinchBegin {
     TResult? Function(DiagramPinchBegin event)? pinchBegin,
     TResult? Function(DiagramPinchContinue event)? pinchContinue,
     TResult? Function(DiagramPinchEnd event)? pinchEnd,
+    TResult? Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetEnter,
+    TResult? Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetOver,
+    TResult? Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)?
+        dragTargetLeave,
+    TResult? Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetDrop,
   }) {
     return pinchBegin?.call(event);
   }
@@ -5519,6 +6309,33 @@ class _$PinchBeginImpl implements _PinchBegin {
     TResult Function(DiagramPinchBegin event)? pinchBegin,
     TResult Function(DiagramPinchContinue event)? pinchContinue,
     TResult Function(DiagramPinchEnd event)? pinchEnd,
+    TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetEnter,
+    TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetOver,
+    TResult Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)?
+        dragTargetLeave,
+    TResult Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetDrop,
     required TResult orElse(),
   }) {
     if (pinchBegin != null) {
@@ -5540,6 +6357,10 @@ class _$PinchBeginImpl implements _PinchBegin {
     required TResult Function(_PinchBegin value) pinchBegin,
     required TResult Function(_PinchContinue value) pinchContinue,
     required TResult Function(_PinchEnd value) pinchEnd,
+    required TResult Function(_DragTargetEnter value) dragTargetEnter,
+    required TResult Function(_DragTargetOver value) dragTargetOver,
+    required TResult Function(_DragTargetLeave value) dragTargetLeave,
+    required TResult Function(_DragTargetDrop value) dragTargetDrop,
   }) {
     return pinchBegin(this);
   }
@@ -5557,6 +6378,10 @@ class _$PinchBeginImpl implements _PinchBegin {
     TResult? Function(_PinchBegin value)? pinchBegin,
     TResult? Function(_PinchContinue value)? pinchContinue,
     TResult? Function(_PinchEnd value)? pinchEnd,
+    TResult? Function(_DragTargetEnter value)? dragTargetEnter,
+    TResult? Function(_DragTargetOver value)? dragTargetOver,
+    TResult? Function(_DragTargetLeave value)? dragTargetLeave,
+    TResult? Function(_DragTargetDrop value)? dragTargetDrop,
   }) {
     return pinchBegin?.call(this);
   }
@@ -5574,6 +6399,10 @@ class _$PinchBeginImpl implements _PinchBegin {
     TResult Function(_PinchBegin value)? pinchBegin,
     TResult Function(_PinchContinue value)? pinchContinue,
     TResult Function(_PinchEnd value)? pinchEnd,
+    TResult Function(_DragTargetEnter value)? dragTargetEnter,
+    TResult Function(_DragTargetOver value)? dragTargetOver,
+    TResult Function(_DragTargetLeave value)? dragTargetLeave,
+    TResult Function(_DragTargetDrop value)? dragTargetDrop,
     required TResult orElse(),
   }) {
     if (pinchBegin != null) {
@@ -5586,7 +6415,6 @@ class _$PinchBeginImpl implements _PinchBegin {
 abstract class _PinchBegin implements DiagramEventUnion {
   const factory _PinchBegin(final DiagramPinchBegin event) = _$PinchBeginImpl;
 
-  @override
   DiagramPinchBegin get event;
 
   /// Create a copy of DiagramEventUnion
@@ -5686,6 +6514,33 @@ class _$PinchContinueImpl implements _PinchContinue {
     required TResult Function(DiagramPinchBegin event) pinchBegin,
     required TResult Function(DiagramPinchContinue event) pinchContinue,
     required TResult Function(DiagramPinchEnd event) pinchEnd,
+    required TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetEnter,
+    required TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetOver,
+    required TResult Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)
+        dragTargetLeave,
+    required TResult Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetDrop,
   }) {
     return pinchContinue(event);
   }
@@ -5703,6 +6558,33 @@ class _$PinchContinueImpl implements _PinchContinue {
     TResult? Function(DiagramPinchBegin event)? pinchBegin,
     TResult? Function(DiagramPinchContinue event)? pinchContinue,
     TResult? Function(DiagramPinchEnd event)? pinchEnd,
+    TResult? Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetEnter,
+    TResult? Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetOver,
+    TResult? Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)?
+        dragTargetLeave,
+    TResult? Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetDrop,
   }) {
     return pinchContinue?.call(event);
   }
@@ -5720,6 +6602,33 @@ class _$PinchContinueImpl implements _PinchContinue {
     TResult Function(DiagramPinchBegin event)? pinchBegin,
     TResult Function(DiagramPinchContinue event)? pinchContinue,
     TResult Function(DiagramPinchEnd event)? pinchEnd,
+    TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetEnter,
+    TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetOver,
+    TResult Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)?
+        dragTargetLeave,
+    TResult Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetDrop,
     required TResult orElse(),
   }) {
     if (pinchContinue != null) {
@@ -5741,6 +6650,10 @@ class _$PinchContinueImpl implements _PinchContinue {
     required TResult Function(_PinchBegin value) pinchBegin,
     required TResult Function(_PinchContinue value) pinchContinue,
     required TResult Function(_PinchEnd value) pinchEnd,
+    required TResult Function(_DragTargetEnter value) dragTargetEnter,
+    required TResult Function(_DragTargetOver value) dragTargetOver,
+    required TResult Function(_DragTargetLeave value) dragTargetLeave,
+    required TResult Function(_DragTargetDrop value) dragTargetDrop,
   }) {
     return pinchContinue(this);
   }
@@ -5758,6 +6671,10 @@ class _$PinchContinueImpl implements _PinchContinue {
     TResult? Function(_PinchBegin value)? pinchBegin,
     TResult? Function(_PinchContinue value)? pinchContinue,
     TResult? Function(_PinchEnd value)? pinchEnd,
+    TResult? Function(_DragTargetEnter value)? dragTargetEnter,
+    TResult? Function(_DragTargetOver value)? dragTargetOver,
+    TResult? Function(_DragTargetLeave value)? dragTargetLeave,
+    TResult? Function(_DragTargetDrop value)? dragTargetDrop,
   }) {
     return pinchContinue?.call(this);
   }
@@ -5775,6 +6692,10 @@ class _$PinchContinueImpl implements _PinchContinue {
     TResult Function(_PinchBegin value)? pinchBegin,
     TResult Function(_PinchContinue value)? pinchContinue,
     TResult Function(_PinchEnd value)? pinchEnd,
+    TResult Function(_DragTargetEnter value)? dragTargetEnter,
+    TResult Function(_DragTargetOver value)? dragTargetOver,
+    TResult Function(_DragTargetLeave value)? dragTargetLeave,
+    TResult Function(_DragTargetDrop value)? dragTargetDrop,
     required TResult orElse(),
   }) {
     if (pinchContinue != null) {
@@ -5788,7 +6709,6 @@ abstract class _PinchContinue implements DiagramEventUnion {
   const factory _PinchContinue(final DiagramPinchContinue event) =
       _$PinchContinueImpl;
 
-  @override
   DiagramPinchContinue get event;
 
   /// Create a copy of DiagramEventUnion
@@ -5888,6 +6808,33 @@ class _$PinchEndImpl implements _PinchEnd {
     required TResult Function(DiagramPinchBegin event) pinchBegin,
     required TResult Function(DiagramPinchContinue event) pinchContinue,
     required TResult Function(DiagramPinchEnd event) pinchEnd,
+    required TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetEnter,
+    required TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetOver,
+    required TResult Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)
+        dragTargetLeave,
+    required TResult Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetDrop,
   }) {
     return pinchEnd(event);
   }
@@ -5905,6 +6852,33 @@ class _$PinchEndImpl implements _PinchEnd {
     TResult? Function(DiagramPinchBegin event)? pinchBegin,
     TResult? Function(DiagramPinchContinue event)? pinchContinue,
     TResult? Function(DiagramPinchEnd event)? pinchEnd,
+    TResult? Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetEnter,
+    TResult? Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetOver,
+    TResult? Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)?
+        dragTargetLeave,
+    TResult? Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetDrop,
   }) {
     return pinchEnd?.call(event);
   }
@@ -5922,6 +6896,33 @@ class _$PinchEndImpl implements _PinchEnd {
     TResult Function(DiagramPinchBegin event)? pinchBegin,
     TResult Function(DiagramPinchContinue event)? pinchContinue,
     TResult Function(DiagramPinchEnd event)? pinchEnd,
+    TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetEnter,
+    TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetOver,
+    TResult Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)?
+        dragTargetLeave,
+    TResult Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetDrop,
     required TResult orElse(),
   }) {
     if (pinchEnd != null) {
@@ -5943,6 +6944,10 @@ class _$PinchEndImpl implements _PinchEnd {
     required TResult Function(_PinchBegin value) pinchBegin,
     required TResult Function(_PinchContinue value) pinchContinue,
     required TResult Function(_PinchEnd value) pinchEnd,
+    required TResult Function(_DragTargetEnter value) dragTargetEnter,
+    required TResult Function(_DragTargetOver value) dragTargetOver,
+    required TResult Function(_DragTargetLeave value) dragTargetLeave,
+    required TResult Function(_DragTargetDrop value) dragTargetDrop,
   }) {
     return pinchEnd(this);
   }
@@ -5960,6 +6965,10 @@ class _$PinchEndImpl implements _PinchEnd {
     TResult? Function(_PinchBegin value)? pinchBegin,
     TResult? Function(_PinchContinue value)? pinchContinue,
     TResult? Function(_PinchEnd value)? pinchEnd,
+    TResult? Function(_DragTargetEnter value)? dragTargetEnter,
+    TResult? Function(_DragTargetOver value)? dragTargetOver,
+    TResult? Function(_DragTargetLeave value)? dragTargetLeave,
+    TResult? Function(_DragTargetDrop value)? dragTargetDrop,
   }) {
     return pinchEnd?.call(this);
   }
@@ -5977,6 +6986,10 @@ class _$PinchEndImpl implements _PinchEnd {
     TResult Function(_PinchBegin value)? pinchBegin,
     TResult Function(_PinchContinue value)? pinchContinue,
     TResult Function(_PinchEnd value)? pinchEnd,
+    TResult Function(_DragTargetEnter value)? dragTargetEnter,
+    TResult Function(_DragTargetOver value)? dragTargetOver,
+    TResult Function(_DragTargetLeave value)? dragTargetLeave,
+    TResult Function(_DragTargetDrop value)? dragTargetDrop,
     required TResult orElse(),
   }) {
     if (pinchEnd != null) {
@@ -5989,12 +7002,1439 @@ class _$PinchEndImpl implements _PinchEnd {
 abstract class _PinchEnd implements DiagramEventUnion {
   const factory _PinchEnd(final DiagramPinchEnd event) = _$PinchEndImpl;
 
-  @override
   DiagramPinchEnd get event;
 
   /// Create a copy of DiagramEventUnion
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PinchEndImplCopyWith<_$PinchEndImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$DragTargetEnterImplCopyWith<$Res> {
+  factory _$$DragTargetEnterImplCopyWith(_$DragTargetEnterImpl value,
+          $Res Function(_$DragTargetEnterImpl) then) =
+      __$$DragTargetEnterImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call(
+      {String eventId,
+      Object dataPreview,
+      Offset screenPosition,
+      Offset logicalPosition,
+      Transform2D transformSnapshot,
+      Duration timestamp});
+
+  $Transform2DCopyWith<$Res> get transformSnapshot;
+}
+
+/// @nodoc
+class __$$DragTargetEnterImplCopyWithImpl<$Res>
+    extends _$DiagramEventUnionCopyWithImpl<$Res, _$DragTargetEnterImpl>
+    implements _$$DragTargetEnterImplCopyWith<$Res> {
+  __$$DragTargetEnterImplCopyWithImpl(
+      _$DragTargetEnterImpl _value, $Res Function(_$DragTargetEnterImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of DiagramEventUnion
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? eventId = null,
+    Object? dataPreview = null,
+    Object? screenPosition = null,
+    Object? logicalPosition = null,
+    Object? transformSnapshot = null,
+    Object? timestamp = null,
+  }) {
+    return _then(_$DragTargetEnterImpl(
+      eventId: null == eventId
+          ? _value.eventId
+          : eventId // ignore: cast_nullable_to_non_nullable
+              as String,
+      dataPreview: null == dataPreview ? _value.dataPreview : dataPreview,
+      screenPosition: null == screenPosition
+          ? _value.screenPosition
+          : screenPosition // ignore: cast_nullable_to_non_nullable
+              as Offset,
+      logicalPosition: null == logicalPosition
+          ? _value.logicalPosition
+          : logicalPosition // ignore: cast_nullable_to_non_nullable
+              as Offset,
+      transformSnapshot: null == transformSnapshot
+          ? _value.transformSnapshot
+          : transformSnapshot // ignore: cast_nullable_to_non_nullable
+              as Transform2D,
+      timestamp: null == timestamp
+          ? _value.timestamp
+          : timestamp // ignore: cast_nullable_to_non_nullable
+              as Duration,
+    ));
+  }
+
+  /// Create a copy of DiagramEventUnion
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $Transform2DCopyWith<$Res> get transformSnapshot {
+    return $Transform2DCopyWith<$Res>(_value.transformSnapshot, (value) {
+      return _then(_value.copyWith(transformSnapshot: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$DragTargetEnterImpl implements _DragTargetEnter {
+  const _$DragTargetEnterImpl(
+      {required this.eventId,
+      required this.dataPreview,
+      required this.screenPosition,
+      required this.logicalPosition,
+      required this.transformSnapshot,
+      required this.timestamp});
+
+  @override
+  final String eventId;
+  @override
+  final Object dataPreview;
+  @override
+  final Offset screenPosition;
+  @override
+  final Offset logicalPosition;
+  @override
+  final Transform2D transformSnapshot;
+  @override
+  final Duration timestamp;
+
+  @override
+  String toString() {
+    return 'DiagramEventUnion.dragTargetEnter(eventId: $eventId, dataPreview: $dataPreview, screenPosition: $screenPosition, logicalPosition: $logicalPosition, transformSnapshot: $transformSnapshot, timestamp: $timestamp)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$DragTargetEnterImpl &&
+            (identical(other.eventId, eventId) || other.eventId == eventId) &&
+            const DeepCollectionEquality()
+                .equals(other.dataPreview, dataPreview) &&
+            (identical(other.screenPosition, screenPosition) ||
+                other.screenPosition == screenPosition) &&
+            (identical(other.logicalPosition, logicalPosition) ||
+                other.logicalPosition == logicalPosition) &&
+            (identical(other.transformSnapshot, transformSnapshot) ||
+                other.transformSnapshot == transformSnapshot) &&
+            (identical(other.timestamp, timestamp) ||
+                other.timestamp == timestamp));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      eventId,
+      const DeepCollectionEquality().hash(dataPreview),
+      screenPosition,
+      logicalPosition,
+      transformSnapshot,
+      timestamp);
+
+  /// Create a copy of DiagramEventUnion
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$DragTargetEnterImplCopyWith<_$DragTargetEnterImpl> get copyWith =>
+      __$$DragTargetEnterImplCopyWithImpl<_$DragTargetEnterImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(DiagramTap event) tap,
+    required TResult Function(DiagramDoubleTap event) doubleTap,
+    required TResult Function(DiagramLongPress event) longPress,
+    required TResult Function(DiagramScroll event) scroll,
+    required TResult Function(DiagramDragBegin event) dragBegin,
+    required TResult Function(DiagramDragContinue event) dragContinue,
+    required TResult Function(DiagramDragEnd event) dragEnd,
+    required TResult Function(DiagramPinchBegin event) pinchBegin,
+    required TResult Function(DiagramPinchContinue event) pinchContinue,
+    required TResult Function(DiagramPinchEnd event) pinchEnd,
+    required TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetEnter,
+    required TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetOver,
+    required TResult Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)
+        dragTargetLeave,
+    required TResult Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetDrop,
+  }) {
+    return dragTargetEnter(eventId, dataPreview, screenPosition,
+        logicalPosition, transformSnapshot, timestamp);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(DiagramTap event)? tap,
+    TResult? Function(DiagramDoubleTap event)? doubleTap,
+    TResult? Function(DiagramLongPress event)? longPress,
+    TResult? Function(DiagramScroll event)? scroll,
+    TResult? Function(DiagramDragBegin event)? dragBegin,
+    TResult? Function(DiagramDragContinue event)? dragContinue,
+    TResult? Function(DiagramDragEnd event)? dragEnd,
+    TResult? Function(DiagramPinchBegin event)? pinchBegin,
+    TResult? Function(DiagramPinchContinue event)? pinchContinue,
+    TResult? Function(DiagramPinchEnd event)? pinchEnd,
+    TResult? Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetEnter,
+    TResult? Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetOver,
+    TResult? Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)?
+        dragTargetLeave,
+    TResult? Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetDrop,
+  }) {
+    return dragTargetEnter?.call(eventId, dataPreview, screenPosition,
+        logicalPosition, transformSnapshot, timestamp);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(DiagramTap event)? tap,
+    TResult Function(DiagramDoubleTap event)? doubleTap,
+    TResult Function(DiagramLongPress event)? longPress,
+    TResult Function(DiagramScroll event)? scroll,
+    TResult Function(DiagramDragBegin event)? dragBegin,
+    TResult Function(DiagramDragContinue event)? dragContinue,
+    TResult Function(DiagramDragEnd event)? dragEnd,
+    TResult Function(DiagramPinchBegin event)? pinchBegin,
+    TResult Function(DiagramPinchContinue event)? pinchContinue,
+    TResult Function(DiagramPinchEnd event)? pinchEnd,
+    TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetEnter,
+    TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetOver,
+    TResult Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)?
+        dragTargetLeave,
+    TResult Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetDrop,
+    required TResult orElse(),
+  }) {
+    if (dragTargetEnter != null) {
+      return dragTargetEnter(eventId, dataPreview, screenPosition,
+          logicalPosition, transformSnapshot, timestamp);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Tap value) tap,
+    required TResult Function(_DoubleTap value) doubleTap,
+    required TResult Function(_LongPress value) longPress,
+    required TResult Function(_Scroll value) scroll,
+    required TResult Function(_DragBegin value) dragBegin,
+    required TResult Function(_DragContinue value) dragContinue,
+    required TResult Function(_DragEnd value) dragEnd,
+    required TResult Function(_PinchBegin value) pinchBegin,
+    required TResult Function(_PinchContinue value) pinchContinue,
+    required TResult Function(_PinchEnd value) pinchEnd,
+    required TResult Function(_DragTargetEnter value) dragTargetEnter,
+    required TResult Function(_DragTargetOver value) dragTargetOver,
+    required TResult Function(_DragTargetLeave value) dragTargetLeave,
+    required TResult Function(_DragTargetDrop value) dragTargetDrop,
+  }) {
+    return dragTargetEnter(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Tap value)? tap,
+    TResult? Function(_DoubleTap value)? doubleTap,
+    TResult? Function(_LongPress value)? longPress,
+    TResult? Function(_Scroll value)? scroll,
+    TResult? Function(_DragBegin value)? dragBegin,
+    TResult? Function(_DragContinue value)? dragContinue,
+    TResult? Function(_DragEnd value)? dragEnd,
+    TResult? Function(_PinchBegin value)? pinchBegin,
+    TResult? Function(_PinchContinue value)? pinchContinue,
+    TResult? Function(_PinchEnd value)? pinchEnd,
+    TResult? Function(_DragTargetEnter value)? dragTargetEnter,
+    TResult? Function(_DragTargetOver value)? dragTargetOver,
+    TResult? Function(_DragTargetLeave value)? dragTargetLeave,
+    TResult? Function(_DragTargetDrop value)? dragTargetDrop,
+  }) {
+    return dragTargetEnter?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Tap value)? tap,
+    TResult Function(_DoubleTap value)? doubleTap,
+    TResult Function(_LongPress value)? longPress,
+    TResult Function(_Scroll value)? scroll,
+    TResult Function(_DragBegin value)? dragBegin,
+    TResult Function(_DragContinue value)? dragContinue,
+    TResult Function(_DragEnd value)? dragEnd,
+    TResult Function(_PinchBegin value)? pinchBegin,
+    TResult Function(_PinchContinue value)? pinchContinue,
+    TResult Function(_PinchEnd value)? pinchEnd,
+    TResult Function(_DragTargetEnter value)? dragTargetEnter,
+    TResult Function(_DragTargetOver value)? dragTargetOver,
+    TResult Function(_DragTargetLeave value)? dragTargetLeave,
+    TResult Function(_DragTargetDrop value)? dragTargetDrop,
+    required TResult orElse(),
+  }) {
+    if (dragTargetEnter != null) {
+      return dragTargetEnter(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _DragTargetEnter implements DiagramEventUnion {
+  const factory _DragTargetEnter(
+      {required final String eventId,
+      required final Object dataPreview,
+      required final Offset screenPosition,
+      required final Offset logicalPosition,
+      required final Transform2D transformSnapshot,
+      required final Duration timestamp}) = _$DragTargetEnterImpl;
+
+  String get eventId;
+  Object get dataPreview;
+  Offset get screenPosition;
+  Offset get logicalPosition;
+  Transform2D get transformSnapshot;
+  Duration get timestamp;
+
+  /// Create a copy of DiagramEventUnion
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$DragTargetEnterImplCopyWith<_$DragTargetEnterImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$DragTargetOverImplCopyWith<$Res> {
+  factory _$$DragTargetOverImplCopyWith(_$DragTargetOverImpl value,
+          $Res Function(_$DragTargetOverImpl) then) =
+      __$$DragTargetOverImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call(
+      {String eventId,
+      Object dataPreview,
+      Offset screenPosition,
+      Offset logicalPosition,
+      Transform2D transformSnapshot,
+      Duration timestamp});
+
+  $Transform2DCopyWith<$Res> get transformSnapshot;
+}
+
+/// @nodoc
+class __$$DragTargetOverImplCopyWithImpl<$Res>
+    extends _$DiagramEventUnionCopyWithImpl<$Res, _$DragTargetOverImpl>
+    implements _$$DragTargetOverImplCopyWith<$Res> {
+  __$$DragTargetOverImplCopyWithImpl(
+      _$DragTargetOverImpl _value, $Res Function(_$DragTargetOverImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of DiagramEventUnion
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? eventId = null,
+    Object? dataPreview = null,
+    Object? screenPosition = null,
+    Object? logicalPosition = null,
+    Object? transformSnapshot = null,
+    Object? timestamp = null,
+  }) {
+    return _then(_$DragTargetOverImpl(
+      eventId: null == eventId
+          ? _value.eventId
+          : eventId // ignore: cast_nullable_to_non_nullable
+              as String,
+      dataPreview: null == dataPreview ? _value.dataPreview : dataPreview,
+      screenPosition: null == screenPosition
+          ? _value.screenPosition
+          : screenPosition // ignore: cast_nullable_to_non_nullable
+              as Offset,
+      logicalPosition: null == logicalPosition
+          ? _value.logicalPosition
+          : logicalPosition // ignore: cast_nullable_to_non_nullable
+              as Offset,
+      transformSnapshot: null == transformSnapshot
+          ? _value.transformSnapshot
+          : transformSnapshot // ignore: cast_nullable_to_non_nullable
+              as Transform2D,
+      timestamp: null == timestamp
+          ? _value.timestamp
+          : timestamp // ignore: cast_nullable_to_non_nullable
+              as Duration,
+    ));
+  }
+
+  /// Create a copy of DiagramEventUnion
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $Transform2DCopyWith<$Res> get transformSnapshot {
+    return $Transform2DCopyWith<$Res>(_value.transformSnapshot, (value) {
+      return _then(_value.copyWith(transformSnapshot: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$DragTargetOverImpl implements _DragTargetOver {
+  const _$DragTargetOverImpl(
+      {required this.eventId,
+      required this.dataPreview,
+      required this.screenPosition,
+      required this.logicalPosition,
+      required this.transformSnapshot,
+      required this.timestamp});
+
+  @override
+  final String eventId;
+  @override
+  final Object dataPreview;
+  @override
+  final Offset screenPosition;
+  @override
+  final Offset logicalPosition;
+  @override
+  final Transform2D transformSnapshot;
+  @override
+  final Duration timestamp;
+
+  @override
+  String toString() {
+    return 'DiagramEventUnion.dragTargetOver(eventId: $eventId, dataPreview: $dataPreview, screenPosition: $screenPosition, logicalPosition: $logicalPosition, transformSnapshot: $transformSnapshot, timestamp: $timestamp)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$DragTargetOverImpl &&
+            (identical(other.eventId, eventId) || other.eventId == eventId) &&
+            const DeepCollectionEquality()
+                .equals(other.dataPreview, dataPreview) &&
+            (identical(other.screenPosition, screenPosition) ||
+                other.screenPosition == screenPosition) &&
+            (identical(other.logicalPosition, logicalPosition) ||
+                other.logicalPosition == logicalPosition) &&
+            (identical(other.transformSnapshot, transformSnapshot) ||
+                other.transformSnapshot == transformSnapshot) &&
+            (identical(other.timestamp, timestamp) ||
+                other.timestamp == timestamp));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      eventId,
+      const DeepCollectionEquality().hash(dataPreview),
+      screenPosition,
+      logicalPosition,
+      transformSnapshot,
+      timestamp);
+
+  /// Create a copy of DiagramEventUnion
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$DragTargetOverImplCopyWith<_$DragTargetOverImpl> get copyWith =>
+      __$$DragTargetOverImplCopyWithImpl<_$DragTargetOverImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(DiagramTap event) tap,
+    required TResult Function(DiagramDoubleTap event) doubleTap,
+    required TResult Function(DiagramLongPress event) longPress,
+    required TResult Function(DiagramScroll event) scroll,
+    required TResult Function(DiagramDragBegin event) dragBegin,
+    required TResult Function(DiagramDragContinue event) dragContinue,
+    required TResult Function(DiagramDragEnd event) dragEnd,
+    required TResult Function(DiagramPinchBegin event) pinchBegin,
+    required TResult Function(DiagramPinchContinue event) pinchContinue,
+    required TResult Function(DiagramPinchEnd event) pinchEnd,
+    required TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetEnter,
+    required TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetOver,
+    required TResult Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)
+        dragTargetLeave,
+    required TResult Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetDrop,
+  }) {
+    return dragTargetOver(eventId, dataPreview, screenPosition, logicalPosition,
+        transformSnapshot, timestamp);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(DiagramTap event)? tap,
+    TResult? Function(DiagramDoubleTap event)? doubleTap,
+    TResult? Function(DiagramLongPress event)? longPress,
+    TResult? Function(DiagramScroll event)? scroll,
+    TResult? Function(DiagramDragBegin event)? dragBegin,
+    TResult? Function(DiagramDragContinue event)? dragContinue,
+    TResult? Function(DiagramDragEnd event)? dragEnd,
+    TResult? Function(DiagramPinchBegin event)? pinchBegin,
+    TResult? Function(DiagramPinchContinue event)? pinchContinue,
+    TResult? Function(DiagramPinchEnd event)? pinchEnd,
+    TResult? Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetEnter,
+    TResult? Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetOver,
+    TResult? Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)?
+        dragTargetLeave,
+    TResult? Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetDrop,
+  }) {
+    return dragTargetOver?.call(eventId, dataPreview, screenPosition,
+        logicalPosition, transformSnapshot, timestamp);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(DiagramTap event)? tap,
+    TResult Function(DiagramDoubleTap event)? doubleTap,
+    TResult Function(DiagramLongPress event)? longPress,
+    TResult Function(DiagramScroll event)? scroll,
+    TResult Function(DiagramDragBegin event)? dragBegin,
+    TResult Function(DiagramDragContinue event)? dragContinue,
+    TResult Function(DiagramDragEnd event)? dragEnd,
+    TResult Function(DiagramPinchBegin event)? pinchBegin,
+    TResult Function(DiagramPinchContinue event)? pinchContinue,
+    TResult Function(DiagramPinchEnd event)? pinchEnd,
+    TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetEnter,
+    TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetOver,
+    TResult Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)?
+        dragTargetLeave,
+    TResult Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetDrop,
+    required TResult orElse(),
+  }) {
+    if (dragTargetOver != null) {
+      return dragTargetOver(eventId, dataPreview, screenPosition,
+          logicalPosition, transformSnapshot, timestamp);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Tap value) tap,
+    required TResult Function(_DoubleTap value) doubleTap,
+    required TResult Function(_LongPress value) longPress,
+    required TResult Function(_Scroll value) scroll,
+    required TResult Function(_DragBegin value) dragBegin,
+    required TResult Function(_DragContinue value) dragContinue,
+    required TResult Function(_DragEnd value) dragEnd,
+    required TResult Function(_PinchBegin value) pinchBegin,
+    required TResult Function(_PinchContinue value) pinchContinue,
+    required TResult Function(_PinchEnd value) pinchEnd,
+    required TResult Function(_DragTargetEnter value) dragTargetEnter,
+    required TResult Function(_DragTargetOver value) dragTargetOver,
+    required TResult Function(_DragTargetLeave value) dragTargetLeave,
+    required TResult Function(_DragTargetDrop value) dragTargetDrop,
+  }) {
+    return dragTargetOver(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Tap value)? tap,
+    TResult? Function(_DoubleTap value)? doubleTap,
+    TResult? Function(_LongPress value)? longPress,
+    TResult? Function(_Scroll value)? scroll,
+    TResult? Function(_DragBegin value)? dragBegin,
+    TResult? Function(_DragContinue value)? dragContinue,
+    TResult? Function(_DragEnd value)? dragEnd,
+    TResult? Function(_PinchBegin value)? pinchBegin,
+    TResult? Function(_PinchContinue value)? pinchContinue,
+    TResult? Function(_PinchEnd value)? pinchEnd,
+    TResult? Function(_DragTargetEnter value)? dragTargetEnter,
+    TResult? Function(_DragTargetOver value)? dragTargetOver,
+    TResult? Function(_DragTargetLeave value)? dragTargetLeave,
+    TResult? Function(_DragTargetDrop value)? dragTargetDrop,
+  }) {
+    return dragTargetOver?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Tap value)? tap,
+    TResult Function(_DoubleTap value)? doubleTap,
+    TResult Function(_LongPress value)? longPress,
+    TResult Function(_Scroll value)? scroll,
+    TResult Function(_DragBegin value)? dragBegin,
+    TResult Function(_DragContinue value)? dragContinue,
+    TResult Function(_DragEnd value)? dragEnd,
+    TResult Function(_PinchBegin value)? pinchBegin,
+    TResult Function(_PinchContinue value)? pinchContinue,
+    TResult Function(_PinchEnd value)? pinchEnd,
+    TResult Function(_DragTargetEnter value)? dragTargetEnter,
+    TResult Function(_DragTargetOver value)? dragTargetOver,
+    TResult Function(_DragTargetLeave value)? dragTargetLeave,
+    TResult Function(_DragTargetDrop value)? dragTargetDrop,
+    required TResult orElse(),
+  }) {
+    if (dragTargetOver != null) {
+      return dragTargetOver(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _DragTargetOver implements DiagramEventUnion {
+  const factory _DragTargetOver(
+      {required final String eventId,
+      required final Object dataPreview,
+      required final Offset screenPosition,
+      required final Offset logicalPosition,
+      required final Transform2D transformSnapshot,
+      required final Duration timestamp}) = _$DragTargetOverImpl;
+
+  String get eventId;
+  Object get dataPreview;
+  Offset get screenPosition;
+  Offset get logicalPosition;
+  Transform2D get transformSnapshot;
+  Duration get timestamp;
+
+  /// Create a copy of DiagramEventUnion
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$DragTargetOverImplCopyWith<_$DragTargetOverImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$DragTargetLeaveImplCopyWith<$Res> {
+  factory _$$DragTargetLeaveImplCopyWith(_$DragTargetLeaveImpl value,
+          $Res Function(_$DragTargetLeaveImpl) then) =
+      __$$DragTargetLeaveImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call(
+      {String eventId, Transform2D transformSnapshot, Duration timestamp});
+
+  $Transform2DCopyWith<$Res> get transformSnapshot;
+}
+
+/// @nodoc
+class __$$DragTargetLeaveImplCopyWithImpl<$Res>
+    extends _$DiagramEventUnionCopyWithImpl<$Res, _$DragTargetLeaveImpl>
+    implements _$$DragTargetLeaveImplCopyWith<$Res> {
+  __$$DragTargetLeaveImplCopyWithImpl(
+      _$DragTargetLeaveImpl _value, $Res Function(_$DragTargetLeaveImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of DiagramEventUnion
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? eventId = null,
+    Object? transformSnapshot = null,
+    Object? timestamp = null,
+  }) {
+    return _then(_$DragTargetLeaveImpl(
+      eventId: null == eventId
+          ? _value.eventId
+          : eventId // ignore: cast_nullable_to_non_nullable
+              as String,
+      transformSnapshot: null == transformSnapshot
+          ? _value.transformSnapshot
+          : transformSnapshot // ignore: cast_nullable_to_non_nullable
+              as Transform2D,
+      timestamp: null == timestamp
+          ? _value.timestamp
+          : timestamp // ignore: cast_nullable_to_non_nullable
+              as Duration,
+    ));
+  }
+
+  /// Create a copy of DiagramEventUnion
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $Transform2DCopyWith<$Res> get transformSnapshot {
+    return $Transform2DCopyWith<$Res>(_value.transformSnapshot, (value) {
+      return _then(_value.copyWith(transformSnapshot: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$DragTargetLeaveImpl implements _DragTargetLeave {
+  const _$DragTargetLeaveImpl(
+      {required this.eventId,
+      required this.transformSnapshot,
+      required this.timestamp});
+
+  @override
+  final String eventId;
+  @override
+  final Transform2D transformSnapshot;
+  @override
+  final Duration timestamp;
+
+  @override
+  String toString() {
+    return 'DiagramEventUnion.dragTargetLeave(eventId: $eventId, transformSnapshot: $transformSnapshot, timestamp: $timestamp)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$DragTargetLeaveImpl &&
+            (identical(other.eventId, eventId) || other.eventId == eventId) &&
+            (identical(other.transformSnapshot, transformSnapshot) ||
+                other.transformSnapshot == transformSnapshot) &&
+            (identical(other.timestamp, timestamp) ||
+                other.timestamp == timestamp));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, eventId, transformSnapshot, timestamp);
+
+  /// Create a copy of DiagramEventUnion
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$DragTargetLeaveImplCopyWith<_$DragTargetLeaveImpl> get copyWith =>
+      __$$DragTargetLeaveImplCopyWithImpl<_$DragTargetLeaveImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(DiagramTap event) tap,
+    required TResult Function(DiagramDoubleTap event) doubleTap,
+    required TResult Function(DiagramLongPress event) longPress,
+    required TResult Function(DiagramScroll event) scroll,
+    required TResult Function(DiagramDragBegin event) dragBegin,
+    required TResult Function(DiagramDragContinue event) dragContinue,
+    required TResult Function(DiagramDragEnd event) dragEnd,
+    required TResult Function(DiagramPinchBegin event) pinchBegin,
+    required TResult Function(DiagramPinchContinue event) pinchContinue,
+    required TResult Function(DiagramPinchEnd event) pinchEnd,
+    required TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetEnter,
+    required TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetOver,
+    required TResult Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)
+        dragTargetLeave,
+    required TResult Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetDrop,
+  }) {
+    return dragTargetLeave(eventId, transformSnapshot, timestamp);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(DiagramTap event)? tap,
+    TResult? Function(DiagramDoubleTap event)? doubleTap,
+    TResult? Function(DiagramLongPress event)? longPress,
+    TResult? Function(DiagramScroll event)? scroll,
+    TResult? Function(DiagramDragBegin event)? dragBegin,
+    TResult? Function(DiagramDragContinue event)? dragContinue,
+    TResult? Function(DiagramDragEnd event)? dragEnd,
+    TResult? Function(DiagramPinchBegin event)? pinchBegin,
+    TResult? Function(DiagramPinchContinue event)? pinchContinue,
+    TResult? Function(DiagramPinchEnd event)? pinchEnd,
+    TResult? Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetEnter,
+    TResult? Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetOver,
+    TResult? Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)?
+        dragTargetLeave,
+    TResult? Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetDrop,
+  }) {
+    return dragTargetLeave?.call(eventId, transformSnapshot, timestamp);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(DiagramTap event)? tap,
+    TResult Function(DiagramDoubleTap event)? doubleTap,
+    TResult Function(DiagramLongPress event)? longPress,
+    TResult Function(DiagramScroll event)? scroll,
+    TResult Function(DiagramDragBegin event)? dragBegin,
+    TResult Function(DiagramDragContinue event)? dragContinue,
+    TResult Function(DiagramDragEnd event)? dragEnd,
+    TResult Function(DiagramPinchBegin event)? pinchBegin,
+    TResult Function(DiagramPinchContinue event)? pinchContinue,
+    TResult Function(DiagramPinchEnd event)? pinchEnd,
+    TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetEnter,
+    TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetOver,
+    TResult Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)?
+        dragTargetLeave,
+    TResult Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetDrop,
+    required TResult orElse(),
+  }) {
+    if (dragTargetLeave != null) {
+      return dragTargetLeave(eventId, transformSnapshot, timestamp);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Tap value) tap,
+    required TResult Function(_DoubleTap value) doubleTap,
+    required TResult Function(_LongPress value) longPress,
+    required TResult Function(_Scroll value) scroll,
+    required TResult Function(_DragBegin value) dragBegin,
+    required TResult Function(_DragContinue value) dragContinue,
+    required TResult Function(_DragEnd value) dragEnd,
+    required TResult Function(_PinchBegin value) pinchBegin,
+    required TResult Function(_PinchContinue value) pinchContinue,
+    required TResult Function(_PinchEnd value) pinchEnd,
+    required TResult Function(_DragTargetEnter value) dragTargetEnter,
+    required TResult Function(_DragTargetOver value) dragTargetOver,
+    required TResult Function(_DragTargetLeave value) dragTargetLeave,
+    required TResult Function(_DragTargetDrop value) dragTargetDrop,
+  }) {
+    return dragTargetLeave(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Tap value)? tap,
+    TResult? Function(_DoubleTap value)? doubleTap,
+    TResult? Function(_LongPress value)? longPress,
+    TResult? Function(_Scroll value)? scroll,
+    TResult? Function(_DragBegin value)? dragBegin,
+    TResult? Function(_DragContinue value)? dragContinue,
+    TResult? Function(_DragEnd value)? dragEnd,
+    TResult? Function(_PinchBegin value)? pinchBegin,
+    TResult? Function(_PinchContinue value)? pinchContinue,
+    TResult? Function(_PinchEnd value)? pinchEnd,
+    TResult? Function(_DragTargetEnter value)? dragTargetEnter,
+    TResult? Function(_DragTargetOver value)? dragTargetOver,
+    TResult? Function(_DragTargetLeave value)? dragTargetLeave,
+    TResult? Function(_DragTargetDrop value)? dragTargetDrop,
+  }) {
+    return dragTargetLeave?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Tap value)? tap,
+    TResult Function(_DoubleTap value)? doubleTap,
+    TResult Function(_LongPress value)? longPress,
+    TResult Function(_Scroll value)? scroll,
+    TResult Function(_DragBegin value)? dragBegin,
+    TResult Function(_DragContinue value)? dragContinue,
+    TResult Function(_DragEnd value)? dragEnd,
+    TResult Function(_PinchBegin value)? pinchBegin,
+    TResult Function(_PinchContinue value)? pinchContinue,
+    TResult Function(_PinchEnd value)? pinchEnd,
+    TResult Function(_DragTargetEnter value)? dragTargetEnter,
+    TResult Function(_DragTargetOver value)? dragTargetOver,
+    TResult Function(_DragTargetLeave value)? dragTargetLeave,
+    TResult Function(_DragTargetDrop value)? dragTargetDrop,
+    required TResult orElse(),
+  }) {
+    if (dragTargetLeave != null) {
+      return dragTargetLeave(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _DragTargetLeave implements DiagramEventUnion {
+  const factory _DragTargetLeave(
+      {required final String eventId,
+      required final Transform2D transformSnapshot,
+      required final Duration timestamp}) = _$DragTargetLeaveImpl;
+
+  String get eventId;
+  Transform2D get transformSnapshot;
+  Duration get timestamp;
+
+  /// Create a copy of DiagramEventUnion
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$DragTargetLeaveImplCopyWith<_$DragTargetLeaveImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$DragTargetDropImplCopyWith<$Res> {
+  factory _$$DragTargetDropImplCopyWith(_$DragTargetDropImpl value,
+          $Res Function(_$DragTargetDropImpl) then) =
+      __$$DragTargetDropImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call(
+      {String eventId,
+      Object data,
+      Offset screenPosition,
+      Offset logicalPosition,
+      Transform2D transformSnapshot,
+      Duration timestamp});
+
+  $Transform2DCopyWith<$Res> get transformSnapshot;
+}
+
+/// @nodoc
+class __$$DragTargetDropImplCopyWithImpl<$Res>
+    extends _$DiagramEventUnionCopyWithImpl<$Res, _$DragTargetDropImpl>
+    implements _$$DragTargetDropImplCopyWith<$Res> {
+  __$$DragTargetDropImplCopyWithImpl(
+      _$DragTargetDropImpl _value, $Res Function(_$DragTargetDropImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of DiagramEventUnion
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? eventId = null,
+    Object? data = null,
+    Object? screenPosition = null,
+    Object? logicalPosition = null,
+    Object? transformSnapshot = null,
+    Object? timestamp = null,
+  }) {
+    return _then(_$DragTargetDropImpl(
+      eventId: null == eventId
+          ? _value.eventId
+          : eventId // ignore: cast_nullable_to_non_nullable
+              as String,
+      data: null == data ? _value.data : data,
+      screenPosition: null == screenPosition
+          ? _value.screenPosition
+          : screenPosition // ignore: cast_nullable_to_non_nullable
+              as Offset,
+      logicalPosition: null == logicalPosition
+          ? _value.logicalPosition
+          : logicalPosition // ignore: cast_nullable_to_non_nullable
+              as Offset,
+      transformSnapshot: null == transformSnapshot
+          ? _value.transformSnapshot
+          : transformSnapshot // ignore: cast_nullable_to_non_nullable
+              as Transform2D,
+      timestamp: null == timestamp
+          ? _value.timestamp
+          : timestamp // ignore: cast_nullable_to_non_nullable
+              as Duration,
+    ));
+  }
+
+  /// Create a copy of DiagramEventUnion
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $Transform2DCopyWith<$Res> get transformSnapshot {
+    return $Transform2DCopyWith<$Res>(_value.transformSnapshot, (value) {
+      return _then(_value.copyWith(transformSnapshot: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$DragTargetDropImpl implements _DragTargetDrop {
+  const _$DragTargetDropImpl(
+      {required this.eventId,
+      required this.data,
+      required this.screenPosition,
+      required this.logicalPosition,
+      required this.transformSnapshot,
+      required this.timestamp});
+
+  @override
+  final String eventId;
+  @override
+  final Object data;
+  @override
+  final Offset screenPosition;
+  @override
+  final Offset logicalPosition;
+  @override
+  final Transform2D transformSnapshot;
+  @override
+  final Duration timestamp;
+
+  @override
+  String toString() {
+    return 'DiagramEventUnion.dragTargetDrop(eventId: $eventId, data: $data, screenPosition: $screenPosition, logicalPosition: $logicalPosition, transformSnapshot: $transformSnapshot, timestamp: $timestamp)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$DragTargetDropImpl &&
+            (identical(other.eventId, eventId) || other.eventId == eventId) &&
+            const DeepCollectionEquality().equals(other.data, data) &&
+            (identical(other.screenPosition, screenPosition) ||
+                other.screenPosition == screenPosition) &&
+            (identical(other.logicalPosition, logicalPosition) ||
+                other.logicalPosition == logicalPosition) &&
+            (identical(other.transformSnapshot, transformSnapshot) ||
+                other.transformSnapshot == transformSnapshot) &&
+            (identical(other.timestamp, timestamp) ||
+                other.timestamp == timestamp));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      eventId,
+      const DeepCollectionEquality().hash(data),
+      screenPosition,
+      logicalPosition,
+      transformSnapshot,
+      timestamp);
+
+  /// Create a copy of DiagramEventUnion
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$DragTargetDropImplCopyWith<_$DragTargetDropImpl> get copyWith =>
+      __$$DragTargetDropImplCopyWithImpl<_$DragTargetDropImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(DiagramTap event) tap,
+    required TResult Function(DiagramDoubleTap event) doubleTap,
+    required TResult Function(DiagramLongPress event) longPress,
+    required TResult Function(DiagramScroll event) scroll,
+    required TResult Function(DiagramDragBegin event) dragBegin,
+    required TResult Function(DiagramDragContinue event) dragContinue,
+    required TResult Function(DiagramDragEnd event) dragEnd,
+    required TResult Function(DiagramPinchBegin event) pinchBegin,
+    required TResult Function(DiagramPinchContinue event) pinchContinue,
+    required TResult Function(DiagramPinchEnd event) pinchEnd,
+    required TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetEnter,
+    required TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetOver,
+    required TResult Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)
+        dragTargetLeave,
+    required TResult Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetDrop,
+  }) {
+    return dragTargetDrop(eventId, data, screenPosition, logicalPosition,
+        transformSnapshot, timestamp);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(DiagramTap event)? tap,
+    TResult? Function(DiagramDoubleTap event)? doubleTap,
+    TResult? Function(DiagramLongPress event)? longPress,
+    TResult? Function(DiagramScroll event)? scroll,
+    TResult? Function(DiagramDragBegin event)? dragBegin,
+    TResult? Function(DiagramDragContinue event)? dragContinue,
+    TResult? Function(DiagramDragEnd event)? dragEnd,
+    TResult? Function(DiagramPinchBegin event)? pinchBegin,
+    TResult? Function(DiagramPinchContinue event)? pinchContinue,
+    TResult? Function(DiagramPinchEnd event)? pinchEnd,
+    TResult? Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetEnter,
+    TResult? Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetOver,
+    TResult? Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)?
+        dragTargetLeave,
+    TResult? Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetDrop,
+  }) {
+    return dragTargetDrop?.call(eventId, data, screenPosition, logicalPosition,
+        transformSnapshot, timestamp);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(DiagramTap event)? tap,
+    TResult Function(DiagramDoubleTap event)? doubleTap,
+    TResult Function(DiagramLongPress event)? longPress,
+    TResult Function(DiagramScroll event)? scroll,
+    TResult Function(DiagramDragBegin event)? dragBegin,
+    TResult Function(DiagramDragContinue event)? dragContinue,
+    TResult Function(DiagramDragEnd event)? dragEnd,
+    TResult Function(DiagramPinchBegin event)? pinchBegin,
+    TResult Function(DiagramPinchContinue event)? pinchContinue,
+    TResult Function(DiagramPinchEnd event)? pinchEnd,
+    TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetEnter,
+    TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetOver,
+    TResult Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)?
+        dragTargetLeave,
+    TResult Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetDrop,
+    required TResult orElse(),
+  }) {
+    if (dragTargetDrop != null) {
+      return dragTargetDrop(eventId, data, screenPosition, logicalPosition,
+          transformSnapshot, timestamp);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Tap value) tap,
+    required TResult Function(_DoubleTap value) doubleTap,
+    required TResult Function(_LongPress value) longPress,
+    required TResult Function(_Scroll value) scroll,
+    required TResult Function(_DragBegin value) dragBegin,
+    required TResult Function(_DragContinue value) dragContinue,
+    required TResult Function(_DragEnd value) dragEnd,
+    required TResult Function(_PinchBegin value) pinchBegin,
+    required TResult Function(_PinchContinue value) pinchContinue,
+    required TResult Function(_PinchEnd value) pinchEnd,
+    required TResult Function(_DragTargetEnter value) dragTargetEnter,
+    required TResult Function(_DragTargetOver value) dragTargetOver,
+    required TResult Function(_DragTargetLeave value) dragTargetLeave,
+    required TResult Function(_DragTargetDrop value) dragTargetDrop,
+  }) {
+    return dragTargetDrop(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Tap value)? tap,
+    TResult? Function(_DoubleTap value)? doubleTap,
+    TResult? Function(_LongPress value)? longPress,
+    TResult? Function(_Scroll value)? scroll,
+    TResult? Function(_DragBegin value)? dragBegin,
+    TResult? Function(_DragContinue value)? dragContinue,
+    TResult? Function(_DragEnd value)? dragEnd,
+    TResult? Function(_PinchBegin value)? pinchBegin,
+    TResult? Function(_PinchContinue value)? pinchContinue,
+    TResult? Function(_PinchEnd value)? pinchEnd,
+    TResult? Function(_DragTargetEnter value)? dragTargetEnter,
+    TResult? Function(_DragTargetOver value)? dragTargetOver,
+    TResult? Function(_DragTargetLeave value)? dragTargetLeave,
+    TResult? Function(_DragTargetDrop value)? dragTargetDrop,
+  }) {
+    return dragTargetDrop?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Tap value)? tap,
+    TResult Function(_DoubleTap value)? doubleTap,
+    TResult Function(_LongPress value)? longPress,
+    TResult Function(_Scroll value)? scroll,
+    TResult Function(_DragBegin value)? dragBegin,
+    TResult Function(_DragContinue value)? dragContinue,
+    TResult Function(_DragEnd value)? dragEnd,
+    TResult Function(_PinchBegin value)? pinchBegin,
+    TResult Function(_PinchContinue value)? pinchContinue,
+    TResult Function(_PinchEnd value)? pinchEnd,
+    TResult Function(_DragTargetEnter value)? dragTargetEnter,
+    TResult Function(_DragTargetOver value)? dragTargetOver,
+    TResult Function(_DragTargetLeave value)? dragTargetLeave,
+    TResult Function(_DragTargetDrop value)? dragTargetDrop,
+    required TResult orElse(),
+  }) {
+    if (dragTargetDrop != null) {
+      return dragTargetDrop(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _DragTargetDrop implements DiagramEventUnion {
+  const factory _DragTargetDrop(
+      {required final String eventId,
+      required final Object data,
+      required final Offset screenPosition,
+      required final Offset logicalPosition,
+      required final Transform2D transformSnapshot,
+      required final Duration timestamp}) = _$DragTargetDropImpl;
+
+  String get eventId;
+  Object get data;
+  Offset get screenPosition;
+  Offset get logicalPosition;
+  Transform2D get transformSnapshot;
+  Duration get timestamp;
+
+  /// Create a copy of DiagramEventUnion
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$DragTargetDropImplCopyWith<_$DragTargetDropImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

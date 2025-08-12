@@ -9,6 +9,9 @@
   - E2E widget autoscroll test stabilized and enabled
 - Border proximity: computation enabled in `EventManagementBloc` and propagated to drag events
 - Docs: Updated architecture, technical design, and functional requirements for autoscroll contract and border proximity
+ - In‑App Drag & Drop (Target):
+   - Added DnD target events (enter/over/leave/drop) with screen and logical positions
+   - Added ghost overlay commands (show/update/hide) and technical notes on global→local→logical mapping
 
 ### Changed
 - Removed temporary debug logs from runtime code; kept optional `DebugBlocObserver` behind configuration

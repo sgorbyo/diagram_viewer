@@ -28,6 +28,10 @@ mixin _$DiagramCommand {
     required TResult Function(Offset velocity, Duration stepDuration)
         autoScrollStep,
     required TResult Function() stopAutoScroll,
+    required TResult Function(Object? ghostSpec, Offset position)
+        showDragOverlay,
+    required TResult Function(Offset position) updateDragOverlay,
+    required TResult Function() hideDragOverlay,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -41,6 +45,9 @@ mixin _$DiagramCommand {
         elasticBounceBack,
     TResult? Function(Offset velocity, Duration stepDuration)? autoScrollStep,
     TResult? Function()? stopAutoScroll,
+    TResult? Function(Object? ghostSpec, Offset position)? showDragOverlay,
+    TResult? Function(Offset position)? updateDragOverlay,
+    TResult? Function()? hideDragOverlay,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -53,6 +60,9 @@ mixin _$DiagramCommand {
         elasticBounceBack,
     TResult Function(Offset velocity, Duration stepDuration)? autoScrollStep,
     TResult Function()? stopAutoScroll,
+    TResult Function(Object? ghostSpec, Offset position)? showDragOverlay,
+    TResult Function(Offset position)? updateDragOverlay,
+    TResult Function()? hideDragOverlay,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -65,6 +75,9 @@ mixin _$DiagramCommand {
     required TResult Function(ElasticBounceBackCommand value) elasticBounceBack,
     required TResult Function(AutoScrollStepCommand value) autoScrollStep,
     required TResult Function(StopAutoScrollCommand value) stopAutoScroll,
+    required TResult Function(ShowDragOverlayCommand value) showDragOverlay,
+    required TResult Function(UpdateDragOverlayCommand value) updateDragOverlay,
+    required TResult Function(HideDragOverlayCommand value) hideDragOverlay,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -75,6 +88,9 @@ mixin _$DiagramCommand {
     TResult? Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult? Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult? Function(StopAutoScrollCommand value)? stopAutoScroll,
+    TResult? Function(ShowDragOverlayCommand value)? showDragOverlay,
+    TResult? Function(UpdateDragOverlayCommand value)? updateDragOverlay,
+    TResult? Function(HideDragOverlayCommand value)? hideDragOverlay,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -85,6 +101,9 @@ mixin _$DiagramCommand {
     TResult Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult Function(StopAutoScrollCommand value)? stopAutoScroll,
+    TResult Function(ShowDragOverlayCommand value)? showDragOverlay,
+    TResult Function(UpdateDragOverlayCommand value)? updateDragOverlay,
+    TResult Function(HideDragOverlayCommand value)? hideDragOverlay,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -204,6 +223,10 @@ class _$ApplyDefaultPanZoomCommandImpl extends ApplyDefaultPanZoomCommand {
     required TResult Function(Offset velocity, Duration stepDuration)
         autoScrollStep,
     required TResult Function() stopAutoScroll,
+    required TResult Function(Object? ghostSpec, Offset position)
+        showDragOverlay,
+    required TResult Function(Offset position) updateDragOverlay,
+    required TResult Function() hideDragOverlay,
   }) {
     return applyDefaultPanZoom(origin);
   }
@@ -220,6 +243,9 @@ class _$ApplyDefaultPanZoomCommandImpl extends ApplyDefaultPanZoomCommand {
         elasticBounceBack,
     TResult? Function(Offset velocity, Duration stepDuration)? autoScrollStep,
     TResult? Function()? stopAutoScroll,
+    TResult? Function(Object? ghostSpec, Offset position)? showDragOverlay,
+    TResult? Function(Offset position)? updateDragOverlay,
+    TResult? Function()? hideDragOverlay,
   }) {
     return applyDefaultPanZoom?.call(origin);
   }
@@ -235,6 +261,9 @@ class _$ApplyDefaultPanZoomCommandImpl extends ApplyDefaultPanZoomCommand {
         elasticBounceBack,
     TResult Function(Offset velocity, Duration stepDuration)? autoScrollStep,
     TResult Function()? stopAutoScroll,
+    TResult Function(Object? ghostSpec, Offset position)? showDragOverlay,
+    TResult Function(Offset position)? updateDragOverlay,
+    TResult Function()? hideDragOverlay,
     required TResult orElse(),
   }) {
     if (applyDefaultPanZoom != null) {
@@ -253,6 +282,9 @@ class _$ApplyDefaultPanZoomCommandImpl extends ApplyDefaultPanZoomCommand {
     required TResult Function(ElasticBounceBackCommand value) elasticBounceBack,
     required TResult Function(AutoScrollStepCommand value) autoScrollStep,
     required TResult Function(StopAutoScrollCommand value) stopAutoScroll,
+    required TResult Function(ShowDragOverlayCommand value) showDragOverlay,
+    required TResult Function(UpdateDragOverlayCommand value) updateDragOverlay,
+    required TResult Function(HideDragOverlayCommand value) hideDragOverlay,
   }) {
     return applyDefaultPanZoom(this);
   }
@@ -266,6 +298,9 @@ class _$ApplyDefaultPanZoomCommandImpl extends ApplyDefaultPanZoomCommand {
     TResult? Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult? Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult? Function(StopAutoScrollCommand value)? stopAutoScroll,
+    TResult? Function(ShowDragOverlayCommand value)? showDragOverlay,
+    TResult? Function(UpdateDragOverlayCommand value)? updateDragOverlay,
+    TResult? Function(HideDragOverlayCommand value)? hideDragOverlay,
   }) {
     return applyDefaultPanZoom?.call(this);
   }
@@ -279,6 +314,9 @@ class _$ApplyDefaultPanZoomCommandImpl extends ApplyDefaultPanZoomCommand {
     TResult Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult Function(StopAutoScrollCommand value)? stopAutoScroll,
+    TResult Function(ShowDragOverlayCommand value)? showDragOverlay,
+    TResult Function(UpdateDragOverlayCommand value)? updateDragOverlay,
+    TResult Function(HideDragOverlayCommand value)? hideDragOverlay,
     required TResult orElse(),
   }) {
     if (applyDefaultPanZoom != null) {
@@ -394,6 +432,10 @@ class _$SetTransformCommandImpl extends SetTransformCommand {
     required TResult Function(Offset velocity, Duration stepDuration)
         autoScrollStep,
     required TResult Function() stopAutoScroll,
+    required TResult Function(Object? ghostSpec, Offset position)
+        showDragOverlay,
+    required TResult Function(Offset position) updateDragOverlay,
+    required TResult Function() hideDragOverlay,
   }) {
     return setTransform(transform);
   }
@@ -410,6 +452,9 @@ class _$SetTransformCommandImpl extends SetTransformCommand {
         elasticBounceBack,
     TResult? Function(Offset velocity, Duration stepDuration)? autoScrollStep,
     TResult? Function()? stopAutoScroll,
+    TResult? Function(Object? ghostSpec, Offset position)? showDragOverlay,
+    TResult? Function(Offset position)? updateDragOverlay,
+    TResult? Function()? hideDragOverlay,
   }) {
     return setTransform?.call(transform);
   }
@@ -425,6 +470,9 @@ class _$SetTransformCommandImpl extends SetTransformCommand {
         elasticBounceBack,
     TResult Function(Offset velocity, Duration stepDuration)? autoScrollStep,
     TResult Function()? stopAutoScroll,
+    TResult Function(Object? ghostSpec, Offset position)? showDragOverlay,
+    TResult Function(Offset position)? updateDragOverlay,
+    TResult Function()? hideDragOverlay,
     required TResult orElse(),
   }) {
     if (setTransform != null) {
@@ -443,6 +491,9 @@ class _$SetTransformCommandImpl extends SetTransformCommand {
     required TResult Function(ElasticBounceBackCommand value) elasticBounceBack,
     required TResult Function(AutoScrollStepCommand value) autoScrollStep,
     required TResult Function(StopAutoScrollCommand value) stopAutoScroll,
+    required TResult Function(ShowDragOverlayCommand value) showDragOverlay,
+    required TResult Function(UpdateDragOverlayCommand value) updateDragOverlay,
+    required TResult Function(HideDragOverlayCommand value) hideDragOverlay,
   }) {
     return setTransform(this);
   }
@@ -456,6 +507,9 @@ class _$SetTransformCommandImpl extends SetTransformCommand {
     TResult? Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult? Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult? Function(StopAutoScrollCommand value)? stopAutoScroll,
+    TResult? Function(ShowDragOverlayCommand value)? showDragOverlay,
+    TResult? Function(UpdateDragOverlayCommand value)? updateDragOverlay,
+    TResult? Function(HideDragOverlayCommand value)? hideDragOverlay,
   }) {
     return setTransform?.call(this);
   }
@@ -469,6 +523,9 @@ class _$SetTransformCommandImpl extends SetTransformCommand {
     TResult Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult Function(StopAutoScrollCommand value)? stopAutoScroll,
+    TResult Function(ShowDragOverlayCommand value)? showDragOverlay,
+    TResult Function(UpdateDragOverlayCommand value)? updateDragOverlay,
+    TResult Function(HideDragOverlayCommand value)? hideDragOverlay,
     required TResult orElse(),
   }) {
     if (setTransform != null) {
@@ -591,6 +648,10 @@ class _$RedrawCommandImpl extends RedrawCommand {
     required TResult Function(Offset velocity, Duration stepDuration)
         autoScrollStep,
     required TResult Function() stopAutoScroll,
+    required TResult Function(Object? ghostSpec, Offset position)
+        showDragOverlay,
+    required TResult Function(Offset position) updateDragOverlay,
+    required TResult Function() hideDragOverlay,
   }) {
     return redraw(renderables, logicalExtent);
   }
@@ -607,6 +668,9 @@ class _$RedrawCommandImpl extends RedrawCommand {
         elasticBounceBack,
     TResult? Function(Offset velocity, Duration stepDuration)? autoScrollStep,
     TResult? Function()? stopAutoScroll,
+    TResult? Function(Object? ghostSpec, Offset position)? showDragOverlay,
+    TResult? Function(Offset position)? updateDragOverlay,
+    TResult? Function()? hideDragOverlay,
   }) {
     return redraw?.call(renderables, logicalExtent);
   }
@@ -622,6 +686,9 @@ class _$RedrawCommandImpl extends RedrawCommand {
         elasticBounceBack,
     TResult Function(Offset velocity, Duration stepDuration)? autoScrollStep,
     TResult Function()? stopAutoScroll,
+    TResult Function(Object? ghostSpec, Offset position)? showDragOverlay,
+    TResult Function(Offset position)? updateDragOverlay,
+    TResult Function()? hideDragOverlay,
     required TResult orElse(),
   }) {
     if (redraw != null) {
@@ -640,6 +707,9 @@ class _$RedrawCommandImpl extends RedrawCommand {
     required TResult Function(ElasticBounceBackCommand value) elasticBounceBack,
     required TResult Function(AutoScrollStepCommand value) autoScrollStep,
     required TResult Function(StopAutoScrollCommand value) stopAutoScroll,
+    required TResult Function(ShowDragOverlayCommand value) showDragOverlay,
+    required TResult Function(UpdateDragOverlayCommand value) updateDragOverlay,
+    required TResult Function(HideDragOverlayCommand value) hideDragOverlay,
   }) {
     return redraw(this);
   }
@@ -653,6 +723,9 @@ class _$RedrawCommandImpl extends RedrawCommand {
     TResult? Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult? Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult? Function(StopAutoScrollCommand value)? stopAutoScroll,
+    TResult? Function(ShowDragOverlayCommand value)? showDragOverlay,
+    TResult? Function(UpdateDragOverlayCommand value)? updateDragOverlay,
+    TResult? Function(HideDragOverlayCommand value)? hideDragOverlay,
   }) {
     return redraw?.call(this);
   }
@@ -666,6 +739,9 @@ class _$RedrawCommandImpl extends RedrawCommand {
     TResult Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult Function(StopAutoScrollCommand value)? stopAutoScroll,
+    TResult Function(ShowDragOverlayCommand value)? showDragOverlay,
+    TResult Function(UpdateDragOverlayCommand value)? updateDragOverlay,
+    TResult Function(HideDragOverlayCommand value)? hideDragOverlay,
     required TResult orElse(),
   }) {
     if (redraw != null) {
@@ -798,6 +874,10 @@ class _$ElasticBounceBackCommandImpl extends ElasticBounceBackCommand {
     required TResult Function(Offset velocity, Duration stepDuration)
         autoScrollStep,
     required TResult Function() stopAutoScroll,
+    required TResult Function(Object? ghostSpec, Offset position)
+        showDragOverlay,
+    required TResult Function(Offset position) updateDragOverlay,
+    required TResult Function() hideDragOverlay,
   }) {
     return elasticBounceBack(targetTransform, duration);
   }
@@ -814,6 +894,9 @@ class _$ElasticBounceBackCommandImpl extends ElasticBounceBackCommand {
         elasticBounceBack,
     TResult? Function(Offset velocity, Duration stepDuration)? autoScrollStep,
     TResult? Function()? stopAutoScroll,
+    TResult? Function(Object? ghostSpec, Offset position)? showDragOverlay,
+    TResult? Function(Offset position)? updateDragOverlay,
+    TResult? Function()? hideDragOverlay,
   }) {
     return elasticBounceBack?.call(targetTransform, duration);
   }
@@ -829,6 +912,9 @@ class _$ElasticBounceBackCommandImpl extends ElasticBounceBackCommand {
         elasticBounceBack,
     TResult Function(Offset velocity, Duration stepDuration)? autoScrollStep,
     TResult Function()? stopAutoScroll,
+    TResult Function(Object? ghostSpec, Offset position)? showDragOverlay,
+    TResult Function(Offset position)? updateDragOverlay,
+    TResult Function()? hideDragOverlay,
     required TResult orElse(),
   }) {
     if (elasticBounceBack != null) {
@@ -847,6 +933,9 @@ class _$ElasticBounceBackCommandImpl extends ElasticBounceBackCommand {
     required TResult Function(ElasticBounceBackCommand value) elasticBounceBack,
     required TResult Function(AutoScrollStepCommand value) autoScrollStep,
     required TResult Function(StopAutoScrollCommand value) stopAutoScroll,
+    required TResult Function(ShowDragOverlayCommand value) showDragOverlay,
+    required TResult Function(UpdateDragOverlayCommand value) updateDragOverlay,
+    required TResult Function(HideDragOverlayCommand value) hideDragOverlay,
   }) {
     return elasticBounceBack(this);
   }
@@ -860,6 +949,9 @@ class _$ElasticBounceBackCommandImpl extends ElasticBounceBackCommand {
     TResult? Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult? Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult? Function(StopAutoScrollCommand value)? stopAutoScroll,
+    TResult? Function(ShowDragOverlayCommand value)? showDragOverlay,
+    TResult? Function(UpdateDragOverlayCommand value)? updateDragOverlay,
+    TResult? Function(HideDragOverlayCommand value)? hideDragOverlay,
   }) {
     return elasticBounceBack?.call(this);
   }
@@ -873,6 +965,9 @@ class _$ElasticBounceBackCommandImpl extends ElasticBounceBackCommand {
     TResult Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult Function(StopAutoScrollCommand value)? stopAutoScroll,
+    TResult Function(ShowDragOverlayCommand value)? showDragOverlay,
+    TResult Function(UpdateDragOverlayCommand value)? updateDragOverlay,
+    TResult Function(HideDragOverlayCommand value)? hideDragOverlay,
     required TResult orElse(),
   }) {
     if (elasticBounceBack != null) {
@@ -992,6 +1087,10 @@ class _$AutoScrollStepCommandImpl extends AutoScrollStepCommand {
     required TResult Function(Offset velocity, Duration stepDuration)
         autoScrollStep,
     required TResult Function() stopAutoScroll,
+    required TResult Function(Object? ghostSpec, Offset position)
+        showDragOverlay,
+    required TResult Function(Offset position) updateDragOverlay,
+    required TResult Function() hideDragOverlay,
   }) {
     return autoScrollStep(velocity, stepDuration);
   }
@@ -1008,6 +1107,9 @@ class _$AutoScrollStepCommandImpl extends AutoScrollStepCommand {
         elasticBounceBack,
     TResult? Function(Offset velocity, Duration stepDuration)? autoScrollStep,
     TResult? Function()? stopAutoScroll,
+    TResult? Function(Object? ghostSpec, Offset position)? showDragOverlay,
+    TResult? Function(Offset position)? updateDragOverlay,
+    TResult? Function()? hideDragOverlay,
   }) {
     return autoScrollStep?.call(velocity, stepDuration);
   }
@@ -1023,6 +1125,9 @@ class _$AutoScrollStepCommandImpl extends AutoScrollStepCommand {
         elasticBounceBack,
     TResult Function(Offset velocity, Duration stepDuration)? autoScrollStep,
     TResult Function()? stopAutoScroll,
+    TResult Function(Object? ghostSpec, Offset position)? showDragOverlay,
+    TResult Function(Offset position)? updateDragOverlay,
+    TResult Function()? hideDragOverlay,
     required TResult orElse(),
   }) {
     if (autoScrollStep != null) {
@@ -1041,6 +1146,9 @@ class _$AutoScrollStepCommandImpl extends AutoScrollStepCommand {
     required TResult Function(ElasticBounceBackCommand value) elasticBounceBack,
     required TResult Function(AutoScrollStepCommand value) autoScrollStep,
     required TResult Function(StopAutoScrollCommand value) stopAutoScroll,
+    required TResult Function(ShowDragOverlayCommand value) showDragOverlay,
+    required TResult Function(UpdateDragOverlayCommand value) updateDragOverlay,
+    required TResult Function(HideDragOverlayCommand value) hideDragOverlay,
   }) {
     return autoScrollStep(this);
   }
@@ -1054,6 +1162,9 @@ class _$AutoScrollStepCommandImpl extends AutoScrollStepCommand {
     TResult? Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult? Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult? Function(StopAutoScrollCommand value)? stopAutoScroll,
+    TResult? Function(ShowDragOverlayCommand value)? showDragOverlay,
+    TResult? Function(UpdateDragOverlayCommand value)? updateDragOverlay,
+    TResult? Function(HideDragOverlayCommand value)? hideDragOverlay,
   }) {
     return autoScrollStep?.call(this);
   }
@@ -1067,6 +1178,9 @@ class _$AutoScrollStepCommandImpl extends AutoScrollStepCommand {
     TResult Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult Function(StopAutoScrollCommand value)? stopAutoScroll,
+    TResult Function(ShowDragOverlayCommand value)? showDragOverlay,
+    TResult Function(UpdateDragOverlayCommand value)? updateDragOverlay,
+    TResult Function(HideDragOverlayCommand value)? hideDragOverlay,
     required TResult orElse(),
   }) {
     if (autoScrollStep != null) {
@@ -1145,6 +1259,10 @@ class _$StopAutoScrollCommandImpl extends StopAutoScrollCommand {
     required TResult Function(Offset velocity, Duration stepDuration)
         autoScrollStep,
     required TResult Function() stopAutoScroll,
+    required TResult Function(Object? ghostSpec, Offset position)
+        showDragOverlay,
+    required TResult Function(Offset position) updateDragOverlay,
+    required TResult Function() hideDragOverlay,
   }) {
     return stopAutoScroll();
   }
@@ -1161,6 +1279,9 @@ class _$StopAutoScrollCommandImpl extends StopAutoScrollCommand {
         elasticBounceBack,
     TResult? Function(Offset velocity, Duration stepDuration)? autoScrollStep,
     TResult? Function()? stopAutoScroll,
+    TResult? Function(Object? ghostSpec, Offset position)? showDragOverlay,
+    TResult? Function(Offset position)? updateDragOverlay,
+    TResult? Function()? hideDragOverlay,
   }) {
     return stopAutoScroll?.call();
   }
@@ -1176,6 +1297,9 @@ class _$StopAutoScrollCommandImpl extends StopAutoScrollCommand {
         elasticBounceBack,
     TResult Function(Offset velocity, Duration stepDuration)? autoScrollStep,
     TResult Function()? stopAutoScroll,
+    TResult Function(Object? ghostSpec, Offset position)? showDragOverlay,
+    TResult Function(Offset position)? updateDragOverlay,
+    TResult Function()? hideDragOverlay,
     required TResult orElse(),
   }) {
     if (stopAutoScroll != null) {
@@ -1194,6 +1318,9 @@ class _$StopAutoScrollCommandImpl extends StopAutoScrollCommand {
     required TResult Function(ElasticBounceBackCommand value) elasticBounceBack,
     required TResult Function(AutoScrollStepCommand value) autoScrollStep,
     required TResult Function(StopAutoScrollCommand value) stopAutoScroll,
+    required TResult Function(ShowDragOverlayCommand value) showDragOverlay,
+    required TResult Function(UpdateDragOverlayCommand value) updateDragOverlay,
+    required TResult Function(HideDragOverlayCommand value) hideDragOverlay,
   }) {
     return stopAutoScroll(this);
   }
@@ -1207,6 +1334,9 @@ class _$StopAutoScrollCommandImpl extends StopAutoScrollCommand {
     TResult? Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult? Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult? Function(StopAutoScrollCommand value)? stopAutoScroll,
+    TResult? Function(ShowDragOverlayCommand value)? showDragOverlay,
+    TResult? Function(UpdateDragOverlayCommand value)? updateDragOverlay,
+    TResult? Function(HideDragOverlayCommand value)? hideDragOverlay,
   }) {
     return stopAutoScroll?.call(this);
   }
@@ -1220,6 +1350,9 @@ class _$StopAutoScrollCommandImpl extends StopAutoScrollCommand {
     TResult Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult Function(StopAutoScrollCommand value)? stopAutoScroll,
+    TResult Function(ShowDragOverlayCommand value)? showDragOverlay,
+    TResult Function(UpdateDragOverlayCommand value)? updateDragOverlay,
+    TResult Function(HideDragOverlayCommand value)? hideDragOverlay,
     required TResult orElse(),
   }) {
     if (stopAutoScroll != null) {
@@ -1232,4 +1365,573 @@ class _$StopAutoScrollCommandImpl extends StopAutoScrollCommand {
 abstract class StopAutoScrollCommand extends DiagramCommand {
   const factory StopAutoScrollCommand() = _$StopAutoScrollCommandImpl;
   const StopAutoScrollCommand._() : super._();
+}
+
+/// @nodoc
+abstract class _$$ShowDragOverlayCommandImplCopyWith<$Res> {
+  factory _$$ShowDragOverlayCommandImplCopyWith(
+          _$ShowDragOverlayCommandImpl value,
+          $Res Function(_$ShowDragOverlayCommandImpl) then) =
+      __$$ShowDragOverlayCommandImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({Object? ghostSpec, Offset position});
+}
+
+/// @nodoc
+class __$$ShowDragOverlayCommandImplCopyWithImpl<$Res>
+    extends _$DiagramCommandCopyWithImpl<$Res, _$ShowDragOverlayCommandImpl>
+    implements _$$ShowDragOverlayCommandImplCopyWith<$Res> {
+  __$$ShowDragOverlayCommandImplCopyWithImpl(
+      _$ShowDragOverlayCommandImpl _value,
+      $Res Function(_$ShowDragOverlayCommandImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of DiagramCommand
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? ghostSpec = freezed,
+    Object? position = null,
+  }) {
+    return _then(_$ShowDragOverlayCommandImpl(
+      ghostSpec: freezed == ghostSpec ? _value.ghostSpec : ghostSpec,
+      position: null == position
+          ? _value.position
+          : position // ignore: cast_nullable_to_non_nullable
+              as Offset,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$ShowDragOverlayCommandImpl extends ShowDragOverlayCommand {
+  const _$ShowDragOverlayCommandImpl({this.ghostSpec, required this.position})
+      : super._();
+
+  @override
+  final Object? ghostSpec;
+  @override
+  final Offset position;
+
+  @override
+  String toString() {
+    return 'DiagramCommand.showDragOverlay(ghostSpec: $ghostSpec, position: $position)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ShowDragOverlayCommandImpl &&
+            const DeepCollectionEquality().equals(other.ghostSpec, ghostSpec) &&
+            (identical(other.position, position) ||
+                other.position == position));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(ghostSpec), position);
+
+  /// Create a copy of DiagramCommand
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ShowDragOverlayCommandImplCopyWith<_$ShowDragOverlayCommandImpl>
+      get copyWith => __$$ShowDragOverlayCommandImplCopyWithImpl<
+          _$ShowDragOverlayCommandImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(PhysicalEvent origin) applyDefaultPanZoom,
+    required TResult Function(Transform2D transform) setTransform,
+    required TResult Function(
+            List<DiagramObjectEntity> renderables, Rect logicalExtent)
+        redraw,
+    required TResult Function(Transform2D targetTransform, Duration duration)
+        elasticBounceBack,
+    required TResult Function(Offset velocity, Duration stepDuration)
+        autoScrollStep,
+    required TResult Function() stopAutoScroll,
+    required TResult Function(Object? ghostSpec, Offset position)
+        showDragOverlay,
+    required TResult Function(Offset position) updateDragOverlay,
+    required TResult Function() hideDragOverlay,
+  }) {
+    return showDragOverlay(ghostSpec, position);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(PhysicalEvent origin)? applyDefaultPanZoom,
+    TResult? Function(Transform2D transform)? setTransform,
+    TResult? Function(
+            List<DiagramObjectEntity> renderables, Rect logicalExtent)?
+        redraw,
+    TResult? Function(Transform2D targetTransform, Duration duration)?
+        elasticBounceBack,
+    TResult? Function(Offset velocity, Duration stepDuration)? autoScrollStep,
+    TResult? Function()? stopAutoScroll,
+    TResult? Function(Object? ghostSpec, Offset position)? showDragOverlay,
+    TResult? Function(Offset position)? updateDragOverlay,
+    TResult? Function()? hideDragOverlay,
+  }) {
+    return showDragOverlay?.call(ghostSpec, position);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(PhysicalEvent origin)? applyDefaultPanZoom,
+    TResult Function(Transform2D transform)? setTransform,
+    TResult Function(List<DiagramObjectEntity> renderables, Rect logicalExtent)?
+        redraw,
+    TResult Function(Transform2D targetTransform, Duration duration)?
+        elasticBounceBack,
+    TResult Function(Offset velocity, Duration stepDuration)? autoScrollStep,
+    TResult Function()? stopAutoScroll,
+    TResult Function(Object? ghostSpec, Offset position)? showDragOverlay,
+    TResult Function(Offset position)? updateDragOverlay,
+    TResult Function()? hideDragOverlay,
+    required TResult orElse(),
+  }) {
+    if (showDragOverlay != null) {
+      return showDragOverlay(ghostSpec, position);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(ApplyDefaultPanZoomCommand value)
+        applyDefaultPanZoom,
+    required TResult Function(SetTransformCommand value) setTransform,
+    required TResult Function(RedrawCommand value) redraw,
+    required TResult Function(ElasticBounceBackCommand value) elasticBounceBack,
+    required TResult Function(AutoScrollStepCommand value) autoScrollStep,
+    required TResult Function(StopAutoScrollCommand value) stopAutoScroll,
+    required TResult Function(ShowDragOverlayCommand value) showDragOverlay,
+    required TResult Function(UpdateDragOverlayCommand value) updateDragOverlay,
+    required TResult Function(HideDragOverlayCommand value) hideDragOverlay,
+  }) {
+    return showDragOverlay(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
+    TResult? Function(SetTransformCommand value)? setTransform,
+    TResult? Function(RedrawCommand value)? redraw,
+    TResult? Function(ElasticBounceBackCommand value)? elasticBounceBack,
+    TResult? Function(AutoScrollStepCommand value)? autoScrollStep,
+    TResult? Function(StopAutoScrollCommand value)? stopAutoScroll,
+    TResult? Function(ShowDragOverlayCommand value)? showDragOverlay,
+    TResult? Function(UpdateDragOverlayCommand value)? updateDragOverlay,
+    TResult? Function(HideDragOverlayCommand value)? hideDragOverlay,
+  }) {
+    return showDragOverlay?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
+    TResult Function(SetTransformCommand value)? setTransform,
+    TResult Function(RedrawCommand value)? redraw,
+    TResult Function(ElasticBounceBackCommand value)? elasticBounceBack,
+    TResult Function(AutoScrollStepCommand value)? autoScrollStep,
+    TResult Function(StopAutoScrollCommand value)? stopAutoScroll,
+    TResult Function(ShowDragOverlayCommand value)? showDragOverlay,
+    TResult Function(UpdateDragOverlayCommand value)? updateDragOverlay,
+    TResult Function(HideDragOverlayCommand value)? hideDragOverlay,
+    required TResult orElse(),
+  }) {
+    if (showDragOverlay != null) {
+      return showDragOverlay(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class ShowDragOverlayCommand extends DiagramCommand {
+  const factory ShowDragOverlayCommand(
+      {final Object? ghostSpec,
+      required final Offset position}) = _$ShowDragOverlayCommandImpl;
+  const ShowDragOverlayCommand._() : super._();
+
+  Object? get ghostSpec;
+  Offset get position;
+
+  /// Create a copy of DiagramCommand
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ShowDragOverlayCommandImplCopyWith<_$ShowDragOverlayCommandImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$UpdateDragOverlayCommandImplCopyWith<$Res> {
+  factory _$$UpdateDragOverlayCommandImplCopyWith(
+          _$UpdateDragOverlayCommandImpl value,
+          $Res Function(_$UpdateDragOverlayCommandImpl) then) =
+      __$$UpdateDragOverlayCommandImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({Offset position});
+}
+
+/// @nodoc
+class __$$UpdateDragOverlayCommandImplCopyWithImpl<$Res>
+    extends _$DiagramCommandCopyWithImpl<$Res, _$UpdateDragOverlayCommandImpl>
+    implements _$$UpdateDragOverlayCommandImplCopyWith<$Res> {
+  __$$UpdateDragOverlayCommandImplCopyWithImpl(
+      _$UpdateDragOverlayCommandImpl _value,
+      $Res Function(_$UpdateDragOverlayCommandImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of DiagramCommand
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? position = null,
+  }) {
+    return _then(_$UpdateDragOverlayCommandImpl(
+      position: null == position
+          ? _value.position
+          : position // ignore: cast_nullable_to_non_nullable
+              as Offset,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$UpdateDragOverlayCommandImpl extends UpdateDragOverlayCommand {
+  const _$UpdateDragOverlayCommandImpl({required this.position}) : super._();
+
+  @override
+  final Offset position;
+
+  @override
+  String toString() {
+    return 'DiagramCommand.updateDragOverlay(position: $position)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$UpdateDragOverlayCommandImpl &&
+            (identical(other.position, position) ||
+                other.position == position));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, position);
+
+  /// Create a copy of DiagramCommand
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$UpdateDragOverlayCommandImplCopyWith<_$UpdateDragOverlayCommandImpl>
+      get copyWith => __$$UpdateDragOverlayCommandImplCopyWithImpl<
+          _$UpdateDragOverlayCommandImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(PhysicalEvent origin) applyDefaultPanZoom,
+    required TResult Function(Transform2D transform) setTransform,
+    required TResult Function(
+            List<DiagramObjectEntity> renderables, Rect logicalExtent)
+        redraw,
+    required TResult Function(Transform2D targetTransform, Duration duration)
+        elasticBounceBack,
+    required TResult Function(Offset velocity, Duration stepDuration)
+        autoScrollStep,
+    required TResult Function() stopAutoScroll,
+    required TResult Function(Object? ghostSpec, Offset position)
+        showDragOverlay,
+    required TResult Function(Offset position) updateDragOverlay,
+    required TResult Function() hideDragOverlay,
+  }) {
+    return updateDragOverlay(position);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(PhysicalEvent origin)? applyDefaultPanZoom,
+    TResult? Function(Transform2D transform)? setTransform,
+    TResult? Function(
+            List<DiagramObjectEntity> renderables, Rect logicalExtent)?
+        redraw,
+    TResult? Function(Transform2D targetTransform, Duration duration)?
+        elasticBounceBack,
+    TResult? Function(Offset velocity, Duration stepDuration)? autoScrollStep,
+    TResult? Function()? stopAutoScroll,
+    TResult? Function(Object? ghostSpec, Offset position)? showDragOverlay,
+    TResult? Function(Offset position)? updateDragOverlay,
+    TResult? Function()? hideDragOverlay,
+  }) {
+    return updateDragOverlay?.call(position);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(PhysicalEvent origin)? applyDefaultPanZoom,
+    TResult Function(Transform2D transform)? setTransform,
+    TResult Function(List<DiagramObjectEntity> renderables, Rect logicalExtent)?
+        redraw,
+    TResult Function(Transform2D targetTransform, Duration duration)?
+        elasticBounceBack,
+    TResult Function(Offset velocity, Duration stepDuration)? autoScrollStep,
+    TResult Function()? stopAutoScroll,
+    TResult Function(Object? ghostSpec, Offset position)? showDragOverlay,
+    TResult Function(Offset position)? updateDragOverlay,
+    TResult Function()? hideDragOverlay,
+    required TResult orElse(),
+  }) {
+    if (updateDragOverlay != null) {
+      return updateDragOverlay(position);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(ApplyDefaultPanZoomCommand value)
+        applyDefaultPanZoom,
+    required TResult Function(SetTransformCommand value) setTransform,
+    required TResult Function(RedrawCommand value) redraw,
+    required TResult Function(ElasticBounceBackCommand value) elasticBounceBack,
+    required TResult Function(AutoScrollStepCommand value) autoScrollStep,
+    required TResult Function(StopAutoScrollCommand value) stopAutoScroll,
+    required TResult Function(ShowDragOverlayCommand value) showDragOverlay,
+    required TResult Function(UpdateDragOverlayCommand value) updateDragOverlay,
+    required TResult Function(HideDragOverlayCommand value) hideDragOverlay,
+  }) {
+    return updateDragOverlay(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
+    TResult? Function(SetTransformCommand value)? setTransform,
+    TResult? Function(RedrawCommand value)? redraw,
+    TResult? Function(ElasticBounceBackCommand value)? elasticBounceBack,
+    TResult? Function(AutoScrollStepCommand value)? autoScrollStep,
+    TResult? Function(StopAutoScrollCommand value)? stopAutoScroll,
+    TResult? Function(ShowDragOverlayCommand value)? showDragOverlay,
+    TResult? Function(UpdateDragOverlayCommand value)? updateDragOverlay,
+    TResult? Function(HideDragOverlayCommand value)? hideDragOverlay,
+  }) {
+    return updateDragOverlay?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
+    TResult Function(SetTransformCommand value)? setTransform,
+    TResult Function(RedrawCommand value)? redraw,
+    TResult Function(ElasticBounceBackCommand value)? elasticBounceBack,
+    TResult Function(AutoScrollStepCommand value)? autoScrollStep,
+    TResult Function(StopAutoScrollCommand value)? stopAutoScroll,
+    TResult Function(ShowDragOverlayCommand value)? showDragOverlay,
+    TResult Function(UpdateDragOverlayCommand value)? updateDragOverlay,
+    TResult Function(HideDragOverlayCommand value)? hideDragOverlay,
+    required TResult orElse(),
+  }) {
+    if (updateDragOverlay != null) {
+      return updateDragOverlay(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class UpdateDragOverlayCommand extends DiagramCommand {
+  const factory UpdateDragOverlayCommand({required final Offset position}) =
+      _$UpdateDragOverlayCommandImpl;
+  const UpdateDragOverlayCommand._() : super._();
+
+  Offset get position;
+
+  /// Create a copy of DiagramCommand
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$UpdateDragOverlayCommandImplCopyWith<_$UpdateDragOverlayCommandImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$HideDragOverlayCommandImplCopyWith<$Res> {
+  factory _$$HideDragOverlayCommandImplCopyWith(
+          _$HideDragOverlayCommandImpl value,
+          $Res Function(_$HideDragOverlayCommandImpl) then) =
+      __$$HideDragOverlayCommandImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$HideDragOverlayCommandImplCopyWithImpl<$Res>
+    extends _$DiagramCommandCopyWithImpl<$Res, _$HideDragOverlayCommandImpl>
+    implements _$$HideDragOverlayCommandImplCopyWith<$Res> {
+  __$$HideDragOverlayCommandImplCopyWithImpl(
+      _$HideDragOverlayCommandImpl _value,
+      $Res Function(_$HideDragOverlayCommandImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of DiagramCommand
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$HideDragOverlayCommandImpl extends HideDragOverlayCommand {
+  const _$HideDragOverlayCommandImpl() : super._();
+
+  @override
+  String toString() {
+    return 'DiagramCommand.hideDragOverlay()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$HideDragOverlayCommandImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(PhysicalEvent origin) applyDefaultPanZoom,
+    required TResult Function(Transform2D transform) setTransform,
+    required TResult Function(
+            List<DiagramObjectEntity> renderables, Rect logicalExtent)
+        redraw,
+    required TResult Function(Transform2D targetTransform, Duration duration)
+        elasticBounceBack,
+    required TResult Function(Offset velocity, Duration stepDuration)
+        autoScrollStep,
+    required TResult Function() stopAutoScroll,
+    required TResult Function(Object? ghostSpec, Offset position)
+        showDragOverlay,
+    required TResult Function(Offset position) updateDragOverlay,
+    required TResult Function() hideDragOverlay,
+  }) {
+    return hideDragOverlay();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(PhysicalEvent origin)? applyDefaultPanZoom,
+    TResult? Function(Transform2D transform)? setTransform,
+    TResult? Function(
+            List<DiagramObjectEntity> renderables, Rect logicalExtent)?
+        redraw,
+    TResult? Function(Transform2D targetTransform, Duration duration)?
+        elasticBounceBack,
+    TResult? Function(Offset velocity, Duration stepDuration)? autoScrollStep,
+    TResult? Function()? stopAutoScroll,
+    TResult? Function(Object? ghostSpec, Offset position)? showDragOverlay,
+    TResult? Function(Offset position)? updateDragOverlay,
+    TResult? Function()? hideDragOverlay,
+  }) {
+    return hideDragOverlay?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(PhysicalEvent origin)? applyDefaultPanZoom,
+    TResult Function(Transform2D transform)? setTransform,
+    TResult Function(List<DiagramObjectEntity> renderables, Rect logicalExtent)?
+        redraw,
+    TResult Function(Transform2D targetTransform, Duration duration)?
+        elasticBounceBack,
+    TResult Function(Offset velocity, Duration stepDuration)? autoScrollStep,
+    TResult Function()? stopAutoScroll,
+    TResult Function(Object? ghostSpec, Offset position)? showDragOverlay,
+    TResult Function(Offset position)? updateDragOverlay,
+    TResult Function()? hideDragOverlay,
+    required TResult orElse(),
+  }) {
+    if (hideDragOverlay != null) {
+      return hideDragOverlay();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(ApplyDefaultPanZoomCommand value)
+        applyDefaultPanZoom,
+    required TResult Function(SetTransformCommand value) setTransform,
+    required TResult Function(RedrawCommand value) redraw,
+    required TResult Function(ElasticBounceBackCommand value) elasticBounceBack,
+    required TResult Function(AutoScrollStepCommand value) autoScrollStep,
+    required TResult Function(StopAutoScrollCommand value) stopAutoScroll,
+    required TResult Function(ShowDragOverlayCommand value) showDragOverlay,
+    required TResult Function(UpdateDragOverlayCommand value) updateDragOverlay,
+    required TResult Function(HideDragOverlayCommand value) hideDragOverlay,
+  }) {
+    return hideDragOverlay(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
+    TResult? Function(SetTransformCommand value)? setTransform,
+    TResult? Function(RedrawCommand value)? redraw,
+    TResult? Function(ElasticBounceBackCommand value)? elasticBounceBack,
+    TResult? Function(AutoScrollStepCommand value)? autoScrollStep,
+    TResult? Function(StopAutoScrollCommand value)? stopAutoScroll,
+    TResult? Function(ShowDragOverlayCommand value)? showDragOverlay,
+    TResult? Function(UpdateDragOverlayCommand value)? updateDragOverlay,
+    TResult? Function(HideDragOverlayCommand value)? hideDragOverlay,
+  }) {
+    return hideDragOverlay?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
+    TResult Function(SetTransformCommand value)? setTransform,
+    TResult Function(RedrawCommand value)? redraw,
+    TResult Function(ElasticBounceBackCommand value)? elasticBounceBack,
+    TResult Function(AutoScrollStepCommand value)? autoScrollStep,
+    TResult Function(StopAutoScrollCommand value)? stopAutoScroll,
+    TResult Function(ShowDragOverlayCommand value)? showDragOverlay,
+    TResult Function(UpdateDragOverlayCommand value)? updateDragOverlay,
+    TResult Function(HideDragOverlayCommand value)? hideDragOverlay,
+    required TResult orElse(),
+  }) {
+    if (hideDragOverlay != null) {
+      return hideDragOverlay(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class HideDragOverlayCommand extends DiagramCommand {
+  const factory HideDragOverlayCommand() = _$HideDragOverlayCommandImpl;
+  const HideDragOverlayCommand._() : super._();
 }

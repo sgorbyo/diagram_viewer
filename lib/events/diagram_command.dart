@@ -120,7 +120,17 @@ class DiagramCommand with _$DiagramCommand {
   const factory DiagramCommand.stopAutoScroll() = StopAutoScrollCommand;
 
   // In-App Drag & Drop (Target) feedback commands (reserved names)
-  // Placeholders intentionally omitted to avoid generating new union cases now.
+  // Visual ghost overlay control (cursor command omitted; no-op on mobile)
+  const factory DiagramCommand.showDragOverlay({
+    Object? ghostSpec,
+    required Offset position,
+  }) = ShowDragOverlayCommand;
+
+  const factory DiagramCommand.updateDragOverlay({
+    required Offset position,
+  }) = UpdateDragOverlayCommand;
+
+  const factory DiagramCommand.hideDragOverlay() = HideDragOverlayCommand;
 
   /// Returns true if this command is an ApplyDefaultPanZoom command.
   bool get isApplyDefaultPanZoom => this is ApplyDefaultPanZoomCommand;
@@ -163,5 +173,10 @@ class DiagramCommand with _$DiagramCommand {
         autoScrollStep: (velocity, stepDuration) =>
             'AutoScrollStep(velocity: $velocity, duration: $stepDuration)',
         stopAutoScroll: () => 'StopAutoScroll',
+        showDragOverlay: (ghostSpec, position) =>
+            'ShowDragOverlay(position: $position)',
+        updateDragOverlay: (position) =>
+            'UpdateDragOverlay(position: $position)',
+        hideDragOverlay: () => 'HideDragOverlay',
       );
 }
