@@ -50,6 +50,59 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
   Size _lastViewportSize = Size.zero;
   bool _wasMultiTouchGesture = false;
   bool _draggingOnObject = false;
+  bool _isDnDInside = false;
+  CursorEffect _cursorEffect = CursorEffect.basic;
+  Offset? _dragOverlayLocalCenter; // last pointer local center for overlay
+
+  double _ghostDiameterFor(Object? spec, double scale) {
+    try {
+      if (spec is Map) {
+        final radius = (spec['radius'] as num?)?.toDouble();
+        if (radius != null) {
+          final px = 2.0 * radius * (scale <= 0 ? 1.0 : scale);
+
+          return px.clamp(8.0, 512.0);
+        }
+      }
+    } catch (_) {}
+
+    return 24.0;
+  }
+
+  bool _isGhostFullyVisible(
+      {required Offset topLeft, required double diameter}) {
+    final Size viewport = _lastViewportSize;
+    if (viewport == Size.zero) return false;
+    final double right = topLeft.dx + diameter;
+    final double bottom = topLeft.dy + diameter;
+    return topLeft.dx >= 0.0 &&
+        topLeft.dy >= 0.0 &&
+        right <= viewport.width &&
+        bottom <= viewport.height;
+  }
+
+  // removed unused helpers
+
+  MouseCursor _toMouseCursor(CursorEffect effect) {
+    switch (effect) {
+      case CursorEffect.basic:
+        return SystemMouseCursors.basic;
+      case CursorEffect.forbidden:
+        return SystemMouseCursors.forbidden;
+      case CursorEffect.click:
+        return SystemMouseCursors.click;
+      case CursorEffect.text:
+        return SystemMouseCursors.text;
+      case CursorEffect.grab:
+        return SystemMouseCursors.grab;
+      case CursorEffect.grabbing:
+        return SystemMouseCursors.grabbing;
+      case CursorEffect.move:
+        return SystemMouseCursors.move;
+      case CursorEffect.copy:
+        return SystemMouseCursors.copy;
+    }
+  }
 
   @override
   void initState() {
@@ -150,26 +203,40 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
             _autoScroll.stop();
           },
           showDragOverlay: (ghostSpec, position) {
-            // Convert global position to local (viewer space)
             final box = context.findRenderObject() as RenderBox?;
             final local = box != null ? box.globalToLocal(position) : position;
+            final scale = context.read<TransformBloc>().state.transform.scale;
+            final diameter = _ghostDiameterFor(ghostSpec, scale);
+            final topLeft = local - Offset(diameter / 2, diameter / 2);
             setState(() {
               _dragOverlayVisible = true;
               _dragOverlaySpec = ghostSpec;
-              _dragOverlayLocalPosition = local;
+              _dragOverlayLocalPosition = topLeft;
+              _dragOverlayLocalCenter = local;
             });
           },
           updateDragOverlay: (position) {
             final box = context.findRenderObject() as RenderBox?;
             final local = box != null ? box.globalToLocal(position) : position;
+            final scale = context.read<TransformBloc>().state.transform.scale;
+            final diameter = _ghostDiameterFor(_dragOverlaySpec, scale);
+            final topLeft = local - Offset(diameter / 2, diameter / 2);
             setState(() {
-              _dragOverlayLocalPosition = local;
+              _dragOverlayLocalPosition = topLeft;
+              _dragOverlayLocalCenter = local;
             });
           },
           hideDragOverlay: () {
             setState(() {
               _dragOverlayVisible = false;
               _dragOverlaySpec = null;
+              _dragOverlayLocalCenter = null;
+            });
+          },
+          setCursor: (effect) {
+            // Desktop/web: update MouseRegion cursor; mobile platforms ignore
+            setState(() {
+              _cursorEffect = effect;
             });
           },
         );
@@ -236,6 +303,21 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
           rawEvent: rawEvent,
         ));
       },
+      dndTargetEnter: (eventId, dataPreview, screenPosition, logicalPosition,
+          transformSnapshot, timestamp) {
+        // No default pan/zoom behavior for DnD target enter
+      },
+      dndTargetOver: (eventId, dataPreview, screenPosition, logicalPosition,
+          transformSnapshot, timestamp) {
+        // No default pan/zoom behavior for DnD target over
+      },
+      dndTargetLeave: (eventId, transformSnapshot, timestamp) {
+        // No default pan/zoom behavior for DnD target leave
+      },
+      dndTargetDrop: (eventId, data, screenPosition, logicalPosition,
+          transformSnapshot, timestamp) {
+        // No default pan/zoom behavior for DnD target drop
+      },
     );
   }
 
@@ -285,10 +367,13 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
                 );
 
                 // Keep EventManagementBloc dependencies in sync with latest viewport
+                final box = context.findRenderObject() as RenderBox?;
+                final topLeftGlobal = box?.localToGlobal(Offset.zero);
                 eventBloc.configureDependencies(
                   transformBloc: transformBloc,
                   configuration: widget.configuration,
                   viewportSize: currentSize,
+                  viewportTopLeft: topLeftGlobal,
                 );
               });
               _lastViewportSize = currentSize;
@@ -298,132 +383,230 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
               focusNode: _keyboardFocusNode,
               autofocus: true,
               onKeyEvent: (event) => _handleKeyEvent(context, event),
-              child: Listener(
-                onPointerDown: (event) {
-                  // Request focus when user taps
-                  _keyboardFocusNode.requestFocus();
-                  _handlePointerDown(context, event, appBarHeight);
-                },
-                onPointerMove: (event) =>
-                    _handlePointerMove(context, event, appBarHeight),
-                onPointerUp: (event) => _handlePointerUp(context, event),
-                onPointerSignal: (event) =>
-                    _handlePointerSignal(context, event, appBarHeight),
-                child: Stack(
-                  children: [
-                    GestureDetector(
-                      onScaleStart: (details) =>
-                          _handleScaleStart(context, details, appBarHeight),
-                      onScaleUpdate: (details) =>
-                          _handleScaleUpdate(context, details, appBarHeight),
-                      onScaleEnd: (details) =>
-                          _handleScaleEnd(context, details),
-                      child: CustomPaint(
-                        painter: DiagramPainter(
-                          transform: transformState.transform,
-                          objects: widget.controller.objects,
-                          logicalExtent: widget.controller.logicalExtent,
-                          configuration: widget.configuration,
-                          debug: widget.debug,
+              child: MouseRegion(
+                key: ValueKey('cursor_${_cursorEffect.name}'),
+                cursor: _toMouseCursor(_cursorEffect),
+                child: Listener(
+                  onPointerDown: (event) {
+                    // Request focus when user taps
+                    _keyboardFocusNode.requestFocus();
+                    _handlePointerDown(context, event, appBarHeight);
+                  },
+                  onPointerMove: (event) =>
+                      _handlePointerMove(context, event, appBarHeight),
+                  onPointerUp: (event) => _handlePointerUp(context, event),
+                  onPointerSignal: (event) =>
+                      _handlePointerSignal(context, event, appBarHeight),
+                  child: Stack(
+                    children: [
+                      GestureDetector(
+                        onScaleStart: (details) =>
+                            _handleScaleStart(context, details, appBarHeight),
+                        onScaleUpdate: (details) =>
+                            _handleScaleUpdate(context, details, appBarHeight),
+                        onScaleEnd: (details) =>
+                            _handleScaleEnd(context, details),
+                        child: ClipRect(
+                          child: CustomPaint(
+                            painter: DiagramPainter(
+                              transform: transformState.transform,
+                              objects: widget.controller.objects,
+                              logicalExtent: widget.controller.logicalExtent,
+                              configuration: widget.configuration,
+                              debug: widget.debug,
+                            ),
+                            size: Size.infinite,
+                          ),
                         ),
-                        size: Size.infinite,
                       ),
-                    ),
-                    // DnD ghost overlay and DragTarget layer
-                    Positioned.fill(
-                      child: DragTarget<Map<String, dynamic>>(
-                        onWillAccept: (data) => true,
-                        onAcceptWithDetails: (details) {
-                          final globalPos = details.offset;
-                          final box = context.findRenderObject() as RenderBox?;
-                          final localPos = box != null
-                              ? box.globalToLocal(globalPos)
-                              : globalPos;
-                          final logicalPos = transformState.transform
-                              .physicalToLogical(localPos);
-                          widget.controller.eventsSink.add(
-                            DiagramEventUnion.dragTargetDrop(
-                              eventId: UniqueKey().toString(),
-                              data: details.data,
-                              screenPosition: globalPos,
-                              logicalPosition: logicalPos,
-                              transformSnapshot: transformState.transform,
-                              timestamp: Duration(
-                                  milliseconds:
-                                      DateTime.now().millisecondsSinceEpoch),
-                            ),
-                          );
-                          widget.controller.eventsSink.add(
-                            DiagramEventUnion.dragTargetLeave(
-                              eventId: UniqueKey().toString(),
-                              transformSnapshot: transformState.transform,
-                              timestamp: Duration(
-                                  milliseconds:
-                                      DateTime.now().millisecondsSinceEpoch),
-                            ),
-                          );
-                          // Hide overlay on drop
-                          setState(() {
-                            _dragOverlayVisible = false;
-                            _dragOverlaySpec = null;
-                          });
-                        },
-                        onMove: (details) {
-                          final globalPos = details.offset;
-                          final box = context.findRenderObject() as RenderBox?;
-                          final localPos = box != null
-                              ? box.globalToLocal(globalPos)
-                              : globalPos;
-                          final logicalPos = transformState.transform
-                              .physicalToLogical(localPos);
-                          widget.controller.eventsSink.add(
-                            DiagramEventUnion.dragTargetOver(
-                              eventId: UniqueKey().toString(),
-                              dataPreview: details.data,
-                              screenPosition: globalPos,
-                              logicalPosition: logicalPos,
-                              transformSnapshot: transformState.transform,
-                              timestamp: Duration(
-                                  milliseconds:
-                                      DateTime.now().millisecondsSinceEpoch),
-                            ),
-                          );
-                          // Move overlay to cursor
-                          setState(() {
-                            _dragOverlayVisible = true;
-                            _dragOverlaySpec = details.data;
-                            _dragOverlayLocalPosition = localPos;
-                          });
-                        },
-                        onLeave: (data) {
-                          widget.controller.eventsSink.add(
-                            DiagramEventUnion.dragTargetLeave(
-                              eventId: UniqueKey().toString(),
-                              transformSnapshot: transformState.transform,
-                              timestamp: Duration(
-                                  milliseconds:
-                                      DateTime.now().millisecondsSinceEpoch),
-                            ),
-                          );
-                          setState(() {
-                            _dragOverlayVisible = false;
-                            _dragOverlaySpec = null;
-                          });
-                        },
-                        builder: (context, candidate, rejected) {
-                          if (!_dragOverlayVisible) return const SizedBox();
-                          // Simple ghost: small translucent circle at screen position
-                          return IgnorePointer(
-                            child: CustomSingleChildLayout(
-                              delegate: _OverlayPositionDelegate(
-                                  _dragOverlayLocalPosition),
-                              child: _GhostWidget(spec: _dragOverlaySpec),
-                            ),
-                          );
-                        },
+                      // DnD ghost overlay and DragTarget layer
+                      Positioned.fill(
+                        child: DragTarget<Map<String, dynamic>>(
+                          onWillAcceptWithDetails: (details) => true,
+                          onAcceptWithDetails: (details) {
+                            final globalPos = details.offset;
+                            final box =
+                                context.findRenderObject() as RenderBox?;
+                            final localPos = box != null
+                                ? box.globalToLocal(globalPos)
+                                : globalPos;
+
+                            // Centro di drop coincidente con il puntatore
+                            final scale = transformState.transform.scale;
+                            final ghostSize =
+                                _ghostDiameterFor(details.data, scale);
+                            // Opzione A: feedback e ghost centrati sul cursore
+                            final localCenter = localPos;
+                            final logicalPos = transformState.transform
+                                .physicalToLogical(localCenter);
+                            final globalCenter = globalPos;
+                            // Se il ghost non è interamente visibile, annulla il drop
+                            final topLeft = localCenter -
+                                Offset(ghostSize / 2, ghostSize / 2);
+                            final fullyVisible = _isGhostFullyVisible(
+                                topLeft: topLeft, diameter: ghostSize);
+                            if (!fullyVisible) {
+                              setState(() {
+                                _dragOverlayVisible = false;
+                                _dragOverlaySpec = null;
+                                _isDnDInside = false;
+                              });
+                              return;
+                            }
+                            final translatedDrop = _translator.translate(
+                              PhysicalEvent.dndTargetDrop(
+                                eventId: UniqueKey().toString(),
+                                data: details.data,
+                                screenPosition: globalCenter,
+                                logicalPosition: logicalPos,
+                                transformSnapshot: transformState.transform,
+                                timestamp: Duration(
+                                    milliseconds:
+                                        DateTime.now().millisecondsSinceEpoch),
+                              ),
+                            );
+                            if (translatedDrop != null) {
+                              widget.controller.eventsSink.add(translatedDrop);
+                            }
+                            final translatedLeave = _translator.translate(
+                              PhysicalEvent.dndTargetLeave(
+                                eventId: UniqueKey().toString(),
+                                transformSnapshot: transformState.transform,
+                                timestamp: Duration(
+                                    milliseconds:
+                                        DateTime.now().millisecondsSinceEpoch),
+                              ),
+                            );
+                            if (translatedLeave != null) {
+                              widget.controller.eventsSink.add(translatedLeave);
+                            }
+                            // Hide overlay on drop
+                            setState(() {
+                              _dragOverlayVisible = false;
+                              _dragOverlaySpec = null;
+                              _isDnDInside = false;
+                            });
+                          },
+                          onMove: (details) {
+                            final globalPos = details.offset;
+                            final box =
+                                context.findRenderObject() as RenderBox?;
+                            final localPos = box != null
+                                ? box.globalToLocal(globalPos)
+                                : globalPos;
+
+                            // Opzione A: feedback e ghost centrati sul cursore
+                            final localCenter = localPos;
+                            final logicalPos = transformState.transform
+                                .physicalToLogical(localCenter);
+                            if (!_isDnDInside) {
+                              final globalCenter = globalPos;
+                              final translatedEnter = _translator.translate(
+                                PhysicalEvent.dndTargetEnter(
+                                  eventId: UniqueKey().toString(),
+                                  dataPreview: details.data,
+                                  screenPosition: globalCenter,
+                                  logicalPosition: logicalPos,
+                                  transformSnapshot: transformState.transform,
+                                  timestamp: Duration(
+                                      milliseconds: DateTime.now()
+                                          .millisecondsSinceEpoch),
+                                ),
+                              );
+                              if (translatedEnter != null) {
+                                widget.controller.eventsSink
+                                    .add(translatedEnter);
+                              }
+                              _isDnDInside = true;
+                            }
+                            final translatedOver = _translator.translate(
+                              PhysicalEvent.dndTargetOver(
+                                eventId: UniqueKey().toString(),
+                                dataPreview: details.data,
+                                screenPosition: globalPos,
+                                logicalPosition: logicalPos,
+                                transformSnapshot: transformState.transform,
+                                timestamp: Duration(
+                                    milliseconds:
+                                        DateTime.now().millisecondsSinceEpoch),
+                              ),
+                            );
+                            if (translatedOver != null) {
+                              widget.controller.eventsSink.add(translatedOver);
+                            }
+                            // Aggiorna overlay centrato sulla posizione corrente (fallback automatico)
+                            final scale = transformState.transform.scale;
+                            final ghostDiameter =
+                                _ghostDiameterFor(details.data, scale);
+                            final topLeft = localCenter -
+                                Offset(ghostDiameter / 2, ghostDiameter / 2);
+
+                            setState(() {
+                              _dragOverlayVisible = true;
+                              _dragOverlaySpec = details.data;
+                              _dragOverlayLocalPosition = topLeft;
+                              _dragOverlayLocalCenter = localCenter;
+                            });
+                          },
+                          onLeave: (data) {
+                            widget.controller.eventsSink.add(
+                              DiagramEventUnion.dragTargetLeave(
+                                eventId: UniqueKey().toString(),
+                                transformSnapshot: transformState.transform,
+                                timestamp: Duration(
+                                    milliseconds:
+                                        DateTime.now().millisecondsSinceEpoch),
+                              ),
+                            );
+                            setState(() {
+                              _dragOverlayVisible = false;
+                              _dragOverlaySpec = null;
+                              _isDnDInside = false;
+                            });
+                          },
+                          builder: (context, candidate, rejected) {
+                            // Mostra il ghost solo quando il feedback entra realmente nella view (candidate non vuoto)
+                            // e quando il centro calcolato coincide con la posizione del feedback (non solo del cursore)
+                            if (!_dragOverlayVisible || candidate.isEmpty) {
+                              return const SizedBox();
+                            }
+                            final scale = transformState.transform.scale;
+                            final ghostDiameter =
+                                _ghostDiameterFor(_dragOverlaySpec, scale);
+                            // Re-centra dinamicamente in base alla center locale registrata
+                            final center = _dragOverlayLocalCenter ??
+                                (_dragOverlayLocalPosition +
+                                    Offset(
+                                        ghostDiameter / 2, ghostDiameter / 2));
+                            final dynamicTopLeft = center -
+                                Offset(ghostDiameter / 2, ghostDiameter / 2);
+                            if (!_isGhostFullyVisible(
+                                topLeft: dynamicTopLeft,
+                                diameter: ghostDiameter)) {
+                              return const SizedBox();
+                            }
+
+                            return IgnorePointer(
+                              child: CustomSingleChildLayout(
+                                delegate: _OverlayPositionDelegate(
+                                  position: dynamicTopLeft,
+                                  desiredSize:
+                                      Size(ghostDiameter, ghostDiameter),
+                                ),
+                                child: RepaintBoundary(
+                                  key: const ValueKey('drag_ghost_overlay'),
+                                  child: _GhostWidget(
+                                    spec: _dragOverlaySpec,
+                                    size: Size(ghostDiameter, ghostDiameter),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             );
@@ -442,9 +625,10 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
     final transformBloc = context.read<TransformBloc>();
     final currentTransform = transformBloc.state.transform;
 
-    // Correct the position by subtracting the top padding offset
+    // Convert global position to viewer-local coordinates
+    final box = context.findRenderObject() as RenderBox?;
     final correctedPosition =
-        Offset(event.position.dx, event.position.dy - topPadding);
+        box != null ? box.globalToLocal(event.position) : event.position;
 
     // Perform hit-testing
     final hitResults = _performHitTesting(correctedPosition, currentTransform);
@@ -453,7 +637,7 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
     final logicalPosition =
         currentTransform.physicalToLogical(correctedPosition);
 
-    // Send to EventManagementBloc
+    // Send to EventManagementBloc with original rawEvent; bloc will convert for viewport
     eventBloc.add(EventManagementEvent.startPointerEvent(
       rawEvent: event,
       logicalPosition: logicalPosition,
@@ -475,9 +659,10 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
     final transformBloc = context.read<TransformBloc>();
     final currentTransform = transformBloc.state.transform;
 
-    // Correct the position by subtracting the top padding offset
+    // Convert global position to viewer-local coordinates
+    final box = context.findRenderObject() as RenderBox?;
     final correctedPosition =
-        Offset(event.position.dx, event.position.dy - topPadding);
+        box != null ? box.globalToLocal(event.position) : event.position;
 
     // Perform hit-testing
     final hitResults = _performHitTesting(correctedPosition, currentTransform);
@@ -486,7 +671,7 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
     final logicalPosition =
         currentTransform.physicalToLogical(correctedPosition);
 
-    // Send to EventManagementBloc
+    // Send to EventManagementBloc with original rawEvent; bloc will convert for viewport
     eventBloc.add(EventManagementEvent.updatePointerEvent(
       rawEvent: event,
       logicalPosition: logicalPosition,
@@ -511,7 +696,7 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
     _autoScroll.stop();
     final eventBloc = context.read<EventManagementBloc>();
 
-    // Send to EventManagementBloc
+    // Send to EventManagementBloc with original rawEvent; bloc will convert for viewport
     eventBloc.add(EventManagementEvent.endPointerEvent(
       rawEvent: event,
       pressedKeys: _pressedKeys,
@@ -536,9 +721,10 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
       final transformBloc = context.read<TransformBloc>();
       final currentTransform = transformBloc.state.transform;
 
-      // Correct the position by subtracting the top padding offset
+      // Convert global position to viewer-local coordinates
+      final box = context.findRenderObject() as RenderBox?;
       final correctedPosition =
-          Offset(event.position.dx, event.position.dy - topPadding);
+          box != null ? box.globalToLocal(event.position) : event.position;
 
       // Perform hit-testing
       final hitResults =
@@ -574,9 +760,11 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
     final transformBloc = context.read<TransformBloc>();
     final currentTransform = transformBloc.state.transform;
 
-    // Correct the position by subtracting the top padding offset
-    final correctedPosition =
-        Offset(details.focalPoint.dx, details.focalPoint.dy - topPadding);
+    // Convert global focal point to viewer-local coordinates
+    final box = context.findRenderObject() as RenderBox?;
+    final correctedPosition = box != null
+        ? box.globalToLocal(details.focalPoint)
+        : details.focalPoint;
 
     // Perform hit-testing
     final hitResults = _performHitTesting(correctedPosition, currentTransform);
@@ -604,9 +792,11 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
     final transformBloc = context.read<TransformBloc>();
     final currentTransform = transformBloc.state.transform;
 
-    // Correct the position by subtracting the top padding offset
-    final correctedPosition =
-        Offset(details.focalPoint.dx, details.focalPoint.dy - topPadding);
+    // Convert global focal point to viewer-local coordinates
+    final box = context.findRenderObject() as RenderBox?;
+    final correctedPosition = box != null
+        ? box.globalToLocal(details.focalPoint)
+        : details.focalPoint;
 
     // Perform hit-testing
     final hitResults = _performHitTesting(correctedPosition, currentTransform);
@@ -734,36 +924,58 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
 }
 
 class _OverlayPositionDelegate extends SingleChildLayoutDelegate {
-  final Offset position; // screen-space
-  const _OverlayPositionDelegate(this.position);
+  final Offset position; // local top-left
+  final Size desiredSize;
+  const _OverlayPositionDelegate(
+      {required this.position, required this.desiredSize});
 
   @override
   Offset getPositionForChild(Size size, Size childSize) {
-    final dx = (position.dx - childSize.width / 2).clamp(0.0, size.width);
-    final dy = (position.dy - childSize.height / 2).clamp(0.0, size.height);
+    // Posiziona il ghost con il suo top-left al punto indicato
+    final maxX = (size.width - childSize.width).clamp(0.0, double.infinity);
+    final maxY = (size.height - childSize.height).clamp(0.0, double.infinity);
+    final dx = position.dx.clamp(0.0, maxX);
+    final dy = position.dy.clamp(0.0, maxY);
     return Offset(dx, dy);
   }
 
   @override
+  Size getSize(BoxConstraints constraints) {
+    // suggerisce al layout la size desiderata
+    final w = desiredSize.width.clamp(0.0, constraints.maxWidth);
+    final h = desiredSize.height.clamp(0.0, constraints.maxHeight);
+    return Size(w, h);
+  }
+
+  @override
+  BoxConstraints getConstraintsForChild(BoxConstraints constraints) {
+    // vincola il child alla size del ghost
+    return BoxConstraints.tight(desiredSize);
+  }
+
+  @override
   bool shouldRelayout(covariant _OverlayPositionDelegate oldDelegate) {
-    return oldDelegate.position != position;
+    return oldDelegate.position != position ||
+        oldDelegate.desiredSize != desiredSize;
   }
 }
 
 class _GhostWidget extends StatelessWidget {
   final Object? spec;
-  const _GhostWidget({required this.spec});
+  final Size size;
+  const _GhostWidget({required this.spec, this.size = const Size(24, 24)});
 
   @override
   Widget build(BuildContext context) {
-    // Minimal translucent circle; could be enhanced using spec
+    // Ghost senza riempimento: solo bordo, per evitare un cerchio pieno invadente
     return Container(
-      width: 24,
-      height: 24,
+      key: const ValueKey('drag_ghost_overlay_inner'),
+      width: size.width,
+      height: size.height,
       decoration: BoxDecoration(
-        color: Colors.blue.withOpacity(0.3),
+        color: Colors.transparent,
         shape: BoxShape.circle,
-        border: Border.all(color: Colors.blueAccent.withOpacity(0.6)),
+        border: Border.all(color: Colors.blueAccent.withValues(alpha: 0.7)),
       ),
     );
   }

@@ -109,6 +109,9 @@ The `PhysicalEvent` system has been enhanced with new fields:
   - Implemented as a lightweight overlay widget controlled by commands: `ShowDragOverlay`, `UpdateDragOverlay`, `HideDragOverlay`.
   - Overlay positions are tracked in local (viewer) coordinates for accurate placement.
   - No system cursor on mobile (cursor-related commands would be no-op there).
+  - The overlay is rendered only if the drag feedback is inside the target AND the ghost would be fully visible inside the viewport in the current frame. This avoids edge-clamping visual shifts on entry.
+  - On drop, if the ghost would not be fully visible, the drop operation is canceled; no new object is added. This guarantees visual and logical consistency at the borders.
+  - With the current configuration (Option A), feedback, ghost, and drop share the same center (pointer), yielding pixel-accurate alignment across screen and logical coordinates.
 
 - Controller Contract
   - Controller starts the in‑app DnD (source) and supplies `application/json` payload (opaque to the Diagrammer).

@@ -20,46 +20,34 @@ class DiagramPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // Apply transformation
+    // Sfondo viewer (non trasformato) grigio molto chiaro per distinguere dal bianco del diagramma
+    final viewerBg = Paint()
+      ..color = const Color(0xFFE5E7EB)
+      ..style = PaintingStyle.fill;
+    canvas.drawRect(Offset.zero & size, viewerBg);
+
+    // Applica la trasformazione e dipingi l'area logica + oggetti
     canvas.save();
     canvas.transform(transform.toMatrix4().storage);
-
-    // Draw background
     _drawBackground(canvas, size);
-
-    // Draw diagram area
     _drawDiagramArea(canvas);
-
-    // Draw objects
     _drawObjects(canvas);
-
-    // Draw debug information
     if (debug) {
       _drawDebugInfo(canvas, size);
     }
-
     canvas.restore();
   }
 
   void _drawBackground(Canvas canvas, Size size) {
-    final backgroundPaint = Paint()
-      ..color = Colors.grey.shade200
+    // Riempie l'area del diagramma (logicalExtent) di bianco, così l'interno è bianco
+    final diagramBg = Paint()
+      ..color = Colors.white
       ..style = PaintingStyle.fill;
-
-    final largeRect = Rect.fromCenter(
-      center: Offset.zero,
-      width: size.width * 10,
-      height: size.height * 10,
-    );
-    canvas.drawRect(largeRect, backgroundPaint);
+    canvas.drawRect(logicalExtent, diagramBg);
   }
 
   void _drawDiagramArea(Canvas canvas) {
-    final diagramAreaPaint = Paint()
-      ..color = Colors.white
-      ..style = PaintingStyle.fill;
-
-    canvas.drawRect(logicalExtent, diagramAreaPaint);
+    // Non disegnare un layer extra: lo sfondo è già l'extent logico
   }
 
   void _drawObjects(Canvas canvas) {

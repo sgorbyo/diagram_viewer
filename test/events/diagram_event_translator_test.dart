@@ -75,13 +75,13 @@ void main() {
           pinchContinue: (event) =>
               fail('Expected dragBegin, got pinchContinue'),
           pinchEnd: (event) => fail('Expected dragBegin, got pinchEnd'),
-          dragTargetEnter: (_a, _b, _c, _d, _e, _f) =>
+          dragTargetEnter: (a, b, c, d, e, f) =>
               fail('Expected dragBegin, got dragTargetEnter'),
-          dragTargetOver: (_a, _b, _c, _d, _e, _f) =>
+          dragTargetOver: (a, b, c, d, e, f) =>
               fail('Expected dragBegin, got dragTargetOver'),
-          dragTargetLeave: (_a, _b, _c) =>
+          dragTargetLeave: (a, b, c) =>
               fail('Expected dragBegin, got dragTargetLeave'),
-          dragTargetDrop: (_a, _b, _c, _d, _e, _f) =>
+          dragTargetDrop: (a, b, c, d, e, f) =>
               fail('Expected dragBegin, got dragTargetDrop'),
         );
       });
@@ -159,13 +159,13 @@ void main() {
           pinchContinue: (event) =>
               fail('Expected dragContinue, got pinchContinue'),
           pinchEnd: (event) => fail('Expected dragContinue, got pinchEnd'),
-          dragTargetEnter: (_a, _b, _c, _d, _e, _f) =>
+          dragTargetEnter: (a, b, c, d, e, f) =>
               fail('Expected dragContinue, got dragTargetEnter'),
-          dragTargetOver: (_a, _b, _c, _d, _e, _f) =>
+          dragTargetOver: (a, b, c, d, e, f) =>
               fail('Expected dragContinue, got dragTargetOver'),
-          dragTargetLeave: (_a, _b, _c) =>
+          dragTargetLeave: (a, b, c) =>
               fail('Expected dragContinue, got dragTargetLeave'),
-          dragTargetDrop: (_a, _b, _c, _d, _e, _f) =>
+          dragTargetDrop: (a, b, c, d, e, f) =>
               fail('Expected dragContinue, got dragTargetDrop'),
         );
       });
@@ -272,13 +272,13 @@ void main() {
           pinchBegin: (event) => fail('Expected dragEnd, got pinchBegin'),
           pinchContinue: (event) => fail('Expected dragEnd, got pinchContinue'),
           pinchEnd: (event) => fail('Expected dragEnd, got pinchEnd'),
-          dragTargetEnter: (_a, _b, _c, _d, _e, _f) =>
+          dragTargetEnter: (a, b, c, d, e, f) =>
               fail('Expected dragEnd, got dragTargetEnter'),
-          dragTargetOver: (_a, _b, _c, _d, _e, _f) =>
+          dragTargetOver: (a, b, c, d, e, f) =>
               fail('Expected dragEnd, got dragTargetOver'),
-          dragTargetLeave: (_a, _b, _c) =>
+          dragTargetLeave: (a, b, c) =>
               fail('Expected dragEnd, got dragTargetLeave'),
-          dragTargetDrop: (_a, _b, _c, _d, _e, _f) =>
+          dragTargetDrop: (a, b, c, d, e, f) =>
               fail('Expected dragEnd, got dragTargetDrop'),
         );
       });
@@ -361,13 +361,13 @@ void main() {
           pinchBegin: (event) => fail('Expected tap, got pinchBegin'),
           pinchContinue: (event) => fail('Expected tap, got pinchContinue'),
           pinchEnd: (event) => fail('Expected tap, got pinchEnd'),
-          dragTargetEnter: (_a, _b, _c, _d, _e, _f) =>
+          dragTargetEnter: (a, b, c, d, e, f) =>
               fail('Expected tap, got dragTargetEnter'),
-          dragTargetOver: (_a, _b, _c, _d, _e, _f) =>
+          dragTargetOver: (a, b, c, d, e, f) =>
               fail('Expected tap, got dragTargetOver'),
-          dragTargetLeave: (_a, _b, _c) =>
+          dragTargetLeave: (a, b, c) =>
               fail('Expected tap, got dragTargetLeave'),
-          dragTargetDrop: (_a, _b, _c, _d, _e, _f) =>
+          dragTargetDrop: (a, b, c, d, e, f) =>
               fail('Expected tap, got dragTargetDrop'),
         );
       });
@@ -420,13 +420,13 @@ void main() {
           pinchContinue: (event) =>
               fail('Expected dragBegin, got pinchContinue'),
           pinchEnd: (event) => fail('Expected dragBegin, got pinchEnd'),
-          dragTargetEnter: (_a, _b, _c, _d, _e, _f) =>
+          dragTargetEnter: (a, b, c, d, e, f) =>
               fail('Expected dragBegin, got dragTargetEnter'),
-          dragTargetOver: (_a, _b, _c, _d, _e, _f) =>
+          dragTargetOver: (a, b, c, d, e, f) =>
               fail('Expected dragBegin, got dragTargetOver'),
-          dragTargetLeave: (_a, _b, _c) =>
+          dragTargetLeave: (a, b, c) =>
               fail('Expected dragBegin, got dragTargetLeave'),
-          dragTargetDrop: (_a, _b, _c, _d, _e, _f) =>
+          dragTargetDrop: (a, b, c, d, e, f) =>
               fail('Expected dragBegin, got dragTargetDrop'),
         );
       });
@@ -470,13 +470,13 @@ void main() {
           pinchBegin: (event) => fail('Expected scroll, got pinchBegin'),
           pinchContinue: (event) => fail('Expected scroll, got pinchContinue'),
           pinchEnd: (event) => fail('Expected scroll, got pinchEnd'),
-          dragTargetEnter: (_a, _b, _c, _d, _e, _f) =>
+          dragTargetEnter: (a, b, c, d, e, f) =>
               fail('Expected scroll, got dragTargetEnter'),
-          dragTargetOver: (_a, _b, _c, _d, _e, _f) =>
+          dragTargetOver: (a, b, c, d, e, f) =>
               fail('Expected scroll, got dragTargetOver'),
-          dragTargetLeave: (_a, _b, _c) =>
+          dragTargetLeave: (a, b, c) =>
               fail('Expected scroll, got dragTargetLeave'),
-          dragTargetDrop: (_a, _b, _c, _d, _e, _f) =>
+          dragTargetDrop: (a, b, c, d, e, f) =>
               fail('Expected scroll, got dragTargetDrop'),
         );
       });
@@ -577,13 +577,13 @@ void main() {
           pinchBegin: (event) => fail('Expected dragBegin'),
           pinchContinue: (event) => fail('Expected dragBegin'),
           pinchEnd: (event) => fail('Expected dragBegin'),
-          dragTargetEnter: (_a, _b, _c, _d, _e, _f) =>
+          dragTargetEnter: (a, b, c, d, e, f) =>
               fail('Expected dragBegin, got dragTargetEnter'),
-          dragTargetOver: (_a, _b, _c, _d, _e, _f) =>
+          dragTargetOver: (a, b, c, d, e, f) =>
               fail('Expected dragBegin, got dragTargetOver'),
-          dragTargetLeave: (_a, _b, _c) =>
+          dragTargetLeave: (a, b, c) =>
               fail('Expected dragBegin, got dragTargetLeave'),
-          dragTargetDrop: (_a, _b, _c, _d, _e, _f) =>
+          dragTargetDrop: (a, b, c, d, e, f) =>
               fail('Expected dragBegin, got dragTargetDrop'),
         );
 
@@ -598,13 +598,13 @@ void main() {
           pinchBegin: (event) => fail('Expected dragContinue'),
           pinchContinue: (event) => fail('Expected dragContinue'),
           pinchEnd: (event) => fail('Expected dragContinue'),
-          dragTargetEnter: (_a, _b, _c, _d, _e, _f) =>
+          dragTargetEnter: (a, b, c, d, e, f) =>
               fail('Expected dragContinue, got dragTargetEnter'),
-          dragTargetOver: (_a, _b, _c, _d, _e, _f) =>
+          dragTargetOver: (a, b, c, d, e, f) =>
               fail('Expected dragContinue, got dragTargetOver'),
-          dragTargetLeave: (_a, _b, _c) =>
+          dragTargetLeave: (a, b, c) =>
               fail('Expected dragContinue, got dragTargetLeave'),
-          dragTargetDrop: (_a, _b, _c, _d, _e, _f) =>
+          dragTargetDrop: (a, b, c, d, e, f) =>
               fail('Expected dragContinue, got dragTargetDrop'),
         );
 
@@ -619,13 +619,13 @@ void main() {
           pinchBegin: (event) => fail('Expected dragEnd'),
           pinchContinue: (event) => fail('Expected dragEnd'),
           pinchEnd: (event) => fail('Expected dragEnd'),
-          dragTargetEnter: (_a, _b, _c, _d, _e, _f) =>
+          dragTargetEnter: (a, b, c, d, e, f) =>
               fail('Expected dragEnd, got dragTargetEnter'),
-          dragTargetOver: (_a, _b, _c, _d, _e, _f) =>
+          dragTargetOver: (a, b, c, d, e, f) =>
               fail('Expected dragEnd, got dragTargetOver'),
-          dragTargetLeave: (_a, _b, _c) =>
+          dragTargetLeave: (a, b, c) =>
               fail('Expected dragEnd, got dragTargetLeave'),
-          dragTargetDrop: (_a, _b, _c, _d, _e, _f) =>
+          dragTargetDrop: (a, b, c, d, e, f) =>
               fail('Expected dragEnd, got dragTargetDrop'),
         );
       });

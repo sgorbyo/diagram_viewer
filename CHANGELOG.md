@@ -12,6 +12,9 @@
  - In‑App Drag & Drop (Target):
    - Added DnD target events (enter/over/leave/drop) with screen and logical positions
    - Added ghost overlay commands (show/update/hide) and technical notes on global→local→logical mapping
+    - Ghost overlay rendered only when drag feedback is over the viewer and the ghost is fully visible within viewport bounds; drop is canceled if ghost is not fully visible at release time
+    - Option A alignment: feedback, ghost, and drop are centered on the pointer with zero offset for pixel-accurate positioning
+    - Viewer background clarified: grey outside logical diagram extent; white inside the diagram area for clear visual distinction
 
 ### Changed
 - Removed temporary debug logs from runtime code; kept optional `DebugBlocObserver` behind configuration

@@ -184,6 +184,40 @@ class PhysicalEvent with _$PhysicalEvent {
     required InteractionType? activeInteraction,
   }) = KeyboardPhysicalEvent;
 
+  /// In-App Drag & Drop (Target) events
+  const factory PhysicalEvent.dndTargetEnter({
+    required String eventId,
+    required Object dataPreview,
+    required Offset screenPosition,
+    required Offset logicalPosition,
+    required Transform2D transformSnapshot,
+    required Duration timestamp,
+  }) = DnDTargetEnterPhysicalEvent;
+
+  const factory PhysicalEvent.dndTargetOver({
+    required String eventId,
+    required Object dataPreview,
+    required Offset screenPosition,
+    required Offset logicalPosition,
+    required Transform2D transformSnapshot,
+    required Duration timestamp,
+  }) = DnDTargetOverPhysicalEvent;
+
+  const factory PhysicalEvent.dndTargetLeave({
+    required String eventId,
+    required Transform2D transformSnapshot,
+    required Duration timestamp,
+  }) = DnDTargetLeavePhysicalEvent;
+
+  const factory PhysicalEvent.dndTargetDrop({
+    required String eventId,
+    required Object data,
+    required Offset screenPosition,
+    required Offset logicalPosition,
+    required Transform2D transformSnapshot,
+    required Duration timestamp,
+  }) = DnDTargetDropPhysicalEvent;
+
   /// Returns true if this event is a pointer event.
   bool get isPointer => this is PointerPhysicalEvent;
 
@@ -226,6 +260,16 @@ class PhysicalEvent with _$PhysicalEvent {
         keyboard: (eventId, transformSnapshot, rawEvent, pressedKeys,
                 currentViewport, activeInteraction) =>
             Offset.zero, // Keyboard events don't have logical position
+        dndTargetEnter: (eventId, dataPreview, screenPosition, logicalPosition,
+                transformSnapshot, timestamp) =>
+            logicalPosition,
+        dndTargetOver: (eventId, dataPreview, screenPosition, logicalPosition,
+                transformSnapshot, timestamp) =>
+            logicalPosition,
+        dndTargetLeave: (eventId, transformSnapshot, timestamp) => Offset.zero,
+        dndTargetDrop: (eventId, data, screenPosition, logicalPosition,
+                transformSnapshot, timestamp) =>
+            logicalPosition,
       );
 
   /// Returns the transform snapshot of this event.
@@ -262,6 +306,17 @@ class PhysicalEvent with _$PhysicalEvent {
         keyboard: (eventId, transformSnapshot, rawEvent, pressedKeys,
                 currentViewport, activeInteraction) =>
             transformSnapshot,
+        dndTargetEnter: (eventId, dataPreview, screenPosition, logicalPosition,
+                transformSnapshot, timestamp) =>
+            transformSnapshot,
+        dndTargetOver: (eventId, dataPreview, screenPosition, logicalPosition,
+                transformSnapshot, timestamp) =>
+            transformSnapshot,
+        dndTargetLeave: (eventId, transformSnapshot, timestamp) =>
+            transformSnapshot,
+        dndTargetDrop: (eventId, data, screenPosition, logicalPosition,
+                transformSnapshot, timestamp) =>
+            transformSnapshot,
       );
 
   /// Returns the hit list of this event.
@@ -297,6 +352,16 @@ class PhysicalEvent with _$PhysicalEvent {
         keyboard: (eventId, transformSnapshot, rawEvent, pressedKeys,
                 currentViewport, activeInteraction) =>
             [], // Keyboard events don't have hit list
+        dndTargetEnter: (eventId, dataPreview, screenPosition, logicalPosition,
+                transformSnapshot, timestamp) =>
+            [],
+        dndTargetOver: (eventId, dataPreview, screenPosition, logicalPosition,
+                transformSnapshot, timestamp) =>
+            [],
+        dndTargetLeave: (eventId, transformSnapshot, timestamp) => [],
+        dndTargetDrop: (eventId, data, screenPosition, logicalPosition,
+                transformSnapshot, timestamp) =>
+            [],
       );
 
   /// Returns the border proximity of this event.
@@ -332,6 +397,17 @@ class PhysicalEvent with _$PhysicalEvent {
         keyboard: (eventId, transformSnapshot, rawEvent, pressedKeys,
                 currentViewport, activeInteraction) =>
             BorderProximity.none, // Keyboard events don't have border proximity
+        dndTargetEnter: (eventId, dataPreview, screenPosition, logicalPosition,
+                transformSnapshot, timestamp) =>
+            BorderProximity.none,
+        dndTargetOver: (eventId, dataPreview, screenPosition, logicalPosition,
+                transformSnapshot, timestamp) =>
+            BorderProximity.none,
+        dndTargetLeave: (eventId, transformSnapshot, timestamp) =>
+            BorderProximity.none,
+        dndTargetDrop: (eventId, data, screenPosition, logicalPosition,
+                transformSnapshot, timestamp) =>
+            BorderProximity.none,
       );
 
   /// Returns true if this event has any objects in its hit list.

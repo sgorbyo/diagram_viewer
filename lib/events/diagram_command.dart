@@ -6,6 +6,18 @@ import 'package:diagram_viewer/interfaces/diagram_object_entity.dart';
 
 part 'diagram_command.freezed.dart';
 
+/// Suggested cursor effects for desktop/web. Mobile platforms will ignore.
+enum CursorEffect {
+  basic,
+  forbidden,
+  click,
+  text,
+  grab,
+  grabbing,
+  move,
+  copy,
+}
+
 /// Commands sent from the Controller to the DiagramViewer.
 ///
 /// This sealed class defines all the commands that the Controller can send
@@ -132,6 +144,11 @@ class DiagramCommand with _$DiagramCommand {
 
   const factory DiagramCommand.hideDragOverlay() = HideDragOverlayCommand;
 
+  /// Set cursor effect (desktop/web). No-op on mobile platforms.
+  const factory DiagramCommand.setCursor({
+    required CursorEffect effect,
+  }) = _SetCursorCommand;
+
   /// Returns true if this command is an ApplyDefaultPanZoom command.
   bool get isApplyDefaultPanZoom => this is ApplyDefaultPanZoomCommand;
 
@@ -178,5 +195,6 @@ class DiagramCommand with _$DiagramCommand {
         updateDragOverlay: (position) =>
             'UpdateDragOverlay(position: $position)',
         hideDragOverlay: () => 'HideDragOverlay',
+        setCursor: (effect) => 'SetCursor(effect: $effect)',
       );
 }

@@ -25,6 +25,7 @@ class EventManagementBloc
   TransformBloc? _transformBloc;
   DiagramConfiguration? _configuration;
   Size? _viewportSize;
+  Offset? _viewportTopLeftGlobal;
 
   EventManagementBloc({Duration? debounceTime})
       : _debounceTime = debounceTime ?? const Duration(milliseconds: 16),
@@ -504,11 +505,19 @@ class EventManagementBloc
     final width = _viewportSize!.width;
     final height = _viewportSize!.height;
 
+    // If we know the viewport top-left in global coords, convert to local
+    final localDx = _viewportTopLeftGlobal != null
+        ? (screenPosition.dx - _viewportTopLeftGlobal!.dx)
+        : screenPosition.dx;
+    final localDy = _viewportTopLeftGlobal != null
+        ? (screenPosition.dy - _viewportTopLeftGlobal!.dy)
+        : screenPosition.dy;
+
     // Distances to edges
-    final left = screenPosition.dx;
-    final right = (width - screenPosition.dx).clamp(0.0, double.infinity);
-    final top = screenPosition.dy;
-    final bottom = (height - screenPosition.dy).clamp(0.0, double.infinity);
+    final left = localDx;
+    final right = (width - localDx).clamp(0.0, double.infinity);
+    final top = localDy;
+    final bottom = (height - localDy).clamp(0.0, double.infinity);
 
     final isNearLeft = left <= threshold;
     final isNearRight = right <= threshold;
@@ -561,10 +570,12 @@ class EventManagementBloc
     TransformBloc? transformBloc,
     DiagramConfiguration? configuration,
     Size? viewportSize,
+    Offset? viewportTopLeft,
   }) {
     _transformBloc = transformBloc;
     _configuration = configuration;
     _viewportSize = viewportSize;
+    _viewportTopLeftGlobal = viewportTopLeft;
   }
 
   @override

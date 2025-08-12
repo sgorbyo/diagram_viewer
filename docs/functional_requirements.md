@@ -131,6 +131,11 @@ The package implements a **Diagrammer-Controller architecture** where:
   - `UpdateDragOverlay(position)`
   - `HideDragOverlay()`
 
+- Visual feedback and drop rules
+  - The ghost overlay is rendered only when the drag feedback is inside the viewer target and the ghost would be fully visible within the viewport bounds in the current frame.
+  - If, at drop time, the ghost would not be fully visible (e.g., cursor too close to edges), the drop operation is canceled and no object is added.
+  - Positions used for ghost and drop are centered on the current pointer location (same center for feedback, ghost, and drop) and are accurate in both screen and logical coordinates.
+
 - Acceptance criteria
   - Starting an in‑app drag from an external widget yields continuous Over events to the Diagrammer while hovering; releasing results in a Drop event carrying the original JSON.
   - Visual feedback (cursor/effect where supported, ghost overlay) updates within one frame after relevant commands.

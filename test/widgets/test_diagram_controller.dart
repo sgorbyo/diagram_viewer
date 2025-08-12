@@ -45,6 +45,10 @@ class TestDiagramController implements IDiagramController {
     _setupEventHandling();
   }
 
+  void sendCommand(DiagramCommand command) {
+    _commandController.add(command);
+  }
+
   void _setupEventHandling() {
     _eventController.stream.listen(_handleDiagramEvent);
   }

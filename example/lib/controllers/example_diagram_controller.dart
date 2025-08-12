@@ -16,6 +16,7 @@ class ExampleDiagramController implements IDiagramController {
   static const height = 768;
   static const radius = 50.0;
   DiagramObjectEntity? _draggedObject;
+  Offset? _dragOffsetFromCenter; // distanza mouse->centro al dragBegin
   bool _autoScrolling = false;
 
   final StreamController<DiagramCommand> _commandController =
@@ -52,6 +53,9 @@ class ExampleDiagramController implements IDiagramController {
         if (event.hitList.isNotEmpty) {
           // Start object drag - store the object being dragged
           _draggedObject = event.hitList.first;
+          // calcola offset relativo dal centro per evitare il "salto"
+          _dragOffsetFromCenter =
+              event.logicalPosition - _draggedObject!.center;
           _startObjectDrag(_draggedObject!);
         } else {
           // Background drag - let DiagramViewer handle pan
@@ -64,7 +68,9 @@ class ExampleDiagramController implements IDiagramController {
         if (_draggedObject != null) {
           // Continue object drag - use the stored object regardless of hitList
           try {
-            _updateObjectPosition(_draggedObject!, event.logicalPosition);
+            final targetCenter =
+                event.logicalPosition - (_dragOffsetFromCenter ?? Offset.zero);
+            _updateObjectPosition(_draggedObject!, targetCenter);
             sendRedrawCommand();
           } catch (_) {
             // Ignore model update errors for unknown test entities
@@ -115,6 +121,7 @@ class ExampleDiagramController implements IDiagramController {
           // End object drag
           _endObjectDrag();
           _draggedObject = null;
+          _dragOffsetFromCenter = null;
           sendRedrawCommand();
           if (_autoScrolling) {
             _commandController.add(const DiagramCommand.stopAutoScroll());
@@ -214,7 +221,14 @@ class ExampleDiagramController implements IDiagramController {
       ) {
         // Hide ghost on drop
         _commandController.add(const DiagramCommand.hideDragOverlay());
-        // Example: could parse JSON and create object here in future
+        // Parse payload and create a new object into storage
+        if (data is Map<String, dynamic> && data['type'] == 'circle') {
+          final double radius = (data['radius'] as num?)?.toDouble() ?? 40.0;
+          // Create a new model at logicalPosition
+          final model = CerchioModel(center: logicalPosition, radius: radius);
+          _storage[model.id] = model;
+          _updateLogicalExtentAndRedraw();
+        }
       },
       // Handle other events with default behavior
       doubleTap: (event) => _handleDoubleTap(event),

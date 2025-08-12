@@ -31,6 +31,46 @@ class DiagramEventTranslator {
           activeInteraction,
         );
       },
+      dndTargetEnter: (eventId, dataPreview, screenPosition, logicalPosition,
+          transformSnapshot, timestamp) {
+        return DiagramEventUnion.dragTargetEnter(
+          eventId: eventId,
+          dataPreview: dataPreview,
+          screenPosition: screenPosition,
+          logicalPosition: logicalPosition,
+          transformSnapshot: transformSnapshot,
+          timestamp: timestamp,
+        );
+      },
+      dndTargetOver: (eventId, dataPreview, screenPosition, logicalPosition,
+          transformSnapshot, timestamp) {
+        return DiagramEventUnion.dragTargetOver(
+          eventId: eventId,
+          dataPreview: dataPreview,
+          screenPosition: screenPosition,
+          logicalPosition: logicalPosition,
+          transformSnapshot: transformSnapshot,
+          timestamp: timestamp,
+        );
+      },
+      dndTargetLeave: (eventId, transformSnapshot, timestamp) {
+        return DiagramEventUnion.dragTargetLeave(
+          eventId: eventId,
+          transformSnapshot: transformSnapshot,
+          timestamp: timestamp,
+        );
+      },
+      dndTargetDrop: (eventId, data, screenPosition, logicalPosition,
+          transformSnapshot, timestamp) {
+        return DiagramEventUnion.dragTargetDrop(
+          eventId: eventId,
+          data: data,
+          screenPosition: screenPosition,
+          logicalPosition: logicalPosition,
+          transformSnapshot: transformSnapshot,
+          timestamp: timestamp,
+        );
+      },
     );
     return result;
   }
