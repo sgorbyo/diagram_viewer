@@ -392,6 +392,11 @@ final config = DiagramConfiguration(
   autoScrollAcceleration: 1.5,
   enableInertialScrolling: true,
   inertialFriction: 0.95,
+  // Snap grid (optional)
+  snapGridEnabled: false,
+  snapGridSpacing: 16.0,
+  snapGridOrigin: Offset.zero,
+  showSnapGrid: false,
 );
 ```
 
@@ -400,6 +405,7 @@ Key options in `DiagramConfiguration` used by the implementation:
 - `bounceDuration` and `bounceCurve`: tune bounce-back animation
 - `enableBlocDebugObserver`: enable verbose BLoC logging in debug
 - Presets: `touchOptimized`, `desktopOptimized`
+ - Snap grid: `snapGridEnabled`, `snapGridSpacing`, `snapGridOrigin`, `showSnapGrid`
 
 ## Command Set
 
@@ -413,6 +419,37 @@ Implemented commands from controller to viewer:
 - `ShowDragOverlay(ghostSpec, position)`
 - `UpdateDragOverlay(position)`
 - `HideDragOverlay()`
+
+### Snap Grid Design
+
+- Overview
+  - Snapping occurs in logical space and targets object centers. It is opt-in and controlled by the controller through `DiagramConfiguration`.
+
+- Computation
+  - Given logical center `p`, spacing `s`, and origin `o`, the snapped center `p'` is:
+    - `p'.dx = o.dx + round((p.dx - o.dx)/s) * s`
+    - `p'.dy = o.dy + round((p.dy - o.dy)/s) * s`
+  - Conversion between screen and logical positions uses current `Transform2D`.
+
+- Rendering (optional)
+  - When `showSnapGrid` is enabled, the viewer renders a lightweight grid after applying the transform. Grid line density is adaptively thinned based on scale to keep draw calls bounded.
+
+- Control flow
+  - During drag, the controller can preview snapping by emitting overlay updates aligned to `p'`.
+  - On drop, if `snapGridEnabled` is true, the controller finalizes the object center at `p'`.
+  - Viewer remains policy-agnostic; it exposes utilities and draws the optional grid.
+
+### Standard Input Mapping
+
+- Baseline equivalences (policy at controller layer):
+  - Pan: mouse left-drag on empty area; touch one-finger drag; trackpad two-finger drag.
+  - Zoom: wheel+Ctrl/Cmd on desktop/web; pinch on touch/trackpad.
+  - Selection: click/tap; multi-select via Shift/Ctrl or controller-defined mobile gesture.
+  - Context menu: right-click / long-press.
+
+- Implementation notes
+  - `EventManagementBloc` unifies input as PhysicalEvents; controller interprets per-platform policy.
+  - Tests should validate equivalences without depending on OS-specific gesture recognizers.
 
 ## Inertial Scrolling Design
 

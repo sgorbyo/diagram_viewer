@@ -141,6 +141,36 @@ The package implements a **Diagrammer-Controller architecture** where:
   - Visual feedback (cursor/effect where supported, ghost overlay) updates within one frame after relevant commands.
   - Positions are accurate in both screen and logical coordinates.
 
+### Snap Grid for Object Centers
+
+- Objective
+  - Provide an optional, configurable snap-to grid applied to the centers of diagram objects.
+
+- Configuration (DiagramConfiguration)
+  - `snapGridEnabled: bool` (default false)
+  - `snapGridSpacing: double` (logical units; default 16.0)
+  - `snapGridOrigin: Offset` (logical origin for grid alignment; default `Offset.zero`)
+  - `showSnapGrid: bool` (visualization of grid; default false)
+
+- Responsibilities
+  - Controller:
+    - Enables/disables snapping and adjusts grid parameters at runtime.
+    - Decides policy for when snapping applies (e.g., on drag preview vs. only on drop).
+  - Diagrammer:
+    - Exposes configuration and helper mapping utilities in logical space.
+    - Optionally renders a lightweight grid overlay when `showSnapGrid` is true.
+
+- Behavior
+  - Snapping operates in logical coordinates; the snapped position is computed by projecting the logical center to the nearest grid node defined by `snapGridOrigin` and `snapGridSpacing`.
+  - When enabled by the controller, object centers land on grid at drop time. Preview snapping during drag is controller-driven.
+  - Grid visualization (if enabled) respects current transform (zoom/pan) with pixel-density-aware thinning to avoid overdraw.
+
+- Acceptance criteria
+  - With snapping enabled, a drop results in the object center aligned to the nearest grid node in logical space.
+  - With snapping disabled, behavior is unchanged from free placement.
+  - Toggling snapping and changing spacing/origin at runtime takes effect within one frame.
+  - Optional grid overlay appears/disappears within one frame when toggled.
+
 ### Inertial Scrolling
 
 - Objective: When a pan ends with sufficient velocity, scrolling must continue with inertia in the same direction, progressively slowing down due to friction until it stops or hits bounds.
@@ -253,6 +283,25 @@ The package implements a **Diagrammer-Controller architecture** where:
 - **Unified Events**: Same logical events across all platforms
 - **Platform-Specific Optimizations**: Optimize for each platform's input methods
 - **Gesture Mapping**: Consistent gesture behavior across platforms
+
+### Standard Input Mapping and Equivalences
+
+- Baseline equivalences (controller may override or extend):
+  - Panning:
+    - Desktop/Web: left-drag on empty area; Trackpad: two-finger drag; Touch: one-finger drag.
+  - Zooming:
+    - Desktop/Web: wheel + Ctrl/Cmd for zoom about cursor; Trackpad: pinch gesture; Touch: pinch-to-zoom.
+  - Selection/Tap:
+    - Desktop/Web: left-click; Touch: tap; Long-press can map to context-specific actions.
+  - Multi-select modifier:
+    - Desktop/Web: Shift/Ctrl; Mobile: secondary finger + drag or long-press + drag (controller-defined).
+  - Context actions:
+    - Desktop/Web: right-click/context menu key; Mobile: long-press.
+
+- Generalization rules
+  - Viewer provides unified PhysicalEvents; the controller defines the policy mapping PhysicalEvents to domain actions per platform.
+  - A standard set of equivalences must be honored by default across desktop, mobile, and trackpad, with controller-level overrides allowed.
+  - Platform-specific edge cases (e.g., Magic Mouse momentum, OS gesture conflicts) must not break the baseline mapping and can be handled by controller policy.
 
 ## Testing Requirements
 

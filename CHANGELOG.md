@@ -15,6 +15,11 @@
     - Ghost overlay rendered only when drag feedback is over the viewer and the ghost is fully visible within viewport bounds; drop is canceled if ghost is not fully visible at release time
     - Option A alignment: feedback, ghost, and drop are centered on the pointer with zero offset for pixel-accurate positioning
     - Viewer background clarified: grey outside logical diagram extent; white inside the diagram area for clear visual distinction
+  - Snap Grid (planned):
+    - Configurable snap-to grid for object centers in logical space (`snapGridEnabled`, `snapGridSpacing`, `snapGridOrigin`, `showSnapGrid`)
+    - Controller-driven policy for preview and drop snapping
+  - Standard Input Mapping (baseline):
+    - Documented cross-platform equivalences for pan/zoom/select/context actions; controller can override per domain
 
 ### Changed
 - Removed temporary debug logs from runtime code; kept optional `DebugBlocObserver` behind configuration
