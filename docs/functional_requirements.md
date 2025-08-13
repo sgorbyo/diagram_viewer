@@ -162,11 +162,14 @@ The package implements a **Diagrammer-Controller architecture** where:
 
 - Behavior
   - Snapping operates in logical coordinates; the snapped position is computed by projecting the logical center to the nearest grid node defined by `snapGridOrigin` and `snapGridSpacing`.
-  - When enabled by the controller, object centers land on grid at drop time. Preview snapping during drag is controller-driven.
+  - When enabled, object centers snap to grid both:
+    - in real time during drag of existing objects (controller applies snapping on drag‑continue updates), e
+    - at drop time for DnD insertions.
+  - The controller may optionally provide a preview (e.g., ghost/marker) aligned to the snapped center during drag.
   - Grid visualization (if enabled) respects current transform (zoom/pan) with pixel-density-aware thinning to avoid overdraw.
 
 - Acceptance criteria
-  - With snapping enabled, a drop results in the object center aligned to the nearest grid node in logical space.
+  - With snapping enabled, a drag movement of an existing object updates its center in real time to the nearest grid node; a drop results in the center aligned to the nearest grid node in logical space.
   - With snapping disabled, behavior is unchanged from free placement.
   - Toggling snapping and changing spacing/origin at runtime takes effect within one frame.
   - Optional grid overlay appears/disappears within one frame when toggled.

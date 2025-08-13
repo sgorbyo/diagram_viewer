@@ -17,7 +17,8 @@
     - Viewer background clarified: grey outside logical diagram extent; white inside the diagram area for clear visual distinction
   - Snap Grid (planned):
     - Configurable snap-to grid for object centers in logical space (`snapGridEnabled`, `snapGridSpacing`, `snapGridOrigin`, `showSnapGrid`)
-    - Controller-driven policy for preview and drop snapping
+    - Snapping applicato sia al drag di oggetti esistenti (in tempo reale su drag-continue) sia al drop da DnD
+    - Controller-driven policy per preview e finalizzazione
   - Standard Input Mapping (baseline):
     - Documented cross-platform equivalences for pan/zoom/select/context actions; controller can override per domain
 

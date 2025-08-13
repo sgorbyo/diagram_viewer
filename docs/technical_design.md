@@ -435,8 +435,9 @@ Implemented commands from controller to viewer:
   - When `showSnapGrid` is enabled, the viewer renders a lightweight grid after applying the transform. Grid line density is adaptively thinned based on scale to keep draw calls bounded.
 
 - Control flow
-  - During drag, the controller can preview snapping by emitting overlay updates aligned to `p'`.
-  - On drop, if `snapGridEnabled` is true, the controller finalizes the object center at `p'`.
+  - During drag of existing objects, the controller applies snapping on each `dragContinue`, updating the model (and thus the rendered center) to `p'` in real time.
+  - During DnD insertions, the controller can preview snapping by emitting overlay updates aligned to `p'`.
+  - On drop (both existing-object drag end and DnD), if `snapGridEnabled` is true, the controller finalizes the object center at `p'`.
   - Viewer remains policy-agnostic; it exposes utilities and draws the optional grid.
 
 ### Standard Input Mapping
