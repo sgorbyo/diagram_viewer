@@ -122,6 +122,26 @@ Check the `/example` folder for a complete implementation showing:
 - Interactive diagram viewer setup
 - Gesture handling
 
+## Development
+
+### Running tests
+
+- flutter test -r expanded
+- cd example && flutter test -r expanded
+
+### TDD policy and pre-push hook
+
+- This repo enforces a TDD workflow: when changing code under `lib/` or `example/lib/` you must also add/update tests under `test/` or `example/test/`.
+- A GitHub Actions workflow enforces this on PRs and runs tests for root and example apps.
+- To enable local pre-push checks:
+
+```bash
+git config core.hooksPath .githooks
+chmod +x .githooks/pre-push
+```
+
+From now on, pushing will run tests (root + example) and block if they fail.
+
 ## Notice
 
 This package is for internal use by iLogoTec only. All rights reserved.

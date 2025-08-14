@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+RED="\033[31m"
+GREEN="\033[32m"
+YELLOW="\033[33m"
+RESET="\033[0m"
+
+echo -e "${YELLOW}[pre-push] Running Flutter tests (root)${RESET}"
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+cd "$REPO_ROOT"
+
+if ! command -v flutter >/dev/null 2>&1; then
+  echo -e "${RED}[pre-push] Flutter not found in PATH. Aborting push.${RESET}"
+  exit 1
+fi
+
+flutter pub get >/dev/null
+flutter test -r expanded
+
+echo -e "${YELLOW}[pre-push] Running Flutter tests (example)${RESET}"
+cd example
+flutter pub get >/dev/null
+flutter test -r expanded
+
+echo -e "${GREEN}[pre-push] OK - All tests passed (root + example).${RESET}"
+exit 0
+
+
