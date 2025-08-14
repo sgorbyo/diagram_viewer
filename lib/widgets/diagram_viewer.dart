@@ -72,6 +72,7 @@ class TestableDiagramViewer extends StatefulWidget {
 
 class _DiagramViewerState extends State<DiagramViewer> {
   late final FocusNode _focusNode;
+  final GlobalKey _contentKey = GlobalKey();
 
   @override
   void initState() {
@@ -136,15 +137,20 @@ class _DiagramViewerState extends State<DiagramViewer> {
                   if (context.mounted) {
                     final eventBloc = context.read<EventManagementBloc>();
                     final transformBloc = context.read<TransformBloc>();
+                    final renderObject = _contentKey.currentContext
+                        ?.findRenderObject() as RenderBox?;
+                    final topLeft = renderObject?.localToGlobal(Offset.zero);
                     eventBloc.configureDependencies(
                       transformBloc: transformBloc,
                       configuration: config,
                       viewportSize: contentSize,
+                      viewportTopLeft: topLeft,
                     );
                   }
                 });
 
                 return DiagramViewerContent(
+                  key: _contentKey,
                   controller: widget.controller,
                   configuration: config,
                   debug: widget.debug,
@@ -160,6 +166,7 @@ class _DiagramViewerState extends State<DiagramViewer> {
 
 class _TestableDiagramViewerState extends State<TestableDiagramViewer> {
   late final FocusNode _focusNode;
+  final GlobalKey _contentKey = GlobalKey();
 
   @override
   void initState() {
@@ -225,6 +232,9 @@ class _TestableDiagramViewerState extends State<TestableDiagramViewer> {
                     final transformBloc = context.read<TransformBloc>();
                     final panBloc = context.read<PanBloc>();
                     final zoomBloc = context.read<ZoomBloc>();
+                    final renderObject = _contentKey.currentContext
+                        ?.findRenderObject() as RenderBox?;
+                    final topLeft = renderObject?.localToGlobal(Offset.zero);
 
                     // Expose BLoCs for testing if callback is provided
                     if (widget.onBlocsCreated != null) {
@@ -235,11 +245,13 @@ class _TestableDiagramViewerState extends State<TestableDiagramViewer> {
                       transformBloc: transformBloc,
                       configuration: config,
                       viewportSize: contentSize,
+                      viewportTopLeft: topLeft,
                     );
                   }
                 });
 
                 return DiagramViewerContent(
+                  key: _contentKey,
                   controller: widget.controller,
                   configuration: config,
                   debug: widget.debug,

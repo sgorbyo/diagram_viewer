@@ -435,10 +435,10 @@ Implemented commands from controller to viewer:
   - When `showSnapGrid` is enabled, the viewer renders a lightweight grid after applying the transform. Grid line density is adaptively thinned based on scale to keep draw calls bounded.
 
 - Control flow
-  - During drag of existing objects, the controller applies snapping on each `dragContinue`, updating the model (and thus the rendered center) to `p'` in real time.
-  - During DnD insertions, the controller can preview snapping by emitting overlay updates aligned to `p'`.
-  - On drop (both existing-object drag end and DnD), if `snapGridEnabled` is true, the controller finalizes the object center at `p'`.
-  - Viewer remains policy-agnostic; it exposes utilities and draws the optional grid.
+  - The viewer computes snapped positions when `snapGridEnabled` is true and passes them alongside events as `snappedLogicalPosition` for DnD target events (`dragTargetOver`, `dragTargetDrop`).
+  - For pointer drags of existing objects, the controller can compute snapping using the same utility (`Transform2DUtils.snapPointToGrid`) or, in future, receive snapped hints through extended events.
+  - The controller decides whether to apply the snapped positions to the model in real time (drag) and on drop (DnD).
+  - Viewer remains policy-agnostic; it exposes utilities, optional snapped hints, aligns the DnD ghost when enabled, and draws the optional grid.
 
 ### Standard Input Mapping
 

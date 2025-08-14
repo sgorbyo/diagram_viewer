@@ -112,13 +112,14 @@ void main() {
         ghostTopLeft + Offset(ghostSize.width / 2, ghostSize.height / 2);
     // Recupera l'ultimo Over per ottenere la screenPosition reale
     final overs = controller.received.where((e) => e.maybeWhen(
-          dragTargetOver: (a, b, c, d, e, f) => true,
+          dragTargetOver: (a, b, c, d, e, f, g) => true,
           orElse: () => false,
         ));
     expect(overs, isNotEmpty);
     late Offset expectedCenter;
     overs.last.when(
-      dragTargetOver: (id, dataPreview, screenPos, logicalPos, snapshot, ts) {
+      dragTargetOver:
+          (id, dataPreview, screenPos, logicalPos, snapshot, ts, snapped) {
         expectedCenter = screenPos;
       },
       tap: (_) => null,
@@ -133,7 +134,7 @@ void main() {
       pinchEnd: (_) => null,
       dragTargetEnter: (a, b, c, d, e, f) => null,
       dragTargetLeave: (a, b, c) => null,
-      dragTargetDrop: (a, b, c, d, e, f) => null,
+      dragTargetDrop: (a, b, c, d, e, f, g) => null,
     );
     // Debug info
     // ignore: avoid_print

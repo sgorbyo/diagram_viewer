@@ -147,7 +147,7 @@ void main() {
           ));
       expect(hasEnter, isTrue);
       final hasOver = controller.receivedEvents.any((e) => e.maybeWhen(
-            dragTargetOver: (_, __, ___, ____, _____, ______) => true,
+            dragTargetOver: (_, __, ___, ____, _____, ______, _______) => true,
             orElse: () => false,
           ));
       expect(hasOver, isTrue);
@@ -157,7 +157,7 @@ void main() {
       await tester.pump();
 
       final hasDrop = controller.receivedEvents.any((e) => e.maybeWhen(
-            dragTargetDrop: (_, __, ___, ____, _____, ______) => true,
+            dragTargetDrop: (_, __, ___, ____, _____, ______, _______) => true,
             orElse: () => false,
           ));
       expect(hasDrop, isTrue);
@@ -191,7 +191,7 @@ void main() {
 
       // Find last Over event and verify logicalPosition
       final overEvents = controller.receivedEvents.where((e) => e.maybeWhen(
-            dragTargetOver: (a, b, c, d, e, f) => true,
+            dragTargetOver: (a, b, c, d, e, f, g) => true,
             orElse: () => false,
           ));
       expect(overEvents, isNotEmpty);
@@ -203,7 +203,7 @@ void main() {
       late Transform2D snapshot;
       lastOver.when(
         dragTargetOver: (eventId, dataPreview, screenPos, logicalPos,
-            transformSnapshot, timestamp) {
+            transformSnapshot, timestamp, snapped) {
           screenPosition = screenPos;
           logicalPosition = logicalPos;
           snapshot = transformSnapshot;
@@ -221,7 +221,7 @@ void main() {
         pinchEnd: (_) => null,
         dragTargetEnter: (a, b, c, d, e, f) => null,
         dragTargetLeave: (a, b, c) => null,
-        dragTargetDrop: (a, b, c, d, e, f) => null,
+        dragTargetDrop: (a, b, c, d, e, f, g) => null,
       );
 
       // Validate mapping by round-tripping: logical→physical equals viewer local

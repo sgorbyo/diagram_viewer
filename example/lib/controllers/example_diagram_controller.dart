@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:diagram_viewer/interfaces/interfaces.dart';
 import 'package:diagram_viewer/events/events.dart';
+import 'package:diagram_viewer/tools/transform2d/transform2d_utils.dart';
 import '../cerchio_entity.dart';
 import '../cerchio_model.dart';
 
@@ -18,6 +19,10 @@ class ExampleDiagramController implements IDiagramController {
   DiagramObjectEntity? _draggedObject;
   Offset? _dragOffsetFromCenter; // distanza mouse->centro al dragBegin
   bool _autoScrolling = false;
+  DiagramConfiguration _configuration = const DiagramConfiguration(
+    maxZoom: 4.0,
+    minZoom: 0.01,
+  );
 
   final StreamController<DiagramCommand> _commandController =
       StreamController<DiagramCommand>.broadcast();
@@ -32,6 +37,11 @@ class ExampleDiagramController implements IDiagramController {
     // Send initial redraw command with calculated logical extent
     // This ensures the DiagramViewer knows about all objects and the correct diagram area
     _updateLogicalExtentAndRedraw();
+  }
+
+  /// Allows the host app to update configuration at runtime (e.g., snap grid).
+  void updateConfiguration(DiagramConfiguration configuration) {
+    _configuration = configuration;
   }
 
   void _setupEventHandling() {
@@ -68,8 +78,20 @@ class ExampleDiagramController implements IDiagramController {
         if (_draggedObject != null) {
           // Continue object drag - use the stored object regardless of hitList
           try {
-            final targetCenter =
-                event.logicalPosition - (_dragOffsetFromCenter ?? Offset.zero);
+            final hinted =
+                event.snappedLogicalPosition ?? event.logicalPosition;
+            Offset targetCenter =
+                hinted - (_dragOffsetFromCenter ?? Offset.zero);
+
+            // Apply snap-to-grid policy (logical space) when enabled
+            final cfg = configuration;
+            if (cfg.snapGridEnabled) {
+              targetCenter = Transform2DUtils.snapPointToGrid(
+                point: targetCenter,
+                spacing: cfg.snapGridSpacing,
+                origin: cfg.snapGridOrigin,
+              );
+            }
             _updateObjectPosition(_draggedObject!, targetCenter);
             sendRedrawCommand();
           } catch (_) {
@@ -197,6 +219,7 @@ class ExampleDiagramController implements IDiagramController {
         Offset logicalPosition,
         Transform2D transformSnapshot,
         Duration timestamp,
+        Offset? snappedLogicalPosition,
       ) {
         // Update ghost position
         _commandController.add(DiagramCommand.updateDragOverlay(
@@ -218,14 +241,24 @@ class ExampleDiagramController implements IDiagramController {
         Offset logicalPosition,
         Transform2D transformSnapshot,
         Duration timestamp,
+        Offset? snappedLogicalPosition,
       ) {
         // Hide ghost on drop
         _commandController.add(const DiagramCommand.hideDragOverlay());
         // Parse payload and create a new object into storage
         if (data is Map<String, dynamic> && data['type'] == 'circle') {
           final double radius = (data['radius'] as num?)?.toDouble() ?? 40.0;
-          // Create a new model at logicalPosition
-          final model = CerchioModel(center: logicalPosition, radius: radius);
+          // Create a new model at (optionally) snapped logicalPosition
+          Offset finalCenter = snappedLogicalPosition ?? logicalPosition;
+          final cfg = configuration;
+          if (cfg.snapGridEnabled) {
+            finalCenter = Transform2DUtils.snapPointToGrid(
+              point: finalCenter,
+              spacing: cfg.snapGridSpacing,
+              origin: cfg.snapGridOrigin,
+            );
+          }
+          final model = CerchioModel(center: finalCenter, radius: radius);
           _storage[model.id] = model;
           _updateLogicalExtentAndRedraw();
         }
@@ -402,10 +435,7 @@ class ExampleDiagramController implements IDiagramController {
   Rect get logicalExtent => _calculateCurrentLogicalExtent();
 
   @override
-  DiagramConfiguration get configuration => const DiagramConfiguration(
-        maxZoom: 4.0, // Zoom massimo 4x
-        minZoom: 0.01, // Zoom minimo 1%
-      );
+  DiagramConfiguration get configuration => _configuration;
 
   @override
   List<DiagramObjectEntity> get objects {

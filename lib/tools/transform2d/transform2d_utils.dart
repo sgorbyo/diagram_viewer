@@ -778,6 +778,25 @@ class Transform2DUtils {
   }) {
     return proposedNewScale.clamp(minZoom, maxZoom);
   }
+
+  /// Snaps a logical point to the nearest grid node defined by [origin] and [spacing].
+  ///
+  /// If [spacing] <= 0, returns [point] unchanged.
+  static Offset snapPointToGrid({
+    required Offset point,
+    required double spacing,
+    required Offset origin,
+  }) {
+    if (spacing <= 0 || spacing.isNaN || !spacing.isFinite) {
+      return point;
+    }
+    final dxUnits = ((point.dx - origin.dx) / spacing).roundToDouble();
+    final dyUnits = ((point.dy - origin.dy) / spacing).roundToDouble();
+    return Offset(
+      origin.dx + dxUnits * spacing,
+      origin.dy + dyUnits * spacing,
+    );
+  }
 }
 
 /// Extension on double to provide precision comparison.

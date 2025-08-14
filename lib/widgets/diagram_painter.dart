@@ -30,6 +30,9 @@ class DiagramPainter extends CustomPainter {
     canvas.save();
     canvas.transform(transform.toMatrix4().storage);
     _drawBackground(canvas, size);
+    if (configuration.showSnapGrid) {
+      _drawSnapGrid(canvas);
+    }
     _drawDiagramArea(canvas);
     _drawObjects(canvas);
     if (debug) {
@@ -48,6 +51,33 @@ class DiagramPainter extends CustomPainter {
 
   void _drawDiagramArea(Canvas canvas) {
     // Non disegnare un layer extra: lo sfondo è già l'extent logico
+  }
+
+  void _drawSnapGrid(Canvas canvas) {
+    final spacing = configuration.snapGridSpacing;
+    if (spacing <= 0) return;
+    final origin = configuration.snapGridOrigin;
+    final extent = logicalExtent;
+    final paint = Paint()
+      ..color = const Color(0x11000000)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.0 / transform.scale.clamp(1.0, double.infinity);
+
+    // Vertical lines
+    final startXUnits = ((extent.left - origin.dx) / spacing).floor();
+    final endXUnits = ((extent.right - origin.dx) / spacing).ceil();
+    for (int i = startXUnits; i <= endXUnits; i++) {
+      final x = origin.dx + i * spacing;
+      canvas.drawLine(Offset(x, extent.top), Offset(x, extent.bottom), paint);
+    }
+
+    // Horizontal lines
+    final startYUnits = ((extent.top - origin.dy) / spacing).floor();
+    final endYUnits = ((extent.bottom - origin.dy) / spacing).ceil();
+    for (int j = startYUnits; j <= endYUnits; j++) {
+      final y = origin.dy + j * spacing;
+      canvas.drawLine(Offset(extent.left, y), Offset(extent.right, y), paint);
+    }
   }
 
   void _drawObjects(Canvas canvas) {

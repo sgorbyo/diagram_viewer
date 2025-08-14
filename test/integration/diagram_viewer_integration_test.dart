@@ -96,6 +96,7 @@ class IntegrationTestController implements IDiagramController {
         Offset logicalPosition,
         Transform2D transformSnapshot,
         Duration timestamp,
+        Offset? snapped,
       ) {},
       dragTargetLeave: (
         String eventId,
@@ -109,6 +110,7 @@ class IntegrationTestController implements IDiagramController {
         Offset logicalPosition,
         Transform2D transformSnapshot,
         Duration timestamp,
+        Offset? snapped,
       ) {},
     );
   }
@@ -289,6 +291,7 @@ void main() {
             Offset logicalPosition,
             Transform2D transformSnapshot,
             Duration timestamp,
+            Offset? snapped,
           ) =>
               isTapEvent = false,
           dragTargetLeave: (
@@ -304,6 +307,7 @@ void main() {
             Offset logicalPosition,
             Transform2D transformSnapshot,
             Duration timestamp,
+            Offset? snapped,
           ) =>
               isTapEvent = false,
         );

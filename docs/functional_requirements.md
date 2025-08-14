@@ -155,16 +155,17 @@ The package implements a **Diagrammer-Controller architecture** where:
 - Responsibilities
   - Controller:
     - Enables/disables snapping and adjusts grid parameters at runtime.
-    - Decides policy for when snapping applies (e.g., on drag preview vs. only on drop).
+    - Decides policy for quando usare lo snapping fornito dal package (e.g., su drag preview vs. solo su drop) applicandolo al modello.
   - Diagrammer:
     - Exposes configuration and helper mapping utilities in logical space.
-    - Optionally renders a lightweight grid overlay when `showSnapGrid` is true.
+    - Computes and includes `snappedLogicalPosition` in DnD target events (`dragTargetOver`/`dragTargetDrop`) when `snapGridEnabled` is true; il controller può usare o ignorare questo valore.
+    - Optionally renders a lightweight grid overlay when `showSnapGrid` is true and may align the DnD ghost to the snapped position when enabled.
 
 - Behavior
   - Snapping operates in logical coordinates; the snapped position is computed by projecting the logical center to the nearest grid node defined by `snapGridOrigin` and `snapGridSpacing`.
-  - When enabled, object centers snap to grid both:
-    - in real time during drag of existing objects (controller applies snapping on drag‑continue updates), e
-    - at drop time for DnD insertions.
+  - When enabled, the package computes snapped positions and exposes them in events; the controller applies them to the model according to its policy both:
+    - in real time during drag of existing objects (using provided snapped position), e
+    - at drop time for DnD insertions (using provided snapped position).
   - The controller may optionally provide a preview (e.g., ghost/marker) aligned to the snapped center during drag.
   - Grid visualization (if enabled) respects current transform (zoom/pan) with pixel-density-aware thinning to avoid overdraw.
 

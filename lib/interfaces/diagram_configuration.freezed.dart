@@ -144,6 +144,30 @@ mixin _$DiagramConfiguration {
   /// Only used in debug builds; ignored in release.
   bool get enableBlocDebugObserver => throw _privateConstructorUsedError;
 
+  /// Enable snap-to-grid for object centers in logical space.
+  ///
+  /// When true, the controller may snap object centers to the nearest grid
+  /// node during drag of existing objects and at drop time for DnD.
+  /// Defaults to false (backward compatible).
+  bool get snapGridEnabled => throw _privateConstructorUsedError;
+
+  /// Grid spacing in logical units.
+  ///
+  /// Defines the distance between adjacent grid nodes. Defaults to 16.0.
+  double get snapGridSpacing => throw _privateConstructorUsedError;
+
+  /// Grid origin in logical coordinates.
+  ///
+  /// The grid nodes are aligned such that the origin is a grid node.
+  /// Defaults to Offset.zero.
+  Offset get snapGridOrigin => throw _privateConstructorUsedError;
+
+  /// Whether to show an optional visual grid overlay.
+  ///
+  /// Rendering is lightweight and performed in logical space. Defaults to
+  /// false to preserve previous visuals.
+  bool get showSnapGrid => throw _privateConstructorUsedError;
+
   /// Create a copy of DiagramConfiguration
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -176,7 +200,11 @@ abstract class $DiagramConfigurationCopyWith<$Res> {
       double inertialFriction,
       bool enableKeyboardShortcuts,
       bool enableAccessibility,
-      bool enableBlocDebugObserver});
+      bool enableBlocDebugObserver,
+      bool snapGridEnabled,
+      double snapGridSpacing,
+      Offset snapGridOrigin,
+      bool showSnapGrid});
 }
 
 /// @nodoc
@@ -214,6 +242,10 @@ class _$DiagramConfigurationCopyWithImpl<$Res,
     Object? enableKeyboardShortcuts = null,
     Object? enableAccessibility = null,
     Object? enableBlocDebugObserver = null,
+    Object? snapGridEnabled = null,
+    Object? snapGridSpacing = null,
+    Object? snapGridOrigin = null,
+    Object? showSnapGrid = null,
   }) {
     return _then(_value.copyWith(
       backgroundColor: null == backgroundColor
@@ -292,6 +324,22 @@ class _$DiagramConfigurationCopyWithImpl<$Res,
           ? _value.enableBlocDebugObserver
           : enableBlocDebugObserver // ignore: cast_nullable_to_non_nullable
               as bool,
+      snapGridEnabled: null == snapGridEnabled
+          ? _value.snapGridEnabled
+          : snapGridEnabled // ignore: cast_nullable_to_non_nullable
+              as bool,
+      snapGridSpacing: null == snapGridSpacing
+          ? _value.snapGridSpacing
+          : snapGridSpacing // ignore: cast_nullable_to_non_nullable
+              as double,
+      snapGridOrigin: null == snapGridOrigin
+          ? _value.snapGridOrigin
+          : snapGridOrigin // ignore: cast_nullable_to_non_nullable
+              as Offset,
+      showSnapGrid: null == showSnapGrid
+          ? _value.showSnapGrid
+          : showSnapGrid // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -323,7 +371,11 @@ abstract class _$$DiagramConfigurationImplCopyWith<$Res>
       double inertialFriction,
       bool enableKeyboardShortcuts,
       bool enableAccessibility,
-      bool enableBlocDebugObserver});
+      bool enableBlocDebugObserver,
+      bool snapGridEnabled,
+      double snapGridSpacing,
+      Offset snapGridOrigin,
+      bool showSnapGrid});
 }
 
 /// @nodoc
@@ -358,6 +410,10 @@ class __$$DiagramConfigurationImplCopyWithImpl<$Res>
     Object? enableKeyboardShortcuts = null,
     Object? enableAccessibility = null,
     Object? enableBlocDebugObserver = null,
+    Object? snapGridEnabled = null,
+    Object? snapGridSpacing = null,
+    Object? snapGridOrigin = null,
+    Object? showSnapGrid = null,
   }) {
     return _then(_$DiagramConfigurationImpl(
       backgroundColor: null == backgroundColor
@@ -436,6 +492,22 @@ class __$$DiagramConfigurationImplCopyWithImpl<$Res>
           ? _value.enableBlocDebugObserver
           : enableBlocDebugObserver // ignore: cast_nullable_to_non_nullable
               as bool,
+      snapGridEnabled: null == snapGridEnabled
+          ? _value.snapGridEnabled
+          : snapGridEnabled // ignore: cast_nullable_to_non_nullable
+              as bool,
+      snapGridSpacing: null == snapGridSpacing
+          ? _value.snapGridSpacing
+          : snapGridSpacing // ignore: cast_nullable_to_non_nullable
+              as double,
+      snapGridOrigin: null == snapGridOrigin
+          ? _value.snapGridOrigin
+          : snapGridOrigin // ignore: cast_nullable_to_non_nullable
+              as Offset,
+      showSnapGrid: null == showSnapGrid
+          ? _value.showSnapGrid
+          : showSnapGrid // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -462,7 +534,11 @@ class _$DiagramConfigurationImpl implements _DiagramConfiguration {
       this.inertialFriction = 0.95,
       this.enableKeyboardShortcuts = true,
       this.enableAccessibility = true,
-      this.enableBlocDebugObserver = false});
+      this.enableBlocDebugObserver = false,
+      this.snapGridEnabled = false,
+      this.snapGridSpacing = 16.0,
+      this.snapGridOrigin = Offset.zero,
+      this.showSnapGrid = false});
 
   /// Background color of the diagram area.
   ///
@@ -630,9 +706,41 @@ class _$DiagramConfigurationImpl implements _DiagramConfiguration {
   @JsonKey()
   final bool enableBlocDebugObserver;
 
+  /// Enable snap-to-grid for object centers in logical space.
+  ///
+  /// When true, the controller may snap object centers to the nearest grid
+  /// node during drag of existing objects and at drop time for DnD.
+  /// Defaults to false (backward compatible).
+  @override
+  @JsonKey()
+  final bool snapGridEnabled;
+
+  /// Grid spacing in logical units.
+  ///
+  /// Defines the distance between adjacent grid nodes. Defaults to 16.0.
+  @override
+  @JsonKey()
+  final double snapGridSpacing;
+
+  /// Grid origin in logical coordinates.
+  ///
+  /// The grid nodes are aligned such that the origin is a grid node.
+  /// Defaults to Offset.zero.
+  @override
+  @JsonKey()
+  final Offset snapGridOrigin;
+
+  /// Whether to show an optional visual grid overlay.
+  ///
+  /// Rendering is lightweight and performed in logical space. Defaults to
+  /// false to preserve previous visuals.
+  @override
+  @JsonKey()
+  final bool showSnapGrid;
+
   @override
   String toString() {
-    return 'DiagramConfiguration(backgroundColor: $backgroundColor, outsideColor: $outsideColor, edgeThreshold: $edgeThreshold, maxZoom: $maxZoom, minZoom: $minZoom, overscrollPixels: $overscrollPixels, bounceDuration: $bounceDuration, bounceCurve: $bounceCurve, autoScrollInterval: $autoScrollInterval, autoScrollAcceleration: $autoScrollAcceleration, enableTranslation: $enableTranslation, enableScale: $enableScale, enableRotation: $enableRotation, clipContent: $clipContent, enableInertialScrolling: $enableInertialScrolling, inertialFriction: $inertialFriction, enableKeyboardShortcuts: $enableKeyboardShortcuts, enableAccessibility: $enableAccessibility, enableBlocDebugObserver: $enableBlocDebugObserver)';
+    return 'DiagramConfiguration(backgroundColor: $backgroundColor, outsideColor: $outsideColor, edgeThreshold: $edgeThreshold, maxZoom: $maxZoom, minZoom: $minZoom, overscrollPixels: $overscrollPixels, bounceDuration: $bounceDuration, bounceCurve: $bounceCurve, autoScrollInterval: $autoScrollInterval, autoScrollAcceleration: $autoScrollAcceleration, enableTranslation: $enableTranslation, enableScale: $enableScale, enableRotation: $enableRotation, clipContent: $clipContent, enableInertialScrolling: $enableInertialScrolling, inertialFriction: $inertialFriction, enableKeyboardShortcuts: $enableKeyboardShortcuts, enableAccessibility: $enableAccessibility, enableBlocDebugObserver: $enableBlocDebugObserver, snapGridEnabled: $snapGridEnabled, snapGridSpacing: $snapGridSpacing, snapGridOrigin: $snapGridOrigin, showSnapGrid: $showSnapGrid)';
   }
 
   @override
@@ -678,7 +786,15 @@ class _$DiagramConfigurationImpl implements _DiagramConfiguration {
                 other.enableAccessibility == enableAccessibility) &&
             (identical(
                     other.enableBlocDebugObserver, enableBlocDebugObserver) ||
-                other.enableBlocDebugObserver == enableBlocDebugObserver));
+                other.enableBlocDebugObserver == enableBlocDebugObserver) &&
+            (identical(other.snapGridEnabled, snapGridEnabled) ||
+                other.snapGridEnabled == snapGridEnabled) &&
+            (identical(other.snapGridSpacing, snapGridSpacing) ||
+                other.snapGridSpacing == snapGridSpacing) &&
+            (identical(other.snapGridOrigin, snapGridOrigin) ||
+                other.snapGridOrigin == snapGridOrigin) &&
+            (identical(other.showSnapGrid, showSnapGrid) ||
+                other.showSnapGrid == showSnapGrid));
   }
 
   @override
@@ -702,7 +818,11 @@ class _$DiagramConfigurationImpl implements _DiagramConfiguration {
         inertialFriction,
         enableKeyboardShortcuts,
         enableAccessibility,
-        enableBlocDebugObserver
+        enableBlocDebugObserver,
+        snapGridEnabled,
+        snapGridSpacing,
+        snapGridOrigin,
+        showSnapGrid
       ]);
 
   /// Create a copy of DiagramConfiguration
@@ -736,7 +856,11 @@ abstract class _DiagramConfiguration implements DiagramConfiguration {
       final double inertialFriction,
       final bool enableKeyboardShortcuts,
       final bool enableAccessibility,
-      final bool enableBlocDebugObserver}) = _$DiagramConfigurationImpl;
+      final bool enableBlocDebugObserver,
+      final bool snapGridEnabled,
+      final double snapGridSpacing,
+      final Offset snapGridOrigin,
+      final bool showSnapGrid}) = _$DiagramConfigurationImpl;
 
   /// Background color of the diagram area.
   ///
@@ -884,6 +1008,34 @@ abstract class _DiagramConfiguration implements DiagramConfiguration {
   /// Only used in debug builds; ignored in release.
   @override
   bool get enableBlocDebugObserver;
+
+  /// Enable snap-to-grid for object centers in logical space.
+  ///
+  /// When true, the controller may snap object centers to the nearest grid
+  /// node during drag of existing objects and at drop time for DnD.
+  /// Defaults to false (backward compatible).
+  @override
+  bool get snapGridEnabled;
+
+  /// Grid spacing in logical units.
+  ///
+  /// Defines the distance between adjacent grid nodes. Defaults to 16.0.
+  @override
+  double get snapGridSpacing;
+
+  /// Grid origin in logical coordinates.
+  ///
+  /// The grid nodes are aligned such that the origin is a grid node.
+  /// Defaults to Offset.zero.
+  @override
+  Offset get snapGridOrigin;
+
+  /// Whether to show an optional visual grid overlay.
+  ///
+  /// Rendering is lightweight and performed in logical space. Defaults to
+  /// false to preserve previous visuals.
+  @override
+  bool get showSnapGrid;
 
   /// Create a copy of DiagramConfiguration
   /// with the given fields replaced by the non-null parameter values.

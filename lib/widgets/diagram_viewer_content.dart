@@ -53,6 +53,7 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
   bool _isDnDInside = false;
   CursorEffect _cursorEffect = CursorEffect.basic;
   Offset? _dragOverlayLocalCenter; // last pointer local center for overlay
+  bool _overlayControlledByController = false;
 
   double _ghostDiameterFor(Object? spec, double scale) {
     try {
@@ -116,8 +117,90 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
         // Translate PhysicalEvent to DiagramEventUnion
         final diagramEvent = _translator.translate(physicalEvent);
         if (diagramEvent != null) {
+          // Optionally enrich with snapped positions based on configuration
+          final cfg = widget.configuration;
+          final enriched = diagramEvent.maybeWhen(
+            dragTargetOver: (
+              String eventId,
+              Object dataPreview,
+              Offset screenPosition,
+              Offset logicalPosition,
+              Transform2D transformSnapshot,
+              Duration timestamp,
+              Offset? existingSnapped,
+            ) {
+              final snapped = cfg.snapGridEnabled
+                  ? Transform2DUtils.snapPointToGrid(
+                      point: logicalPosition,
+                      spacing: cfg.snapGridSpacing,
+                      origin: cfg.snapGridOrigin,
+                    )
+                  : existingSnapped;
+              return DiagramEventUnion.dragTargetOver(
+                eventId: eventId,
+                dataPreview: dataPreview,
+                screenPosition: screenPosition,
+                logicalPosition: logicalPosition,
+                transformSnapshot: transformSnapshot,
+                timestamp: timestamp,
+                snappedLogicalPosition: snapped,
+              );
+            },
+            dragContinue: (dragEvent) {
+              final snapped = cfg.snapGridEnabled
+                  ? Transform2DUtils.snapPointToGrid(
+                      point: dragEvent.logicalPosition,
+                      spacing: cfg.snapGridSpacing,
+                      origin: cfg.snapGridOrigin,
+                    )
+                  : null;
+              return DiagramEventUnion.dragContinue(
+                dragEvent.copyWith(snappedLogicalPosition: snapped),
+              );
+            },
+            dragEnd: (dragEndEvent) {
+              final snapped = cfg.snapGridEnabled
+                  ? Transform2DUtils.snapPointToGrid(
+                      point: dragEndEvent.logicalPosition,
+                      spacing: cfg.snapGridSpacing,
+                      origin: cfg.snapGridOrigin,
+                    )
+                  : null;
+              return DiagramEventUnion.dragEnd(
+                dragEndEvent.copyWith(snappedLogicalPosition: snapped),
+              );
+            },
+            dragTargetDrop: (
+              String eventId,
+              Object data,
+              Offset screenPosition,
+              Offset logicalPosition,
+              Transform2D transformSnapshot,
+              Duration timestamp,
+              Offset? existingSnapped,
+            ) {
+              final snapped = cfg.snapGridEnabled
+                  ? Transform2DUtils.snapPointToGrid(
+                      point: logicalPosition,
+                      spacing: cfg.snapGridSpacing,
+                      origin: cfg.snapGridOrigin,
+                    )
+                  : existingSnapped;
+              return DiagramEventUnion.dragTargetDrop(
+                eventId: eventId,
+                data: data,
+                screenPosition: screenPosition,
+                logicalPosition: logicalPosition,
+                transformSnapshot: transformSnapshot,
+                timestamp: timestamp,
+                snappedLogicalPosition: snapped,
+              );
+            },
+            orElse: () => diagramEvent,
+          );
+
           // Forward DiagramEventUnion to controller
-          widget.controller.eventsSink.add(diagramEvent);
+          widget.controller.eventsSink.add(enriched);
         }
       });
 
@@ -213,6 +296,7 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
               _dragOverlaySpec = ghostSpec;
               _dragOverlayLocalPosition = topLeft;
               _dragOverlayLocalCenter = local;
+              _overlayControlledByController = true;
             });
           },
           updateDragOverlay: (position) {
@@ -224,6 +308,7 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
             setState(() {
               _dragOverlayLocalPosition = topLeft;
               _dragOverlayLocalCenter = local;
+              _overlayControlledByController = true;
             });
           },
           hideDragOverlay: () {
@@ -231,6 +316,7 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
               _dragOverlayVisible = false;
               _dragOverlaySpec = null;
               _dragOverlayLocalCenter = null;
+              _overlayControlledByController = false;
             });
           },
           setCursor: (effect) {
@@ -534,19 +620,32 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
                             if (translatedOver != null) {
                               widget.controller.eventsSink.add(translatedOver);
                             }
-                            // Aggiorna overlay centrato sulla posizione corrente (fallback automatico)
+                            // Aggiorna overlay centrato sulla posizione corrente (snap opzionale)
                             final scale = transformState.transform.scale;
                             final ghostDiameter =
                                 _ghostDiameterFor(details.data, scale);
-                            final topLeft = localCenter -
+                            // If snap grid enabled, align overlay center to snapped position
+                            final cfg = widget.configuration;
+                            final snappedLocalCenter = cfg.snapGridEnabled
+                                ? transformState.transform.logicalToPhysical(
+                                    Transform2DUtils.snapPointToGrid(
+                                      point: transformState.transform
+                                          .physicalToLogical(localCenter),
+                                      spacing: cfg.snapGridSpacing,
+                                      origin: cfg.snapGridOrigin,
+                                    ),
+                                  )
+                                : localCenter;
+                            final topLeft = snappedLocalCenter -
                                 Offset(ghostDiameter / 2, ghostDiameter / 2);
-
-                            setState(() {
-                              _dragOverlayVisible = true;
-                              _dragOverlaySpec = details.data;
-                              _dragOverlayLocalPosition = topLeft;
-                              _dragOverlayLocalCenter = localCenter;
-                            });
+                            if (!_overlayControlledByController) {
+                              setState(() {
+                                _dragOverlayVisible = true;
+                                _dragOverlaySpec = details.data;
+                                _dragOverlayLocalPosition = topLeft;
+                                _dragOverlayLocalCenter = snappedLocalCenter;
+                              });
+                            }
                           },
                           onLeave: (data) {
                             widget.controller.eventsSink.add(

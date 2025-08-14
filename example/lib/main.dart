@@ -35,11 +35,21 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   late final ExampleDiagramController controller;
+  DiagramConfiguration _config = const DiagramConfiguration(
+    bounceDuration: Duration(milliseconds: 600),
+    bounceCurve: Curves.easeOutQuart,
+    enableBlocDebugObserver: true,
+    snapGridEnabled: false,
+    snapGridSpacing: 16,
+    snapGridOrigin: Offset.zero,
+    showSnapGrid: false,
+  );
 
   @override
   void initState() {
     super.initState();
     controller = ExampleDiagramController();
+    controller.updateConfiguration(_config);
   }
 
   @override
@@ -68,23 +78,40 @@ class _MyHomePageState extends State<MyHomePage> {
               color: Colors.black.withValues(alpha: 0.04),
               child: ListView(
                 padding: const EdgeInsets.all(12),
-                children: const [
-                  Text(
+                children: [
+                  const Text(
                     'Palette (drag into viewer):',
                     style: TextStyle(fontWeight: FontWeight.w600),
                   ),
-                  SizedBox(height: 8),
-                  _DraggableItem(payload: {
+                  const SizedBox(height: 8),
+                  const _DraggableItem(payload: {
                     'type': 'circle',
                     'radius': 40.0,
                     'color': 0xFF2196F3
                   }),
-                  SizedBox(height: 8),
-                  _DraggableItem(payload: {
+                  const SizedBox(height: 8),
+                  const _DraggableItem(payload: {
                     'type': 'circle',
                     'radius': 60.0,
                     'color': 0xFFE91E63
                   }),
+                  const SizedBox(height: 16),
+                  const Divider(),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'Snap Grid',
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 8),
+                  _SnapGridControls(
+                    initial: _config,
+                    onChanged: (cfg) {
+                      setState(() {
+                        _config = cfg;
+                      });
+                      controller.updateConfiguration(cfg);
+                    },
+                  ),
                 ],
               ),
             ),
@@ -94,17 +121,150 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: Colors.grey.withValues(alpha: 0.06),
                 child: DiagramViewer(
                   controller: controller,
-                  configuration: const DiagramConfiguration(
-                    bounceDuration: Duration(milliseconds: 600),
-                    bounceCurve: Curves.easeOutQuart,
-                    enableBlocDebugObserver: true,
-                  ),
+                  configuration: _config,
                 ),
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _SnapGridControls extends StatefulWidget {
+  final DiagramConfiguration initial;
+  final ValueChanged<DiagramConfiguration> onChanged;
+  const _SnapGridControls({required this.initial, required this.onChanged});
+
+  @override
+  State<_SnapGridControls> createState() => _SnapGridControlsState();
+}
+
+class _SnapGridControlsState extends State<_SnapGridControls> {
+  late bool enabled;
+  late bool showGrid;
+  late double spacing;
+  late double originX;
+  late double originY;
+
+  @override
+  void initState() {
+    super.initState();
+    enabled = widget.initial.snapGridEnabled;
+    showGrid = widget.initial.showSnapGrid;
+    spacing = widget.initial.snapGridSpacing;
+    originX = widget.initial.snapGridOrigin.dx;
+    originY = widget.initial.snapGridOrigin.dy;
+  }
+
+  void _emit() {
+    widget.onChanged(
+      DiagramConfiguration(
+        bounceDuration: widget.initial.bounceDuration,
+        bounceCurve: widget.initial.bounceCurve,
+        maxZoom: widget.initial.maxZoom,
+        minZoom: widget.initial.minZoom,
+        overscrollPixels: widget.initial.overscrollPixels,
+        autoScrollInterval: widget.initial.autoScrollInterval,
+        autoScrollAcceleration: widget.initial.autoScrollAcceleration,
+        enableTranslation: widget.initial.enableTranslation,
+        enableScale: widget.initial.enableScale,
+        enableRotation: widget.initial.enableRotation,
+        clipContent: widget.initial.clipContent,
+        enableInertialScrolling: widget.initial.enableInertialScrolling,
+        inertialFriction: widget.initial.inertialFriction,
+        enableKeyboardShortcuts: widget.initial.enableKeyboardShortcuts,
+        enableAccessibility: widget.initial.enableAccessibility,
+        enableBlocDebugObserver: widget.initial.enableBlocDebugObserver,
+        snapGridEnabled: enabled,
+        snapGridSpacing: spacing,
+        snapGridOrigin: Offset(originX, originY),
+        showSnapGrid: showGrid,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SwitchListTile(
+          contentPadding: EdgeInsets.zero,
+          title: const Text('Enable snap-to-grid'),
+          value: enabled,
+          onChanged: (v) {
+            setState(() => enabled = v);
+            _emit();
+          },
+        ),
+        SwitchListTile(
+          contentPadding: EdgeInsets.zero,
+          title: const Text('Show grid overlay'),
+          value: showGrid,
+          onChanged: (v) {
+            setState(() => showGrid = v);
+            _emit();
+          },
+        ),
+        const SizedBox(height: 8),
+        Text('Spacing: ${spacing.toStringAsFixed(1)}'),
+        Slider(
+          value: spacing,
+          min: 2,
+          max: 64,
+          divisions: 62,
+          label: spacing.toStringAsFixed(1),
+          onChanged: (v) {
+            setState(() => spacing = v);
+            _emit();
+          },
+        ),
+        const SizedBox(height: 8),
+        const Text('Origin (logical)'),
+        Row(
+          children: [
+            Expanded(
+              child: TextFormField(
+                decoration: const InputDecoration(
+                  labelText: 'X',
+                  isDense: true,
+                ),
+                initialValue: originX.toStringAsFixed(1),
+                keyboardType: const TextInputType.numberWithOptions(
+                    signed: true, decimal: true),
+                onChanged: (s) {
+                  final v = double.tryParse(s);
+                  if (v != null) {
+                    setState(() => originX = v);
+                    _emit();
+                  }
+                },
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: TextFormField(
+                decoration: const InputDecoration(
+                  labelText: 'Y',
+                  isDense: true,
+                ),
+                initialValue: originY.toStringAsFixed(1),
+                keyboardType: const TextInputType.numberWithOptions(
+                    signed: true, decimal: true),
+                onChanged: (s) {
+                  final v = double.tryParse(s);
+                  if (v != null) {
+                    setState(() => originY = v);
+                    _emit();
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

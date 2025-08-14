@@ -48,9 +48,11 @@ void main() {
         pinchBegin: (_) => fail('unexpected'),
         pinchContinue: (_) => fail('unexpected'),
         pinchEnd: (_) => fail('unexpected'),
-        dragTargetOver: (_, __, ___, ____, _____, ______) => fail('unexpected'),
+        dragTargetOver: (_, __, ___, ____, _____, ______, _______) =>
+            fail('unexpected'),
         dragTargetLeave: (_, __, ___) => fail('unexpected'),
-        dragTargetDrop: (_, __, ___, ____, _____, ______) => fail('unexpected'),
+        dragTargetDrop: (_, __, ___, ____, _____, ______, _______) =>
+            fail('unexpected'),
       );
     });
 
@@ -66,7 +68,8 @@ void main() {
       final result = translator.translate(physical);
       expect(result, isNotNull);
       result!.when(
-        dragTargetOver: (eventId, dataPreview, screen, logical, ts, time) {
+        dragTargetOver:
+            (eventId, dataPreview, screen, logical, ts, time, snapped) {
           expect(eventId, 'e2');
           expect(dataPreview, const {'a': 1});
           expect(screen, const Offset(10, 20));
@@ -88,7 +91,8 @@ void main() {
         dragTargetEnter: (_, __, ___, ____, _____, ______) =>
             fail('unexpected'),
         dragTargetLeave: (_, __, ___) => fail('unexpected'),
-        dragTargetDrop: (_, __, ___, ____, _____, ______) => fail('unexpected'),
+        dragTargetDrop: (_, __, ___, ____, _____, ______, _______) =>
+            fail('unexpected'),
       );
     });
 
@@ -119,8 +123,10 @@ void main() {
         pinchEnd: (_) => fail('unexpected'),
         dragTargetEnter: (_, __, ___, ____, _____, ______) =>
             fail('unexpected'),
-        dragTargetOver: (_, __, ___, ____, _____, ______) => fail('unexpected'),
-        dragTargetDrop: (_, __, ___, ____, _____, ______) => fail('unexpected'),
+        dragTargetOver: (_, __, ___, ____, _____, ______, _______) =>
+            fail('unexpected'),
+        dragTargetDrop: (_, __, ___, ____, _____, ______, _______) =>
+            fail('unexpected'),
       );
     });
 
@@ -136,7 +142,7 @@ void main() {
       final result = translator.translate(physical);
       expect(result, isNotNull);
       result!.when(
-        dragTargetDrop: (eventId, data, screen, logical, ts, time) {
+        dragTargetDrop: (eventId, data, screen, logical, ts, time, snapped) {
           expect(eventId, 'e4');
           expect(data, const {'ok': true});
           expect(screen, const Offset(7, 9));
@@ -157,7 +163,8 @@ void main() {
         pinchEnd: (_) => fail('unexpected'),
         dragTargetEnter: (_, __, ___, ____, _____, ______) =>
             fail('unexpected'),
-        dragTargetOver: (_, __, ___, ____, _____, ______) => fail('unexpected'),
+        dragTargetOver: (_, __, ___, ____, _____, ______, _______) =>
+            fail('unexpected'),
         dragTargetLeave: (_, __, ___) => fail('unexpected'),
       );
     });

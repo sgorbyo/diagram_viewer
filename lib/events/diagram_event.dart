@@ -132,6 +132,7 @@ class DiagramDragContinue with _$DiagramDragContinue {
     required Offset totalDelta,
     required Duration duration,
     required Offset velocity,
+    Offset? snappedLogicalPosition,
   }) = _DiagramDragContinue;
 }
 
@@ -149,6 +150,7 @@ class DiagramDragEnd with _$DiagramDragEnd {
     required Duration totalDuration,
     required Offset finalVelocity,
     required bool wasCancelled,
+    Offset? snappedLogicalPosition,
   }) = _DiagramDragEnd;
 }
 
@@ -238,6 +240,7 @@ class DiagramEventUnion with _$DiagramEventUnion {
     required Offset logicalPosition,
     required Transform2D transformSnapshot,
     required Duration timestamp,
+    Offset? snappedLogicalPosition,
   }) = _DragTargetOver;
 
   const factory DiagramEventUnion.dragTargetLeave({
@@ -253,5 +256,6 @@ class DiagramEventUnion with _$DiagramEventUnion {
     required Offset logicalPosition,
     required Transform2D transformSnapshot,
     required Duration timestamp,
+    Offset? snappedLogicalPosition,
   }) = _DragTargetDrop;
 }

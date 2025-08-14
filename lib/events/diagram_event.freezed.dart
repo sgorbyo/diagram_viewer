@@ -2024,6 +2024,7 @@ mixin _$DiagramDragContinue {
   Offset get totalDelta => throw _privateConstructorUsedError;
   Duration get duration => throw _privateConstructorUsedError;
   Offset get velocity => throw _privateConstructorUsedError;
+  Offset? get snappedLogicalPosition => throw _privateConstructorUsedError;
 
   /// Create a copy of DiagramDragContinue
   /// with the given fields replaced by the non-null parameter values.
@@ -2049,7 +2050,8 @@ abstract class $DiagramDragContinueCopyWith<$Res> {
       Offset delta,
       Offset totalDelta,
       Duration duration,
-      Offset velocity});
+      Offset velocity,
+      Offset? snappedLogicalPosition});
 
   $Transform2DCopyWith<$Res> get transformSnapshot;
 }
@@ -2080,6 +2082,7 @@ class _$DiagramDragContinueCopyWithImpl<$Res, $Val extends DiagramDragContinue>
     Object? totalDelta = null,
     Object? duration = null,
     Object? velocity = null,
+    Object? snappedLogicalPosition = freezed,
   }) {
     return _then(_value.copyWith(
       eventId: null == eventId
@@ -2126,6 +2129,10 @@ class _$DiagramDragContinueCopyWithImpl<$Res, $Val extends DiagramDragContinue>
           ? _value.velocity
           : velocity // ignore: cast_nullable_to_non_nullable
               as Offset,
+      snappedLogicalPosition: freezed == snappedLogicalPosition
+          ? _value.snappedLogicalPosition
+          : snappedLogicalPosition // ignore: cast_nullable_to_non_nullable
+              as Offset?,
     ) as $Val);
   }
 
@@ -2159,7 +2166,8 @@ abstract class _$$DiagramDragContinueImplCopyWith<$Res>
       Offset delta,
       Offset totalDelta,
       Duration duration,
-      Offset velocity});
+      Offset velocity,
+      Offset? snappedLogicalPosition});
 
   @override
   $Transform2DCopyWith<$Res> get transformSnapshot;
@@ -2189,6 +2197,7 @@ class __$$DiagramDragContinueImplCopyWithImpl<$Res>
     Object? totalDelta = null,
     Object? duration = null,
     Object? velocity = null,
+    Object? snappedLogicalPosition = freezed,
   }) {
     return _then(_$DiagramDragContinueImpl(
       eventId: null == eventId
@@ -2235,6 +2244,10 @@ class __$$DiagramDragContinueImplCopyWithImpl<$Res>
           ? _value.velocity
           : velocity // ignore: cast_nullable_to_non_nullable
               as Offset,
+      snappedLogicalPosition: freezed == snappedLogicalPosition
+          ? _value.snappedLogicalPosition
+          : snappedLogicalPosition // ignore: cast_nullable_to_non_nullable
+              as Offset?,
     ));
   }
 }
@@ -2253,7 +2266,8 @@ class _$DiagramDragContinueImpl implements _DiagramDragContinue {
       required this.delta,
       required this.totalDelta,
       required this.duration,
-      required this.velocity})
+      required this.velocity,
+      this.snappedLogicalPosition})
       : _hitList = hitList,
         _metadata = metadata;
 
@@ -2291,10 +2305,12 @@ class _$DiagramDragContinueImpl implements _DiagramDragContinue {
   final Duration duration;
   @override
   final Offset velocity;
+  @override
+  final Offset? snappedLogicalPosition;
 
   @override
   String toString() {
-    return 'DiagramDragContinue(eventId: $eventId, logicalPosition: $logicalPosition, screenPosition: $screenPosition, transformSnapshot: $transformSnapshot, hitList: $hitList, timestamp: $timestamp, metadata: $metadata, delta: $delta, totalDelta: $totalDelta, duration: $duration, velocity: $velocity)';
+    return 'DiagramDragContinue(eventId: $eventId, logicalPosition: $logicalPosition, screenPosition: $screenPosition, transformSnapshot: $transformSnapshot, hitList: $hitList, timestamp: $timestamp, metadata: $metadata, delta: $delta, totalDelta: $totalDelta, duration: $duration, velocity: $velocity, snappedLogicalPosition: $snappedLogicalPosition)';
   }
 
   @override
@@ -2319,7 +2335,9 @@ class _$DiagramDragContinueImpl implements _DiagramDragContinue {
             (identical(other.duration, duration) ||
                 other.duration == duration) &&
             (identical(other.velocity, velocity) ||
-                other.velocity == velocity));
+                other.velocity == velocity) &&
+            (identical(other.snappedLogicalPosition, snappedLogicalPosition) ||
+                other.snappedLogicalPosition == snappedLogicalPosition));
   }
 
   @override
@@ -2335,7 +2353,8 @@ class _$DiagramDragContinueImpl implements _DiagramDragContinue {
       delta,
       totalDelta,
       duration,
-      velocity);
+      velocity,
+      snappedLogicalPosition);
 
   /// Create a copy of DiagramDragContinue
   /// with the given fields replaced by the non-null parameter values.
@@ -2359,7 +2378,8 @@ abstract class _DiagramDragContinue implements DiagramDragContinue {
       required final Offset delta,
       required final Offset totalDelta,
       required final Duration duration,
-      required final Offset velocity}) = _$DiagramDragContinueImpl;
+      required final Offset velocity,
+      final Offset? snappedLogicalPosition}) = _$DiagramDragContinueImpl;
 
   @override
   String get eventId;
@@ -2383,6 +2403,8 @@ abstract class _DiagramDragContinue implements DiagramDragContinue {
   Duration get duration;
   @override
   Offset get velocity;
+  @override
+  Offset? get snappedLogicalPosition;
 
   /// Create a copy of DiagramDragContinue
   /// with the given fields replaced by the non-null parameter values.
@@ -2405,6 +2427,7 @@ mixin _$DiagramDragEnd {
   Duration get totalDuration => throw _privateConstructorUsedError;
   Offset get finalVelocity => throw _privateConstructorUsedError;
   bool get wasCancelled => throw _privateConstructorUsedError;
+  Offset? get snappedLogicalPosition => throw _privateConstructorUsedError;
 
   /// Create a copy of DiagramDragEnd
   /// with the given fields replaced by the non-null parameter values.
@@ -2430,7 +2453,8 @@ abstract class $DiagramDragEndCopyWith<$Res> {
       Offset totalDelta,
       Duration totalDuration,
       Offset finalVelocity,
-      bool wasCancelled});
+      bool wasCancelled,
+      Offset? snappedLogicalPosition});
 
   $Transform2DCopyWith<$Res> get transformSnapshot;
 }
@@ -2461,6 +2485,7 @@ class _$DiagramDragEndCopyWithImpl<$Res, $Val extends DiagramDragEnd>
     Object? totalDuration = null,
     Object? finalVelocity = null,
     Object? wasCancelled = null,
+    Object? snappedLogicalPosition = freezed,
   }) {
     return _then(_value.copyWith(
       eventId: null == eventId
@@ -2507,6 +2532,10 @@ class _$DiagramDragEndCopyWithImpl<$Res, $Val extends DiagramDragEnd>
           ? _value.wasCancelled
           : wasCancelled // ignore: cast_nullable_to_non_nullable
               as bool,
+      snappedLogicalPosition: freezed == snappedLogicalPosition
+          ? _value.snappedLogicalPosition
+          : snappedLogicalPosition // ignore: cast_nullable_to_non_nullable
+              as Offset?,
     ) as $Val);
   }
 
@@ -2540,7 +2569,8 @@ abstract class _$$DiagramDragEndImplCopyWith<$Res>
       Offset totalDelta,
       Duration totalDuration,
       Offset finalVelocity,
-      bool wasCancelled});
+      bool wasCancelled,
+      Offset? snappedLogicalPosition});
 
   @override
   $Transform2DCopyWith<$Res> get transformSnapshot;
@@ -2570,6 +2600,7 @@ class __$$DiagramDragEndImplCopyWithImpl<$Res>
     Object? totalDuration = null,
     Object? finalVelocity = null,
     Object? wasCancelled = null,
+    Object? snappedLogicalPosition = freezed,
   }) {
     return _then(_$DiagramDragEndImpl(
       eventId: null == eventId
@@ -2616,6 +2647,10 @@ class __$$DiagramDragEndImplCopyWithImpl<$Res>
           ? _value.wasCancelled
           : wasCancelled // ignore: cast_nullable_to_non_nullable
               as bool,
+      snappedLogicalPosition: freezed == snappedLogicalPosition
+          ? _value.snappedLogicalPosition
+          : snappedLogicalPosition // ignore: cast_nullable_to_non_nullable
+              as Offset?,
     ));
   }
 }
@@ -2634,7 +2669,8 @@ class _$DiagramDragEndImpl implements _DiagramDragEnd {
       required this.totalDelta,
       required this.totalDuration,
       required this.finalVelocity,
-      required this.wasCancelled})
+      required this.wasCancelled,
+      this.snappedLogicalPosition})
       : _hitList = hitList,
         _metadata = metadata;
 
@@ -2672,10 +2708,12 @@ class _$DiagramDragEndImpl implements _DiagramDragEnd {
   final Offset finalVelocity;
   @override
   final bool wasCancelled;
+  @override
+  final Offset? snappedLogicalPosition;
 
   @override
   String toString() {
-    return 'DiagramDragEnd(eventId: $eventId, logicalPosition: $logicalPosition, screenPosition: $screenPosition, transformSnapshot: $transformSnapshot, hitList: $hitList, timestamp: $timestamp, metadata: $metadata, totalDelta: $totalDelta, totalDuration: $totalDuration, finalVelocity: $finalVelocity, wasCancelled: $wasCancelled)';
+    return 'DiagramDragEnd(eventId: $eventId, logicalPosition: $logicalPosition, screenPosition: $screenPosition, transformSnapshot: $transformSnapshot, hitList: $hitList, timestamp: $timestamp, metadata: $metadata, totalDelta: $totalDelta, totalDuration: $totalDuration, finalVelocity: $finalVelocity, wasCancelled: $wasCancelled, snappedLogicalPosition: $snappedLogicalPosition)';
   }
 
   @override
@@ -2701,7 +2739,9 @@ class _$DiagramDragEndImpl implements _DiagramDragEnd {
             (identical(other.finalVelocity, finalVelocity) ||
                 other.finalVelocity == finalVelocity) &&
             (identical(other.wasCancelled, wasCancelled) ||
-                other.wasCancelled == wasCancelled));
+                other.wasCancelled == wasCancelled) &&
+            (identical(other.snappedLogicalPosition, snappedLogicalPosition) ||
+                other.snappedLogicalPosition == snappedLogicalPosition));
   }
 
   @override
@@ -2717,7 +2757,8 @@ class _$DiagramDragEndImpl implements _DiagramDragEnd {
       totalDelta,
       totalDuration,
       finalVelocity,
-      wasCancelled);
+      wasCancelled,
+      snappedLogicalPosition);
 
   /// Create a copy of DiagramDragEnd
   /// with the given fields replaced by the non-null parameter values.
@@ -2741,7 +2782,8 @@ abstract class _DiagramDragEnd implements DiagramDragEnd {
       required final Offset totalDelta,
       required final Duration totalDuration,
       required final Offset finalVelocity,
-      required final bool wasCancelled}) = _$DiagramDragEndImpl;
+      required final bool wasCancelled,
+      final Offset? snappedLogicalPosition}) = _$DiagramDragEndImpl;
 
   @override
   String get eventId;
@@ -2765,6 +2807,8 @@ abstract class _DiagramDragEnd implements DiagramDragEnd {
   Offset get finalVelocity;
   @override
   bool get wasCancelled;
+  @override
+  Offset? get snappedLogicalPosition;
 
   /// Create a copy of DiagramDragEnd
   /// with the given fields replaced by the non-null parameter values.
@@ -3905,7 +3949,8 @@ mixin _$DiagramEventUnion {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)
+            Duration timestamp,
+            Offset? snappedLogicalPosition)
         dragTargetOver,
     required TResult Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)
@@ -3916,7 +3961,8 @@ mixin _$DiagramEventUnion {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)
+            Duration timestamp,
+            Offset? snappedLogicalPosition)
         dragTargetDrop,
   }) =>
       throw _privateConstructorUsedError;
@@ -3946,7 +3992,8 @@ mixin _$DiagramEventUnion {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetOver,
     TResult? Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)?
@@ -3957,7 +4004,8 @@ mixin _$DiagramEventUnion {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetDrop,
   }) =>
       throw _privateConstructorUsedError;
@@ -3987,7 +4035,8 @@ mixin _$DiagramEventUnion {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetOver,
     TResult Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)?
@@ -3998,7 +4047,8 @@ mixin _$DiagramEventUnion {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetDrop,
     required TResult orElse(),
   }) =>
@@ -4183,7 +4233,8 @@ class _$TapImpl implements _Tap {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)
+            Duration timestamp,
+            Offset? snappedLogicalPosition)
         dragTargetOver,
     required TResult Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)
@@ -4194,7 +4245,8 @@ class _$TapImpl implements _Tap {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)
+            Duration timestamp,
+            Offset? snappedLogicalPosition)
         dragTargetDrop,
   }) {
     return tap(event);
@@ -4227,7 +4279,8 @@ class _$TapImpl implements _Tap {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetOver,
     TResult? Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)?
@@ -4238,7 +4291,8 @@ class _$TapImpl implements _Tap {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetDrop,
   }) {
     return tap?.call(event);
@@ -4271,7 +4325,8 @@ class _$TapImpl implements _Tap {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetOver,
     TResult Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)?
@@ -4282,7 +4337,8 @@ class _$TapImpl implements _Tap {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetDrop,
     required TResult orElse(),
   }) {
@@ -4476,7 +4532,8 @@ class _$DoubleTapImpl implements _DoubleTap {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)
+            Duration timestamp,
+            Offset? snappedLogicalPosition)
         dragTargetOver,
     required TResult Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)
@@ -4487,7 +4544,8 @@ class _$DoubleTapImpl implements _DoubleTap {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)
+            Duration timestamp,
+            Offset? snappedLogicalPosition)
         dragTargetDrop,
   }) {
     return doubleTap(event);
@@ -4520,7 +4578,8 @@ class _$DoubleTapImpl implements _DoubleTap {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetOver,
     TResult? Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)?
@@ -4531,7 +4590,8 @@ class _$DoubleTapImpl implements _DoubleTap {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetDrop,
   }) {
     return doubleTap?.call(event);
@@ -4564,7 +4624,8 @@ class _$DoubleTapImpl implements _DoubleTap {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetOver,
     TResult Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)?
@@ -4575,7 +4636,8 @@ class _$DoubleTapImpl implements _DoubleTap {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetDrop,
     required TResult orElse(),
   }) {
@@ -4769,7 +4831,8 @@ class _$LongPressImpl implements _LongPress {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)
+            Duration timestamp,
+            Offset? snappedLogicalPosition)
         dragTargetOver,
     required TResult Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)
@@ -4780,7 +4843,8 @@ class _$LongPressImpl implements _LongPress {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)
+            Duration timestamp,
+            Offset? snappedLogicalPosition)
         dragTargetDrop,
   }) {
     return longPress(event);
@@ -4813,7 +4877,8 @@ class _$LongPressImpl implements _LongPress {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetOver,
     TResult? Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)?
@@ -4824,7 +4889,8 @@ class _$LongPressImpl implements _LongPress {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetDrop,
   }) {
     return longPress?.call(event);
@@ -4857,7 +4923,8 @@ class _$LongPressImpl implements _LongPress {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetOver,
     TResult Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)?
@@ -4868,7 +4935,8 @@ class _$LongPressImpl implements _LongPress {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetDrop,
     required TResult orElse(),
   }) {
@@ -5062,7 +5130,8 @@ class _$ScrollImpl implements _Scroll {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)
+            Duration timestamp,
+            Offset? snappedLogicalPosition)
         dragTargetOver,
     required TResult Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)
@@ -5073,7 +5142,8 @@ class _$ScrollImpl implements _Scroll {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)
+            Duration timestamp,
+            Offset? snappedLogicalPosition)
         dragTargetDrop,
   }) {
     return scroll(event);
@@ -5106,7 +5176,8 @@ class _$ScrollImpl implements _Scroll {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetOver,
     TResult? Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)?
@@ -5117,7 +5188,8 @@ class _$ScrollImpl implements _Scroll {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetDrop,
   }) {
     return scroll?.call(event);
@@ -5150,7 +5222,8 @@ class _$ScrollImpl implements _Scroll {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetOver,
     TResult Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)?
@@ -5161,7 +5234,8 @@ class _$ScrollImpl implements _Scroll {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetDrop,
     required TResult orElse(),
   }) {
@@ -5355,7 +5429,8 @@ class _$DragBeginImpl implements _DragBegin {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)
+            Duration timestamp,
+            Offset? snappedLogicalPosition)
         dragTargetOver,
     required TResult Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)
@@ -5366,7 +5441,8 @@ class _$DragBeginImpl implements _DragBegin {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)
+            Duration timestamp,
+            Offset? snappedLogicalPosition)
         dragTargetDrop,
   }) {
     return dragBegin(event);
@@ -5399,7 +5475,8 @@ class _$DragBeginImpl implements _DragBegin {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetOver,
     TResult? Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)?
@@ -5410,7 +5487,8 @@ class _$DragBeginImpl implements _DragBegin {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetDrop,
   }) {
     return dragBegin?.call(event);
@@ -5443,7 +5521,8 @@ class _$DragBeginImpl implements _DragBegin {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetOver,
     TResult Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)?
@@ -5454,7 +5533,8 @@ class _$DragBeginImpl implements _DragBegin {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetDrop,
     required TResult orElse(),
   }) {
@@ -5648,7 +5728,8 @@ class _$DragContinueImpl implements _DragContinue {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)
+            Duration timestamp,
+            Offset? snappedLogicalPosition)
         dragTargetOver,
     required TResult Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)
@@ -5659,7 +5740,8 @@ class _$DragContinueImpl implements _DragContinue {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)
+            Duration timestamp,
+            Offset? snappedLogicalPosition)
         dragTargetDrop,
   }) {
     return dragContinue(event);
@@ -5692,7 +5774,8 @@ class _$DragContinueImpl implements _DragContinue {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetOver,
     TResult? Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)?
@@ -5703,7 +5786,8 @@ class _$DragContinueImpl implements _DragContinue {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetDrop,
   }) {
     return dragContinue?.call(event);
@@ -5736,7 +5820,8 @@ class _$DragContinueImpl implements _DragContinue {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetOver,
     TResult Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)?
@@ -5747,7 +5832,8 @@ class _$DragContinueImpl implements _DragContinue {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetDrop,
     required TResult orElse(),
   }) {
@@ -5942,7 +6028,8 @@ class _$DragEndImpl implements _DragEnd {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)
+            Duration timestamp,
+            Offset? snappedLogicalPosition)
         dragTargetOver,
     required TResult Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)
@@ -5953,7 +6040,8 @@ class _$DragEndImpl implements _DragEnd {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)
+            Duration timestamp,
+            Offset? snappedLogicalPosition)
         dragTargetDrop,
   }) {
     return dragEnd(event);
@@ -5986,7 +6074,8 @@ class _$DragEndImpl implements _DragEnd {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetOver,
     TResult? Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)?
@@ -5997,7 +6086,8 @@ class _$DragEndImpl implements _DragEnd {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetDrop,
   }) {
     return dragEnd?.call(event);
@@ -6030,7 +6120,8 @@ class _$DragEndImpl implements _DragEnd {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetOver,
     TResult Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)?
@@ -6041,7 +6132,8 @@ class _$DragEndImpl implements _DragEnd {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetDrop,
     required TResult orElse(),
   }) {
@@ -6235,7 +6327,8 @@ class _$PinchBeginImpl implements _PinchBegin {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)
+            Duration timestamp,
+            Offset? snappedLogicalPosition)
         dragTargetOver,
     required TResult Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)
@@ -6246,7 +6339,8 @@ class _$PinchBeginImpl implements _PinchBegin {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)
+            Duration timestamp,
+            Offset? snappedLogicalPosition)
         dragTargetDrop,
   }) {
     return pinchBegin(event);
@@ -6279,7 +6373,8 @@ class _$PinchBeginImpl implements _PinchBegin {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetOver,
     TResult? Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)?
@@ -6290,7 +6385,8 @@ class _$PinchBeginImpl implements _PinchBegin {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetDrop,
   }) {
     return pinchBegin?.call(event);
@@ -6323,7 +6419,8 @@ class _$PinchBeginImpl implements _PinchBegin {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetOver,
     TResult Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)?
@@ -6334,7 +6431,8 @@ class _$PinchBeginImpl implements _PinchBegin {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetDrop,
     required TResult orElse(),
   }) {
@@ -6528,7 +6626,8 @@ class _$PinchContinueImpl implements _PinchContinue {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)
+            Duration timestamp,
+            Offset? snappedLogicalPosition)
         dragTargetOver,
     required TResult Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)
@@ -6539,7 +6638,8 @@ class _$PinchContinueImpl implements _PinchContinue {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)
+            Duration timestamp,
+            Offset? snappedLogicalPosition)
         dragTargetDrop,
   }) {
     return pinchContinue(event);
@@ -6572,7 +6672,8 @@ class _$PinchContinueImpl implements _PinchContinue {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetOver,
     TResult? Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)?
@@ -6583,7 +6684,8 @@ class _$PinchContinueImpl implements _PinchContinue {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetDrop,
   }) {
     return pinchContinue?.call(event);
@@ -6616,7 +6718,8 @@ class _$PinchContinueImpl implements _PinchContinue {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetOver,
     TResult Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)?
@@ -6627,7 +6730,8 @@ class _$PinchContinueImpl implements _PinchContinue {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetDrop,
     required TResult orElse(),
   }) {
@@ -6822,7 +6926,8 @@ class _$PinchEndImpl implements _PinchEnd {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)
+            Duration timestamp,
+            Offset? snappedLogicalPosition)
         dragTargetOver,
     required TResult Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)
@@ -6833,7 +6938,8 @@ class _$PinchEndImpl implements _PinchEnd {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)
+            Duration timestamp,
+            Offset? snappedLogicalPosition)
         dragTargetDrop,
   }) {
     return pinchEnd(event);
@@ -6866,7 +6972,8 @@ class _$PinchEndImpl implements _PinchEnd {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetOver,
     TResult? Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)?
@@ -6877,7 +6984,8 @@ class _$PinchEndImpl implements _PinchEnd {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetDrop,
   }) {
     return pinchEnd?.call(event);
@@ -6910,7 +7018,8 @@ class _$PinchEndImpl implements _PinchEnd {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetOver,
     TResult Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)?
@@ -6921,7 +7030,8 @@ class _$PinchEndImpl implements _PinchEnd {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetDrop,
     required TResult orElse(),
   }) {
@@ -7177,7 +7287,8 @@ class _$DragTargetEnterImpl implements _DragTargetEnter {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)
+            Duration timestamp,
+            Offset? snappedLogicalPosition)
         dragTargetOver,
     required TResult Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)
@@ -7188,7 +7299,8 @@ class _$DragTargetEnterImpl implements _DragTargetEnter {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)
+            Duration timestamp,
+            Offset? snappedLogicalPosition)
         dragTargetDrop,
   }) {
     return dragTargetEnter(eventId, dataPreview, screenPosition,
@@ -7222,7 +7334,8 @@ class _$DragTargetEnterImpl implements _DragTargetEnter {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetOver,
     TResult? Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)?
@@ -7233,7 +7346,8 @@ class _$DragTargetEnterImpl implements _DragTargetEnter {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetDrop,
   }) {
     return dragTargetEnter?.call(eventId, dataPreview, screenPosition,
@@ -7267,7 +7381,8 @@ class _$DragTargetEnterImpl implements _DragTargetEnter {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetOver,
     TResult Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)?
@@ -7278,7 +7393,8 @@ class _$DragTargetEnterImpl implements _DragTargetEnter {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetDrop,
     required TResult orElse(),
   }) {
@@ -7392,7 +7508,8 @@ abstract class _$$DragTargetOverImplCopyWith<$Res> {
       Offset screenPosition,
       Offset logicalPosition,
       Transform2D transformSnapshot,
-      Duration timestamp});
+      Duration timestamp,
+      Offset? snappedLogicalPosition});
 
   $Transform2DCopyWith<$Res> get transformSnapshot;
 }
@@ -7416,6 +7533,7 @@ class __$$DragTargetOverImplCopyWithImpl<$Res>
     Object? logicalPosition = null,
     Object? transformSnapshot = null,
     Object? timestamp = null,
+    Object? snappedLogicalPosition = freezed,
   }) {
     return _then(_$DragTargetOverImpl(
       eventId: null == eventId
@@ -7439,6 +7557,10 @@ class __$$DragTargetOverImplCopyWithImpl<$Res>
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
               as Duration,
+      snappedLogicalPosition: freezed == snappedLogicalPosition
+          ? _value.snappedLogicalPosition
+          : snappedLogicalPosition // ignore: cast_nullable_to_non_nullable
+              as Offset?,
     ));
   }
 
@@ -7462,7 +7584,8 @@ class _$DragTargetOverImpl implements _DragTargetOver {
       required this.screenPosition,
       required this.logicalPosition,
       required this.transformSnapshot,
-      required this.timestamp});
+      required this.timestamp,
+      this.snappedLogicalPosition});
 
   @override
   final String eventId;
@@ -7476,10 +7599,12 @@ class _$DragTargetOverImpl implements _DragTargetOver {
   final Transform2D transformSnapshot;
   @override
   final Duration timestamp;
+  @override
+  final Offset? snappedLogicalPosition;
 
   @override
   String toString() {
-    return 'DiagramEventUnion.dragTargetOver(eventId: $eventId, dataPreview: $dataPreview, screenPosition: $screenPosition, logicalPosition: $logicalPosition, transformSnapshot: $transformSnapshot, timestamp: $timestamp)';
+    return 'DiagramEventUnion.dragTargetOver(eventId: $eventId, dataPreview: $dataPreview, screenPosition: $screenPosition, logicalPosition: $logicalPosition, transformSnapshot: $transformSnapshot, timestamp: $timestamp, snappedLogicalPosition: $snappedLogicalPosition)';
   }
 
   @override
@@ -7497,7 +7622,9 @@ class _$DragTargetOverImpl implements _DragTargetOver {
             (identical(other.transformSnapshot, transformSnapshot) ||
                 other.transformSnapshot == transformSnapshot) &&
             (identical(other.timestamp, timestamp) ||
-                other.timestamp == timestamp));
+                other.timestamp == timestamp) &&
+            (identical(other.snappedLogicalPosition, snappedLogicalPosition) ||
+                other.snappedLogicalPosition == snappedLogicalPosition));
   }
 
   @override
@@ -7508,7 +7635,8 @@ class _$DragTargetOverImpl implements _DragTargetOver {
       screenPosition,
       logicalPosition,
       transformSnapshot,
-      timestamp);
+      timestamp,
+      snappedLogicalPosition);
 
   /// Create a copy of DiagramEventUnion
   /// with the given fields replaced by the non-null parameter values.
@@ -7546,7 +7674,8 @@ class _$DragTargetOverImpl implements _DragTargetOver {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)
+            Duration timestamp,
+            Offset? snappedLogicalPosition)
         dragTargetOver,
     required TResult Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)
@@ -7557,11 +7686,12 @@ class _$DragTargetOverImpl implements _DragTargetOver {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)
+            Duration timestamp,
+            Offset? snappedLogicalPosition)
         dragTargetDrop,
   }) {
     return dragTargetOver(eventId, dataPreview, screenPosition, logicalPosition,
-        transformSnapshot, timestamp);
+        transformSnapshot, timestamp, snappedLogicalPosition);
   }
 
   @override
@@ -7591,7 +7721,8 @@ class _$DragTargetOverImpl implements _DragTargetOver {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetOver,
     TResult? Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)?
@@ -7602,11 +7733,12 @@ class _$DragTargetOverImpl implements _DragTargetOver {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetDrop,
   }) {
     return dragTargetOver?.call(eventId, dataPreview, screenPosition,
-        logicalPosition, transformSnapshot, timestamp);
+        logicalPosition, transformSnapshot, timestamp, snappedLogicalPosition);
   }
 
   @override
@@ -7636,7 +7768,8 @@ class _$DragTargetOverImpl implements _DragTargetOver {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetOver,
     TResult Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)?
@@ -7647,13 +7780,20 @@ class _$DragTargetOverImpl implements _DragTargetOver {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetDrop,
     required TResult orElse(),
   }) {
     if (dragTargetOver != null) {
-      return dragTargetOver(eventId, dataPreview, screenPosition,
-          logicalPosition, transformSnapshot, timestamp);
+      return dragTargetOver(
+          eventId,
+          dataPreview,
+          screenPosition,
+          logicalPosition,
+          transformSnapshot,
+          timestamp,
+          snappedLogicalPosition);
     }
     return orElse();
   }
@@ -7733,7 +7873,8 @@ abstract class _DragTargetOver implements DiagramEventUnion {
       required final Offset screenPosition,
       required final Offset logicalPosition,
       required final Transform2D transformSnapshot,
-      required final Duration timestamp}) = _$DragTargetOverImpl;
+      required final Duration timestamp,
+      final Offset? snappedLogicalPosition}) = _$DragTargetOverImpl;
 
   String get eventId;
   Object get dataPreview;
@@ -7741,6 +7882,7 @@ abstract class _DragTargetOver implements DiagramEventUnion {
   Offset get logicalPosition;
   Transform2D get transformSnapshot;
   Duration get timestamp;
+  Offset? get snappedLogicalPosition;
 
   /// Create a copy of DiagramEventUnion
   /// with the given fields replaced by the non-null parameter values.
@@ -7877,7 +8019,8 @@ class _$DragTargetLeaveImpl implements _DragTargetLeave {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)
+            Duration timestamp,
+            Offset? snappedLogicalPosition)
         dragTargetOver,
     required TResult Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)
@@ -7888,7 +8031,8 @@ class _$DragTargetLeaveImpl implements _DragTargetLeave {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)
+            Duration timestamp,
+            Offset? snappedLogicalPosition)
         dragTargetDrop,
   }) {
     return dragTargetLeave(eventId, transformSnapshot, timestamp);
@@ -7921,7 +8065,8 @@ class _$DragTargetLeaveImpl implements _DragTargetLeave {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetOver,
     TResult? Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)?
@@ -7932,7 +8077,8 @@ class _$DragTargetLeaveImpl implements _DragTargetLeave {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetDrop,
   }) {
     return dragTargetLeave?.call(eventId, transformSnapshot, timestamp);
@@ -7965,7 +8111,8 @@ class _$DragTargetLeaveImpl implements _DragTargetLeave {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetOver,
     TResult Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)?
@@ -7976,7 +8123,8 @@ class _$DragTargetLeaveImpl implements _DragTargetLeave {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetDrop,
     required TResult orElse(),
   }) {
@@ -8083,7 +8231,8 @@ abstract class _$$DragTargetDropImplCopyWith<$Res> {
       Offset screenPosition,
       Offset logicalPosition,
       Transform2D transformSnapshot,
-      Duration timestamp});
+      Duration timestamp,
+      Offset? snappedLogicalPosition});
 
   $Transform2DCopyWith<$Res> get transformSnapshot;
 }
@@ -8107,6 +8256,7 @@ class __$$DragTargetDropImplCopyWithImpl<$Res>
     Object? logicalPosition = null,
     Object? transformSnapshot = null,
     Object? timestamp = null,
+    Object? snappedLogicalPosition = freezed,
   }) {
     return _then(_$DragTargetDropImpl(
       eventId: null == eventId
@@ -8130,6 +8280,10 @@ class __$$DragTargetDropImplCopyWithImpl<$Res>
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
               as Duration,
+      snappedLogicalPosition: freezed == snappedLogicalPosition
+          ? _value.snappedLogicalPosition
+          : snappedLogicalPosition // ignore: cast_nullable_to_non_nullable
+              as Offset?,
     ));
   }
 
@@ -8153,7 +8307,8 @@ class _$DragTargetDropImpl implements _DragTargetDrop {
       required this.screenPosition,
       required this.logicalPosition,
       required this.transformSnapshot,
-      required this.timestamp});
+      required this.timestamp,
+      this.snappedLogicalPosition});
 
   @override
   final String eventId;
@@ -8167,10 +8322,12 @@ class _$DragTargetDropImpl implements _DragTargetDrop {
   final Transform2D transformSnapshot;
   @override
   final Duration timestamp;
+  @override
+  final Offset? snappedLogicalPosition;
 
   @override
   String toString() {
-    return 'DiagramEventUnion.dragTargetDrop(eventId: $eventId, data: $data, screenPosition: $screenPosition, logicalPosition: $logicalPosition, transformSnapshot: $transformSnapshot, timestamp: $timestamp)';
+    return 'DiagramEventUnion.dragTargetDrop(eventId: $eventId, data: $data, screenPosition: $screenPosition, logicalPosition: $logicalPosition, transformSnapshot: $transformSnapshot, timestamp: $timestamp, snappedLogicalPosition: $snappedLogicalPosition)';
   }
 
   @override
@@ -8187,7 +8344,9 @@ class _$DragTargetDropImpl implements _DragTargetDrop {
             (identical(other.transformSnapshot, transformSnapshot) ||
                 other.transformSnapshot == transformSnapshot) &&
             (identical(other.timestamp, timestamp) ||
-                other.timestamp == timestamp));
+                other.timestamp == timestamp) &&
+            (identical(other.snappedLogicalPosition, snappedLogicalPosition) ||
+                other.snappedLogicalPosition == snappedLogicalPosition));
   }
 
   @override
@@ -8198,7 +8357,8 @@ class _$DragTargetDropImpl implements _DragTargetDrop {
       screenPosition,
       logicalPosition,
       transformSnapshot,
-      timestamp);
+      timestamp,
+      snappedLogicalPosition);
 
   /// Create a copy of DiagramEventUnion
   /// with the given fields replaced by the non-null parameter values.
@@ -8236,7 +8396,8 @@ class _$DragTargetDropImpl implements _DragTargetDrop {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)
+            Duration timestamp,
+            Offset? snappedLogicalPosition)
         dragTargetOver,
     required TResult Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)
@@ -8247,11 +8408,12 @@ class _$DragTargetDropImpl implements _DragTargetDrop {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)
+            Duration timestamp,
+            Offset? snappedLogicalPosition)
         dragTargetDrop,
   }) {
     return dragTargetDrop(eventId, data, screenPosition, logicalPosition,
-        transformSnapshot, timestamp);
+        transformSnapshot, timestamp, snappedLogicalPosition);
   }
 
   @override
@@ -8281,7 +8443,8 @@ class _$DragTargetDropImpl implements _DragTargetDrop {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetOver,
     TResult? Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)?
@@ -8292,11 +8455,12 @@ class _$DragTargetDropImpl implements _DragTargetDrop {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetDrop,
   }) {
     return dragTargetDrop?.call(eventId, data, screenPosition, logicalPosition,
-        transformSnapshot, timestamp);
+        transformSnapshot, timestamp, snappedLogicalPosition);
   }
 
   @override
@@ -8326,7 +8490,8 @@ class _$DragTargetDropImpl implements _DragTargetDrop {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetOver,
     TResult Function(
             String eventId, Transform2D transformSnapshot, Duration timestamp)?
@@ -8337,13 +8502,14 @@ class _$DragTargetDropImpl implements _DragTargetDrop {
             Offset screenPosition,
             Offset logicalPosition,
             Transform2D transformSnapshot,
-            Duration timestamp)?
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
         dragTargetDrop,
     required TResult orElse(),
   }) {
     if (dragTargetDrop != null) {
       return dragTargetDrop(eventId, data, screenPosition, logicalPosition,
-          transformSnapshot, timestamp);
+          transformSnapshot, timestamp, snappedLogicalPosition);
     }
     return orElse();
   }
@@ -8423,7 +8589,8 @@ abstract class _DragTargetDrop implements DiagramEventUnion {
       required final Offset screenPosition,
       required final Offset logicalPosition,
       required final Transform2D transformSnapshot,
-      required final Duration timestamp}) = _$DragTargetDropImpl;
+      required final Duration timestamp,
+      final Offset? snappedLogicalPosition}) = _$DragTargetDropImpl;
 
   String get eventId;
   Object get data;
@@ -8431,6 +8598,7 @@ abstract class _DragTargetDrop implements DiagramEventUnion {
   Offset get logicalPosition;
   Transform2D get transformSnapshot;
   Duration get timestamp;
+  Offset? get snappedLogicalPosition;
 
   /// Create a copy of DiagramEventUnion
   /// with the given fields replaced by the non-null parameter values.

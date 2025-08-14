@@ -44,6 +44,11 @@ class DiagramEventTranslator {
       },
       dndTargetOver: (eventId, dataPreview, screenPosition, logicalPosition,
           transformSnapshot, timestamp) {
+        // Compute snapped position based on configuration if enabled.
+        // Note: we cannot access configuration here directly; it is provided to EventManagementBloc
+        // and injected via PhysicalEvent mapping path. For now, keep translator pure.
+        // The snapped position will be computed in DiagramViewerContent where configuration is available
+        // before sending to controller.
         return DiagramEventUnion.dragTargetOver(
           eventId: eventId,
           dataPreview: dataPreview,

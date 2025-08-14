@@ -105,9 +105,9 @@ void main() {
       pinchContinue: (_) {},
       pinchEnd: (_) {},
       dragTargetEnter: (_, __, ___, ____, _____, ______) {},
-      dragTargetOver: (_, __, ___, ____, _____, ______) {},
+      dragTargetOver: (_, __, ___, ____, _____, ______, _______) {},
       dragTargetLeave: (_, __, ___) {},
-      dragTargetDrop: (_, __, ___, ____, _____, ______) {},
+      dragTargetDrop: (_, __, ___, ____, _____, ______, _______) {},
     );
 
     final renderBox = tester.renderObject(viewerFinder) as RenderBox;

@@ -129,6 +129,7 @@ class TestDiagramController implements IDiagramController {
         Offset logicalPosition,
         Transform2D transformSnapshot,
         Duration timestamp,
+        Offset? snapped,
       ) {},
       dragTargetLeave: (
         String eventId,
@@ -142,6 +143,7 @@ class TestDiagramController implements IDiagramController {
         Offset logicalPosition,
         Transform2D transformSnapshot,
         Duration timestamp,
+        Offset? snapped,
       ) {},
       doubleTap: (event) {
         // No action needed for double tap

@@ -156,6 +156,30 @@ class DiagramConfiguration with _$DiagramConfiguration {
     /// Enable verbose BLoC transitions logging for debugging.
     /// Only used in debug builds; ignored in release.
     @Default(false) bool enableBlocDebugObserver,
+
+    /// Enable snap-to-grid for object centers in logical space.
+    ///
+    /// When true, the controller may snap object centers to the nearest grid
+    /// node during drag of existing objects and at drop time for DnD.
+    /// Defaults to false (backward compatible).
+    @Default(false) bool snapGridEnabled,
+
+    /// Grid spacing in logical units.
+    ///
+    /// Defines the distance between adjacent grid nodes. Defaults to 16.0.
+    @Default(16.0) double snapGridSpacing,
+
+    /// Grid origin in logical coordinates.
+    ///
+    /// The grid nodes are aligned such that the origin is a grid node.
+    /// Defaults to Offset.zero.
+    @Default(Offset.zero) Offset snapGridOrigin,
+
+    /// Whether to show an optional visual grid overlay.
+    ///
+    /// Rendering is lightweight and performed in logical space. Defaults to
+    /// false to preserve previous visuals.
+    @Default(false) bool showSnapGrid,
   }) = _DiagramConfiguration;
 
   /// Creates a default configuration suitable for most diagram types.
