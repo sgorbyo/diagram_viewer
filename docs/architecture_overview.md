@@ -45,6 +45,7 @@ class Transform2D {
 - **Event Phases**: Start, update, end for continuous interactions
 - **Edge Proximity Metrics**: Normalized distance and qualitative bands for edge-driven behaviors
 - **In‑App Drag & Drop (Target)**: DragTargetEnter/Over/Leave/Drop with screen/logical positions and data previews (global→local→logical mapping)
+ - Rendering model: the viewer is generic and does not know specific object types (nodes, connections, etc.). It invokes each object's `paint` to render itself.
  - Optional snapped hint: include `snappedLogicalPosition` when snap grid is enabled for drag (`dragContinue`, `dragEnd`) and DnD target events (`dragTargetOver`, `dragTargetDrop`).
 
 Notes:
@@ -74,6 +75,11 @@ Autoscroll execution contract (current):
 - Performance optimization (60 FPS target)
 - Execute `AutoScrollStep`/`StopAutoScroll` commands with a timer-based loop
 - Expose an in‑app drag target layer; convert screen to logical coordinates; execute DnD visual feedback commands
+ - Provide generic rendering facilities to objects (self-rendering):
+   - Local canvas rotation around a pivot to simplify drawing at arbitrary angles
+   - Text-on-path helpers (compute position and tangent-aligned orientation)
+   - Path end trimming against other objects' clip paths
+   - Generic path hit-testing utilities (point-to-path distance with tolerance)
 
 ### **Controller Responsibilities**
 - Business logic interpretation
@@ -83,6 +89,7 @@ Autoscroll execution contract (current):
 - Start in‑app DnD (source in external widgets), handle DnD target events, command visual feedback, and perform final model updates on drop
 - Diagram extent calculation
 - State machine coordination (BLoCs)
+ - Define concrete diagram objects, including connections, which self-render using the provided facilities
 
 Planned consolidation:
 - An internal `AutoScrollService` may consolidate the orchestration in the future to reduce duplication across controllers.

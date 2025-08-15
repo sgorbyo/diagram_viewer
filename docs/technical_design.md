@@ -79,8 +79,28 @@ The package uses a clean widget architecture:
 - Custom painter for diagram rendering
 - Applies transformations and draws objects
 - Located in `lib/widgets/diagram_painter.dart`
+ - Remains agnostic of object types; invokes each object's `paint` method. Complex visuals (e.g., connections) are implemented by the objects themselves using provided facilities.
 
 ### PhysicalEvent Enhancement
+### Rendering Facilities (Generic)
+
+- Purpose: Provide reusable helpers any object can use during `paint`, keeping the viewer generic and object types self-rendered.
+
+- Canvas utilities
+  - `withRotationAt(pivot, angle, draw)`: temporarily rotate the canvas around a logical pivot, run `draw`, then restore. Allows drawing horizontal primitives that appear diagonal.
+
+- Text on path
+  - Compute point at parametric position t∈[0,1] along a `Path` using `PathMetric`, retrieve tangent angle, and draw text with `TextPainter` rotated to align with the tangent.
+
+- Path trimming / clipping
+  - Given a path and optional start/end clip paths (from objects implementing `ClipPathProvider`), compute trimmed endpoints so the rendered connection visually starts/ends at object borders.
+
+- Hit-testing helpers
+  - Compute point-to-path distance with tolerance to support interaction on connection-like objects.
+
+- Optional object interfaces
+  - `ClipPathProvider { Path get logicalClipPath; }`: objects expose their logical clip shape for other objects to consume.
+  - (Future) `AnchorProvider`: objects expose logical anchors/ports.
 
 The `PhysicalEvent` system has been enhanced with new fields:
 

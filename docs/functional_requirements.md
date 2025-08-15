@@ -74,6 +74,7 @@ The package implements a **Diagrammer-Controller architecture** where:
   - Sort DiagramObjectEntity objects by z-order before painting
   - Provide a unified interface for objects to draw themselves
   - Handle the rendering pipeline with transformed canvas
+  - Remain agnostic of object types (nodes, connections, etc.); objects are self-rendering and can leverage generic facilities
 
 ### Dynamic Diagram Boundaries
 - The controller must:
@@ -176,6 +177,31 @@ The package implements a **Diagrammer-Controller architecture** where:
   - Optional grid overlay appears/disappears within one frame when toggled.
 
 ### Inertial Scrolling
+## Connections (Client-defined Entities)
+
+- Scope
+  - Connections are self-rendering objects defined by the controller, just like nodes. The viewer does not provide predefined visual styles for connections.
+
+- Responsibilities
+  - Controller:
+    - Defines the connection objects, their endpoints (anchors in logical space), and visual policies (shape, style, labels, z-order).
+    - Optionally exposes anchors/ports on nodes to be used by connections.
+  - Diagrammer (package):
+    - Invokes `paint` on connection objects and provides generic rendering facilities usable by any object:
+      - Local canvas rotation around a pivot to simplify drawing at arbitrary angles
+      - Text-on-path helpers (position at t∈[0,1] and tangent-aligned orientation)
+      - Path end trimming against other objects' clip paths
+      - Generic path hit-testing utilities (point-to-path distance with tolerance)
+
+- Optional Interfaces
+  - `ClipPathProvider`: objects can expose a `logicalClipPath` used by other objects (e.g., connections) for trimming/clipping purposes.
+  - `AnchorProvider` (optional, future): objects can expose logical anchor points/ports for consistent connections.
+
+- Acceptance Criteria
+  - Connections render correctly across arbitrary orientations using local rotation helpers without altering global viewer transform.
+  - Labels remain aligned with the connection's local tangent using text-on-path utilities.
+  - When trimming is requested, connection endpoints are visually clipped against the target/source objects' clip paths, avoiding overlap on node bodies.
+  - The system maintains 60 FPS for typical scenarios with multiple connections.
 
 - Objective: When a pan ends with sufficient velocity, scrolling must continue with inertia in the same direction, progressively slowing down due to friction until it stops or hits bounds.
 - Trigger:
