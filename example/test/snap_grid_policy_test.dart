@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter/material.dart';
 import 'package:diagram_viewer/events/events.dart';
 import 'package:diagram_viewer/interfaces/interfaces.dart';
 import 'package:diagram_viewer/tools/transform2d/transform2d_utils.dart';
@@ -96,7 +95,7 @@ void main() {
       controller.updateConfiguration(cfgOn);
 
       final before = controller.objects.length;
-      final dropLogical = const Offset(37, 25);
+      const dropLogical = Offset(37, 25);
       final hinted = Transform2DUtils.snapPointToGrid(
         point: dropLogical,
         spacing: cfgOn.snapGridSpacing,
@@ -128,15 +127,15 @@ void main() {
         snapGridEnabled: false,
       ));
 
-      controller.eventsSink.add(DiagramEventUnion.dragTargetDrop(
+      controller.eventsSink.add(const DiagramEventUnion.dragTargetDrop(
         eventId: 'drop-2',
-        data: const {
+        data: {
           'type': 'circle',
           'radius': 40.0,
         },
         screenPosition: dropLogical,
         logicalPosition: dropLogical,
-        transformSnapshot: const Transform2D(),
+        transformSnapshot: Transform2D(),
         timestamp: Duration.zero,
         snappedLogicalPosition: null,
       ));

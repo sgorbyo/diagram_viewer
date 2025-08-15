@@ -288,26 +288,52 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
           showDragOverlay: (ghostSpec, position) {
             final box = context.findRenderObject() as RenderBox?;
             final local = box != null ? box.globalToLocal(position) : position;
-            final scale = context.read<TransformBloc>().state.transform.scale;
+            final transform = context.read<TransformBloc>().state.transform;
+            final scale = transform.scale;
             final diameter = _ghostDiameterFor(ghostSpec, scale);
-            final topLeft = local - Offset(diameter / 2, diameter / 2);
+            // Apply snap-to-grid if enabled (align ghost center to snapped logical)
+            final cfg = widget.configuration;
+            final snappedLocalCenter = cfg.snapGridEnabled
+                ? transform.logicalToPhysical(
+                    Transform2DUtils.snapPointToGrid(
+                      point: transform.physicalToLogical(local),
+                      spacing: cfg.snapGridSpacing,
+                      origin: cfg.snapGridOrigin,
+                    ),
+                  )
+                : local;
+            final topLeft =
+                snappedLocalCenter - Offset(diameter / 2, diameter / 2);
             setState(() {
               _dragOverlayVisible = true;
               _dragOverlaySpec = ghostSpec;
               _dragOverlayLocalPosition = topLeft;
-              _dragOverlayLocalCenter = local;
+              _dragOverlayLocalCenter = snappedLocalCenter;
               _overlayControlledByController = true;
             });
           },
           updateDragOverlay: (position) {
             final box = context.findRenderObject() as RenderBox?;
             final local = box != null ? box.globalToLocal(position) : position;
-            final scale = context.read<TransformBloc>().state.transform.scale;
+            final transform = context.read<TransformBloc>().state.transform;
+            final scale = transform.scale;
             final diameter = _ghostDiameterFor(_dragOverlaySpec, scale);
-            final topLeft = local - Offset(diameter / 2, diameter / 2);
+            // Apply snap-to-grid if enabled (align ghost center to snapped logical)
+            final cfg = widget.configuration;
+            final snappedLocalCenter = cfg.snapGridEnabled
+                ? transform.logicalToPhysical(
+                    Transform2DUtils.snapPointToGrid(
+                      point: transform.physicalToLogical(local),
+                      spacing: cfg.snapGridSpacing,
+                      origin: cfg.snapGridOrigin,
+                    ),
+                  )
+                : local;
+            final topLeft =
+                snappedLocalCenter - Offset(diameter / 2, diameter / 2);
             setState(() {
               _dragOverlayLocalPosition = topLeft;
-              _dragOverlayLocalCenter = local;
+              _dragOverlayLocalCenter = snappedLocalCenter;
               _overlayControlledByController = true;
             });
           },
@@ -673,10 +699,21 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
                             final ghostDiameter =
                                 _ghostDiameterFor(_dragOverlaySpec, scale);
                             // Re-centra dinamicamente in base alla center locale registrata
-                            final center = _dragOverlayLocalCenter ??
+                            Offset center = _dragOverlayLocalCenter ??
                                 (_dragOverlayLocalPosition +
                                     Offset(
                                         ghostDiameter / 2, ghostDiameter / 2));
+                            // Enforce snap-to-grid at paint time as well, to guarantee alignment
+                            if (widget.configuration.snapGridEnabled) {
+                              final t = transformState.transform;
+                              final snappedLogical =
+                                  Transform2DUtils.snapPointToGrid(
+                                point: t.physicalToLogical(center),
+                                spacing: widget.configuration.snapGridSpacing,
+                                origin: widget.configuration.snapGridOrigin,
+                              );
+                              center = t.logicalToPhysical(snappedLogical);
+                            }
                             final dynamicTopLeft = center -
                                 Offset(ghostDiameter / 2, ghostDiameter / 2);
                             if (!_isGhostFullyVisible(

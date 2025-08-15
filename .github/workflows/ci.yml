@@ -32,8 +32,8 @@ jobs:
         working-directory: example
         run: flutter test -r expanded
 
-      - name: Enforce TDD: require tests when lib/ changes
-        if: github.event_name == 'pull_request'
+      - name: "Enforce TDD: require tests when lib/ changes"
+        if: ${{ github.event_name == 'pull_request' }}
         run: |
           set -euo pipefail
           BASE_SHA=$(jq -r '.pull_request.base.sha' "$GITHUB_EVENT_PATH")

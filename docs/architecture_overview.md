@@ -45,6 +45,7 @@ class Transform2D {
 - **Event Phases**: Start, update, end for continuous interactions
 - **Edge Proximity Metrics**: Normalized distance and qualitative bands for edge-driven behaviors
 - **In‑App Drag & Drop (Target)**: DragTargetEnter/Over/Leave/Drop with screen/logical positions and data previews (global→local→logical mapping)
+ - Optional snapped hint: include `snappedLogicalPosition` when snap grid is enabled for drag (`dragContinue`, `dragEnd`) and DnD target events (`dragTargetOver`, `dragTargetDrop`).
 
 Notes:
 - Border proximity is currently computed in `EventManagementBloc` using the viewport and `edgeThreshold`, and included in pointer drag events (update phase) via metadata.
