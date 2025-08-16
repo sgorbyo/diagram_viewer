@@ -126,6 +126,24 @@ mixin _$DiagramConfiguration {
   /// Defaults to 0.95.
   double get inertialFriction => throw _privateConstructorUsedError;
 
+  /// Minimum start velocity to trigger inertia (pixels/second).
+  ///
+  /// Below this velocity, the view stops immediately at drag end.
+  /// Defaults to 400.0 px/s.
+  double get inertialMinStartVelocity => throw _privateConstructorUsedError;
+
+  /// Minimum stop velocity for inertia (pixels/second).
+  ///
+  /// When the velocity decays below this value, inertia stops and
+  /// bounce-back is triggered if needed. Defaults to 20.0 px/s.
+  double get inertialMinStopVelocity => throw _privateConstructorUsedError;
+
+  /// Maximum duration for the inertial phase.
+  ///
+  /// The inertial scrolling will stop once this duration elapses even if
+  /// the velocity is still above the stop threshold. Defaults to 1200ms.
+  Duration get inertialMaxDuration => throw _privateConstructorUsedError;
+
   /// Whether to enable keyboard shortcuts.
   ///
   /// When true, keyboard shortcuts for pan, zoom, and other operations
@@ -198,6 +216,9 @@ abstract class $DiagramConfigurationCopyWith<$Res> {
       bool clipContent,
       bool enableInertialScrolling,
       double inertialFriction,
+      double inertialMinStartVelocity,
+      double inertialMinStopVelocity,
+      Duration inertialMaxDuration,
       bool enableKeyboardShortcuts,
       bool enableAccessibility,
       bool enableBlocDebugObserver,
@@ -239,6 +260,9 @@ class _$DiagramConfigurationCopyWithImpl<$Res,
     Object? clipContent = null,
     Object? enableInertialScrolling = null,
     Object? inertialFriction = null,
+    Object? inertialMinStartVelocity = null,
+    Object? inertialMinStopVelocity = null,
+    Object? inertialMaxDuration = null,
     Object? enableKeyboardShortcuts = null,
     Object? enableAccessibility = null,
     Object? enableBlocDebugObserver = null,
@@ -312,6 +336,18 @@ class _$DiagramConfigurationCopyWithImpl<$Res,
           ? _value.inertialFriction
           : inertialFriction // ignore: cast_nullable_to_non_nullable
               as double,
+      inertialMinStartVelocity: null == inertialMinStartVelocity
+          ? _value.inertialMinStartVelocity
+          : inertialMinStartVelocity // ignore: cast_nullable_to_non_nullable
+              as double,
+      inertialMinStopVelocity: null == inertialMinStopVelocity
+          ? _value.inertialMinStopVelocity
+          : inertialMinStopVelocity // ignore: cast_nullable_to_non_nullable
+              as double,
+      inertialMaxDuration: null == inertialMaxDuration
+          ? _value.inertialMaxDuration
+          : inertialMaxDuration // ignore: cast_nullable_to_non_nullable
+              as Duration,
       enableKeyboardShortcuts: null == enableKeyboardShortcuts
           ? _value.enableKeyboardShortcuts
           : enableKeyboardShortcuts // ignore: cast_nullable_to_non_nullable
@@ -369,6 +405,9 @@ abstract class _$$DiagramConfigurationImplCopyWith<$Res>
       bool clipContent,
       bool enableInertialScrolling,
       double inertialFriction,
+      double inertialMinStartVelocity,
+      double inertialMinStopVelocity,
+      Duration inertialMaxDuration,
       bool enableKeyboardShortcuts,
       bool enableAccessibility,
       bool enableBlocDebugObserver,
@@ -407,6 +446,9 @@ class __$$DiagramConfigurationImplCopyWithImpl<$Res>
     Object? clipContent = null,
     Object? enableInertialScrolling = null,
     Object? inertialFriction = null,
+    Object? inertialMinStartVelocity = null,
+    Object? inertialMinStopVelocity = null,
+    Object? inertialMaxDuration = null,
     Object? enableKeyboardShortcuts = null,
     Object? enableAccessibility = null,
     Object? enableBlocDebugObserver = null,
@@ -480,6 +522,18 @@ class __$$DiagramConfigurationImplCopyWithImpl<$Res>
           ? _value.inertialFriction
           : inertialFriction // ignore: cast_nullable_to_non_nullable
               as double,
+      inertialMinStartVelocity: null == inertialMinStartVelocity
+          ? _value.inertialMinStartVelocity
+          : inertialMinStartVelocity // ignore: cast_nullable_to_non_nullable
+              as double,
+      inertialMinStopVelocity: null == inertialMinStopVelocity
+          ? _value.inertialMinStopVelocity
+          : inertialMinStopVelocity // ignore: cast_nullable_to_non_nullable
+              as double,
+      inertialMaxDuration: null == inertialMaxDuration
+          ? _value.inertialMaxDuration
+          : inertialMaxDuration // ignore: cast_nullable_to_non_nullable
+              as Duration,
       enableKeyboardShortcuts: null == enableKeyboardShortcuts
           ? _value.enableKeyboardShortcuts
           : enableKeyboardShortcuts // ignore: cast_nullable_to_non_nullable
@@ -531,7 +585,10 @@ class _$DiagramConfigurationImpl implements _DiagramConfiguration {
       this.enableRotation = false,
       this.clipContent = true,
       this.enableInertialScrolling = true,
-      this.inertialFriction = 0.95,
+      this.inertialFriction = 0.90,
+      this.inertialMinStartVelocity = 400.0,
+      this.inertialMinStopVelocity = 60.0,
+      this.inertialMaxDuration = const Duration(milliseconds: 900),
       this.enableKeyboardShortcuts = true,
       this.enableAccessibility = true,
       this.enableBlocDebugObserver = false,
@@ -682,6 +739,30 @@ class _$DiagramConfigurationImpl implements _DiagramConfiguration {
   @JsonKey()
   final double inertialFriction;
 
+  /// Minimum start velocity to trigger inertia (pixels/second).
+  ///
+  /// Below this velocity, the view stops immediately at drag end.
+  /// Defaults to 400.0 px/s.
+  @override
+  @JsonKey()
+  final double inertialMinStartVelocity;
+
+  /// Minimum stop velocity for inertia (pixels/second).
+  ///
+  /// When the velocity decays below this value, inertia stops and
+  /// bounce-back is triggered if needed. Defaults to 20.0 px/s.
+  @override
+  @JsonKey()
+  final double inertialMinStopVelocity;
+
+  /// Maximum duration for the inertial phase.
+  ///
+  /// The inertial scrolling will stop once this duration elapses even if
+  /// the velocity is still above the stop threshold. Defaults to 1200ms.
+  @override
+  @JsonKey()
+  final Duration inertialMaxDuration;
+
   /// Whether to enable keyboard shortcuts.
   ///
   /// When true, keyboard shortcuts for pan, zoom, and other operations
@@ -740,7 +821,7 @@ class _$DiagramConfigurationImpl implements _DiagramConfiguration {
 
   @override
   String toString() {
-    return 'DiagramConfiguration(backgroundColor: $backgroundColor, outsideColor: $outsideColor, edgeThreshold: $edgeThreshold, maxZoom: $maxZoom, minZoom: $minZoom, overscrollPixels: $overscrollPixels, bounceDuration: $bounceDuration, bounceCurve: $bounceCurve, autoScrollInterval: $autoScrollInterval, autoScrollAcceleration: $autoScrollAcceleration, enableTranslation: $enableTranslation, enableScale: $enableScale, enableRotation: $enableRotation, clipContent: $clipContent, enableInertialScrolling: $enableInertialScrolling, inertialFriction: $inertialFriction, enableKeyboardShortcuts: $enableKeyboardShortcuts, enableAccessibility: $enableAccessibility, enableBlocDebugObserver: $enableBlocDebugObserver, snapGridEnabled: $snapGridEnabled, snapGridSpacing: $snapGridSpacing, snapGridOrigin: $snapGridOrigin, showSnapGrid: $showSnapGrid)';
+    return 'DiagramConfiguration(backgroundColor: $backgroundColor, outsideColor: $outsideColor, edgeThreshold: $edgeThreshold, maxZoom: $maxZoom, minZoom: $minZoom, overscrollPixels: $overscrollPixels, bounceDuration: $bounceDuration, bounceCurve: $bounceCurve, autoScrollInterval: $autoScrollInterval, autoScrollAcceleration: $autoScrollAcceleration, enableTranslation: $enableTranslation, enableScale: $enableScale, enableRotation: $enableRotation, clipContent: $clipContent, enableInertialScrolling: $enableInertialScrolling, inertialFriction: $inertialFriction, inertialMinStartVelocity: $inertialMinStartVelocity, inertialMinStopVelocity: $inertialMinStopVelocity, inertialMaxDuration: $inertialMaxDuration, enableKeyboardShortcuts: $enableKeyboardShortcuts, enableAccessibility: $enableAccessibility, enableBlocDebugObserver: $enableBlocDebugObserver, snapGridEnabled: $snapGridEnabled, snapGridSpacing: $snapGridSpacing, snapGridOrigin: $snapGridOrigin, showSnapGrid: $showSnapGrid)';
   }
 
   @override
@@ -774,11 +855,18 @@ class _$DiagramConfigurationImpl implements _DiagramConfiguration {
                 other.enableRotation == enableRotation) &&
             (identical(other.clipContent, clipContent) ||
                 other.clipContent == clipContent) &&
-            (identical(
-                    other.enableInertialScrolling, enableInertialScrolling) ||
+            (identical(other.enableInertialScrolling, enableInertialScrolling) ||
                 other.enableInertialScrolling == enableInertialScrolling) &&
             (identical(other.inertialFriction, inertialFriction) ||
                 other.inertialFriction == inertialFriction) &&
+            (identical(
+                    other.inertialMinStartVelocity, inertialMinStartVelocity) ||
+                other.inertialMinStartVelocity == inertialMinStartVelocity) &&
+            (identical(
+                    other.inertialMinStopVelocity, inertialMinStopVelocity) ||
+                other.inertialMinStopVelocity == inertialMinStopVelocity) &&
+            (identical(other.inertialMaxDuration, inertialMaxDuration) ||
+                other.inertialMaxDuration == inertialMaxDuration) &&
             (identical(
                     other.enableKeyboardShortcuts, enableKeyboardShortcuts) ||
                 other.enableKeyboardShortcuts == enableKeyboardShortcuts) &&
@@ -816,6 +904,9 @@ class _$DiagramConfigurationImpl implements _DiagramConfiguration {
         clipContent,
         enableInertialScrolling,
         inertialFriction,
+        inertialMinStartVelocity,
+        inertialMinStopVelocity,
+        inertialMaxDuration,
         enableKeyboardShortcuts,
         enableAccessibility,
         enableBlocDebugObserver,
@@ -854,6 +945,9 @@ abstract class _DiagramConfiguration implements DiagramConfiguration {
       final bool clipContent,
       final bool enableInertialScrolling,
       final double inertialFriction,
+      final double inertialMinStartVelocity,
+      final double inertialMinStopVelocity,
+      final Duration inertialMaxDuration,
       final bool enableKeyboardShortcuts,
       final bool enableAccessibility,
       final bool enableBlocDebugObserver,
@@ -987,6 +1081,27 @@ abstract class _DiagramConfiguration implements DiagramConfiguration {
   /// Defaults to 0.95.
   @override
   double get inertialFriction;
+
+  /// Minimum start velocity to trigger inertia (pixels/second).
+  ///
+  /// Below this velocity, the view stops immediately at drag end.
+  /// Defaults to 400.0 px/s.
+  @override
+  double get inertialMinStartVelocity;
+
+  /// Minimum stop velocity for inertia (pixels/second).
+  ///
+  /// When the velocity decays below this value, inertia stops and
+  /// bounce-back is triggered if needed. Defaults to 20.0 px/s.
+  @override
+  double get inertialMinStopVelocity;
+
+  /// Maximum duration for the inertial phase.
+  ///
+  /// The inertial scrolling will stop once this duration elapses even if
+  /// the velocity is still above the stop threshold. Defaults to 1200ms.
+  @override
+  Duration get inertialMaxDuration;
 
   /// Whether to enable keyboard shortcuts.
   ///

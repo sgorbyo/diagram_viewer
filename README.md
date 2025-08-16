@@ -6,12 +6,14 @@ A Flutter package for building interactive diagram viewers with support for smoo
 
 - 🎯 Interactive diagram viewing with smooth animations
 - 🔄 Pan and zoom gestures with intuitive controls
-- � Flexible content management through repositories
-- � Customizable diagram objects
-- 🏗️ Clean architecture with separation of concerns
-- ⚡ Efficient rendering with custom paint operations
-- 🔲 Smart boundary handling with inertial scrolling
-- 📱 Cross-platform support (iOS, Android, Web, Desktop)
+- 🧠 Controller‑driven architecture (Diagrammer ↔ Controller)
+- 🧩 Generic, self‑rendering diagram objects (no predefined types)
+- 🧲 Optional snap‑to‑grid with event hints and DnD ghost alignment
+- 🚀 Inertial scrolling with elastic bounce‑back and input gating
+- 🧰 Rendering facilities for objects (rotation helpers, text‑on‑path, clipping) [in progress]
+- 🧷 In‑app Drag & Drop target with accurate logical/screen mapping
+- 📐 Unified transform management with `Transform2D`
+- 📱 Cross‑platform support (iOS, Android, Web, Desktop)
 
 ## Installation
 
@@ -27,91 +29,138 @@ dependencies:
 
 ## Quick Start
 
-1. Create a repository that implements `DiagramContentRepository`:
+1. Implementa un Controller (`IDiagramController`) che gestisce eventi e comandi:
 
 ```dart
-class MyDiagramRepository implements DiagramContentRepository {
-  final _controller = StreamController<List<DiagramObjectEntity>>();
+class MyDiagramController implements IDiagramController {
+  final _commands = StreamController<DiagramCommand>.broadcast();
+  final _events = StreamController<DiagramEventUnion>();
+  final List<DiagramObjectEntity> _objects = [];
+
+  MyDiagramController() {
+    _events.stream.listen(_onEvent);
+  }
 
   @override
-  Stream<List<DiagramObjectEntity>> get stream => _controller.stream;
+  Stream<DiagramCommand> get commandStream => _commands.stream;
+
+  @override
+  Sink<DiagramEventUnion> get eventsSink => _events.sink;
+
+  @override
+  Rect get logicalExtent => _calculateExtent();
+
+  @override
+  DiagramConfiguration get configuration => const DiagramConfiguration();
+
+  @override
+  List<DiagramObjectEntity> get objects => _objects;
+
+  void _onEvent(DiagramEventUnion event) {
+    _commands.add(DiagramCommand.redraw(
+      renderables: _objects,
+      logicalExtent: logicalExtent,
+    ));
+  }
+
+  Rect _calculateExtent() {
+    return _objects.isEmpty
+        ? const Rect.fromLTWH(-256, -256, 512, 512)
+        : _objects
+            .map((o) => o.logicalBounds)
+            .reduce((a, b) => a.expandToInclude(b));
+  }
 
   @override
   void dispose() {
-    _controller.close();
-  }
-
-  // Implement other required methods...
-}
-```
-
-2. Create diagram objects by implementing `DiagramObjectEntity`:
-
-```dart
-class MyDiagramObject extends DiagramObjectEntity {
-  final Rect bounds;
-  final Color color;
-
-  MyDiagramObject({required this.bounds, required this.color});
-
-  @override
-  Rect enclosingRect() => bounds;
-
-  @override
-  void printOnCanvas(Canvas canvas) {
-    final paint = Paint()..color = color;
-    canvas.drawRect(bounds, paint);
+    _commands.close();
+    _events.close();
   }
 }
 ```
 
-3. Use `DiagramViewer` in your UI:
+2. Implementa oggetti self‑rendering con `DiagramObjectEntity`:
 
 ```dart
-DiagramViewer(
-  diagramContentRepository: MyDiagramRepository(),
-  shouldScale: true,
-  shouldTranslate: true,
-  shouldRotate: false,
-  clipChild: true,
-  backgroundColor: const Color.fromRGBO(250, 250, 250, 1.0),
-  outsideColor: const Color.fromRGBO(128, 128, 128, 1.0),
-)
+class MyRectObject extends DiagramObjectEntity {
+  final String _id;
+  final Rect _bounds;
+  final Paint _paint = Paint()..color = Colors.blue;
+
+  MyRectObject(this._id, this._bounds);
+
+  @override
+  String get id => _id;
+
+  @override
+  Rect get logicalBounds => _bounds;
+
+  @override
+  int get zOrder => 0;
+
+  @override
+  void paint(Canvas canvas) {
+    canvas.drawRect(_bounds, _paint);
+  }
+
+  @override
+  bool get isVisible => true;
+  @override
+  bool get isInteractive => true;
+}
+```
+
+3. Usa `DiagramViewer` passando il controller e la configurazione:
+
+```dart
+final controller = MyDiagramController();
+
+MaterialApp(
+  home: Scaffold(
+    body: DiagramViewer(
+      controller: controller,
+      configuration: const DiagramConfiguration(
+        backgroundColor: Colors.white,
+        edgeThreshold: 50.0,
+        snapGridEnabled: false,
+      ),
+      debug: false,
+    ),
+  ),
+);
 ```
 
 ## Architecture
 
-The package follows a clean architecture pattern with three main components:
+Diagrammer‑Controller Pattern:
 
-1. **DiagramViewer**: The main widget that handles user interaction and displays content.
-2. **DiagramContentRepository**: An abstract interface for managing diagram content.
-3. **DiagramObjectEntity**: Base class for drawable objects in the diagram.
+- **Diagrammer (DiagramViewer)**: motore di rendering e gestione input; mantiene la `Transform2D`, arricchisce eventi (hit‑test, posizioni logiche), esegue comandi (pan/zoom default, bounce, auto‑scroll, DnD overlay).
+- **Controller (client)**: possiede la business logic; interpreta `DiagramEventUnion` e invia `DiagramCommand`; fornisce `objects` e `logicalExtent`.
 
 ### DiagramViewer Features
 
-The `DiagramViewer` widget supports:
-
-- Pan and zoom gestures (can be enabled/disabled)
-- Background customization
-- Client-controlled drag operations
-- Boundary handling and inertial scrolling
-- Custom clipper support
+- Pan/zoom con focal point stabile; limiti dinamici + elastic window
+- Inertial scrolling con stop su input e bounce‑back configurabile
+- Snap‑to‑grid opzionale (hint negli eventi; ghost overlay allineato)
+- In‑app DnD target cross‑platform con mapping logico/schermo accurato
+- Rendering tramite `CustomPaint` in spazio logico
 
 ### Content Management
 
-The `DiagramContentRepository` is responsible for:
+Il Controller espone:
 
-- Providing a stream of diagram objects
-- Managing content lifecycle
-- Handling content loading and updates
+- `objects: List<DiagramObjectEntity>`: oggetti self‑rendering, ordinati per `zOrder`
+- `logicalExtent: Rect`: bounds logici per limiti e zoom minimo
+- `commandStream`/`eventsSink`: canale di comunicazione con il Diagrammer
 
 ### Custom Objects
 
-Implement `DiagramObjectEntity` to create custom drawable objects:
+Implementa `DiagramObjectEntity` per oggetti custom:
 
-- Override `enclosingRect()` to define object boundaries
-- Override `printOnCanvas()` for custom rendering
-- Use the Equatable mixin for proper object comparison
+- `logicalBounds`: bounds logici dell’oggetto
+- `paint(Canvas)`: disegno in spazio logico (il canvas è già trasformato)
+- `contains(Offset)`: hit‑testing logico
+- `id`, `zOrder`, `isVisible`, `isInteractive`
 
 ## Example
 
@@ -128,6 +177,12 @@ Check the `/example` folder for a complete implementation showing:
 
 - flutter test -r expanded
 - cd example && flutter test -r expanded
+
+Se modifichi classi Freezed/generatori, rigenera con:
+
+```
+flutter pub run build_runner build --delete-conflicting-outputs
+```
 
 ### TDD policy and pre-push hook
 

@@ -65,115 +65,147 @@ class TransformBloc extends Bloc<TransformEvent, TransformState> {
       preserveCentering: true,
       recenterSmallContent: false,
     );
-
-    // Compute relaxed (dynamic) clamped transform that represents the elastic window
-    // Note: we derive the relaxed window bounds directly below for small-content cases,
-    // so we don't need the full relaxed transform here.
-
-    // Determine per-axis correction policy
-    // Heuristic: if last interaction was zoom, recenter small-content axes.
-    // If last was pan, preserve non-violating axes within dynamic window.
-    const double epsilon = 0.5;
+    // Determine per-axis correction using dynamic window policy
+    const double epsilon = 0.5; // window epsilon
+    const double epsilonStrict = 0.01; // strict snap threshold
     final scaledWidth = current.diagramRect.width * start.scale;
     final scaledHeight = current.diagramRect.height * start.scale;
     final isSmallerH = scaledWidth <= current.viewportSize.width;
     final isSmallerV = scaledHeight <= current.viewportSize.height;
 
-    // Per-axis correction decisions
-    bool xNeedsCorrection;
-    if (isSmallerH) {
-      if (_lastInteractionKind == InteractionKind.zoom) {
-        xNeedsCorrection = true; // recenter after zoom
-      } else {
-        // pan case: correct only if outside dynamic window
-        final centerOffsetX = (current.viewportSize.width - scaledWidth) / 2;
-        final centerTargetX =
-            -current.diagramRect.left * start.scale + centerOffsetX;
-        final minCenterX = centerTargetX - Transform2DUtils.dynamicBorderWidth;
-        final maxCenterX = centerTargetX + Transform2DUtils.dynamicBorderWidth;
-        xNeedsCorrection = start.translation.dx <= minCenterX + epsilon ||
-            start.translation.dx >= maxCenterX - epsilon;
-      }
-    } else {
-      xNeedsCorrection =
-          (start.translation.dx - strict.translation.dx).abs() > epsilon;
-    }
+    // Compute dynamic window around center for small-content axes
+    final centerOffsetX = (current.viewportSize.width - scaledWidth) / 2;
+    final centerTargetX =
+        -current.diagramRect.left * start.scale + centerOffsetX;
+    final minCenterX = centerTargetX - Transform2DUtils.dynamicBorderWidth;
+    final maxCenterX = centerTargetX + Transform2DUtils.dynamicBorderWidth;
 
-    bool yNeedsCorrection;
-    if (isSmallerV) {
-      if (_lastInteractionKind == InteractionKind.zoom) {
-        yNeedsCorrection = true; // recenter after zoom
-      } else {
-        final centerOffsetY = (current.viewportSize.height - scaledHeight) / 2;
-        final centerTargetY =
-            -current.diagramRect.top * start.scale + centerOffsetY;
-        final minCenterY = centerTargetY - Transform2DUtils.dynamicBorderWidth;
-        final maxCenterY = centerTargetY + Transform2DUtils.dynamicBorderWidth;
-        yNeedsCorrection = start.translation.dy <= minCenterY + epsilon ||
-            start.translation.dy >= maxCenterY - epsilon;
-      }
-    } else {
-      yNeedsCorrection =
-          (start.translation.dy - strict.translation.dy).abs() > epsilon;
-    }
+    final centerOffsetY = (current.viewportSize.height - scaledHeight) / 2;
+    final centerTargetY =
+        -current.diagramRect.top * start.scale + centerOffsetY;
+    final minCenterY = centerTargetY - Transform2DUtils.dynamicBorderWidth;
+    final maxCenterY = centerTargetY + Transform2DUtils.dynamicBorderWidth;
 
-    // For zoom interactions: recenter all small-content axes
+    bool correctX;
+    bool correctY;
+
     if (_lastInteractionKind == InteractionKind.zoom) {
-      if (isSmallerH) xNeedsCorrection = true;
-      if (isSmallerV) yNeedsCorrection = true;
+      // After zoom: recenter small-content axes; large-content axes snap if deviated
+      correctX = isSmallerH ||
+          (!isSmallerH &&
+              (start.translation.dx - strict.translation.dx).abs() >
+                  epsilonStrict);
+      correctY = isSmallerV ||
+          (!isSmallerV &&
+              (start.translation.dy - strict.translation.dy).abs() >
+                  epsilonStrict);
+    } else if (_lastInteractionKind == InteractionKind.pan) {
+      // After pan: for small-content axes, recenter toward strict (exact center)
+      // For large-content axes, snap to strict if deviated beyond epsilonStrict
+      correctX =
+          (start.translation.dx - strict.translation.dx).abs() > epsilonStrict;
+      correctY =
+          (start.translation.dy - strict.translation.dy).abs() > epsilonStrict;
+    } else {
+      // Other interactions: preserve small-content axes within elastic window;
+      // correct only if outside the window boundaries. Large-content: snap if deviated.
+      correctX = !isSmallerH
+          ? (start.translation.dx - strict.translation.dx).abs() > epsilonStrict
+          : (start.translation.dx <= minCenterX + epsilon ||
+              start.translation.dx >= maxCenterX - epsilon);
+      correctY = !isSmallerV
+          ? (start.translation.dy - strict.translation.dy).abs() > epsilonStrict
+          : (start.translation.dy <= minCenterY + epsilon ||
+              start.translation.dy >= maxCenterY - epsilon);
     }
 
-    // If any axis needs correction, snap small-content axes to center when they are only slightly off
-    final bool anyCorrection = xNeedsCorrection || yNeedsCorrection;
-    if (anyCorrection) {
-      const double smallCenterSnapThreshold = 3.0;
-      if (isSmallerH) {
-        final centerOffsetX = (current.viewportSize.width - scaledWidth) / 2;
-        final centerTargetX =
-            -current.diagramRect.left * start.scale + centerOffsetX;
-        final devX = (start.translation.dx - centerTargetX).abs();
-        if (!xNeedsCorrection && devX <= smallCenterSnapThreshold) {
-          xNeedsCorrection = true;
-        }
-      }
-      if (isSmallerV) {
-        final centerOffsetY = (current.viewportSize.height - scaledHeight) / 2;
-        final centerTargetY =
-            -current.diagramRect.top * start.scale + centerOffsetY;
-        final devY = (start.translation.dy - centerTargetY).abs();
-        if (!yNeedsCorrection && devY <= smallCenterSnapThreshold) {
-          yNeedsCorrection = true;
-        }
-      }
-    }
-
-    // Only correct the axes that violated limits (or need recentering); keep the others as-is
-    final Offset targetTranslation = Offset(
-      xNeedsCorrection ? strict.translation.dx : start.translation.dx,
-      yNeedsCorrection ? strict.translation.dy : start.translation.dy,
-    );
-
-    // Preserve current scale and rotation for pan-only corrections
     final target = Transform2D(
       scale: start.scale,
-      translation: targetTranslation,
+      translation: Offset(
+        correctX ? strict.translation.dx : start.translation.dx,
+        correctY ? strict.translation.dy : start.translation.dy,
+      ),
       rotation: start.rotation,
     );
 
-    // If already at target, nothing to animate
-    if ((start.translation - target.translation).distance < 0.5 &&
-        (start.scale - target.scale).abs() < 0.001) {
-      return;
+    // Immediate snap if zero duration: behavior depends on last interaction
+    if (duration == Duration.zero) {
+      if (_lastInteractionKind == InteractionKind.zoom) {
+        // After zoom, snap to strict with recentering on small-content axes
+        final strictZoom = Transform2DUtils.capTransformWithZoomLimits(
+          transform: start,
+          diagramRect: current.diagramRect,
+          size: current.viewportSize,
+          dynamic: false,
+          minZoom: configuration.minZoom,
+          maxZoom: configuration.maxZoom,
+          preserveCentering: true,
+          recenterSmallContent: true,
+        );
+        // ignore: invalid_use_of_visible_for_testing_member
+        emit(TransformState.updated(
+          transform: strictZoom,
+          diagramRect: current.diagramRect,
+          viewportSize: current.viewportSize,
+        ));
+        return;
+      } else {
+        // Pan/Other: snap micro-overscrolls to nearest strict anchors per-axis
+        final (double minX, double maxX) =
+            Transform2DUtils.legalTranslationRangeX(
+          scale: start.scale,
+          diagramRect: current.diagramRect,
+          viewportSize: current.viewportSize,
+          dynamic: false,
+          preserveCentering: true,
+          recenterSmallContent: false,
+          currentY: start.translation.dy,
+        );
+        final (double minY, double maxY) =
+            Transform2DUtils.legalTranslationRangeY(
+          scale: start.scale,
+          diagramRect: current.diagramRect,
+          viewportSize: current.viewportSize,
+          dynamic: false,
+          preserveCentering: true,
+          recenterSmallContent: false,
+          currentX: start.translation.dx,
+        );
+        const double epsilonSnap =
+            0.51; // snap micro-overscrolls to closest anchor
+        double anchorX = start.translation.dx;
+        double anchorY = start.translation.dy;
+        final double distToMinX = (start.translation.dx - minX).abs();
+        final double distToMaxX = (start.translation.dx - maxX).abs();
+        if (distToMinX < epsilonSnap || distToMaxX < epsilonSnap) {
+          anchorX = (distToMinX <= distToMaxX) ? minX : maxX;
+        }
+        final double distToMinY = (start.translation.dy - minY).abs();
+        final double distToMaxY = (start.translation.dy - maxY).abs();
+        if (distToMinY < epsilonSnap || distToMaxY < epsilonSnap) {
+          anchorY = (distToMinY <= distToMaxY) ? minY : maxY;
+        }
+
+        final snappedImmediate = Transform2D(
+          scale: strict.scale,
+          translation: Offset(anchorX, anchorY),
+          rotation: strict.rotation,
+        );
+
+        // ignore: invalid_use_of_visible_for_testing_member
+        emit(TransformState.updated(
+          transform: snappedImmediate,
+          diagramRect: current.diagramRect,
+          viewportSize: current.viewportSize,
+        ));
+        return;
+      }
     }
 
-    // Immediate snap if zero duration
-    if (duration == Duration.zero) {
-      // ignore: invalid_use_of_visible_for_testing_member
-      emit(TransformState.updated(
-        transform: target,
-        diagramRect: current.diagramRect,
-        viewportSize: current.viewportSize,
-      ));
+    // If already at target, nothing to animate
+    if ((start.translation - target.translation).distance < 0.01 &&
+        (start.scale - target.scale).abs() < 0.0001 &&
+        (start.rotation - target.rotation).abs() < 0.0001) {
       return;
     }
 

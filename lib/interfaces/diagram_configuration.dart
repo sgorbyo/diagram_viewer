@@ -137,7 +137,25 @@ class DiagramConfiguration with _$DiagramConfiguration {
     /// This factor determines how quickly inertial scrolling slows down.
     /// Higher values provide more friction and shorter inertial scrolling.
     /// Defaults to 0.95.
-    @Default(0.95) double inertialFriction,
+    @Default(0.90) double inertialFriction,
+
+    /// Minimum start velocity to trigger inertia (pixels/second).
+    ///
+    /// Below this velocity, the view stops immediately at drag end.
+    /// Defaults to 400.0 px/s.
+    @Default(400.0) double inertialMinStartVelocity,
+
+    /// Minimum stop velocity for inertia (pixels/second).
+    ///
+    /// When the velocity decays below this value, inertia stops and
+    /// bounce-back is triggered if needed. Defaults to 20.0 px/s.
+    @Default(60.0) double inertialMinStopVelocity,
+
+    /// Maximum duration for the inertial phase.
+    ///
+    /// The inertial scrolling will stop once this duration elapses even if
+    /// the velocity is still above the stop threshold. Defaults to 1200ms.
+    @Default(Duration(milliseconds: 900)) Duration inertialMaxDuration,
 
     /// Whether to enable keyboard shortcuts.
     ///

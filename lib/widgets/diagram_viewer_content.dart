@@ -7,6 +7,7 @@ import 'package:diagram_viewer/interfaces/interfaces.dart';
 import 'package:diagram_viewer/events/events.dart';
 import 'package:diagram_viewer/tools/transform2d/transform2d_utils.dart';
 import 'package:diagram_viewer/internal/blocs/blocs.dart';
+import 'package:diagram_viewer/internal/services/inertial_scroll_service.dart';
 import 'package:diagram_viewer/internal/blocs/event_management/event_management_state.dart';
 import 'package:diagram_viewer/internal/blocs/event_management/event_management_event.dart';
 import 'package:diagram_viewer/internal/blocs/transform/transform_state.dart';
@@ -44,6 +45,7 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
   StreamSubscription<PhysicalEvent>? _physicalEventSubscription;
   StreamSubscription<DiagramCommand>? _commandSubscription;
   final AutoScrollService _autoScroll = AutoScrollService();
+  final InertialScrollService _inertia = InertialScrollService();
   bool _dragOverlayVisible = false;
   Offset _dragOverlayLocalPosition = Offset.zero; // local to viewer
   Object? _dragOverlaySpec;
@@ -54,6 +56,12 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
   CursorEffect _cursorEffect = CursorEffect.basic;
   Offset? _dragOverlayLocalCenter; // last pointer local center for overlay
   bool _overlayControlledByController = false;
+  bool _isBouncingBack = false;
+  Timer? _bounceFlagTimer;
+  // Recent pointer movement samples for velocity estimation (physical space)
+  DateTime? _lastPointerMoveTime;
+  final List<Offset> _recentPointerDeltas = <Offset>[]; // px
+  final List<int> _recentPointerDeltaMs = <int>[]; // ms per sample
 
   double _ghostDiameterFor(Object? spec, double scale) {
     try {
@@ -755,6 +763,7 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
   /// Handle pointer down events
   void _handlePointerDown(
       BuildContext context, PointerDownEvent event, double topPadding) {
+    if (_isBouncingBack) return;
     // Any new input should stop auto-scroll
     _autoScroll.stop();
     final eventBloc = context.read<EventManagementBloc>();
@@ -791,6 +800,7 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
   /// Handle pointer move events
   void _handlePointerMove(
       BuildContext context, PointerMoveEvent event, double topPadding) {
+    if (_isBouncingBack) return;
     final eventBloc = context.read<EventManagementBloc>();
     final transformBloc = context.read<TransformBloc>();
     final currentTransform = transformBloc.state.transform;
@@ -816,20 +826,37 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
     ));
 
     // Apply pan only when dragging empty area and we did not start on an object
-    if (hitResults.isEmpty && !_draggingOnObject) {
+    if (hitResults.isEmpty && !_draggingOnObject && event.buttons != 0) {
       transformBloc.add(TransformEvent.pan(
         delta: event.delta,
         currentTransform: currentTransform,
       ));
     }
 
+    // Velocity sampling for inertia (physical)
+    final now = DateTime.timestamp();
+    if (_lastPointerMoveTime != null) {
+      final dtMs = now.difference(_lastPointerMoveTime!).inMilliseconds;
+      _recentPointerDeltaMs.add(dtMs);
+      _recentPointerDeltas.add(event.delta);
+      // Keep only last ~6 samples (~100ms at ~16ms/frame)
+      while (_recentPointerDeltas.length > 6) {
+        _recentPointerDeltas.removeAt(0);
+        _recentPointerDeltaMs.removeAt(0);
+      }
+    }
+    _lastPointerMoveTime = now;
+
     // Do not synthesize DiagramDragContinue here; rely on translator from PhysicalEvents
   }
 
   /// Handle pointer up events
   void _handlePointerUp(BuildContext context, PointerUpEvent event) {
+    if (_isBouncingBack) return;
     // Stop auto-scroll on pointer up
     _autoScroll.stop();
+    // Cancel any previous inertia
+    _inertia.stop();
     final eventBloc = context.read<EventManagementBloc>();
 
     // Send to EventManagementBloc with original rawEvent; bloc will convert for viewport
@@ -838,11 +865,141 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
       pressedKeys: _pressedKeys,
     ));
 
-    // Unfreeze and bounce-back at drag end using configured duration
+    // Compute inertia if enabled and recent pointer velocity is high enough
     final transformBloc = context.read<TransformBloc>();
-    transformBloc.setFrozenDuringDrag(false);
-    transformBloc.clearBounceBackFlag();
-    transformBloc.bounceBack(widget.configuration.bounceDuration);
+    final cfg = widget.configuration;
+    if (cfg.enableInertialScrolling) {
+      // If a bounce just started, do not start inertia
+      if (_isBouncingBack) {
+        _recentPointerDeltas.clear();
+        _recentPointerDeltaMs.clear();
+        return;
+      }
+      // Approximate velocity from recent pointer deltas
+      Offset initialV = Offset.zero;
+      int totalMs = 0;
+      for (int i = 0; i < _recentPointerDeltas.length; i++) {
+        initialV += _recentPointerDeltas[i];
+        totalMs += _recentPointerDeltaMs[i];
+      }
+      if (totalMs > 0) {
+        final seconds = totalMs / 1000.0;
+        initialV = Offset(initialV.dx / seconds, initialV.dy / seconds);
+      }
+      if (initialV.distance > cfg.inertialMinStartVelocity) {
+        // Start inertia in physical space
+        _inertia.start(
+          initialVelocity: initialV,
+          interval: cfg.autoScrollInterval,
+          frictionFactor: cfg.inertialFriction,
+          minStopVelocity: cfg.inertialMinStopVelocity,
+          maxDuration: cfg.inertialMaxDuration,
+          onTick: (delta) {
+            if (!mounted) return;
+            // If a bounce-back is in progress, stop inertia immediately
+            if (_isBouncingBack) {
+              _inertia.stop();
+              return;
+            }
+            final stateBefore = transformBloc.state;
+            final proposed = stateBefore.transform.applyPan(delta);
+            final dynamicCapped = Transform2DUtils.capTransformWithZoomLimits(
+              transform: proposed,
+              diagramRect: stateBefore.diagramRect,
+              size: stateBefore.viewportSize,
+              dynamic: true,
+              minZoom: widget.configuration.minZoom,
+              maxZoom: widget.configuration.maxZoom,
+              preserveCentering: true,
+              recenterSmallContent: false,
+            );
+            final strict = Transform2DUtils.capTransformWithZoomLimits(
+              transform: stateBefore.transform,
+              diagramRect: stateBefore.diagramRect,
+              size: stateBefore.viewportSize,
+              dynamic: false,
+              minZoom: widget.configuration.minZoom,
+              maxZoom: widget.configuration.maxZoom,
+              preserveCentering: true,
+              recenterSmallContent: false,
+            );
+            // Apply pan
+            transformBloc.add(TransformEvent.pan(
+              delta: delta,
+              currentTransform: stateBefore.transform,
+            ));
+            // If capping altered the proposed translation, we hit elastic boundary → bounce now
+            final deviates =
+                (proposed.translation - dynamicCapped.translation).distance >
+                    0.1;
+            // Or if proposed is beyond the dynamic window and delta keeps pushing outward, bounce now
+            bool pinnedOutward = false;
+            const double eps = 0.5;
+            final border = Transform2DUtils.dynamicBorderWidth;
+            final leftLimit = strict.translation.dx - border + eps;
+            final rightLimit = strict.translation.dx + border - eps;
+            final topLimit = strict.translation.dy - border + eps;
+            final bottomLimit = strict.translation.dy + border - eps;
+            final px = proposed.translation.dx;
+            final py = proposed.translation.dy;
+            if ((px <= leftLimit && delta.dx < 0) ||
+                (px >= rightLimit && delta.dx > 0) ||
+                (py <= topLimit && delta.dy < 0) ||
+                (py >= bottomLimit && delta.dy > 0)) {
+              pinnedOutward = true;
+            }
+            if (deviates || pinnedOutward) {
+              _inertia.stop();
+              transformBloc.setFrozenDuringDrag(false);
+              transformBloc.clearBounceBackFlag();
+              // Immediate bounce towards strict bounds
+              _isBouncingBack = true;
+              _bounceFlagTimer?.cancel();
+              _bounceFlagTimer = Timer(widget.configuration.bounceDuration, () {
+                if (mounted) _isBouncingBack = false;
+                _bounceFlagTimer = null;
+              });
+              transformBloc.bounceBack(widget.configuration.bounceDuration);
+            }
+          },
+          onStop: () {
+            if (!mounted) return;
+            // After inertia ends, run bounce-back to return within limits
+            transformBloc.setFrozenDuringDrag(false);
+            transformBloc.clearBounceBackFlag();
+            _isBouncingBack = true;
+            _bounceFlagTimer?.cancel();
+            _bounceFlagTimer = Timer(widget.configuration.bounceDuration, () {
+              if (mounted) _isBouncingBack = false;
+              _bounceFlagTimer = null;
+            });
+            transformBloc.bounceBack(widget.configuration.bounceDuration);
+          },
+        );
+      } else {
+        // No inertia: normal bounce-back
+        transformBloc.setFrozenDuringDrag(false);
+        transformBloc.clearBounceBackFlag();
+        _isBouncingBack = true;
+        _bounceFlagTimer?.cancel();
+        _bounceFlagTimer = Timer(widget.configuration.bounceDuration, () {
+          if (mounted) _isBouncingBack = false;
+          _bounceFlagTimer = null;
+        });
+        transformBloc.bounceBack(widget.configuration.bounceDuration);
+      }
+    } else {
+      // Inertia disabled: normal bounce-back
+      transformBloc.setFrozenDuringDrag(false);
+      transformBloc.clearBounceBackFlag();
+      _isBouncingBack = true;
+      _bounceFlagTimer?.cancel();
+      _bounceFlagTimer = Timer(widget.configuration.bounceDuration, () {
+        if (mounted) _isBouncingBack = false;
+        _bounceFlagTimer = null;
+      });
+      transformBloc.bounceBack(widget.configuration.bounceDuration);
+    }
 
     // Reset isolation flag
     _draggingOnObject = false;
@@ -851,8 +1008,10 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
   /// Handle pointer signal events (mouse wheel)
   void _handlePointerSignal(
       BuildContext context, PointerSignalEvent event, double topPadding) {
+    if (_isBouncingBack) return;
     // Stop auto-scroll on new pointer signal
     _autoScroll.stop();
+    _inertia.stop();
     if (event is PointerScrollEvent) {
       final transformBloc = context.read<TransformBloc>();
       final currentTransform = transformBloc.state.transform;
@@ -890,8 +1049,10 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
   /// Handle scale start events
   void _handleScaleStart(
       BuildContext context, ScaleStartDetails details, double topPadding) {
+    if (_isBouncingBack) return;
     // Stop auto-scroll on new gesture
     _autoScroll.stop();
+    _inertia.stop();
     final eventBloc = context.read<EventManagementBloc>();
     final transformBloc = context.read<TransformBloc>();
     final currentTransform = transformBloc.state.transform;
@@ -924,6 +1085,7 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
   /// Handle scale update events
   void _handleScaleUpdate(
       BuildContext context, ScaleUpdateDetails details, double topPadding) {
+    if (_isBouncingBack) return;
     final eventBloc = context.read<EventManagementBloc>();
     final transformBloc = context.read<TransformBloc>();
     final currentTransform = transformBloc.state.transform;
@@ -963,6 +1125,7 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
 
   /// Handle scale end events
   void _handleScaleEnd(BuildContext context, ScaleEndDetails details) {
+    if (_isBouncingBack) return;
     final eventBloc = context.read<EventManagementBloc>();
 
     // Send to EventManagementBloc
@@ -1052,6 +1215,8 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
   @override
   void dispose() {
     _autoScroll.stop();
+    _inertia.stop();
+    _bounceFlagTimer?.cancel();
     _physicalEventSubscription?.cancel();
     _commandSubscription?.cancel();
     _keyboardFocusNode.dispose();
