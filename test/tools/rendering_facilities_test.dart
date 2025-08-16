@@ -88,4 +88,50 @@ void main() {
       expect(endPt.dy, closeTo(0.0, 0.5));
     });
   });
+
+  group('RenderingFacilities - Multi-segment paths', () {
+    test('computePointAndTangentAt handles multi-metric path at 75%', () {
+      final path = Path()
+        ..moveTo(0, 0)
+        ..lineTo(10, 0)
+        ..lineTo(10, 10);
+
+      final r =
+          RenderingFacilities.computePointAndTangentAt(path: path, t: 0.75);
+      expect(r.position.dx, closeTo(10.0, 1e-2));
+      expect(r.position.dy, closeTo(5.0, 1e-2));
+    });
+
+    test('trimPathAgainstClips works with polygonal clip at start and end', () {
+      final path = Path()
+        ..moveTo(-20, 0)
+        ..lineTo(0, 0)
+        ..lineTo(20, 0);
+
+      // Triangle clip near start (-20..-10)
+      final startClip = Path()
+        ..moveTo(-20, -5)
+        ..lineTo(-10, -5)
+        ..lineTo(-15, 5)
+        ..close();
+
+      // Square clip near end (10..20)
+      final endClip = Path()..addRect(const Rect.fromLTWH(10, -5, 10, 10));
+
+      final trimmed = RenderingFacilities.trimPathAgainstClips(
+        path: path,
+        startClipPath: startClip,
+        endClipPath: endClip,
+      );
+
+      final m = trimmed.computeMetrics().first;
+      final startPt = m.getTangentForOffset(0)!.position;
+      final endPt = m.getTangentForOffset(m.length)!.position;
+      // Boundary with triangle along y=0 occurs near x≈-12.5
+      expect(startPt.dx, closeTo(-12.5, 1.0));
+      expect(startPt.dy, closeTo(0.0, 1.0));
+      expect(endPt.dx, closeTo(10.0, 1.0));
+      expect(endPt.dy, closeTo(0.0, 1.0));
+    });
+  });
 }

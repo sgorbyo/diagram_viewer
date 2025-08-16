@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:ui' as ui;
 
 class RenderingFacilities {
   RenderingFacilities._();
@@ -9,9 +10,24 @@ class RenderingFacilities {
     required double t,
   }) {
     assert(t >= 0.0 && t <= 1.0);
-    final metric = path.computeMetrics().first;
-    final target = metric.length * t;
-    final tangent = metric.getTangentForOffset(target)!;
+    final metrics = path.computeMetrics().toList(growable: false);
+    double fullLength = 0.0;
+    for (final m in metrics) {
+      fullLength += m.length;
+    }
+    double target = fullLength * t;
+    ui.PathMetric? chosen;
+    for (final m in metrics) {
+      if (target <= m.length) {
+        chosen = m;
+        break;
+      } else {
+        target -= m.length;
+      }
+    }
+    chosen ??= metrics.last;
+    final tangent =
+        chosen.getTangentForOffset(target.clamp(0.0, chosen.length))!;
     // Convert to screen-space convention (y down). Flutter's tangent seems y-up; flip sign.
     final angle = -tangent.angle;
     return (position: tangent.position, angleRadians: angle);
@@ -54,12 +70,13 @@ class RenderingFacilities {
     Path? startClipPath,
     Path? endClipPath,
   }) {
-    // Only handle simple single-contour paths with two endpoints here
+    // Reduce to a single straight segment from first to last point in the path
     final metrics = path.computeMetrics().toList();
     if (metrics.isEmpty) return path;
-    final m = metrics.first;
-    final start = m.getTangentForOffset(0)!.position;
-    final end = m.getTangentForOffset(m.length)!.position;
+    final first = metrics.first;
+    final last = metrics.last;
+    final start = first.getTangentForOffset(0)!.position;
+    final end = last.getTangentForOffset(last.length)!.position;
 
     Offset newStart = start;
     Offset newEnd = end;
@@ -93,9 +110,16 @@ class RenderingFacilities {
     required Path clip,
     required bool searchFromStart,
   }) {
-    // Binary search along the segment to find the first point outside the clip
+    // Ensure a starts inside and b is outside (move a slightly along the segment if on boundary)
     Offset a = from;
+    for (int i = 0; i < 4 && !clip.contains(a); i++) {
+      a = _moveAlongSegment(from: a, toward: to, distance: 0.5);
+    }
     Offset b = to;
+    for (int i = 0; i < 4 && clip.contains(b); i++) {
+      b = _moveAlongSegment(from: b, toward: a, distance: 0.5);
+    }
+    // Binary search along the segment to find the boundary
     for (int i = 0; i < 20; i++) {
       final mid = Offset(
         (a.dx + b.dx) / 2,
@@ -104,21 +128,26 @@ class RenderingFacilities {
       final inside = _isPointInsidePath(clip, mid);
       if (inside) {
         // move outward
-        if (searchFromStart) {
-          a = mid;
-        } else {
-          b = mid;
-        }
+        a = mid;
       } else {
         // move inward
-        if (searchFromStart) {
-          b = mid;
-        } else {
-          a = mid;
-        }
+        b = mid;
       }
     }
     return searchFromStart ? b : a;
+  }
+
+  static Offset _moveAlongSegment({
+    required Offset from,
+    required Offset toward,
+    required double distance,
+    bool invert = false,
+  }) {
+    final dir = (toward - from);
+    final len = dir.distance;
+    if (len == 0) return from;
+    final unit = Offset(dir.dx / len, dir.dy / len);
+    return invert ? from - unit * distance : from + unit * distance;
   }
 
   static bool _isPointInsidePath(Path clip, Offset point) {
