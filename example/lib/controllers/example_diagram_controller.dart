@@ -6,6 +6,7 @@ import 'package:diagram_viewer/events/events.dart';
 import 'package:diagram_viewer/tools/transform2d/transform2d_utils.dart';
 import '../cerchio_entity.dart';
 import '../cerchio_model.dart';
+import '../connection_entity.dart';
 
 /// Example implementation of IDiagramController for the example app.
 ///
@@ -29,9 +30,19 @@ class ExampleDiagramController implements IDiagramController {
   final StreamController<DiagramEventUnion> _eventController =
       StreamController<DiagramEventUnion>.broadcast();
 
-  ExampleDiagramController() {
-    // _randomPopulate(50);
-    _regularPopulate(50);
+  // Ephemeral connections demo (self-rendering objects)
+  final List<ConnectionEntity> _ephemeralConnections = [];
+  bool _enableDemoConnections = false;
+
+  void setDemoConnectionsEnabled(bool enabled) {
+    _enableDemoConnections = enabled;
+  }
+
+  ExampleDiagramController({bool populateInitial = true}) {
+    if (populateInitial) {
+      // _randomPopulate(50);
+      _regularPopulate(50);
+    }
     _setupEventHandling();
 
     // Send initial redraw command with calculated logical extent
@@ -261,6 +272,22 @@ class ExampleDiagramController implements IDiagramController {
           final model = CerchioModel(center: finalCenter, radius: radius);
           _storage[model.id] = model;
           _updateLogicalExtentAndRedraw();
+
+          // Demo: create a self-rendering connection between the new circle and the previous one, if any
+          if (_enableDemoConnections && _storage.length >= 2) {
+            final lastTwo = _storage.values.toList().reversed.take(2).toList();
+            final a = lastTwo[1].center;
+            final b = lastTwo[0].center;
+            _ephemeralConnections.add(ConnectionEntity(
+              id: 'conn_${DateTime.now().microsecondsSinceEpoch}',
+              startCenter: a,
+              endCenter: b,
+              endpointRadius: radius,
+              color: const Color(0x8A000000),
+              zOrder: 5,
+            ));
+            _updateLogicalExtentAndRedraw();
+          }
         }
       },
       // Handle other events with default behavior
@@ -448,6 +475,8 @@ class ExampleDiagramController implements IDiagramController {
       );
       result.add(entity);
     }
+    // include demo connections
+    result.addAll(_ephemeralConnections);
     return result;
   }
 

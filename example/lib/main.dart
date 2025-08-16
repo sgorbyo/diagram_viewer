@@ -111,6 +111,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       });
                       controller.updateConfiguration(cfg);
                     },
+                    onToggleDemoConnections: (v) {
+                      controller.setDemoConnectionsEnabled(v);
+                    },
                   ),
                 ],
               ),
@@ -135,7 +138,11 @@ class _MyHomePageState extends State<MyHomePage> {
 class _SnapGridControls extends StatefulWidget {
   final DiagramConfiguration initial;
   final ValueChanged<DiagramConfiguration> onChanged;
-  const _SnapGridControls({required this.initial, required this.onChanged});
+  final ValueChanged<bool> onToggleDemoConnections;
+  const _SnapGridControls(
+      {required this.initial,
+      required this.onChanged,
+      required this.onToggleDemoConnections});
 
   @override
   State<_SnapGridControls> createState() => _SnapGridControlsState();
@@ -147,6 +154,7 @@ class _SnapGridControlsState extends State<_SnapGridControls> {
   late double spacing;
   late double originX;
   late double originY;
+  bool demoConnections = false;
 
   @override
   void initState() {
@@ -206,6 +214,15 @@ class _SnapGridControlsState extends State<_SnapGridControls> {
           onChanged: (v) {
             setState(() => showGrid = v);
             _emit();
+          },
+        ),
+        SwitchListTile(
+          contentPadding: EdgeInsets.zero,
+          title: const Text('Demo: show connections'),
+          value: demoConnections,
+          onChanged: (v) {
+            setState(() => demoConnections = v);
+            widget.onToggleDemoConnections(v);
           },
         ),
         const SizedBox(height: 8),

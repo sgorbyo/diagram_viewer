@@ -78,8 +78,8 @@ class Transform2D with _$Transform2D {
   /// for rendering transformations.
   Matrix4 toMatrix4() {
     return Matrix4.identity()
-      ..translate(translation.dx, translation.dy)
-      ..scale(scale)
+      ..translateByVector3(Vector3(translation.dx, translation.dy, 0))
+      ..scaleByVector3(Vector3(scale, scale, 1.0))
       ..rotateZ(rotation);
   }
 
