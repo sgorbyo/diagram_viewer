@@ -39,12 +39,12 @@ void main() {
     test('distance to circle path is correct within tolerance', () {
       final circle = Path()
         ..addOval(Rect.fromCircle(center: const Offset(0, 0), radius: 10));
-      final p1 = const Offset(12, 0); // ~2px from circle
+      const p1 = Offset(12, 0); // ~2px from circle
       final d1 =
           RenderingFacilities.pointToPathDistance(path: circle, point: p1);
       expect(d1, closeTo(2.0, 0.5));
 
-      final p2 = const Offset(25, 0); // ~15px from circle
+      const p2 = Offset(25, 0); // ~15px from circle
       final d2 =
           RenderingFacilities.pointToPathDistance(path: circle, point: p2);
       expect(d2, greaterThan(10.0));

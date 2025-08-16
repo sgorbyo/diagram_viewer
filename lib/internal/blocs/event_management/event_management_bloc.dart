@@ -29,6 +29,12 @@ class EventManagementBloc
   Set<LogicalKeyboardKey>? _pendingPointerMoveKeys;
   // Tolerance to avoid over-emitting around frame boundaries
   final Duration _throttleTolerance = const Duration(milliseconds: 8);
+  // Gesture throttling state
+  DateTime? _lastGestureUpdateEmit;
+  Object? _pendingGestureRaw;
+  Offset? _pendingGestureLogical;
+  List<HitTestResult>? _pendingGestureHits;
+  Set<LogicalKeyboardKey>? _pendingGestureKeys;
 
   // Dependencies for getting current state
   TransformBloc? _transformBloc;
@@ -302,23 +308,40 @@ class EventManagementBloc
       pressedKeys: pressedKeys,
     ));
 
-    _emitPhysicalEvent(PhysicalEvent.gesture(
-      eventId: currentState.eventId,
-      logicalPosition: logicalPosition,
-      screenPosition: _getScreenPosition(rawEvent),
-      transformSnapshot: _getCurrentTransform(),
-      hitList: hitResults.map((r) => r.object).toList(),
-      borderProximity: _getBorderProximity(_getScreenPosition(rawEvent)),
-      phase: InteractionPhase.update,
-      rawEvent: rawEvent,
-      scale: _extractScale(rawEvent),
-      rotation: _extractRotation(rawEvent),
-      currentViewport: _getCurrentViewport(),
-      pressedKeys: pressedKeys,
-      activeInteraction: InteractionType.gesture,
-    ));
+    // Coalescing for gesture updates (~60 FPS)
+    _pendingGestureRaw = rawEvent;
+    _pendingGestureLogical = logicalPosition;
+    _pendingGestureHits = hitResults;
+    _pendingGestureKeys = pressedKeys;
 
-    _lastEventTime = DateTime.now();
+    final now = DateTime.now();
+    final window = _debounceTime + _throttleTolerance;
+    final canEmitNow = _lastGestureUpdateEmit == null ||
+        now.difference(_lastGestureUpdateEmit!) >= window;
+    if (canEmitNow) {
+      _lastGestureUpdateEmit = now;
+      _emitPhysicalEvent(PhysicalEvent.gesture(
+        eventId: currentState.eventId,
+        logicalPosition: logicalPosition,
+        screenPosition: _getScreenPosition(rawEvent),
+        transformSnapshot: _getCurrentTransform(),
+        hitList: hitResults.map((r) => r.object).toList(),
+        borderProximity: _getBorderProximity(_getScreenPosition(rawEvent)),
+        phase: InteractionPhase.update,
+        rawEvent: rawEvent,
+        scale: _extractScale(rawEvent),
+        rotation: _extractRotation(rawEvent),
+        currentViewport: _getCurrentViewport(),
+        pressedKeys: pressedKeys,
+        activeInteraction: InteractionType.gesture,
+      ));
+      _pendingGestureRaw = null;
+      _pendingGestureLogical = null;
+      _pendingGestureHits = null;
+      _pendingGestureKeys = null;
+    }
+
+    _lastEventTime = now;
   }
 
   /// Handle end of gesture event
@@ -329,6 +352,33 @@ class EventManagementBloc
   ) {
     final currentState = state;
     if (currentState is! GestureActiveState) return;
+
+    // Flush any pending gesture update before ending
+    if (_pendingGestureRaw != null) {
+      final pending = _pendingGestureRaw!;
+      final lastLogical = _pendingGestureLogical ?? currentState.startPosition;
+      final lastHits = _pendingGestureHits ?? [];
+      final lastKeys = _pendingGestureKeys ?? {};
+      _emitPhysicalEvent(PhysicalEvent.gesture(
+        eventId: currentState.eventId,
+        logicalPosition: lastLogical,
+        screenPosition: _getScreenPosition(pending),
+        transformSnapshot: _getCurrentTransform(),
+        hitList: lastHits.map((r) => r.object).toList(),
+        borderProximity: _getBorderProximity(_getScreenPosition(pending)),
+        phase: InteractionPhase.update,
+        rawEvent: pending,
+        scale: _extractScale(pending),
+        rotation: _extractRotation(pending),
+        currentViewport: _getCurrentViewport(),
+        pressedKeys: lastKeys,
+        activeInteraction: InteractionType.gesture,
+      ));
+      _pendingGestureRaw = null;
+      _pendingGestureLogical = null;
+      _pendingGestureHits = null;
+      _pendingGestureKeys = null;
+    }
 
     emit(const EventManagementState.idle());
 
@@ -521,8 +571,8 @@ class EventManagementBloc
   }
 
   Rect _getCurrentViewport() {
-    // Calculate viewport based on configuration and size
-    if (_viewportSize != null && _configuration != null) {
+    // Calculate viewport based on current known size
+    if (_viewportSize != null) {
       return Rect.fromLTWH(0, 0, _viewportSize!.width, _viewportSize!.height);
     }
     return Rect.zero; // Fallback
