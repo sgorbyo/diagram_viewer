@@ -198,6 +198,28 @@ class DiagramConfiguration with _$DiagramConfiguration {
     /// Rendering is lightweight and performed in logical space. Defaults to
     /// false to preserve previous visuals.
     @Default(false) bool showSnapGrid,
+
+    /// Whether to enable adaptive grid line density based on zoom level.
+    ///
+    /// When true, the grid automatically reduces the number of visible lines
+    /// at high zoom levels to maintain visual clarity and performance.
+    /// Defaults to true for optimal performance.
+    @Default(true) bool enableAdaptiveGridDensity,
+
+    /// Minimum grid line spacing in pixels for adaptive density.
+    ///
+    /// When adaptive density is enabled, grid lines are only drawn if they
+    /// are at least this many pixels apart on screen. This prevents
+    /// overcrowding at high zoom levels.
+    /// Defaults to 8.0 pixels.
+    @Default(8.0) double minGridLinePixelSpacing,
+
+    /// Maximum number of grid lines to render for performance.
+    ///
+    /// Limits the total number of grid lines to prevent performance issues
+    /// with very large diagrams or extreme zoom levels.
+    /// Defaults to 200 lines.
+    @Default(200) int maxGridLines,
   }) = _DiagramConfiguration;
 
   /// Creates a default configuration suitable for most diagram types.

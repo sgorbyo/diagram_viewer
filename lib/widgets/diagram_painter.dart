@@ -58,25 +58,56 @@ class DiagramPainter extends CustomPainter {
     if (spacing <= 0) return;
     final origin = configuration.snapGridOrigin;
     final extent = logicalExtent;
+
+    // CRITICAL: Apply pixel spacing constraint to prevent performance issues
+    final pixelSpacing = spacing * transform.scale;
+    if (pixelSpacing < configuration.minGridLinePixelSpacing) {
+      // Skip rendering if pixel spacing is too small
+      return;
+    }
+
+    // Simple, efficient grid rendering with basic optimizations
+    _drawSimpleGrid(canvas, extent, origin, spacing);
+  }
+
+  /// Draws a simple grid without adaptive density calculations.
+  void _drawSimpleGrid(
+      Canvas canvas, Rect extent, Offset origin, double spacing) {
+    // Early exit for very small spacing to prevent excessive lines
+    if (spacing < 0.1) return;
+
+    // Calculate grid lines efficiently
+    final startX = ((extent.left - origin.dx) / spacing).floor();
+    final endX = ((extent.right - origin.dx) / spacing).ceil();
+    final startY = ((extent.top - origin.dy) / spacing).floor();
+    final endY = ((extent.bottom - origin.dy) / spacing).ceil();
+
+    // Limit maximum number of lines for performance
+    final maxLines = configuration.maxGridLines;
+    if ((endX - startX + 1) + (endY - startY + 1) > maxLines) {
+      // Skip rendering if too many lines would be drawn
+      return;
+    }
+
     final paint = Paint()
       ..color = const Color(0x11000000)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.0 / transform.scale.clamp(1.0, double.infinity);
 
-    // Vertical lines
-    final startXUnits = ((extent.left - origin.dx) / spacing).floor();
-    final endXUnits = ((extent.right - origin.dx) / spacing).ceil();
-    for (int i = startXUnits; i <= endXUnits; i++) {
+    // Draw vertical lines
+    for (int i = startX; i <= endX; i++) {
       final x = origin.dx + i * spacing;
-      canvas.drawLine(Offset(x, extent.top), Offset(x, extent.bottom), paint);
+      if (x >= extent.left && x <= extent.right) {
+        canvas.drawLine(Offset(x, extent.top), Offset(x, extent.bottom), paint);
+      }
     }
 
-    // Horizontal lines
-    final startYUnits = ((extent.top - origin.dy) / spacing).floor();
-    final endYUnits = ((extent.bottom - origin.dy) / spacing).ceil();
-    for (int j = startYUnits; j <= endYUnits; j++) {
+    // Draw horizontal lines
+    for (int j = startY; j <= endY; j++) {
       final y = origin.dy + j * spacing;
-      canvas.drawLine(Offset(extent.left, y), Offset(extent.right, y), paint);
+      if (y >= extent.top && y <= extent.bottom) {
+        canvas.drawLine(Offset(extent.left, y), Offset(extent.right, y), paint);
+      }
     }
   }
 

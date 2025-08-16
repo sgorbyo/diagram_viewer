@@ -186,6 +186,28 @@ mixin _$DiagramConfiguration {
   /// false to preserve previous visuals.
   bool get showSnapGrid => throw _privateConstructorUsedError;
 
+  /// Whether to enable adaptive grid line density based on zoom level.
+  ///
+  /// When true, the grid automatically reduces the number of visible lines
+  /// at high zoom levels to maintain visual clarity and performance.
+  /// Defaults to true for optimal performance.
+  bool get enableAdaptiveGridDensity => throw _privateConstructorUsedError;
+
+  /// Minimum grid line spacing in pixels for adaptive density.
+  ///
+  /// When adaptive density is enabled, grid lines are only drawn if they
+  /// are at least this many pixels apart on screen. This prevents
+  /// overcrowding at high zoom levels.
+  /// Defaults to 8.0 pixels.
+  double get minGridLinePixelSpacing => throw _privateConstructorUsedError;
+
+  /// Maximum number of grid lines to render for performance.
+  ///
+  /// Limits the total number of grid lines to prevent performance issues
+  /// with very large diagrams or extreme zoom levels.
+  /// Defaults to 200 lines.
+  int get maxGridLines => throw _privateConstructorUsedError;
+
   /// Create a copy of DiagramConfiguration
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -225,7 +247,10 @@ abstract class $DiagramConfigurationCopyWith<$Res> {
       bool snapGridEnabled,
       double snapGridSpacing,
       Offset snapGridOrigin,
-      bool showSnapGrid});
+      bool showSnapGrid,
+      bool enableAdaptiveGridDensity,
+      double minGridLinePixelSpacing,
+      int maxGridLines});
 }
 
 /// @nodoc
@@ -270,6 +295,9 @@ class _$DiagramConfigurationCopyWithImpl<$Res,
     Object? snapGridSpacing = null,
     Object? snapGridOrigin = null,
     Object? showSnapGrid = null,
+    Object? enableAdaptiveGridDensity = null,
+    Object? minGridLinePixelSpacing = null,
+    Object? maxGridLines = null,
   }) {
     return _then(_value.copyWith(
       backgroundColor: null == backgroundColor
@@ -376,6 +404,18 @@ class _$DiagramConfigurationCopyWithImpl<$Res,
           ? _value.showSnapGrid
           : showSnapGrid // ignore: cast_nullable_to_non_nullable
               as bool,
+      enableAdaptiveGridDensity: null == enableAdaptiveGridDensity
+          ? _value.enableAdaptiveGridDensity
+          : enableAdaptiveGridDensity // ignore: cast_nullable_to_non_nullable
+              as bool,
+      minGridLinePixelSpacing: null == minGridLinePixelSpacing
+          ? _value.minGridLinePixelSpacing
+          : minGridLinePixelSpacing // ignore: cast_nullable_to_non_nullable
+              as double,
+      maxGridLines: null == maxGridLines
+          ? _value.maxGridLines
+          : maxGridLines // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 }
@@ -414,7 +454,10 @@ abstract class _$$DiagramConfigurationImplCopyWith<$Res>
       bool snapGridEnabled,
       double snapGridSpacing,
       Offset snapGridOrigin,
-      bool showSnapGrid});
+      bool showSnapGrid,
+      bool enableAdaptiveGridDensity,
+      double minGridLinePixelSpacing,
+      int maxGridLines});
 }
 
 /// @nodoc
@@ -456,6 +499,9 @@ class __$$DiagramConfigurationImplCopyWithImpl<$Res>
     Object? snapGridSpacing = null,
     Object? snapGridOrigin = null,
     Object? showSnapGrid = null,
+    Object? enableAdaptiveGridDensity = null,
+    Object? minGridLinePixelSpacing = null,
+    Object? maxGridLines = null,
   }) {
     return _then(_$DiagramConfigurationImpl(
       backgroundColor: null == backgroundColor
@@ -562,6 +608,18 @@ class __$$DiagramConfigurationImplCopyWithImpl<$Res>
           ? _value.showSnapGrid
           : showSnapGrid // ignore: cast_nullable_to_non_nullable
               as bool,
+      enableAdaptiveGridDensity: null == enableAdaptiveGridDensity
+          ? _value.enableAdaptiveGridDensity
+          : enableAdaptiveGridDensity // ignore: cast_nullable_to_non_nullable
+              as bool,
+      minGridLinePixelSpacing: null == minGridLinePixelSpacing
+          ? _value.minGridLinePixelSpacing
+          : minGridLinePixelSpacing // ignore: cast_nullable_to_non_nullable
+              as double,
+      maxGridLines: null == maxGridLines
+          ? _value.maxGridLines
+          : maxGridLines // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -595,7 +653,10 @@ class _$DiagramConfigurationImpl implements _DiagramConfiguration {
       this.snapGridEnabled = false,
       this.snapGridSpacing = 16.0,
       this.snapGridOrigin = Offset.zero,
-      this.showSnapGrid = false});
+      this.showSnapGrid = false,
+      this.enableAdaptiveGridDensity = true,
+      this.minGridLinePixelSpacing = 8.0,
+      this.maxGridLines = 200});
 
   /// Background color of the diagram area.
   ///
@@ -819,9 +880,37 @@ class _$DiagramConfigurationImpl implements _DiagramConfiguration {
   @JsonKey()
   final bool showSnapGrid;
 
+  /// Whether to enable adaptive grid line density based on zoom level.
+  ///
+  /// When true, the grid automatically reduces the number of visible lines
+  /// at high zoom levels to maintain visual clarity and performance.
+  /// Defaults to true for optimal performance.
+  @override
+  @JsonKey()
+  final bool enableAdaptiveGridDensity;
+
+  /// Minimum grid line spacing in pixels for adaptive density.
+  ///
+  /// When adaptive density is enabled, grid lines are only drawn if they
+  /// are at least this many pixels apart on screen. This prevents
+  /// overcrowding at high zoom levels.
+  /// Defaults to 8.0 pixels.
+  @override
+  @JsonKey()
+  final double minGridLinePixelSpacing;
+
+  /// Maximum number of grid lines to render for performance.
+  ///
+  /// Limits the total number of grid lines to prevent performance issues
+  /// with very large diagrams or extreme zoom levels.
+  /// Defaults to 200 lines.
+  @override
+  @JsonKey()
+  final int maxGridLines;
+
   @override
   String toString() {
-    return 'DiagramConfiguration(backgroundColor: $backgroundColor, outsideColor: $outsideColor, edgeThreshold: $edgeThreshold, maxZoom: $maxZoom, minZoom: $minZoom, overscrollPixels: $overscrollPixels, bounceDuration: $bounceDuration, bounceCurve: $bounceCurve, autoScrollInterval: $autoScrollInterval, autoScrollAcceleration: $autoScrollAcceleration, enableTranslation: $enableTranslation, enableScale: $enableScale, enableRotation: $enableRotation, clipContent: $clipContent, enableInertialScrolling: $enableInertialScrolling, inertialFriction: $inertialFriction, inertialMinStartVelocity: $inertialMinStartVelocity, inertialMinStopVelocity: $inertialMinStopVelocity, inertialMaxDuration: $inertialMaxDuration, enableKeyboardShortcuts: $enableKeyboardShortcuts, enableAccessibility: $enableAccessibility, enableBlocDebugObserver: $enableBlocDebugObserver, snapGridEnabled: $snapGridEnabled, snapGridSpacing: $snapGridSpacing, snapGridOrigin: $snapGridOrigin, showSnapGrid: $showSnapGrid)';
+    return 'DiagramConfiguration(backgroundColor: $backgroundColor, outsideColor: $outsideColor, edgeThreshold: $edgeThreshold, maxZoom: $maxZoom, minZoom: $minZoom, overscrollPixels: $overscrollPixels, bounceDuration: $bounceDuration, bounceCurve: $bounceCurve, autoScrollInterval: $autoScrollInterval, autoScrollAcceleration: $autoScrollAcceleration, enableTranslation: $enableTranslation, enableScale: $enableScale, enableRotation: $enableRotation, clipContent: $clipContent, enableInertialScrolling: $enableInertialScrolling, inertialFriction: $inertialFriction, inertialMinStartVelocity: $inertialMinStartVelocity, inertialMinStopVelocity: $inertialMinStopVelocity, inertialMaxDuration: $inertialMaxDuration, enableKeyboardShortcuts: $enableKeyboardShortcuts, enableAccessibility: $enableAccessibility, enableBlocDebugObserver: $enableBlocDebugObserver, snapGridEnabled: $snapGridEnabled, snapGridSpacing: $snapGridSpacing, snapGridOrigin: $snapGridOrigin, showSnapGrid: $showSnapGrid, enableAdaptiveGridDensity: $enableAdaptiveGridDensity, minGridLinePixelSpacing: $minGridLinePixelSpacing, maxGridLines: $maxGridLines)';
   }
 
   @override
@@ -862,18 +951,15 @@ class _$DiagramConfigurationImpl implements _DiagramConfiguration {
             (identical(
                     other.inertialMinStartVelocity, inertialMinStartVelocity) ||
                 other.inertialMinStartVelocity == inertialMinStartVelocity) &&
-            (identical(
-                    other.inertialMinStopVelocity, inertialMinStopVelocity) ||
+            (identical(other.inertialMinStopVelocity, inertialMinStopVelocity) ||
                 other.inertialMinStopVelocity == inertialMinStopVelocity) &&
             (identical(other.inertialMaxDuration, inertialMaxDuration) ||
                 other.inertialMaxDuration == inertialMaxDuration) &&
-            (identical(
-                    other.enableKeyboardShortcuts, enableKeyboardShortcuts) ||
+            (identical(other.enableKeyboardShortcuts, enableKeyboardShortcuts) ||
                 other.enableKeyboardShortcuts == enableKeyboardShortcuts) &&
             (identical(other.enableAccessibility, enableAccessibility) ||
                 other.enableAccessibility == enableAccessibility) &&
-            (identical(
-                    other.enableBlocDebugObserver, enableBlocDebugObserver) ||
+            (identical(other.enableBlocDebugObserver, enableBlocDebugObserver) ||
                 other.enableBlocDebugObserver == enableBlocDebugObserver) &&
             (identical(other.snapGridEnabled, snapGridEnabled) ||
                 other.snapGridEnabled == snapGridEnabled) &&
@@ -882,7 +968,14 @@ class _$DiagramConfigurationImpl implements _DiagramConfiguration {
             (identical(other.snapGridOrigin, snapGridOrigin) ||
                 other.snapGridOrigin == snapGridOrigin) &&
             (identical(other.showSnapGrid, showSnapGrid) ||
-                other.showSnapGrid == showSnapGrid));
+                other.showSnapGrid == showSnapGrid) &&
+            (identical(other.enableAdaptiveGridDensity,
+                    enableAdaptiveGridDensity) ||
+                other.enableAdaptiveGridDensity == enableAdaptiveGridDensity) &&
+            (identical(other.minGridLinePixelSpacing, minGridLinePixelSpacing) ||
+                other.minGridLinePixelSpacing == minGridLinePixelSpacing) &&
+            (identical(other.maxGridLines, maxGridLines) ||
+                other.maxGridLines == maxGridLines));
   }
 
   @override
@@ -913,7 +1006,10 @@ class _$DiagramConfigurationImpl implements _DiagramConfiguration {
         snapGridEnabled,
         snapGridSpacing,
         snapGridOrigin,
-        showSnapGrid
+        showSnapGrid,
+        enableAdaptiveGridDensity,
+        minGridLinePixelSpacing,
+        maxGridLines
       ]);
 
   /// Create a copy of DiagramConfiguration
@@ -954,7 +1050,10 @@ abstract class _DiagramConfiguration implements DiagramConfiguration {
       final bool snapGridEnabled,
       final double snapGridSpacing,
       final Offset snapGridOrigin,
-      final bool showSnapGrid}) = _$DiagramConfigurationImpl;
+      final bool showSnapGrid,
+      final bool enableAdaptiveGridDensity,
+      final double minGridLinePixelSpacing,
+      final int maxGridLines}) = _$DiagramConfigurationImpl;
 
   /// Background color of the diagram area.
   ///
@@ -1151,6 +1250,31 @@ abstract class _DiagramConfiguration implements DiagramConfiguration {
   /// false to preserve previous visuals.
   @override
   bool get showSnapGrid;
+
+  /// Whether to enable adaptive grid line density based on zoom level.
+  ///
+  /// When true, the grid automatically reduces the number of visible lines
+  /// at high zoom levels to maintain visual clarity and performance.
+  /// Defaults to true for optimal performance.
+  @override
+  bool get enableAdaptiveGridDensity;
+
+  /// Minimum grid line spacing in pixels for adaptive density.
+  ///
+  /// When adaptive density is enabled, grid lines are only drawn if they
+  /// are at least this many pixels apart on screen. This prevents
+  /// overcrowding at high zoom levels.
+  /// Defaults to 8.0 pixels.
+  @override
+  double get minGridLinePixelSpacing;
+
+  /// Maximum number of grid lines to render for performance.
+  ///
+  /// Limits the total number of grid lines to prevent performance issues
+  /// with very large diagrams or extreme zoom levels.
+  /// Defaults to 200 lines.
+  @override
+  int get maxGridLines;
 
   /// Create a copy of DiagramConfiguration
   /// with the given fields replaced by the non-null parameter values.

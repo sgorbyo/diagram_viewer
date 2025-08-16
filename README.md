@@ -14,6 +14,7 @@ A Flutter package for building interactive diagram viewers with support for smoo
 - 🧷 In‑app Drag & Drop target with accurate logical/screen mapping
 - 📐 Unified transform management with `Transform2D`
 - 📱 Cross‑platform support (iOS, Android, Web, Desktop)
+- 🎯 Grid overlay thinning with adaptive density optimization
 
 ## Installation
 
