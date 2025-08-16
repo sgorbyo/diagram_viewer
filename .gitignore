@@ -29,6 +29,10 @@ migrate_working_dir/
 .packages
 build/
 
+# Test coverage outputs
+coverage/
+example/coverage/
+
 # Flutter generated artifacts (do not version)
 ios/Flutter/
 ios/Flutter/ephemeral/
