@@ -21,6 +21,15 @@ class EventManagementBloc
       StreamController<PhysicalEvent>.broadcast();
   Stream<PhysicalEvent> get physicalEvents => _physicalEventController.stream;
 
+  // Throttling state for pointer updates (~60 FPS)
+  DateTime? _lastPointerUpdateEmit;
+  PointerEvent? _pendingPointerMoveRaw;
+  Offset? _pendingPointerMoveLogical;
+  List<HitTestResult>? _pendingPointerMoveHits;
+  Set<LogicalKeyboardKey>? _pendingPointerMoveKeys;
+  // Tolerance to avoid over-emitting around frame boundaries
+  final Duration _throttleTolerance = const Duration(milliseconds: 8);
+
   // Dependencies for getting current state
   TransformBloc? _transformBloc;
   DiagramConfiguration? _configuration;
@@ -141,22 +150,38 @@ class EventManagementBloc
       lastPosition: logicalPosition,
       lastHitList: hitResults.map((r) => r.object).toList(),
     ));
+    // Coalesce: store latest move to emit on next allowed tick
+    _pendingPointerMoveRaw = rawEvent;
+    _pendingPointerMoveLogical = logicalPosition;
+    _pendingPointerMoveHits = hitResults;
+    _pendingPointerMoveKeys = pressedKeys;
 
-    _emitPhysicalEvent(PhysicalEvent.pointer(
-      eventId: currentState.eventId,
-      logicalPosition: logicalPosition,
-      screenPosition: rawEvent.position,
-      transformSnapshot: _getCurrentTransform(),
-      hitList: hitResults.map((r) => r.object).toList(),
-      borderProximity: _getBorderProximity(rawEvent.position),
-      phase: InteractionPhase.update,
-      rawEvent: rawEvent,
-      delta: rawEvent is PointerMoveEvent ? rawEvent.delta : null,
-      currentViewport: _getCurrentViewport(),
-      pressedMouseButtons: _extractMouseButtons(rawEvent),
-      pressedKeys: pressedKeys,
-      activeInteraction: InteractionType.pointer,
-    ));
+    final now = DateTime.now();
+    final window = _debounceTime + _throttleTolerance;
+    final canEmitNow = _lastPointerUpdateEmit == null ||
+        now.difference(_lastPointerUpdateEmit!) >= window;
+    if (canEmitNow) {
+      _lastPointerUpdateEmit = now;
+      _emitPhysicalEvent(PhysicalEvent.pointer(
+        eventId: currentState.eventId,
+        logicalPosition: logicalPosition,
+        screenPosition: rawEvent.position,
+        transformSnapshot: _getCurrentTransform(),
+        hitList: hitResults.map((r) => r.object).toList(),
+        borderProximity: _getBorderProximity(rawEvent.position),
+        phase: InteractionPhase.update,
+        rawEvent: rawEvent,
+        delta: rawEvent is PointerMoveEvent ? rawEvent.delta : null,
+        currentViewport: _getCurrentViewport(),
+        pressedMouseButtons: _extractMouseButtons(rawEvent),
+        pressedKeys: pressedKeys,
+        activeInteraction: InteractionType.pointer,
+      ));
+      _pendingPointerMoveRaw = null;
+      _pendingPointerMoveLogical = null;
+      _pendingPointerMoveHits = null;
+      _pendingPointerMoveKeys = null;
+    }
 
     _lastEventTime = DateTime.now();
   }
@@ -169,6 +194,35 @@ class EventManagementBloc
   ) {
     final currentState = state;
     if (currentState is! PointerActiveState) return;
+
+    // Flush any pending coalesced update before ending, to not lose the last position
+    if (_pendingPointerMoveRaw != null && state is PointerActiveState) {
+      final currentState = state as PointerActiveState;
+      final last = _pendingPointerMoveRaw!;
+      final lastLogical =
+          _pendingPointerMoveLogical ?? currentState.lastPosition;
+      final lastHits = _pendingPointerMoveHits ?? [];
+      final lastKeys = _pendingPointerMoveKeys ?? {};
+      _emitPhysicalEvent(PhysicalEvent.pointer(
+        eventId: currentState.eventId,
+        logicalPosition: lastLogical,
+        screenPosition: last.position,
+        transformSnapshot: _getCurrentTransform(),
+        hitList: lastHits.map((r) => r.object).toList(),
+        borderProximity: _getBorderProximity(last.position),
+        phase: InteractionPhase.update,
+        rawEvent: last,
+        delta: last is PointerMoveEvent ? last.delta : null,
+        currentViewport: _getCurrentViewport(),
+        pressedMouseButtons: _extractMouseButtons(last),
+        pressedKeys: lastKeys,
+        activeInteraction: InteractionType.pointer,
+      ));
+      _pendingPointerMoveRaw = null;
+      _pendingPointerMoveLogical = null;
+      _pendingPointerMoveHits = null;
+      _pendingPointerMoveKeys = null;
+    }
 
     emit(const EventManagementState.idle());
 
@@ -189,6 +243,7 @@ class EventManagementBloc
     ));
 
     _lastEventTime = DateTime.now();
+    _lastPointerUpdateEmit = null; // reset throttling window on end
   }
 
   /// Handle start of gesture event
