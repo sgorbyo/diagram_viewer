@@ -3,6 +3,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:diagram_viewer/diagram_viewer.dart';
 import '../interfaces/i_diagram_controller_test.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/services.dart';
+import 'package:diagram_viewer/internal/blocs/blocs.dart';
+import 'package:diagram_viewer/internal/blocs/transform/transform_event.dart';
 
 /// Tests for Magic Mouse scroll functionality
 /// These tests should fail initially and pass after fixing the implementation
@@ -200,6 +204,78 @@ void main() {
         final scrollEvents = extractScrollEvents();
         expect(scrollEvents, hasLength(1));
         expect(scrollEvents.first.scrollDirection.dy, lessThan(0));
+      });
+    
+      testWidgets('Cmd + Magic Mouse scroll triggers zoom (no scroll forwarded)',
+          (WidgetTester tester) async {
+        // Arrange
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: MultiBlocProvider(
+                providers: [
+                  BlocProvider<EventManagementBloc>(
+                      create: (_) => EventManagementBloc()),
+                  BlocProvider<TransformBloc>(
+                    create: (_) => TransformBloc(
+                      configuration: const DiagramConfiguration(),
+                    ),
+                  ),
+                  BlocProvider<ZoomBloc>(
+                    create: (_) => ZoomBloc(
+                      configuration: const DiagramConfiguration(),
+                      diagramRect: mockController.logicalExtent,
+                      viewportSize: const Size(800, 600),
+                    ),
+                  ),
+                ],
+                child: Builder(builder: (context) {
+                  // Initialize bounds
+                  final transformBloc = context.read<TransformBloc>();
+                  transformBloc.add(
+                    TransformEvent.updateDiagramBounds(
+                      diagramRect: mockController.logicalExtent,
+                      viewportSize: const Size(800, 600),
+                    ),
+                  );
+                  return DiagramViewerContent(
+                    controller: mockController,
+                    configuration: const DiagramConfiguration(),
+                    debug: false,
+                  );
+                }),
+              ),
+            ),
+          ),
+        );
+
+        final element = tester.element(find.byType(DiagramViewerContent));
+        final transformBloc = BlocProvider.of<TransformBloc>(element);
+        final initialScale = transformBloc.state.transform.scale;
+
+        // Act - Press Cmd and simulate Magic Mouse scroll up (zoom in)
+        await tester.sendKeyDownEvent(LogicalKeyboardKey.metaLeft);
+        tester.binding.handlePointerEvent(
+          const PointerScrollEvent(
+            position: Offset(200, 150),
+            scrollDelta: Offset(0, -40),
+            timeStamp: Duration(milliseconds: 16),
+            kind: PointerDeviceKind.mouse,
+          ),
+        );
+        await tester.pump();
+
+        // Assert - Scale increased, and no scroll forwarded to controller
+        final zoomedScale = transformBloc.state.transform.scale;
+        expect(zoomedScale, greaterThan(initialScale));
+        final afterCtrlScrollCount = mockController.receivedEvents
+            .where((e) => e.maybeWhen(scroll: (_) => true, orElse: () => false))
+            .length;
+        expect(afterCtrlScrollCount, equals(0));
+
+        // Cleanup key
+        await tester.sendKeyUpEvent(LogicalKeyboardKey.metaLeft);
+        await tester.pump();
       });
     });
   });
