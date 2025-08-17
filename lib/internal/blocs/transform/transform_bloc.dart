@@ -340,7 +340,7 @@ class TransformBloc extends Bloc<TransformEvent, TransformState> {
       dynamic: true,
       minZoom: configuration.minZoom,
       maxZoom: configuration.maxZoom,
-      preserveCentering: false,
+      preserveCentering: true,
       recenterSmallContent: false,
     );
 
