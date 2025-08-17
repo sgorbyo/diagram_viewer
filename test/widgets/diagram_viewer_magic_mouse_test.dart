@@ -109,7 +109,8 @@ void main() {
         // Assert - Should receive scroll event with correct delta
         final scrollEvents = extractScrollEvents();
         expect(scrollEvents, hasLength(1));
-        expect(scrollEvents.first.scrollDelta, equals(30.0));
+        // Viewer amplifies small mouse deltas by 1.8x for sensitivity
+        expect(scrollEvents.first.scrollDelta, equals(54.0));
         expect(scrollEvents.first.scrollDirection, equals(const Offset(0, 1)));
       });
 
@@ -140,7 +141,8 @@ void main() {
         // Assert - Should receive scroll event with correct delta
         final scrollEvents = extractScrollEvents();
         expect(scrollEvents, hasLength(1));
-        expect(scrollEvents.first.scrollDelta, equals(25.0));
+        // Viewer amplifies small mouse deltas by 1.8x for sensitivity
+        expect(scrollEvents.first.scrollDelta, equals(45.0));
         expect(scrollEvents.first.scrollDirection, equals(const Offset(1, 0)));
       });
     });
@@ -205,8 +207,9 @@ void main() {
         expect(scrollEvents, hasLength(1));
         expect(scrollEvents.first.scrollDirection.dy, lessThan(0));
       });
-    
-      testWidgets('Cmd + Magic Mouse scroll triggers zoom (no scroll forwarded)',
+
+      testWidgets(
+          'Cmd + Magic Mouse scroll triggers zoom (no scroll forwarded)',
           (WidgetTester tester) async {
         // Arrange
         await tester.pumpWidget(
@@ -268,6 +271,79 @@ void main() {
         // Assert - Scale increased, and no scroll forwarded to controller
         final zoomedScale = transformBloc.state.transform.scale;
         expect(zoomedScale, greaterThan(initialScale));
+        final afterCtrlScrollCount = mockController.receivedEvents
+            .where((e) => e.maybeWhen(scroll: (_) => true, orElse: () => false))
+            .length;
+        expect(afterCtrlScrollCount, equals(0));
+
+        // Cleanup key
+        await tester.sendKeyUpEvent(LogicalKeyboardKey.metaLeft);
+        await tester.pump();
+      });
+
+      testWidgets(
+          'Cmd + Magic Mouse horizontal scroll triggers zoom (no scroll forwarded)',
+          (WidgetTester tester) async {
+        // Arrange
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: MultiBlocProvider(
+                providers: [
+                  BlocProvider<EventManagementBloc>(
+                      create: (_) => EventManagementBloc()),
+                  BlocProvider<TransformBloc>(
+                    create: (_) => TransformBloc(
+                      configuration: const DiagramConfiguration(),
+                    ),
+                  ),
+                  BlocProvider<ZoomBloc>(
+                    create: (_) => ZoomBloc(
+                      configuration: const DiagramConfiguration(),
+                      diagramRect: mockController.logicalExtent,
+                      viewportSize: const Size(800, 600),
+                    ),
+                  ),
+                ],
+                child: Builder(builder: (context) {
+                  // Initialize bounds
+                  final transformBloc = context.read<TransformBloc>();
+                  transformBloc.add(
+                    TransformEvent.updateDiagramBounds(
+                      diagramRect: mockController.logicalExtent,
+                      viewportSize: const Size(800, 600),
+                    ),
+                  );
+                  return DiagramViewerContent(
+                    controller: mockController,
+                    configuration: const DiagramConfiguration(),
+                    debug: false,
+                  );
+                }),
+              ),
+            ),
+          ),
+        );
+
+        final element = tester.element(find.byType(DiagramViewerContent));
+        final transformBloc = BlocProvider.of<TransformBloc>(element);
+        final initialScale = transformBloc.state.transform.scale;
+
+        // Act - Press Cmd and simulate Magic Mouse horizontal scroll (right)
+        await tester.sendKeyDownEvent(LogicalKeyboardKey.metaLeft);
+        tester.binding.handlePointerEvent(
+          const PointerScrollEvent(
+            position: Offset(200, 150),
+            scrollDelta: Offset(40, 0),
+            timeStamp: Duration(milliseconds: 16),
+            kind: PointerDeviceKind.mouse,
+          ),
+        );
+        await tester.pump();
+
+        // Assert - Scale changed, and no scroll forwarded to controller
+        final zoomedScale = transformBloc.state.transform.scale;
+        expect(zoomedScale, isNot(equals(initialScale)));
         final afterCtrlScrollCount = mockController.receivedEvents
             .where((e) => e.maybeWhen(scroll: (_) => true, orElse: () => false))
             .length;

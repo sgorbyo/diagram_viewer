@@ -52,12 +52,12 @@ void main() {
     final viewer = find.byType(TestableDiagramViewer);
     final center = tester.getCenter(viewer);
 
-    // Emit a burst of wheel scroll events (vertical)
-    for (int i = 0; i < 10; i++) {
+    // Emit a burst of smooth Magic Mouse-like scroll events (vertical)
+    for (int i = 0; i < 15; i++) {
       tester.binding.handlePointerEvent(
         PointerScrollEvent(
           position: center,
-          scrollDelta: const Offset(0, -40), // scroll up (content moves down)
+          scrollDelta: const Offset(0, -3), // small smooth delta (MM-like)
           kind: PointerDeviceKind.mouse,
           timeStamp: Duration(milliseconds: 16 * (i + 1)),
         ),

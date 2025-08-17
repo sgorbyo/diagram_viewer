@@ -89,8 +89,8 @@ void main() {
         // Act - Measure rendering time (min of N after warm-up)
         final tOptUs = _measureMinPaintUs(optimizedPainter);
         final tNoOptUs = _measureMinPaintUs(nonOptimizedPainter);
-        final picture1 = const Object();
-        final picture2 = const Object();
+        const picture1 = Object();
+        const picture2 = Object();
 
         // Assert - Both should render successfully
         expect(picture1, isNotNull);

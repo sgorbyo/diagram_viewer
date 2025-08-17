@@ -316,16 +316,24 @@ class TransformBloc extends Bloc<TransformEvent, TransformState> {
         now.difference(_lastZoomEventTime!).inMilliseconds > 300;
     _lastZoomEventTime = now;
 
-    final wasSmallH =
+    final bool wasSmallH =
         diagramRect.width * currentTransform.scale <= viewportSize.width;
-    final wasSmallV =
+    final bool wasSmallV =
         diagramRect.height * currentTransform.scale <= viewportSize.height;
-    final wasSmall = wasSmallH || wasSmallV;
+    final bool wasSmall = wasSmallH || wasSmallV;
+
+    // Predict small/large state AFTER applying this zoom step to avoid one-frame drift
+    final double proposedScale = currentTransform.scale * scale;
+    final bool willBeSmallH =
+        diagramRect.width * proposedScale <= viewportSize.width;
+    final bool willBeSmallV =
+        diagramRect.height * proposedScale <= viewportSize.height;
+    final bool willBeSmall = willBeSmallH || willBeSmallV;
 
     if (newBurst) {
-      _zoomSequenceOriginWasSmall = wasSmall;
-    } else if (wasSmall) {
-      // Once the sequence passes into small-content state, latch to center-anchored mode
+      _zoomSequenceOriginWasSmall = wasSmall || willBeSmall;
+    } else if (wasSmall || willBeSmall) {
+      // Once the sequence enters small-content state (including at this very step), latch to center-anchored mode
       _zoomSequenceOriginWasSmall = true;
     }
 
