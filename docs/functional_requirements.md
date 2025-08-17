@@ -99,6 +99,7 @@ The package implements a **Diagrammer-Controller architecture** where:
   - Execute auto-scroll commands with a periodic tick based on `DiagramConfiguration.autoScrollInterval`
   - Support configurable edge detection thresholds via `DiagramConfiguration.edgeThreshold`
   - Integrate velocity per tick and apply it via `TransformBloc`
+  - During an active pointer drag, synthesize pointer updates post-frame to keep event flow coherent (`dragContinue` without physical pointer moves), preserving correlation via `eventId` and correct button bitmask
   - Stop immediately on `StopAutoScroll` or on any new user input
 
 ### In‑App Drag & Drop (Target)

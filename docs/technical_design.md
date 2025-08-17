@@ -188,8 +188,10 @@ The package uses multiple BLoCs for different responsibilities:
 #### **AutoScroll (current implementation)**
 - Orchestration lives in the example controller based on `borderProximity`.
 - Execution is encapsulated by an internal `AutoScrollService` used by `DiagramViewerContent`, which runs a timer-driven loop at `autoScrollInterval` integrating `velocity * dt` and dispatching pan deltas to `TransformBloc`.
+- During autoscroll and while a pointer drag is active, `DiagramViewerContent` synthesizes a `PointerMoveEvent` post-frame using the last local pointer position and current transform, mapping pressed buttons to the Flutter bitmask and recomputing hit-testing; this is forwarded as `EventManagementEvent.updatePointerEvent` to produce `PhysicalEvent.pointer(update)`.
+- The `DiagramEventTranslator` uses `eventId` as the correlation key and emits `dragContinue` when there is raw delta or logical delta (due to transform changes), or when cumulative distance > 0.5 px, or duration > 100 ms.
 - Immediate stop on `StopAutoScroll` or any new user input (pointer/gesture/keyboard) via the service.
-- Widget-level E2E autoscroll test stabilized and active.
+- Widget-level TDD tests validate drag-sync during autoscroll.
 
 #### **EventManagementBloc**
 - Manages complex event states and isolation

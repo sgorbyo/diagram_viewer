@@ -62,6 +62,7 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
   DateTime? _lastPointerMoveTime;
   final List<Offset> _recentPointerDeltas = <Offset>[]; // px
   final List<int> _recentPointerDeltaMs = <int>[]; // ms per sample
+  Offset? _lastPointerLocalPosition;
 
   double _ghostDiameterFor(Object? spec, double scale) {
     try {
@@ -287,6 +288,54 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
                   delta: delta,
                   currentTransform: currentTransform,
                 ));
+
+                // NEW: keep drag/object in sync during auto-scroll by synthesizing a pointer update
+                final eventBloc = context.read<EventManagementBloc>();
+                final state = eventBloc.state;
+                if (state is PointerActiveState &&
+                    _lastPointerLocalPosition != null) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    if (!mounted) return;
+                    // Recompute hit results and logical position under current (updated) transform
+                    final tNow = context.read<TransformBloc>().state.transform;
+                    final local = _lastPointerLocalPosition!;
+                    final hitResults = _performHitTesting(local, tNow);
+                    final logicalPosition = tNow.physicalToLogical(local);
+                    // Map pressed buttons from bloc state to Flutter PointerEvent bitmask
+                    int buttonsMask = 0;
+                    for (final b in state.pressedMouseButtons) {
+                      switch (b) {
+                        case MouseButton.left:
+                          buttonsMask |= 1;
+                          break;
+                        case MouseButton.right:
+                          buttonsMask |= 2;
+                          break;
+                        case MouseButton.middle:
+                          buttonsMask |= 4;
+                          break;
+                        case MouseButton.back:
+                          buttonsMask |= 8;
+                          break;
+                        case MouseButton.forward:
+                          buttonsMask |= 16;
+                          break;
+                      }
+                    }
+                    // Synthesize a PointerMoveEvent with correct global position and buttons bitmask
+                    final box = context.findRenderObject() as RenderBox?;
+                    final global =
+                        box != null ? box.localToGlobal(local) : local;
+                    final synthetic = PointerMoveEvent(
+                        position: global, buttons: buttonsMask);
+                    eventBloc.add(EventManagementEvent.updatePointerEvent(
+                      rawEvent: synthetic,
+                      logicalPosition: logicalPosition,
+                      hitResults: hitResults,
+                      pressedKeys: _pressedKeys,
+                    ));
+                  });
+                }
               },
             );
           },
@@ -703,6 +752,50 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
                             if (!_dragOverlayVisible || candidate.isEmpty) {
                               return const SizedBox();
                             }
+
+                            // CRITICAL FIX: Update overlay position when transform changes (e.g., during auto-scroll)
+                            if (_dragOverlayLocalCenter != null) {
+                              final currentTransform = transformState.transform;
+                              final scale = currentTransform.scale;
+                              final ghostDiameter =
+                                  _ghostDiameterFor(_dragOverlaySpec, scale);
+
+                              // Convert stored logical center to new physical coordinates
+                              final newPhysicalCenter =
+                                  currentTransform.logicalToPhysical(
+                                currentTransform.physicalToLogical(
+                                    _dragOverlayLocalCenter!),
+                              );
+
+                              // Apply snap-to-grid if enabled
+                              final cfg = widget.configuration;
+                              final snappedPhysicalCenter = cfg.snapGridEnabled
+                                  ? currentTransform.logicalToPhysical(
+                                      Transform2DUtils.snapPointToGrid(
+                                        point:
+                                            currentTransform.physicalToLogical(
+                                                _dragOverlayLocalCenter!),
+                                        spacing: cfg.snapGridSpacing,
+                                        origin: cfg.snapGridOrigin,
+                                      ),
+                                    )
+                                  : newPhysicalCenter;
+
+                              final newTopLeft = snappedPhysicalCenter -
+                                  Offset(ghostDiameter / 2, ghostDiameter / 2);
+
+                              // Update overlay position to match current transform
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                if (mounted) {
+                                  setState(() {
+                                    _dragOverlayLocalPosition = newTopLeft;
+                                    _dragOverlayLocalCenter =
+                                        snappedPhysicalCenter;
+                                  });
+                                }
+                              });
+                            }
+
                             final scale = transformState.transform.scale;
                             final ghostDiameter =
                                 _ghostDiameterFor(_dragOverlaySpec, scale);
@@ -774,6 +867,7 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
     final box = context.findRenderObject() as RenderBox?;
     final correctedPosition =
         box != null ? box.globalToLocal(event.position) : event.position;
+    _lastPointerLocalPosition = correctedPosition;
 
     // Perform hit-testing
     final hitResults = _performHitTesting(correctedPosition, currentTransform);
@@ -809,6 +903,7 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
     final box = context.findRenderObject() as RenderBox?;
     final correctedPosition =
         box != null ? box.globalToLocal(event.position) : event.position;
+    _lastPointerLocalPosition = correctedPosition;
 
     // Perform hit-testing
     final hitResults = _performHitTesting(correctedPosition, currentTransform);

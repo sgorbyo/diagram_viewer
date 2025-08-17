@@ -109,7 +109,9 @@ class DiagramEventTranslator {
       );
     }
 
-    final eventKey = _generateEventKey(rawEvent);
+    // Use stable eventId as the correlation key so synthetic pointer
+    // events (e.g., during auto-scroll) continue the same interaction
+    final eventKey = eventId;
     final isOnObject = hitList.isNotEmpty;
     final mouseButton =
         pressedMouseButtons.isNotEmpty ? pressedMouseButtons.first : null;
@@ -263,6 +265,7 @@ class DiagramEventTranslator {
     _activeEvents[eventKey] = _EventState(
       startTime: DateTime.now(),
       startPosition: logicalPosition,
+      lastLogicalPosition: logicalPosition,
       hitList: hitList,
       mouseButton: mouseButton,
       isOnObject: isOnObject,
@@ -321,11 +324,26 @@ class DiagramEventTranslator {
       return null;
     }
 
-    final duration = DateTime.now().difference(state.startTime);
+    final now = DateTime.now();
+    final duration = now.difference(state.startTime);
     final totalDelta = logicalPosition - state.startPosition;
 
+    // Compute logical delta vs last known logical position to support auto-scroll
+    final logicalDelta = logicalPosition - state.lastLogicalPosition;
+    // Prefer raw delta when available and non-zero, otherwise use logical delta
+    final effectiveDelta = (delta != null && (delta.dx != 0 || delta.dy != 0))
+        ? delta
+        : logicalDelta;
+
+    // Update last logical position for next update
+    state.lastLogicalPosition = logicalPosition;
+
     // Check if this has become a drag using multiple criteria
-    if (delta != null && _isDrag(totalDelta, duration)) {
+    final hasMovement = (effectiveDelta.dx != 0 || effectiveDelta.dy != 0);
+    final significant = hasMovement ||
+        totalDelta.distance > 0.5 ||
+        duration > const Duration(milliseconds: 100);
+    if (significant) {
       return DiagramEventUnion.dragContinue(
         DiagramDragContinue(
           eventId: eventId,
@@ -345,10 +363,10 @@ class DiagramEventTranslator {
               'normalizedDistance': borderProximity.normalizedDistance,
             },
           },
-          delta: delta,
+          delta: effectiveDelta,
           totalDelta: totalDelta,
           duration: duration,
-          velocity: _calculateVelocity(delta, duration),
+          velocity: _calculateVelocity(effectiveDelta, duration),
         ),
       );
     }
@@ -432,6 +450,7 @@ class DiagramEventTranslator {
     _activeEvents[eventKey] = _EventState(
       startTime: DateTime.now(),
       startPosition: logicalPosition,
+      lastLogicalPosition: logicalPosition,
       hitList: hitList,
       mouseButton: null,
       isOnObject: hitList.isNotEmpty,
@@ -655,6 +674,7 @@ class DiagramEventTranslator {
 class _EventState {
   final DateTime startTime;
   final Offset startPosition;
+  Offset lastLogicalPosition;
   final List<DiagramObjectEntity> hitList;
   final MouseButton? mouseButton;
   final bool isOnObject;
@@ -662,6 +682,7 @@ class _EventState {
   _EventState({
     required this.startTime,
     required this.startPosition,
+    required this.lastLogicalPosition,
     required this.hitList,
     required this.mouseButton,
     required this.isOnObject,

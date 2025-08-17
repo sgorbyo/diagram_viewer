@@ -14,7 +14,8 @@ A Flutter package for building interactive diagram viewers with support for smoo
 - 🧷 In‑app Drag & Drop target with accurate logical/screen mapping
 - 📐 Unified transform management with `Transform2D`
 - 📱 Cross‑platform support (iOS, Android, Web, Desktop)
-- 🎯 Grid overlay thinning with adaptive density optimization
+- 🧭 Autoscroll drag‑sync: continuous `dragContinue` during `AutoScrollStep` via post‑frame synthesized pointer updates
+- 🎯 Snap grid overlay: balanced styling and zoom‑aware minimum pixel spacing
 
 ## Installation
 
@@ -145,6 +146,7 @@ Diagrammer‑Controller Pattern:
 - Snap‑to‑grid opzionale (hint negli eventi; ghost overlay allineato)
 - In‑app DnD target cross‑platform con mapping logico/schermo accurato
 - Rendering tramite `CustomPaint` in spazio logico
+ - Autoscroll drag‑sync: durante `AutoScrollStep` il viewer sintetizza update del puntatore post‑frame mantenendo aggiornata la posizione logica e l’hit‑testing; il controller continua a ricevere `dragContinue` anche senza ulteriori movimenti fisici del puntatore
 
 ### Content Management
 

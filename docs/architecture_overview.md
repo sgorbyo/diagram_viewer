@@ -63,6 +63,7 @@ Notes:
 Autoscroll execution contract (current):
 - The controller decides when to autoscroll (based on border proximity) and emits `AutoScrollStep` with a velocity vector; it must emit `StopAutoScroll` when leaving the edge region or on drag end.
 - The Diagrammer executes autoscroll with a periodic tick (per `autoScrollInterval`) integrating `velocity * dt`, and immediately cancels on `StopAutoScroll` or on new user input.
+ - Drag‑sync: while autoscrolling and a pointer drag is active, the Diagrammer synthesizes a post‑frame pointer update preserving the current `eventId` and pressed button bitmask, recomputes hit‑testing and the logical position under the fixed cursor, and forwards `PhysicalEvent.pointer(update)` so that the translator emits `dragContinue` even without physical pointer motion.
 
 ## Component Responsibilities
 
@@ -74,6 +75,7 @@ Autoscroll execution contract (current):
 - Default pan/zoom behaviors
 - Performance optimization (60 FPS target)
 - Execute `AutoScrollStep`/`StopAutoScroll` commands with a timer-based loop
+ - Execute `AutoScrollStep`/`StopAutoScroll` commands with a timer-based loop and synthesize pointer updates during autoscroll to keep drags in sync
 - Expose an in‑app drag target layer; convert screen to logical coordinates; execute DnD visual feedback commands
  - Provide generic rendering facilities to objects (self-rendering):
    - Local canvas rotation around a pivot to simplify drawing at arbitrary angles
