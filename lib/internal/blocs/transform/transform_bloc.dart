@@ -13,6 +13,8 @@ class TransformBloc extends Bloc<TransformEvent, TransformState> {
   Timer? _bounceTimer;
   bool _needsBounceBack = false;
   InteractionKind _lastInteractionKind = InteractionKind.other;
+  DateTime? _lastZoomEventTime;
+  bool _zoomSequenceOriginWasSmall = false;
 
   TransformBloc({
     required this.configuration,
@@ -304,22 +306,67 @@ class TransformBloc extends Bloc<TransformEvent, TransformState> {
     Transform2D currentTransform,
     Emitter<TransformState> emit,
   ) {
-    final newTransform = currentTransform.applyZoom(scale, focalPoint);
     final currentState = state;
-    final scaledWidth = currentState.diagramRect.width * newTransform.scale;
-    final scaledHeight = currentState.diagramRect.height * newTransform.scale;
-    final isSmallerH = scaledWidth < currentState.viewportSize.width;
-    final isSmallerV = scaledHeight < currentState.viewportSize.height;
+    final viewportSize = currentState.viewportSize;
+    final diagramRect = currentState.diagramRect;
 
-    final finalTransform = Transform2DUtils.capTransformWithZoomLimits(
+    // Determine if this is a new zoom burst (gap > 300ms)
+    final now = DateTime.timestamp();
+    final bool newBurst = _lastZoomEventTime == null ||
+        now.difference(_lastZoomEventTime!).inMilliseconds > 300;
+    _lastZoomEventTime = now;
+
+    final wasSmallH =
+        diagramRect.width * currentTransform.scale <= viewportSize.width;
+    final wasSmallV =
+        diagramRect.height * currentTransform.scale <= viewportSize.height;
+    final wasSmall = wasSmallH || wasSmallV;
+
+    if (newBurst) {
+      _zoomSequenceOriginWasSmall = wasSmall;
+    } else if (wasSmall) {
+      // Once the sequence passes into small-content state, latch to center-anchored mode
+      _zoomSequenceOriginWasSmall = true;
+    }
+
+    final prevPhysicalFocal = currentTransform.logicalToPhysical(focalPoint);
+    final newTransform = currentTransform.applyZoom(scale, focalPoint);
+
+    Transform2D cappedScaleTransform =
+        Transform2DUtils.capTransformWithZoomLimits(
       transform: newTransform,
-      diagramRect: currentState.diagramRect,
-      size: currentState.viewportSize,
+      diagramRect: diagramRect,
+      size: viewportSize,
       dynamic: true,
       minZoom: configuration.minZoom,
       maxZoom: configuration.maxZoom,
-      preserveCentering: isSmallerH || isSmallerV,
+      preserveCentering: false,
       recenterSmallContent: false,
+    );
+
+    Offset desiredTranslation;
+    if (_zoomSequenceOriginWasSmall) {
+      final viewportCenter =
+          Offset(viewportSize.width / 2, viewportSize.height / 2);
+      final logicalCenter = diagramRect.center;
+      desiredTranslation =
+          viewportCenter - logicalCenter * cappedScaleTransform.scale;
+    } else {
+      desiredTranslation =
+          prevPhysicalFocal - focalPoint * cappedScaleTransform.scale;
+    }
+    cappedScaleTransform =
+        cappedScaleTransform.copyWith(translation: desiredTranslation);
+
+    final finalTransform = Transform2DUtils.capTransformWithZoomLimits(
+      transform: cappedScaleTransform,
+      diagramRect: diagramRect,
+      size: viewportSize,
+      dynamic: false,
+      minZoom: configuration.minZoom,
+      maxZoom: configuration.maxZoom,
+      preserveCentering: true,
+      recenterSmallContent: true,
     );
 
     emit(TransformState.updated(

@@ -589,6 +589,29 @@ Implemented commands from controller to viewer:
   - `EventManagementBloc` unifies input as PhysicalEvents; controller interprets per-platform policy.
   - Tests should validate equivalences without depending on OS-specific gesture recognizers.
 
+### Wheel + Modifier Zoom Pipeline (Design Details)
+
+- Decision of focal point:
+  - If Ctrl/Cmd is pressed and a wheel event occurs, treat it as zoom.
+  - Determine if content is "small" using `scaleToFit(contentRect, viewportSize)` compared to current scale.
+  - Focal anchoring strategy for a wheel burst (sequence of wheel events within ~300ms gaps):
+    - If the sequence starts while content is small on any axis, anchor focal to the viewport center for the whole burst.
+    - Otherwise, anchor focal to the cursor position in logical space.
+  - If during a burst the content becomes small, latch to center-anchored mode until the burst ends.
+
+- Application order per wheel tick:
+  1. Compute proposed scale using multiplicative factor; clamp to `[effectiveMin, maxZoom]`, where `effectiveMin = max(minZoom, scaleToFit)`.
+  2. Apply zoom around the chosen focal (`Transform2D.applyZoom`).
+  3. Recompute translation:
+     - If center-anchored (small-content burst), set translation so that the logical center maps to the viewport center.
+     - Else, set translation to preserve the physical position of the logical focal under the cursor.
+  4. Cap with `capTransformWithZoomLimits(dynamic: false, preserveCentering: true, recenterSmallContent: true)` to enforce limits and centering.
+
+- Resulting behavior:
+  - From min→max burst starting small: center stays visually stable (drift < 1 px) across the burst and across the `fitMin` threshold.
+  - When content is large on both axes, the point under the cursor remains stable.
+  - At limits, extra wheel ticks do not change scale or translation (no spurious pan).
+
 ## Inertial Scrolling Design
 
 ### Overview

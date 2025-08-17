@@ -29,9 +29,10 @@ The package implements a **Diagrammer-Controller architecture** where:
 ### Zoom Behavior Requirements
 - The package must implement zoom behavior that maintains the focal point:
   - **Pinch-to-zoom**: The point between the user's fingers (focal point) must remain stationary in the viewport during zoom operations
-  - **Mouse wheel zoom**: The point under the mouse cursor must remain stationary during zoom operations
+  - **Mouse wheel zoom**: The point under the mouse cursor must remain stationary during zoom operations when the content is "large" (fills both axes). When the content is "small" on at least one axis, the focal is anchored to the viewport center for the duration of the wheel burst to preserve centering; upon becoming large, focal anchoring switches to the cursor.
   - **Keyboard zoom**: The center of the viewport must remain stationary during zoom operations
-  - **Zoom constraints**: All zoom operations must respect minimum and maximum zoom limits while maintaining focal point stability
+  - **Zoom constraints**: All zoom operations must respect minimum and maximum zoom limits while maintaining focal point stability. When at effective min/max, further wheel zooms are ignored (no spurious pan).
+  - **Small-content centering during zoom**: When the diagram is smaller than the viewport on any axis, it must remain centered on those axes throughout interaction and during zoom bursts from min→max; the physical center drift of the logical center must remain < 1 px across the burst.
 
 ### Hit-Testing Responsibility
 - The package must perform internal hit-testing:
@@ -272,7 +273,7 @@ The package implements a **Diagrammer-Controller architecture** where:
 - **Background Visibility**: Show background when over-bounds to indicate overscroll
 
 ### Zoom Blocking
-- When at normal zoom limits and not in overscroll state, further zoom events must be blocked
+- When at effective zoom limits (considering dynamic min = max(config.minZoom, scaleToFit)), further wheel/pinch zoom events must be blocked; no translation side-effects must be introduced.
 - Overscroll state allows temporary zooming beyond limits
 - Bounce-back animation returns to strict limits after interaction ends
 
@@ -283,6 +284,7 @@ The package implements a **Diagrammer-Controller architecture** where:
 - This shows an equal amount of background on both sides
 - Centering must be applied during transform capping operations
 - Centering must be preserved when applying translation limits
+- During zoom from a "small" state, the logical center must remain aligned with the viewport center for the duration of a wheel burst; once content becomes large on both axes, zoom focal switches to cursor and center anchoring is released.
 
 ## Performance Requirements
 

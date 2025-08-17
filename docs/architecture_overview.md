@@ -189,3 +189,10 @@ User Gesture → Diagrammer (enrichment) → Controller (interpretation) → Com
 Known limitations (current):
 // None specific to autoscroll tests; timer-driven flows stabilized.
 
+## Zoom Behavior Summary
+
+- Standard input mapping: **Ctrl/Cmd + wheel = zoom**; default wheel (no modifiers) forwards scroll to controller.
+- **No pan at limits**: When at effective min/max zoom, additional wheel ticks are ignored and must not introduce translation changes.
+- **Small-content anchoring**: If the diagram is smaller than the viewport on any axis, the viewer maintains the diagram centered on those axes. During a wheel zoom burst that starts in this state, the focal point is anchored to the viewport center for the entire burst to avoid drift.
+- **Large-content anchoring**: When the diagram fills the viewport on both axes, the zoom focal point is the cursor; the point under the cursor remains visually stable during zoom.
+
