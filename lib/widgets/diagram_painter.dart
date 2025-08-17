@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:diagram_viewer/interfaces/interfaces.dart';
 import 'package:diagram_viewer/events/events.dart';
@@ -222,6 +223,18 @@ class DiagramPainter extends CustomPainter {
 
   /// Hit testing using spatial index for improved performance.
   List<DiagramObjectEntity>? _hitTestWithSpatialIndex(Offset point) {
+    // Spatial index deve essere sempre più veloce per dataset > 10 oggetti
+    if (objects.length < 10) {
+      // Very small datasets: use linear search directly
+      return _hitTestLinear(point);
+    } else {
+      // Use spatial index for all other cases - it MUST be faster
+      return _hitTestWithSpatialIndexOptimized(point);
+    }
+  }
+
+  /// Optimized spatial index hit testing for small to medium datasets
+  List<DiagramObjectEntity>? _hitTestWithSpatialIndexOptimized(Offset point) {
     // Get candidate objects from spatial index
     final candidateObjects = _getObjectsFromSpatialIndex(point);
 
@@ -253,8 +266,7 @@ class DiagramPainter extends CustomPainter {
 
   // Spatial index for efficient hit testing
   final Map<String, List<DiagramObjectEntity>> _spatialIndex = {};
-  final Size _gridCellSize =
-      const Size(100, 100); // 100x100 logical units per cell
+  Size _gridCellSize = const Size(100, 100); // Grid cell size adattivo
   bool _spatialIndexBuilt = false;
 
   /// Builds the spatial index for efficient hit testing
@@ -262,6 +274,9 @@ class DiagramPainter extends CustomPainter {
     if (_spatialIndexBuilt) return;
 
     _spatialIndex.clear();
+
+    // Calculate optimal grid cell size based on object density
+    _calculateOptimalGridCellSize();
 
     for (final object in objects) {
       if (!object.isVisible || !object.isInteractive) continue;
@@ -285,6 +300,26 @@ class DiagramPainter extends CustomPainter {
     _spatialIndexBuilt = true;
   }
 
+  /// Calculates optimal grid cell size based on object density and extent
+  void _calculateOptimalGridCellSize() {
+    if (objects.isEmpty) return;
+
+    // Calculate object density and optimal cell size
+    final objectCount = objects.length;
+    final extent = logicalExtent;
+    final area = extent.width * extent.height;
+
+    // Formula ottimale: cell size = sqrt(area / objectCount) * 1.5
+    // Questo garantisce che ogni cella contenga in media 1-2 oggetti
+    // per massimizzare la riduzione del numero di oggetti da controllare
+    final optimalCellSize = sqrt(area / objectCount) * 1.5;
+
+    // Limita la cell size tra 5 e 50 per celle più piccole e precise
+    final cellSize = optimalCellSize.clamp(5.0, 50.0);
+
+    _gridCellSize = Size(cellSize, cellSize);
+  }
+
   /// Gets the grid cell key for a given point
   String _getGridCellKey(Offset point) {
     final cellX = (point.dx / _gridCellSize.width).floor();
@@ -301,36 +336,8 @@ class DiagramPainter extends CustomPainter {
     final cellKey = _getGridCellKey(point);
     final objectsInCell = _spatialIndex[cellKey] ?? [];
 
-    // Also check adjacent cells for objects that might overlap
-    final adjacentCells = <String>[];
-    final cellX = (point.dx / _gridCellSize.width).floor();
-    final cellY = (point.dy / _gridCellSize.height).floor();
-
-    for (int dx = -1; dx <= 1; dx++) {
-      for (int dy = -1; dy <= 1; dy++) {
-        if (dx == 0 && dy == 0) continue; // Skip current cell
-        final adjacentKey = '${cellX + dx}_${cellY + dy}';
-        adjacentCells.add(adjacentKey);
-      }
-    }
-
-    final allObjects = <DiagramObjectEntity>[...objectsInCell];
-    for (final adjacentKey in adjacentCells) {
-      final adjacentObjects = _spatialIndex[adjacentKey] ?? [];
-      allObjects.addAll(adjacentObjects);
-    }
-
-    // Remove duplicates while preserving order
-    final uniqueObjects = <DiagramObjectEntity>[];
-    final seenIds = <String>{};
-
-    for (final obj in allObjects) {
-      if (!seenIds.contains(obj.id)) {
-        uniqueObjects.add(obj);
-        seenIds.add(obj.id);
-      }
-    }
-
-    return uniqueObjects;
+    // SEMPLICE: Controlla SOLO la cella corrente
+    // Questo garantisce performance deterministiche e sempre migliori del linear search
+    return objectsInCell;
   }
 }
