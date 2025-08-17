@@ -198,14 +198,14 @@ mixin _$DiagramConfiguration {
   /// When adaptive density is enabled, grid lines are only drawn if they
   /// are at least this many pixels apart on screen. This prevents
   /// overcrowding at high zoom levels.
-  /// Defaults to 8.0 pixels.
+  /// Defaults to 2.0 pixels (more permissive).
   double get minGridLinePixelSpacing => throw _privateConstructorUsedError;
 
   /// Maximum number of grid lines to render for performance.
   ///
-  /// Limits the total number of grid lines to prevent performance issues
-  /// with very large diagrams or extreme zoom levels.
-  /// Defaults to 200 lines.
+  /// NOTE: This limit is currently NOT enforced to ensure grid visibility.
+  /// User experience takes priority over performance for grid rendering.
+  /// Defaults to 200 lines (legacy value, not used).
   int get maxGridLines => throw _privateConstructorUsedError;
 
   /// Whether to enable spatial index for efficient hit-testing.
@@ -675,7 +675,7 @@ class _$DiagramConfigurationImpl implements _DiagramConfiguration {
       this.snapGridOrigin = Offset.zero,
       this.showSnapGrid = false,
       this.enableAdaptiveGridDensity = true,
-      this.minGridLinePixelSpacing = 8.0,
+      this.minGridLinePixelSpacing = 2.0,
       this.maxGridLines = 200,
       this.enableSpatialIndex = false});
 
@@ -915,16 +915,16 @@ class _$DiagramConfigurationImpl implements _DiagramConfiguration {
   /// When adaptive density is enabled, grid lines are only drawn if they
   /// are at least this many pixels apart on screen. This prevents
   /// overcrowding at high zoom levels.
-  /// Defaults to 8.0 pixels.
+  /// Defaults to 2.0 pixels (more permissive).
   @override
   @JsonKey()
   final double minGridLinePixelSpacing;
 
   /// Maximum number of grid lines to render for performance.
   ///
-  /// Limits the total number of grid lines to prevent performance issues
-  /// with very large diagrams or extreme zoom levels.
-  /// Defaults to 200 lines.
+  /// NOTE: This limit is currently NOT enforced to ensure grid visibility.
+  /// User experience takes priority over performance for grid rendering.
+  /// Defaults to 200 lines (legacy value, not used).
   @override
   @JsonKey()
   final int maxGridLines;
@@ -1298,15 +1298,15 @@ abstract class _DiagramConfiguration implements DiagramConfiguration {
   /// When adaptive density is enabled, grid lines are only drawn if they
   /// are at least this many pixels apart on screen. This prevents
   /// overcrowding at high zoom levels.
-  /// Defaults to 8.0 pixels.
+  /// Defaults to 2.0 pixels (more permissive).
   @override
   double get minGridLinePixelSpacing;
 
   /// Maximum number of grid lines to render for performance.
   ///
-  /// Limits the total number of grid lines to prevent performance issues
-  /// with very large diagrams or extreme zoom levels.
-  /// Defaults to 200 lines.
+  /// NOTE: This limit is currently NOT enforced to ensure grid visibility.
+  /// User experience takes priority over performance for grid rendering.
+  /// Defaults to 200 lines (legacy value, not used).
   @override
   int get maxGridLines;
 

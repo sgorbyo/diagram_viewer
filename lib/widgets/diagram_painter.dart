@@ -65,14 +65,16 @@ class DiagramPainter extends CustomPainter {
     final origin = configuration.snapGridOrigin;
     final extent = logicalExtent;
 
-    // CRITICAL: Apply pixel spacing constraint to prevent performance issues
+    // Apply pixel spacing constraint to prevent overcrowding
+    // This makes sense: don't show grid when lines are too close together
     final pixelSpacing = spacing * transform.scale;
     if (pixelSpacing < configuration.minGridLinePixelSpacing) {
-      // Skip rendering if pixel spacing is too small
+      // Skip rendering if pixel spacing is too small (prevents visual clutter)
       return;
     }
 
-    // Simple, efficient grid rendering with basic optimizations
+    // Draw grid without artificial line count limits
+    // User wants to see the grid, so we show it regardless of line count
     _drawSimpleGrid(canvas, extent, origin, spacing);
   }
 
@@ -88,17 +90,16 @@ class DiagramPainter extends CustomPainter {
     final startY = ((extent.top - origin.dy) / spacing).floor();
     final endY = ((extent.bottom - origin.dy) / spacing).ceil();
 
-    // Limit maximum number of lines for performance
-    final maxLines = configuration.maxGridLines;
-    if ((endX - startX + 1) + (endY - startY + 1) > maxLines) {
-      // Skip rendering if too many lines would be drawn
-      return;
-    }
+    // REMOVED: Artificial line count limit
+    // This was wrong: user wants to see the grid regardless of line count
+    // Performance is not a concern for grid rendering
 
     final paint = Paint()
-      ..color = const Color(0x11000000)
+      ..color = const Color(
+          0x22000000) // Balanced visibility: alpha = 0x22 = 34/255 ≈ 13% (clear but not invasive)
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.0 / transform.scale.clamp(1.0, double.infinity);
+      ..strokeWidth = (1.0 / transform.scale.clamp(1.0, double.infinity))
+          .clamp(0.8, 2.0); // Min 0.8px, max 2.0px for balanced visibility
 
     // Draw vertical lines
     for (int i = startX; i <= endX; i++) {

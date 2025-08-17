@@ -211,14 +211,14 @@ class DiagramConfiguration with _$DiagramConfiguration {
     /// When adaptive density is enabled, grid lines are only drawn if they
     /// are at least this many pixels apart on screen. This prevents
     /// overcrowding at high zoom levels.
-    /// Defaults to 8.0 pixels.
-    @Default(8.0) double minGridLinePixelSpacing,
+    /// Defaults to 2.0 pixels (more permissive).
+    @Default(2.0) double minGridLinePixelSpacing,
 
     /// Maximum number of grid lines to render for performance.
     ///
-    /// Limits the total number of grid lines to prevent performance issues
-    /// with very large diagrams or extreme zoom levels.
-    /// Defaults to 200 lines.
+    /// NOTE: This limit is currently NOT enforced to ensure grid visibility.
+    /// User experience takes priority over performance for grid rendering.
+    /// Defaults to 200 lines (legacy value, not used).
     @Default(200) int maxGridLines,
 
     /// Whether to enable spatial index for efficient hit-testing.
