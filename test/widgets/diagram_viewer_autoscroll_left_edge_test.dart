@@ -116,6 +116,8 @@ void main() {
     expect(after, greaterThan(before));
 
     await gesture.up();
+    // Allow any pending controller listener actions (e.g., stopAutoScroll) to flush before disposing
+    await tester.pump(const Duration(milliseconds: 16));
     eventBloc.close();
     transformBloc.close();
     zoomBloc.close();

@@ -121,7 +121,7 @@ void main() {
         );
 
         final moveEvent = PhysicalEvent.pointer(
-          eventId: 'test-2',
+          eventId: 'test-1',
           logicalPosition: const Offset(110, 110),
           screenPosition: const Offset(110, 110),
           transformSnapshot: testTransform,
@@ -148,7 +148,7 @@ void main() {
           scroll: (event) => fail('Expected dragContinue, got scroll'),
           dragBegin: (event) => fail('Expected dragContinue, got dragBegin'),
           dragContinue: (event) {
-            expect(event.eventId, equals('test-2'));
+            expect(event.eventId, equals('test-1'));
             expect(event.logicalPosition, equals(const Offset(110, 110)));
             expect(event.delta, equals(const Offset(10, 10)));
             expect(event.totalDelta, equals(const Offset(10, 10)));
@@ -207,7 +207,7 @@ void main() {
         );
 
         final moveEvent = PhysicalEvent.pointer(
-          eventId: 'test-2',
+          eventId: 'test-1',
           logicalPosition: const Offset(110, 110),
           screenPosition: const Offset(110, 110),
           transformSnapshot: testTransform,
@@ -235,7 +235,7 @@ void main() {
         );
 
         final endEvent = PhysicalEvent.pointer(
-          eventId: 'test-3',
+          eventId: 'test-1',
           logicalPosition: const Offset(110, 110),
           screenPosition: const Offset(110, 110),
           transformSnapshot: testTransform,
@@ -263,7 +263,7 @@ void main() {
           dragBegin: (event) => fail('Expected dragEnd, got dragBegin'),
           dragContinue: (event) => fail('Expected dragEnd, got dragContinue'),
           dragEnd: (event) {
-            expect(event.eventId, equals('test-3'));
+            expect(event.eventId, equals('test-1'));
             expect(event.logicalPosition, equals(const Offset(110, 110)));
             expect(event.totalDelta, equals(const Offset(10, 10)));
             expect(event.totalDuration.inMilliseconds, greaterThan(0));
@@ -322,7 +322,7 @@ void main() {
         );
 
         final endEvent = PhysicalEvent.pointer(
-          eventId: 'test-2',
+          eventId: 'test-1',
           logicalPosition: const Offset(100.5, 100.5),
           screenPosition: const Offset(100.5, 100.5),
           transformSnapshot: testTransform,
@@ -344,7 +344,7 @@ void main() {
         expect(result, isNotNull);
         result!.when(
           tap: (event) {
-            expect(event.eventId, equals('test-2'));
+            expect(event.eventId, equals('test-1'));
             expect(event.logicalPosition, equals(const Offset(100.5, 100.5)));
             expect(event.hitList, equals(testObjects));
             expect(event.isOnObject, isFalse);
@@ -519,7 +519,7 @@ void main() {
         );
 
         final moveEvent = PhysicalEvent.pointer(
-          eventId: 'test-2',
+          eventId: 'test-1',
           logicalPosition: const Offset(110, 110),
           screenPosition: const Offset(110, 110),
           transformSnapshot: testTransform,
@@ -546,7 +546,7 @@ void main() {
         );
 
         final endEvent = PhysicalEvent.pointer(
-          eventId: 'test-3',
+          eventId: 'test-1',
           logicalPosition: const Offset(110, 110),
           screenPosition: const Offset(110, 110),
           transformSnapshot: testTransform,
@@ -588,7 +588,7 @@ void main() {
         );
 
         moveResult!.when(
-          dragContinue: (event) => expect(event.eventId, equals('test-2')),
+          dragContinue: (event) => expect(event.eventId, equals('test-1')),
           tap: (event) => fail('Expected dragContinue'),
           doubleTap: (event) => fail('Expected dragContinue'),
           longPress: (event) => fail('Expected dragContinue'),
@@ -609,7 +609,7 @@ void main() {
         );
 
         endResult!.when(
-          dragEnd: (event) => expect(event.eventId, equals('test-3')),
+          dragEnd: (event) => expect(event.eventId, equals('test-1')),
           tap: (event) => fail('Expected dragEnd'),
           doubleTap: (event) => fail('Expected dragEnd'),
           longPress: (event) => fail('Expected dragEnd'),
