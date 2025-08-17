@@ -37,7 +37,7 @@ class DiagramPainter extends CustomPainter {
     canvas.transform(transform.toMatrix4().storage);
     _drawBackground(canvas, size);
     if (configuration.showSnapGrid) {
-      _drawSnapGrid(canvas);
+      _drawSnapGrid(canvas, size);
     }
     _drawDiagramArea(canvas);
     _drawObjects(canvas);
@@ -59,7 +59,7 @@ class DiagramPainter extends CustomPainter {
     // Non disegnare un layer extra: lo sfondo è già l'extent logico
   }
 
-  void _drawSnapGrid(Canvas canvas) {
+  void _drawSnapGrid(Canvas canvas, Size viewportSize) {
     final spacing = configuration.snapGridSpacing;
     if (spacing <= 0) return;
     final origin = configuration.snapGridOrigin;
@@ -69,13 +69,39 @@ class DiagramPainter extends CustomPainter {
     // This makes sense: don't show grid when lines are too close together
     final pixelSpacing = spacing * transform.scale;
     if (pixelSpacing < configuration.minGridLinePixelSpacing) {
-      // Skip rendering if pixel spacing is too small (prevents visual clutter)
+      // Adaptive LOD: double logical spacing until pixel spacing is above min threshold
+      double effectiveSpacing = spacing;
+      int safety = 0;
+      while (effectiveSpacing * transform.scale <
+          configuration.minGridLinePixelSpacing) {
+        effectiveSpacing *= 2.0;
+        safety++;
+        if (safety > 10) break;
+      }
+      // Recompute draw-rect with inflated margin based on effective spacing
+      final logicalTopLeft = transform.physicalToLogical(Offset.zero);
+      final logicalBottomRight = transform
+          .physicalToLogical(Offset(viewportSize.width, viewportSize.height));
+      Rect visibleLogical = Rect.fromPoints(logicalTopLeft, logicalBottomRight);
+      visibleLogical = visibleLogical.inflate(effectiveSpacing * 1.5);
+      final drawRect = extent.intersect(visibleLogical);
+      if (!drawRect.isEmpty) {
+        _drawSimpleGrid(canvas, drawRect, origin, effectiveSpacing);
+      }
       return;
     }
 
-    // Draw grid without artificial line count limits
-    // User wants to see the grid, so we show it regardless of line count
-    _drawSimpleGrid(canvas, extent, origin, spacing);
+    // Cull to visible logical viewport to avoid drawing off-screen lines
+    final logicalTopLeft = transform.physicalToLogical(Offset.zero);
+    final logicalBottomRight = transform
+        .physicalToLogical(Offset(viewportSize.width, viewportSize.height));
+    Rect visibleLogical = Rect.fromPoints(logicalTopLeft, logicalBottomRight);
+    // Inflate by one spacing so border lines are included
+    visibleLogical = visibleLogical.inflate(spacing * 1.5);
+    final drawRect = extent.intersect(visibleLogical);
+    if (drawRect.isEmpty) return;
+
+    _drawSimpleGrid(canvas, drawRect, origin, spacing);
   }
 
   /// Draws a simple grid without adaptive density calculations.
