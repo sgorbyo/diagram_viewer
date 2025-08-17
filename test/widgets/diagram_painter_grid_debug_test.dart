@@ -61,20 +61,36 @@ void main() {
           debug: false,
         );
 
-        // Act - Measure rendering time for both configurations
-        final recorder1 = PictureRecorder();
-        final canvas1 = Canvas(recorder1);
-        final stopwatch1 = Stopwatch()..start();
-        optimizedPainter.paint(canvas1, const Size(400, 400));
-        stopwatch1.stop();
-        final picture1 = recorder1.endRecording();
+        // Helper to measure with warm-ups and multiple samples → min time
+        int _measureMinPaintUs(DiagramPainter painter,
+            {int warmups = 2, int samples = 5}) {
+          for (int i = 0; i < warmups; i++) {
+            final r = PictureRecorder();
+            final c = Canvas(r);
+            painter.paint(c, const Size(400, 400));
+            r.endRecording();
+          }
+          final times = <int>[];
+          for (int i = 0; i < samples; i++) {
+            final r = PictureRecorder();
+            final c = Canvas(r);
+            final sw = Stopwatch()..start();
+            painter.paint(c, const Size(400, 400));
+            final pic = r.endRecording();
+            sw.stop();
+            // ensure picture is created
+            expect(pic, isNotNull);
+            times.add(sw.elapsedMicroseconds);
+          }
+          times.sort();
+          return times.first;
+        }
 
-        final recorder2 = PictureRecorder();
-        final canvas2 = Canvas(recorder2);
-        final stopwatch2 = Stopwatch()..start();
-        nonOptimizedPainter.paint(canvas2, const Size(400, 400));
-        stopwatch2.stop();
-        final picture2 = recorder2.endRecording();
+        // Act - Measure rendering time (min of N after warm-up)
+        final tOptUs = _measureMinPaintUs(optimizedPainter);
+        final tNoOptUs = _measureMinPaintUs(nonOptimizedPainter);
+        final picture1 = const Object();
+        final picture2 = const Object();
 
         // Assert - Both should render successfully
         expect(picture1, isNotNull);
@@ -83,14 +99,12 @@ void main() {
         // Log performance comparison
         print('=== Grid Thinning Performance Debug ===');
         print('High zoom level (20x):');
-        print('  With optimization: ${stopwatch1.elapsedMicroseconds}μs');
-        print('  Without optimization: ${stopwatch2.elapsedMicroseconds}μs');
-        print(
-            '  Performance ratio: ${stopwatch2.elapsedMicroseconds / stopwatch1.elapsedMicroseconds}');
+        print('  With optimization: ${tOptUs}μs');
+        print('  Without optimization: ${tNoOptUs}μs');
+        print('  Performance ratio: ${tNoOptUs / tOptUs}');
 
         // The optimized version should be faster or at least not significantly slower
-        final performanceRatio =
-            stopwatch2.elapsedMicroseconds / stopwatch1.elapsedMicroseconds;
+        final performanceRatio = tNoOptUs / tOptUs;
         expect(performanceRatio, lessThan(100.0),
             reason:
                 'Optimized version should not be more than 100x slower than non-optimized');
@@ -109,6 +123,29 @@ void main() {
         final zoomLevels = [1.0, 5.0, 10.0, 20.0, 50.0];
         final performanceResults = <double, int>{};
 
+        int _measureMedianPaintUs(DiagramPainter painter,
+            {int warmups = 2, int samples = 5}) {
+          for (int i = 0; i < warmups; i++) {
+            final r = PictureRecorder();
+            final c = Canvas(r);
+            painter.paint(c, const Size(400, 400));
+            r.endRecording();
+          }
+          final times = <int>[];
+          for (int i = 0; i < samples; i++) {
+            final r = PictureRecorder();
+            final c = Canvas(r);
+            final sw = Stopwatch()..start();
+            painter.paint(c, const Size(400, 400));
+            final pic = r.endRecording();
+            sw.stop();
+            expect(pic, isNotNull);
+            times.add(sw.elapsedMicroseconds);
+          }
+          times.sort();
+          return times[times.length ~/ 2];
+        }
+
         for (final zoom in zoomLevels) {
           final transform = Transform2D(
             scale: zoom,
@@ -124,16 +161,9 @@ void main() {
             debug: false,
           );
 
-          // Act - Measure rendering time
-          final recorder = PictureRecorder();
-          final canvas = Canvas(recorder);
-          final stopwatch = Stopwatch()..start();
-          painter.paint(canvas, const Size(400, 400));
-          stopwatch.stop();
-          final picture = recorder.endRecording();
-
-          performanceResults[zoom] = stopwatch.elapsedMicroseconds;
-          expect(picture, isNotNull);
+          // Act - Measure rendering time (median after warm-up)
+          final us = _measureMedianPaintUs(painter);
+          performanceResults[zoom] = us;
         }
 
         // Log detailed performance analysis
@@ -180,6 +210,29 @@ void main() {
         // Test at different zoom levels
         final zoomLevels = [0.1, 1.0, 10.0];
         final performanceResults = <double, int>{};
+
+        int _measureMinPaintUs2(DiagramPainter painter,
+            {int warmups = 2, int samples = 5}) {
+          for (int i = 0; i < warmups; i++) {
+            final r = PictureRecorder();
+            final c = Canvas(r);
+            painter.paint(c, const Size(400, 400));
+            r.endRecording();
+          }
+          final times = <int>[];
+          for (int i = 0; i < samples; i++) {
+            final r = PictureRecorder();
+            final c = Canvas(r);
+            final sw = Stopwatch()..start();
+            painter.paint(c, const Size(400, 400));
+            final pic = r.endRecording();
+            sw.stop();
+            expect(pic, isNotNull);
+            times.add(sw.elapsedMicroseconds);
+          }
+          times.sort();
+          return times.first;
+        }
 
         for (final zoom in zoomLevels) {
           final transform = Transform2D(
@@ -343,6 +396,29 @@ void main() {
         print(
             '-----|---------------|------------|----------------|-------------------');
 
+        int _measureMinPaintUs2(DiagramPainter painter,
+            {int warmups = 2, int samples = 5}) {
+          for (int i = 0; i < warmups; i++) {
+            final r = PictureRecorder();
+            final c = Canvas(r);
+            painter.paint(c, const Size(400, 400));
+            r.endRecording();
+          }
+          final times = <int>[];
+          for (int i = 0; i < samples; i++) {
+            final r = PictureRecorder();
+            final c = Canvas(r);
+            final sw = Stopwatch()..start();
+            painter.paint(c, const Size(400, 400));
+            final pic = r.endRecording();
+            sw.stop();
+            expect(pic, isNotNull);
+            times.add(sw.elapsedMicroseconds);
+          }
+          times.sort();
+          return times.first;
+        }
+
         for (final zoom in zoomLevels) {
           final transform = Transform2D(
             scale: zoom,
@@ -366,27 +442,21 @@ void main() {
               ((logicalExtent.height) / config.snapGridSpacing).ceil();
           final totalLines = verticalLines + horizontalLines;
 
-          // Act - Measure rendering time
-          final stopwatch = Stopwatch()..start();
-          final recorder = PictureRecorder();
-          final canvas = Canvas(recorder);
-          painter.paint(canvas, const Size(400, 400));
-          final picture = recorder.endRecording();
-          stopwatch.stop();
-
-          performanceResults[zoom] = stopwatch.elapsedMicroseconds;
+          // Act - Measure rendering time (min of N after warm-up)
+          final us = _measureMinPaintUs2(painter);
+          performanceResults[zoom] = us;
           lineCounts[zoom] = totalLines;
 
           // Calculate performance vs base (zoom 1.0)
-          final baseTime =
-              performanceResults[1.0] ?? stopwatch.elapsedMicroseconds;
-          final performanceRatio = stopwatch.elapsedMicroseconds / baseTime;
+          final baseTime = performanceResults.containsKey(1.0)
+              ? performanceResults[1.0]!
+              : us;
+          final performanceRatio = us / baseTime;
 
           print(
-              '${zoom.toString().padRight(4)} | ${pixelSpacing.toStringAsFixed(1).padRight(13)} | ${totalLines.toString().padLeft(10)} | ${stopwatch.elapsedMicroseconds.toString().padLeft(14)}μs | ${performanceRatio.toStringAsFixed(2).padLeft(15)}x');
+              '${zoom.toString().padRight(4)} | ${pixelSpacing.toStringAsFixed(1).padRight(13)} | ${totalLines.toString().padLeft(10)} | ${us.toString().padLeft(14)}μs | ${performanceRatio.toStringAsFixed(2).padLeft(15)}x');
 
-          // Assert - Should render successfully
-          expect(picture, isNotNull);
+          // Picture creation validated in measurement helper
         }
 
         // Analysis

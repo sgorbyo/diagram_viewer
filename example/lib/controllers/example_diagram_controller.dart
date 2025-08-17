@@ -161,10 +161,8 @@ class ExampleDiagramController implements IDiagramController {
             _autoScrolling = false;
           }
         } else {
-          // Background drag end - let DiagramViewer handle it
-          _commandController.add(DiagramCommand.setTransform(
-            transform: event.transformSnapshot,
-          ));
+          // Background drag end - let DiagramViewer handle bounce-back/inertia
+          // No-op: avoid issuing setTransform here to prevent an immediate snap
         }
       },
       scroll: (event) {

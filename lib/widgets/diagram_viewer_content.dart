@@ -991,6 +991,11 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
           maxDuration: cfg.inertialMaxDuration,
           onTick: (delta) {
             if (!mounted) return;
+            // If a bounce-back is already in progress, stop inertia and ignore further ticks
+            if (_isBouncingBack) {
+              _inertia.stop();
+              return;
+            }
             // If a bounce-back is in progress, stop inertia immediately
             if (_isBouncingBack) {
               _inertia.stop();
@@ -1059,6 +1064,8 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
           },
           onStop: () {
             if (!mounted) return;
+            // If a bounce-back has already been initiated during inertia, avoid double-bounce
+            if (_isBouncingBack) return;
             // After inertia ends, run bounce-back to return within limits
             transformBloc.setFrozenDuringDrag(false);
             transformBloc.clearBounceBackFlag();
