@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_declarations
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:diagram_viewer/interfaces/diagram_configuration.dart';
@@ -55,25 +57,24 @@ void main() {
 
     group('Spatial Index Hit-Testing', () {
       test('should find objects in spatial index when enabled', () {
-        // TODO: Implementare spatial index
-        // Questo test dovrebbe fallire finché non implementiamo la funzionalità
+        // Spatial index è ora implementato e funzionante
         final hitResult = painter.hitTestAt(const Offset(125, 125));
 
         expect(hitResult, isNotNull);
         expect(hitResult!.isNotEmpty, isTrue);
-        expect(hitResult![0].id,
+        expect(hitResult[0].id,
             equals('obj1')); // First object (closest to center)
       });
 
       test('should return null for points outside all objects', () {
-        // TODO: Implementare spatial index
+        // Spatial index è ora implementato e funzionante
         final hitResult = painter.hitTestAt(const Offset(1000, 1000));
 
         expect(hitResult, isNull);
       });
 
       test('should handle edge cases correctly', () {
-        // TODO: Implementare spatial index
+        // Spatial index è ora implementato e funzionante
         // Test sui bordi degli oggetti
         final hitResult1 =
             painter.hitTestAt(const Offset(100, 100)); // Center of obj1
@@ -82,15 +83,15 @@ void main() {
 
         expect(hitResult1, isNotNull);
         expect(hitResult1!.isNotEmpty, isTrue);
-        expect(hitResult1![0].id, equals('obj1'));
+        expect(hitResult1[0].id, equals('obj1'));
 
         expect(hitResult2, isNotNull);
         expect(hitResult2!.isNotEmpty, isTrue);
-        expect(hitResult2![0].id, equals('obj1'));
+        expect(hitResult2[0].id, equals('obj1'));
       });
 
       test('should work with overlapping objects', () {
-        // TODO: Implementare spatial index
+        // Spatial index è ora implementato e funzionante
         // Crea oggetti sovrapposti con z-order più alto
         final overlappingObj = _TestObject(
           id: 'overlap',
@@ -144,7 +145,7 @@ void main() {
 
     group('Spatial Index Configuration', () {
       test('should respect enableSpatialIndex configuration flag', () {
-        // TODO: Implementare configurazione spatial index
+        // Configurazione spatial index è ora implementata
         final configWithSpatialIndex = const DiagramConfiguration().copyWith(
           enableSpatialIndex: true,
         );
@@ -162,7 +163,7 @@ void main() {
       });
 
       test('should use default spatial index settings when not specified', () {
-        // TODO: Implementare configurazione spatial index
+        // Configurazione spatial index è ora implementata
         final defaultConfig = const DiagramConfiguration();
 
         expect(defaultConfig.enableSpatialIndex, isFalse);
@@ -171,7 +172,7 @@ void main() {
 
     group('Spatial Index Performance', () {
       test('should maintain consistent performance with many objects', () {
-        // TODO: Implementare spatial index
+        // Spatial index è ora implementato e funzionante
         // Aggiungi molti oggetti per testare performance
         final manyObjects = <DiagramObjectEntity>[];
         for (int i = 0; i < 100; i++) {
@@ -202,7 +203,7 @@ void main() {
       });
 
       test('should be faster than linear search for large object counts', () {
-        // TODO: Implementare spatial index
+        // Spatial index è ora implementato e funzionante
         // Aggiungi molti oggetti
         final largeObjectList = <DiagramObjectEntity>[];
         for (int i = 0; i < 1000; i++) {
@@ -265,7 +266,7 @@ class _TestObject extends DiagramObjectEntity {
   final String _id;
   final Offset _center;
   final Size _size;
-  int _zOrder;
+  final int _zOrder;
 
   _TestObject({
     required String id,
