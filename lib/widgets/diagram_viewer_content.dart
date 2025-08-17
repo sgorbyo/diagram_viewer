@@ -561,6 +561,7 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
                 key: ValueKey('cursor_${_cursorEffect.name}'),
                 cursor: _toMouseCursor(_cursorEffect),
                 child: Listener(
+                  behavior: HitTestBehavior.opaque,
                   onPointerDown: (event) {
                     // Request focus when user taps
                     _keyboardFocusNode.requestFocus();
