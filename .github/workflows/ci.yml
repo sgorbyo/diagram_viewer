@@ -2,12 +2,12 @@ name: CI
 
 on:
   push:
-    branches: [ "**" ]
+    branches: [ "main", "release/**" ]
   pull_request:
     branches: [ "**" ]
 
 jobs:
-  build:
+  root:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -17,12 +17,43 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           flutter-version: stable
+          cache: true
+
+      - name: Cache pub (root)
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+          key: pub-${{ runner.os }}-${{ hashFiles('pubspec.lock') }}
+          restore-keys: |
+            pub-${{ runner.os }}-
 
       - name: Flutter pub get (root)
         run: flutter pub get
 
       - name: Run tests (root)
         run: flutter test -r expanded
+
+  example:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: stable
+          cache: true
+
+      - name: Cache pub (example)
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+          key: pub-${{ runner.os }}-${{ hashFiles('example/pubspec.lock') }}
+          restore-keys: |
+            pub-${{ runner.os }}-
 
       - name: Flutter pub get (example)
         working-directory: example
@@ -32,8 +63,13 @@ jobs:
         working-directory: example
         run: flutter test -r expanded
 
-      - name: "Enforce TDD: require tests when lib/ changes"
-        if: ${{ github.event_name == 'pull_request' }}
+  tdd-policy:
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Enforce TDD when lib changes
         run: |
           set -euo pipefail
           BASE_SHA=$(jq -r '.pull_request.base.sha' "$GITHUB_EVENT_PATH")
