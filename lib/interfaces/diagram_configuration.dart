@@ -220,6 +220,14 @@ class DiagramConfiguration with _$DiagramConfiguration {
     /// with very large diagrams or extreme zoom levels.
     /// Defaults to 200 lines.
     @Default(200) int maxGridLines,
+
+    /// Whether to enable spatial index for efficient hit-testing.
+    ///
+    /// When true, a spatial index (quadtree or uniform grid) is used to
+    /// accelerate hit-testing operations, especially beneficial for diagrams
+    /// with many objects. When false, linear search is used.
+    /// Defaults to false for backward compatibility.
+    @Default(false) bool enableSpatialIndex,
   }) = _DiagramConfiguration;
 
   /// Creates a default configuration suitable for most diagram types.

@@ -208,6 +208,14 @@ mixin _$DiagramConfiguration {
   /// Defaults to 200 lines.
   int get maxGridLines => throw _privateConstructorUsedError;
 
+  /// Whether to enable spatial index for efficient hit-testing.
+  ///
+  /// When true, a spatial index (quadtree or uniform grid) is used to
+  /// accelerate hit-testing operations, especially beneficial for diagrams
+  /// with many objects. When false, linear search is used.
+  /// Defaults to false for backward compatibility.
+  bool get enableSpatialIndex => throw _privateConstructorUsedError;
+
   /// Create a copy of DiagramConfiguration
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -250,7 +258,8 @@ abstract class $DiagramConfigurationCopyWith<$Res> {
       bool showSnapGrid,
       bool enableAdaptiveGridDensity,
       double minGridLinePixelSpacing,
-      int maxGridLines});
+      int maxGridLines,
+      bool enableSpatialIndex});
 }
 
 /// @nodoc
@@ -298,6 +307,7 @@ class _$DiagramConfigurationCopyWithImpl<$Res,
     Object? enableAdaptiveGridDensity = null,
     Object? minGridLinePixelSpacing = null,
     Object? maxGridLines = null,
+    Object? enableSpatialIndex = null,
   }) {
     return _then(_value.copyWith(
       backgroundColor: null == backgroundColor
@@ -416,6 +426,10 @@ class _$DiagramConfigurationCopyWithImpl<$Res,
           ? _value.maxGridLines
           : maxGridLines // ignore: cast_nullable_to_non_nullable
               as int,
+      enableSpatialIndex: null == enableSpatialIndex
+          ? _value.enableSpatialIndex
+          : enableSpatialIndex // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -457,7 +471,8 @@ abstract class _$$DiagramConfigurationImplCopyWith<$Res>
       bool showSnapGrid,
       bool enableAdaptiveGridDensity,
       double minGridLinePixelSpacing,
-      int maxGridLines});
+      int maxGridLines,
+      bool enableSpatialIndex});
 }
 
 /// @nodoc
@@ -502,6 +517,7 @@ class __$$DiagramConfigurationImplCopyWithImpl<$Res>
     Object? enableAdaptiveGridDensity = null,
     Object? minGridLinePixelSpacing = null,
     Object? maxGridLines = null,
+    Object? enableSpatialIndex = null,
   }) {
     return _then(_$DiagramConfigurationImpl(
       backgroundColor: null == backgroundColor
@@ -620,6 +636,10 @@ class __$$DiagramConfigurationImplCopyWithImpl<$Res>
           ? _value.maxGridLines
           : maxGridLines // ignore: cast_nullable_to_non_nullable
               as int,
+      enableSpatialIndex: null == enableSpatialIndex
+          ? _value.enableSpatialIndex
+          : enableSpatialIndex // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -656,7 +676,8 @@ class _$DiagramConfigurationImpl implements _DiagramConfiguration {
       this.showSnapGrid = false,
       this.enableAdaptiveGridDensity = true,
       this.minGridLinePixelSpacing = 8.0,
-      this.maxGridLines = 200});
+      this.maxGridLines = 200,
+      this.enableSpatialIndex = false});
 
   /// Background color of the diagram area.
   ///
@@ -908,9 +929,19 @@ class _$DiagramConfigurationImpl implements _DiagramConfiguration {
   @JsonKey()
   final int maxGridLines;
 
+  /// Whether to enable spatial index for efficient hit-testing.
+  ///
+  /// When true, a spatial index (quadtree or uniform grid) is used to
+  /// accelerate hit-testing operations, especially beneficial for diagrams
+  /// with many objects. When false, linear search is used.
+  /// Defaults to false for backward compatibility.
+  @override
+  @JsonKey()
+  final bool enableSpatialIndex;
+
   @override
   String toString() {
-    return 'DiagramConfiguration(backgroundColor: $backgroundColor, outsideColor: $outsideColor, edgeThreshold: $edgeThreshold, maxZoom: $maxZoom, minZoom: $minZoom, overscrollPixels: $overscrollPixels, bounceDuration: $bounceDuration, bounceCurve: $bounceCurve, autoScrollInterval: $autoScrollInterval, autoScrollAcceleration: $autoScrollAcceleration, enableTranslation: $enableTranslation, enableScale: $enableScale, enableRotation: $enableRotation, clipContent: $clipContent, enableInertialScrolling: $enableInertialScrolling, inertialFriction: $inertialFriction, inertialMinStartVelocity: $inertialMinStartVelocity, inertialMinStopVelocity: $inertialMinStopVelocity, inertialMaxDuration: $inertialMaxDuration, enableKeyboardShortcuts: $enableKeyboardShortcuts, enableAccessibility: $enableAccessibility, enableBlocDebugObserver: $enableBlocDebugObserver, snapGridEnabled: $snapGridEnabled, snapGridSpacing: $snapGridSpacing, snapGridOrigin: $snapGridOrigin, showSnapGrid: $showSnapGrid, enableAdaptiveGridDensity: $enableAdaptiveGridDensity, minGridLinePixelSpacing: $minGridLinePixelSpacing, maxGridLines: $maxGridLines)';
+    return 'DiagramConfiguration(backgroundColor: $backgroundColor, outsideColor: $outsideColor, edgeThreshold: $edgeThreshold, maxZoom: $maxZoom, minZoom: $minZoom, overscrollPixels: $overscrollPixels, bounceDuration: $bounceDuration, bounceCurve: $bounceCurve, autoScrollInterval: $autoScrollInterval, autoScrollAcceleration: $autoScrollAcceleration, enableTranslation: $enableTranslation, enableScale: $enableScale, enableRotation: $enableRotation, clipContent: $clipContent, enableInertialScrolling: $enableInertialScrolling, inertialFriction: $inertialFriction, inertialMinStartVelocity: $inertialMinStartVelocity, inertialMinStopVelocity: $inertialMinStopVelocity, inertialMaxDuration: $inertialMaxDuration, enableKeyboardShortcuts: $enableKeyboardShortcuts, enableAccessibility: $enableAccessibility, enableBlocDebugObserver: $enableBlocDebugObserver, snapGridEnabled: $snapGridEnabled, snapGridSpacing: $snapGridSpacing, snapGridOrigin: $snapGridOrigin, showSnapGrid: $showSnapGrid, enableAdaptiveGridDensity: $enableAdaptiveGridDensity, minGridLinePixelSpacing: $minGridLinePixelSpacing, maxGridLines: $maxGridLines, enableSpatialIndex: $enableSpatialIndex)';
   }
 
   @override
@@ -948,8 +979,7 @@ class _$DiagramConfigurationImpl implements _DiagramConfiguration {
                 other.enableInertialScrolling == enableInertialScrolling) &&
             (identical(other.inertialFriction, inertialFriction) ||
                 other.inertialFriction == inertialFriction) &&
-            (identical(
-                    other.inertialMinStartVelocity, inertialMinStartVelocity) ||
+            (identical(other.inertialMinStartVelocity, inertialMinStartVelocity) ||
                 other.inertialMinStartVelocity == inertialMinStartVelocity) &&
             (identical(other.inertialMinStopVelocity, inertialMinStopVelocity) ||
                 other.inertialMinStopVelocity == inertialMinStopVelocity) &&
@@ -975,7 +1005,9 @@ class _$DiagramConfigurationImpl implements _DiagramConfiguration {
             (identical(other.minGridLinePixelSpacing, minGridLinePixelSpacing) ||
                 other.minGridLinePixelSpacing == minGridLinePixelSpacing) &&
             (identical(other.maxGridLines, maxGridLines) ||
-                other.maxGridLines == maxGridLines));
+                other.maxGridLines == maxGridLines) &&
+            (identical(other.enableSpatialIndex, enableSpatialIndex) ||
+                other.enableSpatialIndex == enableSpatialIndex));
   }
 
   @override
@@ -1009,7 +1041,8 @@ class _$DiagramConfigurationImpl implements _DiagramConfiguration {
         showSnapGrid,
         enableAdaptiveGridDensity,
         minGridLinePixelSpacing,
-        maxGridLines
+        maxGridLines,
+        enableSpatialIndex
       ]);
 
   /// Create a copy of DiagramConfiguration
@@ -1053,7 +1086,8 @@ abstract class _DiagramConfiguration implements DiagramConfiguration {
       final bool showSnapGrid,
       final bool enableAdaptiveGridDensity,
       final double minGridLinePixelSpacing,
-      final int maxGridLines}) = _$DiagramConfigurationImpl;
+      final int maxGridLines,
+      final bool enableSpatialIndex}) = _$DiagramConfigurationImpl;
 
   /// Background color of the diagram area.
   ///
@@ -1275,6 +1309,15 @@ abstract class _DiagramConfiguration implements DiagramConfiguration {
   /// Defaults to 200 lines.
   @override
   int get maxGridLines;
+
+  /// Whether to enable spatial index for efficient hit-testing.
+  ///
+  /// When true, a spatial index (quadtree or uniform grid) is used to
+  /// accelerate hit-testing operations, especially beneficial for diagrams
+  /// with many objects. When false, linear search is used.
+  /// Defaults to false for backward compatibility.
+  @override
+  bool get enableSpatialIndex;
 
   /// Create a copy of DiagramConfiguration
   /// with the given fields replaced by the non-null parameter values.

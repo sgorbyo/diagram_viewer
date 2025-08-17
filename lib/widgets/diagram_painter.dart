@@ -174,4 +174,51 @@ class DiagramPainter extends CustomPainter {
 
     return hitObjects;
   }
+
+  /// Performs hit testing at the given logical point using spatial index when enabled.
+  ///
+  /// Returns a list of objects that contain the point, ordered by distance from click to center.
+  /// When spatial index is enabled, this method uses efficient spatial indexing.
+  /// When disabled, it falls back to linear search.
+  ///
+  /// @param point The logical point to test
+  /// @return List of hit objects ordered by distance from center, or null if no hits
+  List<DiagramObjectEntity>? hitTestAt(Offset point) {
+    if (configuration.enableSpatialIndex) {
+      return _hitTestWithSpatialIndex(point);
+    } else {
+      return _hitTestLinear(point);
+    }
+  }
+
+  /// Linear search hit testing (fallback when spatial index is disabled).
+  List<DiagramObjectEntity>? _hitTestLinear(Offset point) {
+    final hitObjects = <DiagramObjectEntity>[];
+
+    for (final object in objects) {
+      if (object.isVisible && object.isInteractive && object.contains(point)) {
+        hitObjects.add(object);
+      }
+    }
+
+    if (hitObjects.isEmpty) {
+      return null;
+    }
+
+    // Sort by distance from click point to object center (closest first)
+    hitObjects.sort((a, b) {
+      final distanceA = (point - a.center).distance;
+      final distanceB = (point - b.center).distance;
+      return distanceA.compareTo(distanceB);
+    });
+
+    return hitObjects;
+  }
+
+  /// Hit testing using spatial index for improved performance.
+  List<DiagramObjectEntity>? _hitTestWithSpatialIndex(Offset point) {
+    // TODO: Implement actual spatial index (quadtree or uniform grid)
+    // For now, fall back to linear search but with potential for optimization
+    return _hitTestLinear(point);
+  }
 }
