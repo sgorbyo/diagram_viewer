@@ -58,6 +58,11 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
   bool _overlayControlledByController = false;
   bool _isBouncingBack = false;
   Timer? _bounceFlagTimer;
+  // Debounce timer for Ctrl/Cmd+wheel zoom to trigger bounce-back after user stops
+  Timer? _wheelZoomBounceTimer;
+  // Wheel-zoom anchoring: keep a stable focal across a burst to avoid drift
+  Offset? _wheelZoomAnchorFocalLogical;
+  Timer? _wheelZoomAnchorTimer;
   // Recent pointer movement samples for velocity estimation (physical space)
   DateTime? _lastPointerMoveTime;
   final List<Offset> _recentPointerDeltas = <Offset>[]; // px
@@ -1131,7 +1136,71 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
       final logicalPosition =
           currentTransform.physicalToLogical(correctedPosition);
 
-      // Use translator to create DiagramScroll event
+      // If Ctrl/Cmd pressed, interpret wheel as zoom instead of scroll.
+      // Use global hardware keyboard state to avoid focus-related misses.
+      final Set<LogicalKeyboardKey> globalKeys =
+          HardwareKeyboard.instance.logicalKeysPressed;
+      final bool ctrlOrCmdPressed =
+          _pressedKeys.contains(LogicalKeyboardKey.controlLeft) ||
+              _pressedKeys.contains(LogicalKeyboardKey.controlRight) ||
+              _pressedKeys.contains(LogicalKeyboardKey.metaLeft) ||
+              _pressedKeys.contains(LogicalKeyboardKey.metaRight) ||
+              globalKeys.contains(LogicalKeyboardKey.controlLeft) ||
+              globalKeys.contains(LogicalKeyboardKey.controlRight) ||
+              globalKeys.contains(LogicalKeyboardKey.metaLeft) ||
+              globalKeys.contains(LogicalKeyboardKey.metaRight) ||
+              globalKeys.contains(LogicalKeyboardKey.control) ||
+              globalKeys.contains(LogicalKeyboardKey.meta);
+      if (ctrlOrCmdPressed) {
+        const double zoomFactor = 1.2;
+        final double scale =
+            event.scrollDelta.dy < 0 ? zoomFactor : 1.0 / zoomFactor;
+        // Skip if effective scale would not change (already at limit)
+        final double currentScale = currentTransform.scale;
+        final double proposedScale = currentScale * scale;
+        // Compute dynamic min based on content fit
+        final transformState = context.read<TransformBloc>().state;
+        final double fitMin = Transform2DUtils.scaleToFit(
+          contentRect: transformState.diagramRect,
+          viewSize: transformState.viewportSize,
+        );
+        final double effectiveMin = (fitMin)
+            .clamp(widget.configuration.minZoom, widget.configuration.maxZoom);
+        final double clampedScale = proposedScale.clamp(
+          effectiveMin,
+          widget.configuration.maxZoom,
+        );
+        const double eps = 1e-6;
+        if ((clampedScale - currentScale).abs() <= eps) {
+          return;
+        }
+        // Choose and persist focal for this wheel burst to avoid drift
+        final tState = context.read<TransformBloc>().state;
+        final double fitMinNow = Transform2DUtils.scaleToFit(
+          contentRect: tState.diagramRect,
+          viewSize: tState.viewportSize,
+        );
+        final bool isSmallContent = currentScale <= fitMinNow + 1e-6;
+        if (_wheelZoomAnchorFocalLogical == null) {
+          _wheelZoomAnchorFocalLogical =
+              isSmallContent ? tState.diagramRect.center : logicalPosition;
+        }
+        final Offset focalLogical = _wheelZoomAnchorFocalLogical!;
+        // Apply zoom around chosen focal point
+        transformBloc.add(TransformEvent.zoom(
+          scale: scale,
+          focalPoint: focalLogical,
+          currentTransform: currentTransform,
+        ));
+        // Refresh anchor lifetime; clear after inactivity
+        _wheelZoomAnchorTimer?.cancel();
+        _wheelZoomAnchorTimer = Timer(const Duration(milliseconds: 250), () {
+          _wheelZoomAnchorFocalLogical = null;
+        });
+        return; // Do not forward as scroll
+      }
+
+      // Otherwise, forward as scroll to controller
       final diagramEvent = _translator.handleScrollEvent(
         DateTime.now().microsecondsSinceEpoch.toString(),
         logicalPosition,
@@ -1142,7 +1211,6 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
       );
 
       if (diagramEvent != null) {
-        // Forward DiagramScroll event directly to controller
         widget.controller.eventsSink.add(diagramEvent);
       }
     }
@@ -1319,6 +1387,8 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
     _autoScroll.stop();
     _inertia.stop();
     _bounceFlagTimer?.cancel();
+    _wheelZoomBounceTimer?.cancel();
+    _wheelZoomAnchorTimer?.cancel();
     _physicalEventSubscription?.cancel();
     _commandSubscription?.cancel();
     _keyboardFocusNode.dispose();

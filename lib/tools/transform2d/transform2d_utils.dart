@@ -22,7 +22,7 @@ class Transform2DUtils {
   static const double maxDynamicScale = 11.0;
   static const double translationDynamicDelta = 50.0;
   static double dynamicBorderWidth = 80.0;
-  // Allow up to 10% zoom overscroll below dynamic min during active interaction
+  // No zoom overscroll in utility capping; overscroll is handled at interaction level if needed
   static const double zoomOverscrollFactor = 1.0;
   static const double respectBorder = 25.0;
   static const int epsilon = 7;
@@ -164,9 +164,6 @@ class Transform2DUtils {
       baseMinZoom = max(minZoom, dynamicMin);
     }
     double effectiveMinZoom = baseMinZoom;
-    if (dynamic) {
-      effectiveMinZoom = baseMinZoom * zoomOverscrollFactor;
-    }
 
     // Cap the scale to zoom limits
     double cappedScale = transform.scale;

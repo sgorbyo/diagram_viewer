@@ -92,11 +92,12 @@ class Transform2D with _$Transform2D {
   /// [focalPoint] - The point around which to zoom (in logical coordinates)
   Transform2D applyZoom(double factor, Offset focalPoint) {
     final newScale = scale * factor;
-
-    // Formula based on the working implementation from the previous version
-    // The key insight is: newTranslation = translation + focalPoint * (1 - factor) * scale
-    // This ensures the focal point remains stationary during zoom when applying to existing transform
-    final newTranslation = translation + focalPoint * (1 - factor) * scale;
+    // Keep focal point stationary in screen space: T' = T + (1 - f) * S * F
+    Offset newTranslation = translation + focalPoint * (1 - factor) * scale;
+    // Numerical guard: if factor ~1 or scale unchanged after capping by caller, avoid injecting drift
+    if ((factor - 1.0).abs() < 1e-9) {
+      newTranslation = translation;
+    }
 
     return copyWith(
       scale: newScale,
