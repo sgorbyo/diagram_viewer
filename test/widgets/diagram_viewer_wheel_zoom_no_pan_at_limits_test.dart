@@ -132,7 +132,8 @@ void main() {
       final viewer = find.byType(DiagramViewerContent);
       final center = tester.getCenter(viewer);
       await tester.sendKeyDownEvent(LogicalKeyboardKey.controlLeft);
-      for (int i = 0; i < 20; i++) {
+      // Use enough steps so 1.04^n reaches or exceeds maxZoom (4.0)
+      for (int i = 0; i < 40; i++) {
         tester.binding.handlePointerEvent(
           PointerScrollEvent(
             position: center,
@@ -182,7 +183,8 @@ void main() {
       final viewer = find.byType(DiagramViewerContent);
       final center = tester.getCenter(viewer);
       await tester.sendKeyDownEvent(LogicalKeyboardKey.controlLeft);
-      for (int i = 0; i < 20; i++) {
+      // Use enough steps so 1.04^n reaches or exceeds maxZoom (4.0)
+      for (int i = 0; i < 40; i++) {
         tester.binding.handlePointerEvent(
           PointerScrollEvent(
             position: center,
