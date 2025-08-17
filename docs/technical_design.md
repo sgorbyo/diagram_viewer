@@ -641,3 +641,36 @@ Implemented commands from controller to viewer:
 ### Testing
 - Unit tests for velocity decay and stopping conditions.
 - Widget tests simulating a fast drag release; verify continued motion and eventual stop/bounce.
+
+## Magic Mouse Scroll Session Window (Design)
+
+### Goals
+- Prevent cross‑talk between consecutive one‑finger slide bursts on Magic Mouse (alternate start/stop due to leftover timers/buffers).
+- Keep sensitivity constant at high zoom by operating entirely in physical pixel space and amplifying micro deltas before sampling for inertia.
+
+### Mechanics
+- Events arrive via `Listener.onPointerSignal` as `PointerScrollEvent`.
+- On the first event of a session:
+  - Stop any ongoing inertia; cancel bounce timers; clear MM buffers and flags.
+  - Mark session active.
+- For each event in session:
+  - Compute adjusted physical delta: min‑step clamp + small multiplier to counteract MM micro jitter.
+  - Apply pan immediately using adjusted delta.
+  - Append adjusted delta to the sampling buffer with timestamp. If inter‑event gap > ~180 ms, treat as a new session (clear buffers).
+- Session idle timeout (~180–220 ms):
+  - Compute dominant‑axis velocity over the last window; apply de‑noise by trimming opposite‑sign tail samples.
+  - If average velocity below threshold but peak sample above threshold, start inertia with peak velocity (fallback).
+  - When inertia ends, run bounce‑back only if out of strict bounds.
+- Dispose: cancel session timer to avoid dangling timers in tests.
+
+### Interaction With Other Inputs
+- While a session is active, incoming different gesture types (e.g., trackpad pinch) are ignored by the MM path.
+- New MM input cancels ongoing inertia immediately.
+
+## Scale‑Invariant Physical Filtering
+
+- All gesture filtering (min movement thresholds, de‑noise, inertia activation, velocity estimation) is computed strictly in physical pixels before any transform to logical coordinates.
+- Benefits:
+  - Sensitivity remains constant regardless of current zoom.
+  - High‑zoom micro motions on MM/trackpad still cross thresholds predictably.
+  - Tests simulate smooth MM‑like bursts using small per‑frame deltas and verify inertia triggers reliably at high zoom.

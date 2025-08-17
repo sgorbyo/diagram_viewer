@@ -33,6 +33,7 @@ The package implements a **Diagrammer-Controller architecture** where:
   - **Keyboard zoom**: The center of the viewport must remain stationary during zoom operations
   - **Zoom constraints**: All zoom operations must respect minimum and maximum zoom limits while maintaining focal point stability. When at effective min/max, further wheel zooms are ignored (no spurious pan).
   - **Small-content centering during zoom**: When the diagram is smaller than the viewport on any axis, it must remain centered on those axes throughout interaction and during zoom bursts from min→max; the physical center drift of the logical center must remain < 1 px across the burst.
+  - **Scale‑invariant filtering**: All gesture filtering and thresholds (min movement, de‑noise, inertia activation, velocity estimation) must operate in physical pixel space before any mapping to logical coordinates so that sensitivity is independent of current zoom.
 
 ### Hit-Testing Responsibility
 - The package must perform internal hit-testing:
@@ -237,6 +238,25 @@ The package implements a **Diagrammer-Controller architecture** where:
   - Inertia respects bounds with elastic window and ends with bounce-back if needed.
   - Any new input interrupts inertia within one frame (≤16 ms).
   - Per-axis behavior is preserved.
+
+### Desktop Input Requirements (Device Policies)
+
+- **Classic mouse wheel**:
+  - Default scroll without modifiers produces discrete pan steps.
+  - Inertial scrolling and overscroll bounce are disabled for the classic wheel.
+  - Ctrl/Cmd + wheel maps to zoom; at effective min/max zoom, further ticks must not produce pan side effects.
+
+- **Magic Mouse**:
+  - One‑finger slide sends `PointerScrollEvent`; treated as pan with immediate application.
+  - Pan deltas are amplified in physical pixels to improve responsiveness on micro movements.
+  - A short "scroll session window" (≈180–220 ms) groups bursts: on first event, clear any residual inertia/bounce and sample only within the session; on idle, compute velocity and start inertia if above threshold; then bounce if needed.
+  - Back‑to‑back bursts must both trigger pan and, when applicable, inertia (no alternating start/stop due to state leakage).
+  - Ctrl/Cmd + slide maps to zoom with a gentle per‑step factor for fine control.
+
+- **Trackpad (desktop/laptops)**:
+  - Two‑finger drag → pan with scale‑invariant thresholds.
+  - Pinch → zoom with focal stability; Cmd/Ctrl has no effect on pinch behavior.
+  - Inertia enabled with the same physical‑space sampling/de‑noise rules as MM.
 
 ## Interaction State Management
 

@@ -196,3 +196,20 @@ Known limitations (current):
 - **Small-content anchoring**: If the diagram is smaller than the viewport on any axis, the viewer maintains the diagram centered on those axes. During a wheel zoom burst that starts in this state, the focal point is anchored to the viewport center for the entire burst to avoid drift.
 - **Large-content anchoring**: When the diagram fills the viewport on both axes, the zoom focal point is the cursor; the point under the cursor remains visually stable during zoom.
 
+## Desktop Input Mapping and Device Behaviors
+
+- **Classic mouse wheel**
+  - Scroll without modifiers → discrete pan steps.
+  - Inertial scrolling and overscroll bounce are disabled.
+  - Ctrl/Cmd + wheel → zoom about cursor; at effective min/max, extra ticks are ignored (no pan side‑effects).
+
+- **Magic Mouse**
+  - One‑finger slide emits `PointerScrollEvent` captured by `Listener`.
+  - Pan is applied immediately using adjusted physical deltas (min‑step + multiplier) for better sensitivity.
+  - A short "scroll session window" groups bursts and resets inertia/bounce/buffers on first event to avoid cross‑talk; on idle, samples drive inertia with de‑noise and peak fallback; bounce runs only if needed.
+  - Cmd + slide → zoom with gentle per‑step factor for fine control.
+
+- **Trackpad**
+  - Two‑finger drag → pan; pinch → zoom.
+  - Same physical‑space filtering and inertia rules as Magic Mouse.
+
