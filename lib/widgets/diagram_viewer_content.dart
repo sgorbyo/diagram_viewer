@@ -65,6 +65,9 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
   bool _overlayControlledByController = false;
   bool _isBouncingBack = false;
   Timer? _bounceFlagTimer;
+  // Session window for Magic Mouse wheel scroll bursts
+  Timer? _wheelScrollSessionTimer;
+  bool _wheelScrollSessionActive = false;
   // Debounce timer for Ctrl/Cmd+wheel zoom to trigger bounce-back after user stops
   Timer? _wheelZoomBounceTimer;
   // Wheel-zoom anchoring: keep a stable focal across a burst to avoid drift
@@ -1124,7 +1127,18 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
   /// Handle pointer signal events (mouse wheel)
   void _handlePointerSignal(
       BuildContext context, PointerSignalEvent event, double topPadding) {
-    if (_isBouncingBack) return;
+    if (_isBouncingBack) {
+      _bounceFlagTimer?.cancel();
+      _isBouncingBack = false;
+      final tfb = context.read<TransformBloc>();
+      tfb.setFrozenDuringDrag(false);
+      tfb.clearBounceBackFlag();
+      // Also clear any pending inertia/timers and samples from previous burst
+      _inertia.stop();
+      _wheelInertiaTimer?.cancel();
+      _recentWheelDeltas.clear();
+      _recentWheelDeltaMs.clear();
+    }
     // Stop auto-scroll on new pointer signal
     _autoScroll.stop();
     _inertia.stop();
@@ -1239,7 +1253,7 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
         return; // Do not forward as scroll
       }
 
-      // Otherwise, forward as scroll to controller (Magic Mouse/trackpad pan)
+      // Otherwise, treat as pan/scroll (Magic Mouse/trackpad)
       debugPrint('[Viewer] Wheel->SCROLL forward to controller');
       // Amplify small deltas for better sensitivity, especially for MM
       Offset adjusted = event.scrollDelta;
@@ -1257,6 +1271,27 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
               mouseMultiplier,
         );
       }
+      // Start/extend scroll session window (prevents bounce/flags from leaking through bursts)
+      if (!_wheelScrollSessionActive) {
+        _wheelScrollSessionActive = true;
+        // Clear residual inertia/bounce and buffers
+        _inertia.stop();
+        _bounceFlagTimer?.cancel();
+        _isBouncingBack = false;
+        _recentWheelDeltas.clear();
+        _recentWheelDeltaMs.clear();
+      }
+      _wheelScrollSessionTimer?.cancel();
+      _wheelScrollSessionTimer = Timer(const Duration(milliseconds: 200), () {
+        // Session ends by idle → evaluate inertia and possible bounce in existing logic
+        _wheelScrollSessionActive = false;
+      });
+
+      // Apply immediate pan internally so behavior does not depend on controller
+      context.read<TransformBloc>().add(TransformEvent.pan(
+            delta: adjusted,
+            currentTransform: currentTransform,
+          ));
       final synthetic = PointerScrollEvent(
         position: event.position,
         scrollDelta: adjusted,
@@ -1288,8 +1323,17 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
         if (_lastWheelEventMonotonic != null) {
           final int dtMs = (tNow - _lastWheelEventMonotonic!).inMilliseconds;
           if (dtMs >= 0) {
+            // New burst detection: large gap → clear previous samples
+            if (dtMs > 180) {
+              _recentWheelDeltas.clear();
+              _recentWheelDeltaMs.clear();
+            }
             _recentWheelDeltaMs.add(dtMs);
-            _recentWheelDeltas.add(event.scrollDelta);
+            // Sample adjusted deltas to keep inertia consistent with applied pan
+            final Offset sampleDelta = event.kind == PointerDeviceKind.mouse
+                ? adjusted
+                : event.scrollDelta;
+            _recentWheelDeltas.add(sampleDelta);
             while (_recentWheelDeltas.length > 8) {
               _recentWheelDeltas.removeAt(0);
               _recentWheelDeltaMs.removeAt(0);
@@ -1910,6 +1954,7 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
     _wheelZoomBounceTimer?.cancel();
     _wheelZoomAnchorTimer?.cancel();
     _wheelInertiaTimer?.cancel();
+    _wheelScrollSessionTimer?.cancel();
     _physicalEventSubscription?.cancel();
     _commandSubscription?.cancel();
     _keyboardFocusNode.dispose();
