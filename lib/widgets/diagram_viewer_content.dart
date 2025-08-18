@@ -1046,9 +1046,10 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
               currentTransform: stateBefore.transform,
             ));
             // If capping altered the proposed translation, we hit elastic boundary → bounce now
+            // For pointer-drag inertia, bounce earlier to match expectations
             final deviates =
                 (proposed.translation - dynamicCapped.translation).distance >
-                    0.1;
+                    0.5;
             // Or if proposed is beyond the dynamic window and delta keeps pushing outward, bounce now
             bool pinnedOutward = false;
             const double eps = 0.5;
@@ -1271,27 +1272,50 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
               mouseMultiplier,
         );
       }
-      // Start/extend scroll session window (prevents bounce/flags from leaking through bursts)
-      if (!_wheelScrollSessionActive) {
-        _wheelScrollSessionActive = true;
-        // Clear residual inertia/bounce and buffers
-        _inertia.stop();
-        _bounceFlagTimer?.cancel();
-        _isBouncingBack = false;
-        _recentWheelDeltas.clear();
-        _recentWheelDeltaMs.clear();
-      }
-      _wheelScrollSessionTimer?.cancel();
-      _wheelScrollSessionTimer = Timer(const Duration(milliseconds: 200), () {
-        // Session ends by idle → evaluate inertia and possible bounce in existing logic
-        _wheelScrollSessionActive = false;
-      });
+      // Determine if this is a classic (coarse) wheel vs smooth (MM/trackpad-like)
+      final bool isMouse = event.kind == PointerDeviceKind.mouse;
+      final bool isSmooth = event.scrollDelta.dx.abs() <= 4.0 &&
+          event.scrollDelta.dy.abs() <= 4.0;
 
-      // Apply immediate pan internally so behavior does not depend on controller
-      context.read<TransformBloc>().add(TransformEvent.pan(
-            delta: adjusted,
-            currentTransform: currentTransform,
-          ));
+      if (isMouse && !isSmooth) {
+        // Classic wheel: strict clamping (no elastic overscroll, no session, no inertia)
+        final tBloc = context.read<TransformBloc>();
+        final stNow = tBloc.state;
+        final proposed = stNow.transform.applyPan(adjusted);
+        final strict = Transform2DUtils.capTransformWithZoomLimits(
+          transform: proposed,
+          diagramRect: stNow.diagramRect,
+          size: stNow.viewportSize,
+          dynamic: false,
+          minZoom: widget.configuration.minZoom,
+          maxZoom: widget.configuration.maxZoom,
+          preserveCentering: true,
+          recenterSmallContent: false,
+        );
+        tBloc.add(TransformEvent.updateTransform(transform: strict));
+      } else {
+        // Smooth path (MM/trackpad): start/extend session and apply dynamic pan
+        if (!_wheelScrollSessionActive) {
+          _wheelScrollSessionActive = true;
+          // Clear residual inertia/bounce and buffers
+          _inertia.stop();
+          _bounceFlagTimer?.cancel();
+          _isBouncingBack = false;
+          _recentWheelDeltas.clear();
+          _recentWheelDeltaMs.clear();
+        }
+        _wheelScrollSessionTimer?.cancel();
+        _wheelScrollSessionTimer = Timer(const Duration(milliseconds: 200), () {
+          // Session ends by idle → evaluate inertia and possible bounce in existing logic
+          _wheelScrollSessionActive = false;
+        });
+
+        // Apply immediate pan internally so behavior does not depend on controller
+        context.read<TransformBloc>().add(TransformEvent.pan(
+              delta: adjusted,
+              currentTransform: currentTransform,
+            ));
+      }
       final synthetic = PointerScrollEvent(
         position: event.position,
         scrollDelta: adjusted,
@@ -1312,9 +1336,6 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
       }
 
       // Start inertia after a short pause (skip for classic wheel mouse)
-      final bool isMouse = event.kind == PointerDeviceKind.mouse;
-      final bool isSmooth = event.scrollDelta.dx.abs() <= 4.0 &&
-          event.scrollDelta.dy.abs() <= 4.0;
       final bool allowInertia =
           !isMouse || isSmooth; // allow MM, skip coarse wheel
       if (widget.configuration.enableInertialScrolling && allowInertia) {
@@ -1683,7 +1704,7 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
       // Two-finger trackpad pan when no pinch scale is applied
       // Amplify small deltas for sensitivity
       const double minStep = 0.4;
-      const double trackpadMultiplier = 1.25;
+      const double trackpadMultiplier = 1.8;
       Offset panDelta = details.focalPointDelta;
       panDelta = Offset(
         (panDelta.dx.abs() < minStep
@@ -1741,23 +1762,68 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
     transformBloc.setFrozenDuringDrag(false);
     if (_wasTwoFingerPan && widget.configuration.enableInertialScrolling) {
       // Start inertia for two-finger pan end using sampled gesture deltas
+      // De-noise tail samples that flip sign on the dominant axis
+      if (_recentPointerDeltas.isNotEmpty) {
+        double sumAbsDx = 0;
+        double sumAbsDy = 0;
+        for (final d in _recentPointerDeltas) {
+          sumAbsDx += d.dx.abs();
+          sumAbsDy += d.dy.abs();
+        }
+        final bool useX = sumAbsDx >= sumAbsDy;
+        // Intended sign is the sign of the last non-zero delta on dominant axis
+        double intendedSign = 0;
+        for (int i = _recentPointerDeltas.length - 1; i >= 0; i--) {
+          final v =
+              useX ? _recentPointerDeltas[i].dx : _recentPointerDeltas[i].dy;
+          if (v != 0) {
+            intendedSign = v.sign;
+            break;
+          }
+        }
+        // Remove small opposite-sign tail samples
+        const double tailEpsilon = 2.0; // physical px
+        while (_recentPointerDeltas.length > 1) {
+          final last = _recentPointerDeltas.last;
+          final v = useX ? last.dx : last.dy;
+          if (v != 0 && v.sign != intendedSign && v.abs() <= tailEpsilon) {
+            _recentPointerDeltas.removeLast();
+            if (_recentPointerDeltaMs.isNotEmpty) {
+              _recentPointerDeltaMs.removeLast();
+            }
+            continue;
+          }
+          break;
+        }
+      }
+
       // Compute velocity from recent samples
+      final double lastSampleDistance = _recentPointerDeltas.isNotEmpty
+          ? _recentPointerDeltas.last.distance
+          : 0.0;
+      final int lastSampleDtMs =
+          _recentPointerDeltaMs.isNotEmpty ? _recentPointerDeltaMs.last : 16;
+      final double lastSampleVelocity = lastSampleDtMs > 0
+          ? lastSampleDistance / (lastSampleDtMs / 1000.0)
+          : 0.0;
       Offset initialV = Offset.zero;
       int totalMs = 0;
       for (int i = 0; i < _recentPointerDeltas.length; i++) {
         initialV += _recentPointerDeltas[i];
         totalMs += _recentPointerDeltaMs[i];
       }
-      _recentPointerDeltas.clear();
-      _recentPointerDeltaMs.clear();
       if (totalMs > 0) {
         final seconds = totalMs / 1000.0;
         initialV = Offset(initialV.dx / seconds, initialV.dy / seconds);
       }
       final double gestureStartThreshold =
-          (widget.configuration.inertialMinStartVelocity * 0.6)
-              .clamp(60.0, widget.configuration.inertialMinStartVelocity);
-      if (initialV.distance > gestureStartThreshold) {
+          (widget.configuration.inertialMinStartVelocity * 0.4)
+              .clamp(30.0, widget.configuration.inertialMinStartVelocity);
+      if (initialV.distance > gestureStartThreshold ||
+          // Fallback: if average is low but the last sample had a strong velocity, use it to kick inertia
+          lastSampleVelocity >= gestureStartThreshold * 0.75) {
+        _recentPointerDeltas.clear();
+        _recentPointerDeltaMs.clear();
         _inertia.start(
           initialVelocity: initialV,
           interval: widget.configuration.autoScrollInterval,
@@ -1842,6 +1908,8 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
           },
         );
       } else {
+        _recentPointerDeltas.clear();
+        _recentPointerDeltaMs.clear();
         // No inertia: if overscrolled after two-finger pan, bounce now
         final stateNow = transformBloc.state;
         final strict = Transform2DUtils.capTransformWithZoomLimits(
