@@ -89,7 +89,7 @@ class _DiagramViewerState extends State<DiagramViewer> {
   @override
   Widget build(BuildContext context) {
     final config = widget.configuration ?? widget.controller.configuration;
-    if (config.enableBlocDebugObserver) {
+    if (widget.debug || config.enableBlocDebugObserver) {
       // Attach debug observer once per app; safe to set repeatedly in debug
       Bloc.observer = DebugBlocObserver();
     }
@@ -183,7 +183,7 @@ class _TestableDiagramViewerState extends State<TestableDiagramViewer> {
   @override
   Widget build(BuildContext context) {
     final config = widget.configuration ?? widget.controller.configuration;
-    if (config.enableBlocDebugObserver) {
+    if (widget.debug || config.enableBlocDebugObserver) {
       Bloc.observer = DebugBlocObserver();
     }
     final diagramRect = widget.controller.logicalExtent;

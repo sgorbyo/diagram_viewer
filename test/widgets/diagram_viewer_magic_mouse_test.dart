@@ -109,8 +109,8 @@ void main() {
         // Assert - Should receive scroll event with correct delta
         final scrollEvents = extractScrollEvents();
         expect(scrollEvents, hasLength(1));
-        // Viewer amplifies small mouse deltas by 1.8x for sensitivity
-        expect(scrollEvents.first.scrollDelta, equals(54.0));
+        // Movement follows the cursor 1:1
+        expect(scrollEvents.first.scrollDelta, equals(30.0));
         expect(scrollEvents.first.scrollDirection, equals(const Offset(0, 1)));
       });
 
@@ -141,8 +141,8 @@ void main() {
         // Assert - Should receive scroll event with correct delta
         final scrollEvents = extractScrollEvents();
         expect(scrollEvents, hasLength(1));
-        // Viewer amplifies small mouse deltas by 1.8x for sensitivity
-        expect(scrollEvents.first.scrollDelta, equals(45.0));
+        // Movement follows the cursor 1:1
+        expect(scrollEvents.first.scrollDelta, equals(25.0));
         expect(scrollEvents.first.scrollDirection, equals(const Offset(1, 0)));
       });
     });

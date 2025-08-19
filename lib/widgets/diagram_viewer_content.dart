@@ -1350,10 +1350,10 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
 
       // Otherwise, treat as pan/scroll (Magic Mouse/trackpad)
       debugPrint('[Viewer] Wheel->SCROLL forward to controller');
-      // Amplify small deltas for better sensitivity, especially for MM
+      // Movement 1:1 (no amplification); keep a tiny min step only to avoid sub-pixel starvation
       Offset adjusted = event.scrollDelta;
       const double minStep = 0.6;
-      const double mouseMultiplier = 2.0; // classic mouse/MM
+      const double mouseMultiplier = 1.0; // 1:1 mapping
       if (event.kind == PointerDeviceKind.mouse) {
         adjusted = Offset(
           (adjusted.dx.abs() < minStep
@@ -1371,25 +1371,6 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
       final bool isSmooth = event.scrollDelta.dx.abs() <= 28.0 &&
           event.scrollDelta.dy.abs() <= 28.0;
 
-      // Enforce strict clamp for standard mouse wheel (no overscroll, no inertia)
-      if (isMouse) {
-        final tBloc = context.read<TransformBloc>();
-        final stNow = tBloc.state;
-        final proposed = stNow.transform.applyPan(event.scrollDelta);
-        final strict = Transform2DUtils.capTransformWithZoomLimits(
-          transform: proposed,
-          diagramRect: stNow.diagramRect,
-          size: stNow.viewportSize,
-          dynamic: false,
-          minZoom: widget.configuration.minZoom,
-          maxZoom: widget.configuration.maxZoom,
-          preserveCentering: true,
-          recenterSmallContent: false,
-        );
-        tBloc.add(TransformEvent.updateTransform(transform: strict));
-        return;
-      }
-
       // Treat events as smooth if a Magic Mouse scroll session is active, even if a single delta is > 4 px.
       // This prevents misclassification of MM bursts and allows inertia to follow the latest command.
       final Duration dtSinceLast = _lastWheelEventMonotonic == null
@@ -1399,23 +1380,7 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
           !isSmooth &&
           !_wheelScrollSessionActive &&
           dtSinceLast.inMilliseconds > 250;
-      if (treatAsClassic) {
-        // Classic wheel: strict clamp only, no overscroll and no inertia
-        final tBloc = context.read<TransformBloc>();
-        final stNow = tBloc.state;
-        final proposed = stNow.transform.applyPan(event.scrollDelta);
-        final strict = Transform2DUtils.capTransformWithZoomLimits(
-          transform: proposed,
-          diagramRect: stNow.diagramRect,
-          size: stNow.viewportSize,
-          dynamic: false,
-          minZoom: widget.configuration.minZoom,
-          maxZoom: widget.configuration.maxZoom,
-          preserveCentering: true,
-          recenterSmallContent: false,
-        );
-        tBloc.add(TransformEvent.updateTransform(transform: strict));
-      } else {
+      if (!treatAsClassic) {
         // Smooth path (MM/trackpad): start/extend session and apply dynamic pan
         if (!_wheelScrollSessionActive) {
           _wheelScrollSessionActive = true;
@@ -1615,7 +1580,7 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
 
       // Start inertia after a short pause (skip for classic wheel mouse)
       final bool allowInertia =
-          !isMouse || isSmooth; // allow MM, skip coarse wheel
+          !treatAsClassic; // allow MM/trackpad, skip coarse wheel
       if (widget.configuration.enableInertialScrolling && allowInertia) {
         // Use monotonic event timestamp for robust dt even in tests
         final Duration tNow = event.timeStamp;

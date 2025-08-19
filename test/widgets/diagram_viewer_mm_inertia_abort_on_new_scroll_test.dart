@@ -94,22 +94,22 @@ void main() {
       await tester.pump(const Duration(milliseconds: 1));
 
       final tAfter = transformBloc.state.transform.translation;
-      // Immediate effect should reverse dy clearly (>10 px to exceed amplify/minStep noise)
-      expect(tAfter.dy, greaterThan(tInertia.dy + 10.0));
+      // Immediate effect should reverse dy clearly with 1:1 mapping (>= 2 px)
+      expect(tAfter.dy, greaterThan(tInertia.dy + 2.0));
 
-      // At 100ms (after 80ms debounce), must be moving in new direction noticeably
+      // At 100ms (after ~80ms debounce), must be moving in new direction noticeably
       await tester.pump(const Duration(milliseconds: 100));
       final t100 = transformBloc.state.transform.translation;
-      expect(t100.dy, greaterThan(tAfter.dy + 10.0));
+      expect(t100.dy, greaterThan(tAfter.dy + 6.0));
 
       // At 200ms, cumulative movement must increase further
       await tester.pump(const Duration(milliseconds: 100));
       final t200 = transformBloc.state.transform.translation;
-      expect(t200.dy, greaterThan(tAfter.dy + 18.0));
+      expect(t200.dy, greaterThan(tAfter.dy + 12.0));
 
       // Final displacement from pre-abort position must be significant
       final tFinal = transformBloc.state.transform.translation;
-      expect(tFinal.dy, greaterThan(tInertia.dy + 28.0));
+      expect(tFinal.dy, greaterThan(tInertia.dy + 16.0));
     });
 
     testWidgets(

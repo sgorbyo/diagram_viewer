@@ -128,8 +128,9 @@ void main() {
       final afterIdle = transformBloc.state.transform.translation;
       expect(afterIdle, equals(beforeIdle));
 
-      // Sanity: some movement occurred vs initial
-      expect((afterIdle - t0.translation).distance, greaterThan(0));
+      // Sanity: since classic wheel is forwarded to controller (no internal pan),
+      // the viewer transform is unchanged w.r.t. initial
+      expect((afterIdle - t0.translation).distance, equals(0));
     });
   });
 }

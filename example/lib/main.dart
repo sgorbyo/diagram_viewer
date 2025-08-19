@@ -38,7 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
   DiagramConfiguration _config = const DiagramConfiguration(
     bounceDuration: Duration(milliseconds: 600),
     bounceCurve: Curves.easeOutQuart,
-    enableBlocDebugObserver: true,
+    enableBlocDebugObserver: false,
     snapGridEnabled: false,
     snapGridSpacing: 16,
     snapGridOrigin: Offset.zero,
@@ -131,7 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: DiagramViewer(
                   controller: controller,
                   configuration: _config,
-                  debug: true,
+                  debug: false,
                 ),
               ),
             ),

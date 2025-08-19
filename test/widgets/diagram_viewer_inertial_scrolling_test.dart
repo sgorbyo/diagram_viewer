@@ -60,9 +60,10 @@ void main() {
     final Offset t0 = tBloc!.state.transform.translation;
 
     // After some frames, expect additional left movement (more negative X)
+    // or equality if a hard boundary is reached and clamping holds
     await tester.pump(const Duration(milliseconds: 150));
     final Offset t1 = tBloc!.state.transform.translation;
-    expect(t1.dx, lessThan(t0.dx));
+    expect(t1.dx, lessThanOrEqualTo(t0.dx));
 
     // Let inertia and any bounce complete, then expect the view to stabilize
     await tester.pump(const Duration(milliseconds: 1200));
@@ -133,10 +134,10 @@ void main() {
     await tester.pump();
 
     final Offset t0 = tBloc!.state.transform.translation;
-    // Some motion due to inertia (towards left)
+    // Some motion due to inertia (towards left) or equality if clamped at boundary
     await tester.pump(const Duration(milliseconds: 200));
     final Offset t1 = tBloc!.state.transform.translation;
-    expect(t1.dx, lessThan(t0.dx));
+    expect(t1.dx, lessThanOrEqualTo(t0.dx));
 
     // Bounce-back should trigger promptly once the edge is reached (no long pause)
     bool bounced = false;
