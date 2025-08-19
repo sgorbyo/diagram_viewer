@@ -126,7 +126,7 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
       _mmResidual = candidate;
       if (widget.debug) {
         debugPrint(
-            '[MM] no-op pan after capping; accumulate residual=${_mmResidual}');
+            '[MM] no-op pan after capping; accumulate residual=$_mmResidual');
       }
       return;
     }
@@ -137,7 +137,7 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
     ));
     _mmResidual = candidate - effective;
     if (widget.debug && _mmResidual != Offset.zero) {
-      debugPrint('[MM] applied=${effective} residual=${_mmResidual}');
+      debugPrint('[MM] applied=$effective residual=$_mmResidual');
     }
   }
 
@@ -1330,7 +1330,7 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
           _wheelZoomAnchorFocalLogical =
               isSmallContent ? tState.diagramRect.center : logicalPosition;
           debugPrint(
-              '[Viewer] Anchor set logical=${_wheelZoomAnchorFocalLogical}');
+              '[Viewer] Anchor set logical=$_wheelZoomAnchorFocalLogical');
         }
         final Offset focalLogical = _wheelZoomAnchorFocalLogical!;
         // Apply zoom around chosen focal point
@@ -1622,7 +1622,9 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
           _recentWheelDeltaMs.clear();
           if (deltas.isEmpty || dts.isEmpty) return;
           Offset rawSum = Offset.zero;
-          for (final d in deltas) rawSum += d;
+          for (final d in deltas) {
+            rawSum += d;
+          }
           final bool xDominant = rawSum.dx.abs() >= rawSum.dy.abs();
           final int signMajor =
               xDominant ? (rawSum.dx >= 0 ? 1 : -1) : (rawSum.dy >= 0 ? 1 : -1);
@@ -1886,7 +1888,6 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
     // Detect modifiers for Magic Mouse zoom mapping
     final Set<LogicalKeyboardKey> globalKeys =
         HardwareKeyboard.instance.logicalKeysPressed;
-    final Set<LogicalKeyboardKey> rawKeys = RawKeyboard.instance.keysPressed;
     final bool ctrlOrCmdPressed =
         _pressedKeys.contains(LogicalKeyboardKey.controlLeft) ||
             _pressedKeys.contains(LogicalKeyboardKey.controlRight) ||
@@ -1897,13 +1898,7 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
             globalKeys.contains(LogicalKeyboardKey.metaLeft) ||
             globalKeys.contains(LogicalKeyboardKey.metaRight) ||
             globalKeys.contains(LogicalKeyboardKey.control) ||
-            globalKeys.contains(LogicalKeyboardKey.meta) ||
-            rawKeys.contains(LogicalKeyboardKey.controlLeft) ||
-            rawKeys.contains(LogicalKeyboardKey.controlRight) ||
-            rawKeys.contains(LogicalKeyboardKey.control) ||
-            rawKeys.contains(LogicalKeyboardKey.metaLeft) ||
-            rawKeys.contains(LogicalKeyboardKey.metaRight) ||
-            rawKeys.contains(LogicalKeyboardKey.meta);
+            globalKeys.contains(LogicalKeyboardKey.meta);
 
     // Handle only zoom from scale details; do NOT handle pan here
     if (details.scale != 1.0 && details.pointerCount > 1) {

@@ -13,7 +13,7 @@ void main() {
   group('Trackpad two-finger pan at high zoom', () {
     late MockDiagramController controller;
 
-    Widget _harness({required Rect extent, double maxZoom = 6.0}) {
+    Widget harness({required Rect extent, double maxZoom = 6.0}) {
       final cfg = DiagramConfiguration(
         showSnapGrid: false,
         maxZoom: maxZoom,
@@ -62,7 +62,7 @@ void main() {
 
     testWidgets('Immediate pan + inertia after two-finger burst',
         (tester) async {
-      await tester.pumpWidget(_harness(extent: controller.logicalExtent));
+      await tester.pumpWidget(harness(extent: controller.logicalExtent));
       await tester.pumpAndSettle();
 
       final transformBloc = tester
@@ -113,7 +113,7 @@ void main() {
     testWidgets(
         'Back-to-back two-finger bursts both start (no alternation drop)',
         (tester) async {
-      await tester.pumpWidget(_harness(extent: controller.logicalExtent));
+      await tester.pumpWidget(harness(extent: controller.logicalExtent));
       await tester.pumpAndSettle();
 
       final transformBloc = tester

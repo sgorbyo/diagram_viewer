@@ -13,8 +13,8 @@ void main() {
   group('Classic wheel pan: no overscroll and no bounce', () {
     late MockDiagramController controller;
 
-    Widget _harness({Size viewport = const Size(800, 600)}) {
-      final cfg = const DiagramConfiguration(
+    Widget harness({Size viewport = const Size(800, 600)}) {
+      const cfg = DiagramConfiguration(
         showSnapGrid: false,
         enableInertialScrolling: true,
       );
@@ -62,7 +62,7 @@ void main() {
     testWidgets(
         'Large coarse wheel bursts stay within strict bounds and stable',
         (tester) async {
-      await tester.pumpWidget(_harness());
+      await tester.pumpWidget(harness());
       await tester.pumpAndSettle();
 
       final transformBloc = tester

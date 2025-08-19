@@ -30,7 +30,7 @@ void main() {
         final zoomLevels = [0.1, 0.5, 1.0, 2.0, 5.0, 10.0];
         final performanceResults = <double, int>{};
 
-        int _measureMedianUs(DiagramPainter painter,
+        int measureMedianUs(DiagramPainter painter,
             {int warmups = 2, int samples = 5}) {
           for (int i = 0; i < warmups; i++) {
             final r = PictureRecorder();
@@ -69,7 +69,7 @@ void main() {
           );
 
           // Act - Measure rendering time (median after warm-up)
-          final us = _measureMedianUs(painter);
+          final us = measureMedianUs(painter);
           performanceResults[zoom] = us;
           // picture creation validated in helper
         }
@@ -119,7 +119,7 @@ void main() {
 
         final performanceResults = <int, int>{};
 
-        int _measureMinUs(DiagramPainter painter,
+        int measureMinUs(DiagramPainter painter,
             {int warmups = 2, int samples = 5}) {
           for (int i = 0; i < warmups; i++) {
             final r = PictureRecorder();
@@ -152,7 +152,7 @@ void main() {
           );
 
           // Act - Measure rendering time (min after warm-up)
-          final us = _measureMinUs(painter);
+          final us = measureMinUs(painter);
           final area = (extent.width * extent.height).round();
           performanceResults[area] = us;
         }
@@ -210,7 +210,7 @@ void main() {
 
         final performanceResults = <int, int>{};
 
-        int _measureMedianUs2(DiagramPainter painter,
+        int measureMedianUs2(DiagramPainter painter,
             {int warmups = 2, int samples = 5}) {
           for (int i = 0; i < warmups; i++) {
             final r = PictureRecorder();
@@ -243,7 +243,7 @@ void main() {
           );
 
           // Act - Measure rendering time (median after warm-up)
-          final us = _measureMedianUs2(painter);
+          final us = measureMedianUs2(painter);
           performanceResults[config.maxGridLines] = us;
         }
 
@@ -285,7 +285,7 @@ void main() {
         final extremeZooms = [0.001, 0.01, 0.1, 1.0, 10.0, 100.0, 1000.0];
         final performanceResults = <double, int>{};
 
-        int _measureMedianUs3(DiagramPainter painter,
+        int measureMedianUs3(DiagramPainter painter,
             {int warmups = 2, int samples = 5}) {
           for (int i = 0; i < warmups; i++) {
             final r = PictureRecorder();
@@ -324,7 +324,7 @@ void main() {
           );
 
           // Act - Measure rendering time (median after warm-up)
-          final us = _measureMedianUs3(painter);
+          final us = measureMedianUs3(painter);
           performanceResults[zoom] = us;
         }
 

@@ -15,7 +15,7 @@ void main() {
   group('Wheel zoom at limits should not pan', () {
     late MockDiagramController controller;
 
-    Widget _harness({double maxZoom = 4.0, double minZoom = 0.5}) {
+    Widget harness({double maxZoom = 4.0, double minZoom = 0.5}) {
       final cfg = DiagramConfiguration(
         showSnapGrid: false,
         maxZoom: maxZoom,
@@ -70,7 +70,7 @@ void main() {
 
     testWidgets('Ctrl+wheel min→max path does not introduce pan drift',
         (tester) async {
-      await tester.pumpWidget(_harness(minZoom: 0.5, maxZoom: 4.0));
+      await tester.pumpWidget(harness(minZoom: 0.5, maxZoom: 4.0));
       await tester.pumpAndSettle();
 
       final transformBloc = tester
@@ -121,7 +121,7 @@ void main() {
 
     testWidgets('Ctrl+wheel at max zoom does not pan (center focal)',
         (tester) async {
-      await tester.pumpWidget(_harness(maxZoom: 4.0));
+      await tester.pumpWidget(harness(maxZoom: 4.0));
       await tester.pumpAndSettle();
 
       final transformBloc = tester
@@ -172,7 +172,7 @@ void main() {
 
     testWidgets('Ctrl+wheel at max zoom does not pan (off-center focal)',
         (tester) async {
-      await tester.pumpWidget(_harness(maxZoom: 4.0));
+      await tester.pumpWidget(harness(maxZoom: 4.0));
       await tester.pumpAndSettle();
 
       final transformBloc = tester
@@ -223,7 +223,7 @@ void main() {
     testWidgets(
         'Ctrl+wheel at min zoom does not pan and stays centered when content < viewport',
         (tester) async {
-      await tester.pumpWidget(_harness(minZoom: 0.5));
+      await tester.pumpWidget(harness(minZoom: 0.5));
       await tester.pumpAndSettle();
 
       final transformBloc = tester
@@ -279,7 +279,7 @@ void main() {
     testWidgets(
         'Ctrl+wheel min→max burst: physical center drift < 1 px across sequence (center focal)',
         (tester) async {
-      await tester.pumpWidget(_harness(minZoom: 0.5, maxZoom: 4.0));
+      await tester.pumpWidget(harness(minZoom: 0.5, maxZoom: 4.0));
       await tester.pumpAndSettle();
 
       final transformBloc = tester
@@ -348,7 +348,7 @@ void main() {
     testWidgets(
         'Ctrl+wheel min→max burst: center drift < 1 px with off-center pointer (top-left)',
         (tester) async {
-      await tester.pumpWidget(_harness(minZoom: 0.5, maxZoom: 4.0));
+      await tester.pumpWidget(harness(minZoom: 0.5, maxZoom: 4.0));
       await tester.pumpAndSettle();
 
       final transformBloc = tester
@@ -403,7 +403,7 @@ void main() {
     testWidgets(
         'Ctrl+wheel max→min burst: physical center drift < 1 px across sequence (center focal)',
         (tester) async {
-      await tester.pumpWidget(_harness(minZoom: 0.5, maxZoom: 4.0));
+      await tester.pumpWidget(harness(minZoom: 0.5, maxZoom: 4.0));
       await tester.pumpAndSettle();
 
       final transformBloc = tester
@@ -467,7 +467,7 @@ void main() {
     testWidgets(
         'Ctrl+wheel max→min burst: center drift < 1 px with off-center pointer (top-right)',
         (tester) async {
-      await tester.pumpWidget(_harness(minZoom: 0.5, maxZoom: 4.0));
+      await tester.pumpWidget(harness(minZoom: 0.5, maxZoom: 4.0));
       await tester.pumpAndSettle();
 
       final transformBloc = tester
@@ -530,7 +530,7 @@ void main() {
     testWidgets(
         'Ctrl+wheel max→min burst: center drift < 1 px with off-center pointer (bottom-right)',
         (tester) async {
-      await tester.pumpWidget(_harness(minZoom: 0.5, maxZoom: 4.0));
+      await tester.pumpWidget(harness(minZoom: 0.5, maxZoom: 4.0));
       await tester.pumpAndSettle();
 
       final transformBloc = tester

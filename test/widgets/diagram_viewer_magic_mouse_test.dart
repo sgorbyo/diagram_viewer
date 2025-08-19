@@ -5,7 +5,6 @@ import 'package:diagram_viewer/diagram_viewer.dart';
 import '../interfaces/i_diagram_controller_test.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/services.dart';
-import 'package:diagram_viewer/internal/blocs/blocs.dart';
 import 'package:diagram_viewer/internal/blocs/transform/transform_event.dart';
 
 /// Tests for Magic Mouse scroll functionality

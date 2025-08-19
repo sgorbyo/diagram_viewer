@@ -12,8 +12,8 @@ void main() {
   group('Magic Mouse: new scroll aborts ongoing inertia', () {
     late MockDiagramController controller;
 
-    Widget _harness({required Rect extent}) {
-      final cfg = DiagramConfiguration(
+    Widget harness({required Rect extent}) {
+      const cfg = DiagramConfiguration(
         showSnapGrid: false,
       );
       return MaterialApp(
@@ -54,7 +54,7 @@ void main() {
     testWidgets(
         'New scroll during inertia reverses immediately and cancels prior motion',
         (tester) async {
-      await tester.pumpWidget(_harness(extent: controller.logicalExtent));
+      await tester.pumpWidget(harness(extent: controller.logicalExtent));
       await tester.pumpAndSettle();
 
       final transformBloc = tester
@@ -115,7 +115,7 @@ void main() {
     testWidgets(
         'Three rapid successive bursts alternate directions without loss',
         (tester) async {
-      await tester.pumpWidget(_harness(extent: controller.logicalExtent));
+      await tester.pumpWidget(harness(extent: controller.logicalExtent));
       await tester.pumpAndSettle();
 
       final transformBloc = tester
@@ -175,7 +175,7 @@ void main() {
     testWidgets(
         'Rapid single-tick alternating bursts are all captured with immediate >= 2px movement',
         (tester) async {
-      await tester.pumpWidget(_harness(extent: controller.logicalExtent));
+      await tester.pumpWidget(harness(extent: controller.logicalExtent));
       await tester.pumpAndSettle();
 
       final transformBloc = tester

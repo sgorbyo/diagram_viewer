@@ -21,8 +21,8 @@ void main() {
       controller.dispose();
     });
 
-    Widget _harness() {
-      final cfg = const DiagramConfiguration(
+    Widget harness() {
+      const cfg = DiagramConfiguration(
         showSnapGrid: false,
       );
       return MaterialApp(
@@ -67,7 +67,7 @@ void main() {
     testWidgets('Ctrl+wheel zooms (scale changes), default wheel sends scroll',
         (tester) async {
       // Arrange
-      await tester.pumpWidget(_harness());
+      await tester.pumpWidget(harness());
       await tester.pumpAndSettle();
 
       final transformBloc = tester

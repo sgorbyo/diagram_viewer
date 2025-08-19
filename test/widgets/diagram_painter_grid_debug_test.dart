@@ -62,7 +62,7 @@ void main() {
         );
 
         // Helper to measure with warm-ups and multiple samples → min time
-        int _measureMinPaintUs(DiagramPainter painter,
+        int measureMinPaintUs(DiagramPainter painter,
             {int warmups = 2, int samples = 5}) {
           for (int i = 0; i < warmups; i++) {
             final r = PictureRecorder();
@@ -87,8 +87,8 @@ void main() {
         }
 
         // Act - Measure rendering time (min of N after warm-up)
-        final tOptUs = _measureMinPaintUs(optimizedPainter);
-        final tNoOptUs = _measureMinPaintUs(nonOptimizedPainter);
+        final tOptUs = measureMinPaintUs(optimizedPainter);
+        final tNoOptUs = measureMinPaintUs(nonOptimizedPainter);
         const picture1 = Object();
         const picture2 = Object();
 
@@ -99,8 +99,8 @@ void main() {
         // Log performance comparison
         print('=== Grid Thinning Performance Debug ===');
         print('High zoom level (20x):');
-        print('  With optimization: ${tOptUs}μs');
-        print('  Without optimization: ${tNoOptUs}μs');
+        print('  With optimization: $tOptUsμs');
+        print('  Without optimization: $tNoOptUsμs');
         print('  Performance ratio: ${tNoOptUs / tOptUs}');
 
         // The optimized version should be faster or at least not significantly slower
@@ -123,7 +123,7 @@ void main() {
         final zoomLevels = [1.0, 5.0, 10.0, 20.0, 50.0];
         final performanceResults = <double, int>{};
 
-        int _measureMedianPaintUs(DiagramPainter painter,
+        int measureMedianPaintUs(DiagramPainter painter,
             {int warmups = 2, int samples = 5}) {
           for (int i = 0; i < warmups; i++) {
             final r = PictureRecorder();
@@ -162,7 +162,7 @@ void main() {
           );
 
           // Act - Measure rendering time (median after warm-up)
-          final us = _measureMedianPaintUs(painter);
+          final us = measureMedianPaintUs(painter);
           performanceResults[zoom] = us;
         }
 
@@ -210,29 +210,6 @@ void main() {
         // Test at different zoom levels
         final zoomLevels = [0.1, 1.0, 10.0];
         final performanceResults = <double, int>{};
-
-        int _measureMinPaintUs2(DiagramPainter painter,
-            {int warmups = 2, int samples = 5}) {
-          for (int i = 0; i < warmups; i++) {
-            final r = PictureRecorder();
-            final c = Canvas(r);
-            painter.paint(c, const Size(400, 400));
-            r.endRecording();
-          }
-          final times = <int>[];
-          for (int i = 0; i < samples; i++) {
-            final r = PictureRecorder();
-            final c = Canvas(r);
-            final sw = Stopwatch()..start();
-            painter.paint(c, const Size(400, 400));
-            final pic = r.endRecording();
-            sw.stop();
-            expect(pic, isNotNull);
-            times.add(sw.elapsedMicroseconds);
-          }
-          times.sort();
-          return times.first;
-        }
 
         for (final zoom in zoomLevels) {
           final transform = Transform2D(
@@ -396,7 +373,7 @@ void main() {
         print(
             '-----|---------------|------------|----------------|-------------------');
 
-        int _measureMinPaintUs2(DiagramPainter painter,
+        int measureMinPaintUs2(DiagramPainter painter,
             {int warmups = 2, int samples = 5}) {
           for (int i = 0; i < warmups; i++) {
             final r = PictureRecorder();
@@ -443,7 +420,7 @@ void main() {
           final totalLines = verticalLines + horizontalLines;
 
           // Act - Measure rendering time (min of N after warm-up)
-          final us = _measureMinPaintUs2(painter);
+          final us = measureMinPaintUs2(painter);
           performanceResults[zoom] = us;
           lineCounts[zoom] = totalLines;
 

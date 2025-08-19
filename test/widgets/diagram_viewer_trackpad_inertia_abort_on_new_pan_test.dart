@@ -12,8 +12,8 @@ void main() {
   group('Trackpad: new two-finger pan aborts ongoing inertia', () {
     late MockDiagramController controller;
 
-    Widget _harness({required Rect extent}) {
-      final cfg = DiagramConfiguration(
+    Widget harness({required Rect extent}) {
+      const cfg = DiagramConfiguration(
         showSnapGrid: false,
       );
       return MaterialApp(
@@ -53,7 +53,7 @@ void main() {
 
     testWidgets('New two-finger pan during inertia reverses immediately',
         (tester) async {
-      await tester.pumpWidget(_harness(extent: controller.logicalExtent));
+      await tester.pumpWidget(harness(extent: controller.logicalExtent));
       await tester.pumpAndSettle();
 
       final transformBloc = tester
@@ -75,7 +75,7 @@ void main() {
       await g1.up();
       await g2.up();
 
-      final t0 = transformBloc.state.transform.translation;
+      final _ = transformBloc.state.transform.translation;
       await tester.pump(const Duration(milliseconds: 100));
       final tInertia = transformBloc.state.transform.translation;
 

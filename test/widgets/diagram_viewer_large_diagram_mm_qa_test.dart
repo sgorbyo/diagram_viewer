@@ -13,7 +13,7 @@ void main() {
   group('Large diagram QA – Magic Mouse responsiveness at high zoom', () {
     late MockDiagramController controller;
 
-    Widget _harness(
+    Widget harness(
         {required Rect extent, double maxZoom = 4.0, double minZoom = 0.25}) {
       final cfg = DiagramConfiguration(
         showSnapGrid: false,
@@ -69,7 +69,7 @@ void main() {
         'High zoom: small MM scroll bursts produce immediate pan and start inertia',
         (tester) async {
       await tester
-          .pumpWidget(_harness(extent: controller.logicalExtent, maxZoom: 6.0));
+          .pumpWidget(harness(extent: controller.logicalExtent, maxZoom: 6.0));
       await tester.pumpAndSettle();
 
       final transformBloc = tester
@@ -122,7 +122,7 @@ void main() {
         'Back-to-back MM bursts at high zoom both start (no alternation drop)',
         (tester) async {
       await tester
-          .pumpWidget(_harness(extent: controller.logicalExtent, maxZoom: 6.0));
+          .pumpWidget(harness(extent: controller.logicalExtent, maxZoom: 6.0));
       await tester.pumpAndSettle();
 
       final transformBloc = tester
