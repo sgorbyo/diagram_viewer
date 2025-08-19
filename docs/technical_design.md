@@ -695,7 +695,7 @@ Implemented commands from controller to viewer:
 
 ### Goals
 - Prevent cross‑talk between consecutive one‑finger slide bursts on Magic Mouse (alternate start/stop due to leftover timers/buffers).
-- Keep sensitivity constant at high zoom by operating entirely in physical pixel space and amplifying micro deltas before sampling for inertia.
+- Sensibilità costante a qualsiasi zoom: operare in pixel fisici con mappatura 1:1 (nessuna amplificazione delle delte). Applicare solo un min‑step per asse per evitare starvation su micro‑tick.
 
 ### Mechanics
 - Events arrive via `Listener.onPointerSignal` as `PointerScrollEvent`.
@@ -703,7 +703,7 @@ Implemented commands from controller to viewer:
   - Stop any ongoing inertia; cancel bounce timers; clear MM buffers and flags.
   - Mark session active.
 - For each event in session:
-  - Compute adjusted physical delta: min‑step clamp + small multiplier to counteract MM micro jitter.
+  - Compute adjusted physical delta applicando solo un min‑step per asse (≥ 1.5 px). Nessun moltiplicatore: il movimento è 1:1.
   - Apply pan immediately using adjusted delta.
   - Append adjusted delta to the sampling buffer with timestamp. If inter‑event gap > ~180 ms, treat as a new session (clear buffers).
 - Session idle timeout (~180–220 ms):
@@ -717,7 +717,8 @@ Implemented commands from controller to viewer:
 - New MM input cancels ongoing inertia immediately.
 
 ### Magic Mouse Responsiveness Addendum
-- **Min-step per tick**: For each `PointerScrollEvent`, the viewer clamps adjusted deltas to a minimum per-axis step (≥ 1.5 px) before applying pan. This guarantees visible motion even for micro‑ticks at high frequency or high zoom.
+- **Min-step per tick**: For each `PointerScrollEvent`, the viewer clamps adjusted deltas to a minimum per-axis step (≥ 1.5 px) before applying pan. This guarantees visible motion even for micro‑ticks ad alta frequenza o ad alto zoom.
+- **Mappatura 1:1**: La delta fisica dello scroll viene applicata 1:1 al pan (nessuna amplificazione).
 - **Direction-consistent immediate inertia**: Immediate inertia start (without waiting for idle debounce) is permitted only if the recent sampled direction is consistent with the current tick; on frequent alternation, no immediate inertia is started to avoid cancel/flip, but pan is still applied synchronously.
 - **Smooth classification threshold**: Wheel deltas are considered “smooth/MM‑like” up to ~20 px per axis to avoid misclassifying MM ticks as classic wheel and accidentally disabling the smooth path.
 
