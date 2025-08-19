@@ -19,6 +19,12 @@ The package implements a **Diagrammer-Controller architecture** where:
   - Hit-test results (list of DiagramObjectEntity objects at the event location)
   - Border proximity information (configurable threshold)
   - Event phase (start, update, end)
+  - Selection rectangle events:
+    - The Diagrammer supports rectangular area selection (lasso on empty space).
+    - During the drag it emits `SelectionArea(start|update|end)` PhysicalEvents carrying:
+      - the logical selection rectangle; and
+      - the list of object IDs whose **convex hit path** intersects the rectangle (partial coverage counts).
+    - The Controller interprets these events and decides the authoritative selection set. The Diagrammer does not mutate selection state.
 
 ### Platform-Agnostic Event Unification
 - The package must unify similar physical input events from different platforms:
@@ -41,6 +47,9 @@ The package implements a **Diagrammer-Controller architecture** where:
   - Handle computational costs of hit-testing internally
   - Include hit-test results in every physical event sent to the controller
   - Sort DiagramObjectEntity objects by z-order for proper hit-testing
+  - Precise hit testing via convex paths:
+    - Each `DiagramObjectEntity` MUST expose a **convex** `logicalHitPath` (logical coordinates).
+    - The Diagrammer uses `logicalHitPath` (not only bounding boxes) for point hit-testing and rectangle selection coverage checks.
 
 ### Command System (Controller → Diagrammer)
 - The package must support commands from the controller:
@@ -53,6 +62,8 @@ The package implements a **Diagrammer-Controller architecture** where:
   7. **ShowDragOverlay**: Show an optional ghost overlay at a given pointer position
   8. **UpdateDragOverlay**: Update the ghost overlay position
   9. **HideDragOverlay**: Hide the ghost overlay
+  10. **HighlightSelection({objectIds})**: Render a transient overlay showing the **minimum axis-aligned logical bounding rectangle** enclosing the given objects’ `logicalBounds`. Purely visual; does not imply or change selection state.
+  11. **ClearSelectionHighlight()**: Remove the highlight overlay.
 
 ### Event Flow and Control
 - The package must:
@@ -61,6 +72,10 @@ The package implements a **Diagrammer-Controller architecture** where:
   - Execute commands received from the controller
   - Maintain default behaviors for diagram manipulation (pan, zoom, etc.)
   - Execute default behaviors only when explicitly requested via commands
+
+- Selection state ownership:
+  - The Controller is the sole source of truth for which objects are selected.
+  - The Diagrammer renders selected visuals only when the Controller supplies objects flagged as selected in the model (presentation hint).
 
 - The controller must:
   - Receive physical events with hit-test results
@@ -242,8 +257,8 @@ The package implements a **Diagrammer-Controller architecture** where:
 ### Desktop Input Requirements (Device Policies)
 
 - **Classic mouse wheel**:
-  - Default scroll without modifiers produces discrete pan steps.
-  - Inertial scrolling and overscroll bounce are disabled for the classic wheel.
+  - Default scroll without modifiers is forwarded to the controller (no pan applied by the viewer).
+  - Inertial scrolling and overscroll bounce are disabled for the classic wheel path handled by the controller.
   - Ctrl/Cmd + wheel maps to zoom; at effective min/max zoom, further ticks must not produce pan side effects.
 
 - **Magic Mouse**:
@@ -257,6 +272,12 @@ The package implements a **Diagrammer-Controller architecture** where:
   - Two‑finger drag → pan with scale‑invariant thresholds.
   - Pinch → zoom with focal stability; Cmd/Ctrl has no effect on pinch behavior.
   - Inertia enabled with the same physical‑space sampling/de‑noise rules as MM.
+
+### Magic Mouse Pan Responsiveness (No-Loss Under Rapid Bursts)
+- **Abort on new command**: If a new one‑finger slide (pan) arrives while an inertial scroll is ongoing, the inertia MUST be aborted within one frame and the new pan applied immediately.
+- **Minimum visible step**: Each `PointerScrollEvent` MUST apply at least a small physical displacement per axis (≥ 1.5 px) to avoid micro‑ticks being dropped at high frequency.
+- **Rapid alternation**: Alternating micro‑bursts (e.g., up/down every ~16–24 ms) MUST still produce immediate visible motion for each tick (no alternation loss). Inertia start is allowed only when recent direction is consistent; otherwise only immediate pan is applied.
+- **Scale‑invariant sensitivity**: Thresholds and filters operate in physical px so that responsiveness does not degrade with zoom.
 
 ## Interaction State Management
 
@@ -369,6 +390,10 @@ The package implements a **Diagrammer-Controller architecture** where:
 - **Widget Tests**: UI interaction and rendering
 - **Performance Tests**: 60 FPS requirement validation
 - **Cross-Platform Tests**: Ensure consistent behavior across platforms
+
+## Compatibility Notes
+- Implementations that previously relied on bounding-box hit testing remain valid by returning a convex rectangular `logicalHitPath` equal to their `logicalBounds`.
+- A legacy `contains(point)` may continue to exist in objects but SHOULD delegate to `logicalHitPath.contains(point)`; future versions may deprecate/remove `contains`.
 
 ## Extensibility Requirements
 

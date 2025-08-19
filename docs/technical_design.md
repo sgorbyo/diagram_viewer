@@ -55,6 +55,11 @@ class EventManagementEvent with _$EventManagementEvent {
 - Provides `Stream<PhysicalEvent>` for controller communication
 - Manages event isolation and state transitions
 
+#### **Selection area mode**
+- When a pointer drag begins on empty space (no hit objects), the bloc enters a SelectionArea mode.
+- It emits `SelectionArea(start|update|end)` PhysicalEvents with the current logical rectangle and covered IDs.
+- If border proximity is detected, the Controller may drive autoscroll; during autoscroll, the viewer synthesizes pointer updates so the rectangle expands consistently under a fixed cursor.
+
 ### Widget Architecture
 
 The package uses a clean widget architecture:
@@ -103,6 +108,25 @@ The package uses a clean widget architecture:
   - (Future) `AnchorProvider`: objects expose logical anchors/ports.
 
 The `PhysicalEvent` system has been enhanced with new fields:
+
+```dart
+// New union case for selection rectangle
+@freezed
+class SelectionAreaEvent with _$SelectionAreaEvent {
+  const factory SelectionAreaEvent({
+    required String eventId,
+    required SelectionPhase phase, // start | update | end
+    required Rect logicalRect,
+    required List<String> coveredObjectIds, // via convex hit-path intersection; z-sorted top-first
+    required Transform2D transformSnapshot,
+    // Optional viewport snapshot to help controller-side filtering if needed
+    ViewportSnapshot? viewport,
+  }) = _SelectionAreaEvent;
+}
+
+enum SelectionPhase { start, update, end }
+```
+Computation rule: coveredObjectIds = objects whose `logicalHitPath` intersects `logicalRect` (intersection or containment in either direction), z-sorted descending (topmost first).
 
 #### **New Fields**
 - `pressedMouseButtons`: Set of currently pressed mouse buttons
@@ -204,31 +228,45 @@ The `DiagramObjectEntity` interface provides a unified contract for all diagram 
 
 ```dart
 abstract class DiagramObjectEntity extends Equatable {
-  /// Logical bounds of the object in diagram coordinates
+  /// Logical bounds of the object in diagram coordinates (tight or conservative).
   Rect get logicalBounds;
-  
-  /// Center point of the object in diagram coordinates
+
+  /// Center point in logical coordinates (defaults to logicalBounds.center).
   Offset get center;
-  
-  /// Z-order for painting and hit-testing (higher values paint on top)
+
+  /// Z-order for painting and hit-testing (higher values paint on top).
   int get zOrder;
-  
-  /// Paint the object on the provided canvas
+
+  /// Paint the object on the provided canvas.
   void paint(Canvas canvas);
-  
-  /// Check if the object contains the given logical point
-  bool contains(Offset logicalPoint);
-  
-  /// Get the object's unique identifier
+
+  /// Unique identifier.
   String get id;
-  
-  /// Check if the object is visible
+
+  /// Visibility / interactivity.
   bool get isVisible;
-  
-  /// Check if the object is interactive
   bool get isInteractive;
+
+  /// Rendering hint set by the Controller for selected visuals (presentation-only).
+  bool get isSelected;
+
+  /// Convex path used for precise hit detection in logical space.
+  Path get logicalHitPath;
+
+  /// Convex path used to clip/trim connections at this object’s boundary.
+  /// Connections must also provide a convex clip path.
+  Path get logicalClipPath;
+
+  /// Deprecated: legacy point containment shortcut.
+  /// Implementations should delegate to logicalHitPath.contains(point).
+  @deprecated
+  bool contains(Offset logicalPoint) => logicalHitPath.contains(logicalPoint);
 }
 ```
+Implementation guidance:
+- If your shape is rectangular or circular, return that exact convex path.
+- If your shape is concave, return a convex approximation adequate for interaction.
+- Keep logicalClipPath aligned with visuals to avoid visible overlaps when trimming connections.
 
 #### **Key Features**
 - **Self-measurement**: `logicalBounds` provides the object's bounding rectangle
@@ -482,6 +520,11 @@ The grid thinning optimizations provide consistent performance across:
 - Z-order sorting for proper layering
 - Viewport-based object filtering
 
+### **Selected visuals & overlays**
+- Objects with `isSelected == true` are rendered with a distinct style (theme-configurable). The flag is provided by the Controller; the Diagrammer never toggles it.
+- While dragging a selection rectangle, the Diagrammer renders a semi-transparent logical-space rectangle for feedback (theme-configurable).
+- Selection highlight overlays render above content but below transient DnD ghosts.
+
 ## Testing Strategy
 
 ### **EventManagementBloc Tests**
@@ -497,6 +540,10 @@ The grid thinning optimizations provide consistent performance across:
 - Cross-platform compatibility tests
 
 ## Extensibility
+
+## **Compatibility**
+- Existing objects remain valid by returning a convex rectangular `logicalHitPath` equal to `logicalBounds`.
+- `contains(point)` remains for transitional use but delegates to `logicalHitPath.contains(point)` and may be removed in a future major release.
 
 ### **New Event Types**
 - Extend `EventManagementEvent` with new event types
@@ -557,6 +604,8 @@ Implemented commands from controller to viewer:
 - `ShowDragOverlay(ghostSpec, position)`
 - `UpdateDragOverlay(position)`
 - `HideDragOverlay()`
+- `HighlightSelection({objectIds})` — Render a transient overlay equal to the minimal axis-aligned logical bounding rectangle covering the supplied objects’ `logicalBounds`. Rendering-only; no model mutation.
+- `ClearSelectionHighlight()` — Remove the highlight overlay.
 
 ### Snap Grid Design
 
@@ -666,6 +715,11 @@ Implemented commands from controller to viewer:
 ### Interaction With Other Inputs
 - While a session is active, incoming different gesture types (e.g., trackpad pinch) are ignored by the MM path.
 - New MM input cancels ongoing inertia immediately.
+
+### Magic Mouse Responsiveness Addendum
+- **Min-step per tick**: For each `PointerScrollEvent`, the viewer clamps adjusted deltas to a minimum per-axis step (≥ 1.5 px) before applying pan. This guarantees visible motion even for micro‑ticks at high frequency or high zoom.
+- **Direction-consistent immediate inertia**: Immediate inertia start (without waiting for idle debounce) is permitted only if the recent sampled direction is consistent with the current tick; on frequent alternation, no immediate inertia is started to avoid cancel/flip, but pan is still applied synchronously.
+- **Smooth classification threshold**: Wheel deltas are considered “smooth/MM‑like” up to ~20 px per axis to avoid misclassifying MM ticks as classic wheel and accidentally disabling the smooth path.
 
 ## Scale‑Invariant Physical Filtering
 

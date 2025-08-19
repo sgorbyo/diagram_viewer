@@ -43,6 +43,12 @@ class _MyHomePageState extends State<MyHomePage> {
     snapGridSpacing: 16,
     snapGridOrigin: Offset.zero,
     showSnapGrid: false,
+    enableInertialScrolling: true,
+    inertialFriction: 0.98, // slower decay → inertia more visible
+    inertialMinStartVelocity:
+        200.0, // lower threshold to start inertia more often
+    inertialMinStopVelocity: 30.0, // allow longer glide
+    inertialMaxDuration: Duration(milliseconds: 1200),
   );
 
   @override
@@ -125,6 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: DiagramViewer(
                   controller: controller,
                   configuration: _config,
+                  debug: true,
                 ),
               ),
             ),

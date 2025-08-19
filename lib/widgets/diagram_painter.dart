@@ -26,6 +26,10 @@ class DiagramPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    if (debug) {
+      debugPrint(
+          '[Paint] scale=${transform.scale.toStringAsFixed(4)} tx=${transform.translation.dx.toStringAsFixed(2)} ty=${transform.translation.dy.toStringAsFixed(2)}');
+    }
     // Sfondo viewer (non trasformato) grigio molto chiaro per distinguere dal bianco del diagramma
     final viewerBg = Paint()
       ..color = const Color(0xFFE5E7EB)

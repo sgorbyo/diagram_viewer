@@ -49,7 +49,7 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
   // Wheel inertia sampling
   final List<Offset> _recentWheelDeltas = <Offset>[]; // px per event
   final List<int> _recentWheelDeltaMs = <int>[]; // ms between events
-  DateTime? _lastWheelEventTime;
+  // DateTime? _lastWheelEventTime; // removed unused
   Duration? _lastWheelEventMonotonic;
   Timer? _wheelInertiaTimer;
   static const int _wheelInertiaMaxSamples = 24;
@@ -73,12 +73,73 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
   // Wheel-zoom anchoring: keep a stable focal across a burst to avoid drift
   Offset? _wheelZoomAnchorFocalLogical;
   Timer? _wheelZoomAnchorTimer;
+  // Flag: wheel inertia started immediately by latest command (skip debounce re-start)
+  // bool _wheelInertiaImmediate = false; // removed unused
   // Recent pointer movement samples for velocity estimation (physical space)
   DateTime? _lastPointerMoveTime;
   final List<Offset> _recentPointerDeltas = <Offset>[]; // px
   final List<int> _recentPointerDeltaMs = <int>[]; // ms per sample
   Offset? _lastPointerLocalPosition;
   bool _wasTwoFingerPan = false;
+  // Magic Mouse residual accumulator to avoid losing tiny deltas near limits
+  Offset _mmResidual = Offset.zero;
+  // Magic Mouse per-frame coalescing to avoid losing rapid successive ticks
+  Offset _mmCoalescedDelta = Offset.zero;
+  // Track last pointer device kind to disambiguate trackpad vs Magic Mouse during gesture updates
+  PointerDeviceKind? _lastPointerKind;
+  // Residual accumulator for gesture-based pans (trackpad/MM-fallback)
+  Offset _gestureResidual = Offset.zero;
+  // Legacy coalescing fields (not used in immediate apply path)
+  // Track if this gesture session had any pan updates (used to trigger inertia on end)
+  bool _gesturePanSessionActive = false;
+  // Cooldown not used in immediate path
+  // Last applied gesture delta (for seeding inertia when needed)
+  Offset _lastGestureFlushDelta = Offset.zero;
+  // Post-gesture bounce verification timer
+  Timer? _postGestureBounceTimer;
+
+  // Removed coalesced gesture flush: switched to immediate apply path
+
+  void _flushMmCoalescedPanNow({required BuildContext context}) {
+    if (!mounted) return;
+    final transformBlocNow = context.read<TransformBloc>();
+    final Transform2D tNow = transformBlocNow.state.transform;
+    // Combine coalesced deltas with residual not yet applied
+    final Offset candidate = _mmCoalescedDelta + _mmResidual;
+    _mmCoalescedDelta = Offset.zero;
+    if (candidate == Offset.zero) return;
+    // Predict effective delta after dynamic capping to avoid sending no-op pans
+    final proposed = tNow.applyPan(candidate);
+    final dynamicCapped = Transform2DUtils.capTransformWithZoomLimits(
+      transform: proposed,
+      diagramRect: transformBlocNow.state.diagramRect,
+      size: transformBlocNow.state.viewportSize,
+      dynamic: true,
+      minZoom: widget.configuration.minZoom,
+      maxZoom: widget.configuration.maxZoom,
+      preserveCentering: true,
+      recenterSmallContent: false,
+    );
+    final Offset effective = dynamicCapped.translation - tNow.translation;
+    if (effective == Offset.zero) {
+      // Nothing would move: keep accumulating until we can pass bounds window
+      _mmResidual = candidate;
+      if (widget.debug) {
+        debugPrint(
+            '[MM] no-op pan after capping; accumulate residual=${_mmResidual}');
+      }
+      return;
+    }
+    // Send only the effective movement and keep leftover as residual
+    transformBlocNow.add(TransformEvent.pan(
+      delta: effective,
+      currentTransform: tNow,
+    ));
+    _mmResidual = candidate - effective;
+    if (widget.debug && _mmResidual != Offset.zero) {
+      debugPrint('[MM] applied=${effective} residual=${_mmResidual}');
+    }
+  }
 
   double _ghostDiameterFor(Object? spec, double scale) {
     try {
@@ -425,6 +486,40 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
             });
           },
         );
+        // Guarantee bounce even if inertia stops without correcting overscroll
+        _postGestureBounceTimer?.cancel();
+        _postGestureBounceTimer = Timer(const Duration(milliseconds: 220), () {
+          if (!mounted) return;
+          final tfbNow = context.read<TransformBloc>();
+          final stateNow = tfbNow.state;
+          final strictNow = Transform2DUtils.capTransformWithZoomLimits(
+            transform: stateNow.transform,
+            diagramRect: stateNow.diagramRect,
+            size: stateNow.viewportSize,
+            dynamic: false,
+            minZoom: widget.configuration.minZoom,
+            maxZoom: widget.configuration.maxZoom,
+            preserveCentering: true,
+            recenterSmallContent: false,
+          );
+          final needsBounce =
+              (strictNow.translation - stateNow.transform.translation)
+                          .distance >
+                      0.5 ||
+                  (strictNow.scale - stateNow.transform.scale).abs() > 0.001;
+          if (needsBounce && !_isBouncingBack) {
+            _inertia.stop();
+            tfbNow.setFrozenDuringDrag(false);
+            tfbNow.clearBounceBackFlag();
+            _isBouncingBack = true;
+            _bounceFlagTimer?.cancel();
+            _bounceFlagTimer = Timer(widget.configuration.bounceDuration, () {
+              if (mounted) _isBouncingBack = false;
+              _bounceFlagTimer = null;
+            });
+            tfbNow.bounceBack(widget.configuration.bounceDuration);
+          }
+        });
       });
     });
   }
@@ -585,6 +680,28 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
                       _handlePointerSignal(context, event, appBarHeight),
                   child: Stack(
                     children: [
+                      if (widget.debug)
+                        Positioned(
+                          left: 8,
+                          top: 8,
+                          child: Builder(builder: (context) {
+                            final tf =
+                                context.read<TransformBloc>().state.transform;
+                            return Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: Colors.black.withValues(alpha: 0.4),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Text(
+                                'scale: ${tf.scale.toStringAsFixed(3)}  tx: ${tf.translation.dx.toStringAsFixed(1)}  ty: ${tf.translation.dy.toStringAsFixed(1)}',
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 12),
+                              ),
+                            );
+                          }),
+                        ),
                       GestureDetector(
                         onScaleStart: (details) =>
                             _handleScaleStart(context, details, appBarHeight),
@@ -885,6 +1002,7 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
     final correctedPosition =
         box != null ? box.globalToLocal(event.position) : event.position;
     _lastPointerLocalPosition = correctedPosition;
+    _lastPointerKind = event.kind;
 
     // Perform hit-testing
     final hitResults = _performHitTesting(correctedPosition, currentTransform);
@@ -921,6 +1039,7 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
     final correctedPosition =
         box != null ? box.globalToLocal(event.position) : event.position;
     _lastPointerLocalPosition = correctedPosition;
+    _lastPointerKind = event.kind;
 
     // Perform hit-testing
     final hitResults = _performHitTesting(correctedPosition, currentTransform);
@@ -938,9 +1057,30 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
     ));
 
     // Apply pan only when dragging empty area and we did not start on an object
-    if (hitResults.isEmpty && !_draggingOnObject && event.buttons != 0) {
+    // If a drag on object is active, do not pan the canvas.
+    if (!_draggingOnObject && hitResults.isEmpty && event.buttons != 0) {
+      // Abort any ongoing inertia on new explicit user pan
+      _inertia.stop();
+      // Predict effective applied delta after dynamic capping
+      final proposed = currentTransform.applyPan(event.delta);
+      final dynamicCapped = Transform2DUtils.capTransformWithZoomLimits(
+        transform: proposed,
+        diagramRect: context.read<TransformBloc>().state.diagramRect,
+        size: context.read<TransformBloc>().state.viewportSize,
+        dynamic: true,
+        minZoom: widget.configuration.minZoom,
+        maxZoom: widget.configuration.maxZoom,
+        preserveCentering: true,
+        recenterSmallContent: false,
+      );
+      final Offset effective =
+          dynamicCapped.translation - currentTransform.translation;
+      if (widget.debug) {
+        debugPrint(
+            '[Viewer] Pointer->PAN (drag) applied=$effective from input=${event.delta}');
+      }
       transformBloc.add(TransformEvent.pan(
-        delta: event.delta,
+        delta: effective,
         currentTransform: currentTransform,
       ));
     }
@@ -987,119 +1127,67 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
         _recentPointerDeltaMs.clear();
         return;
       }
-      // Approximate velocity from recent pointer deltas
-      Offset initialV = Offset.zero;
-      int totalMs = 0;
-      for (int i = 0; i < _recentPointerDeltas.length; i++) {
-        initialV += _recentPointerDeltas[i];
-        totalMs += _recentPointerDeltaMs[i];
+      // If a bounce-back is in progress, stop inertia immediately
+      if (_isBouncingBack) {
+        _inertia.stop();
+        return;
       }
-      if (totalMs > 0) {
-        final seconds = totalMs / 1000.0;
-        initialV = Offset(initialV.dx / seconds, initialV.dy / seconds);
+      // Compute a tiny end-step using last pointer deltas to match previous behavior
+      final Offset delta = _recentPointerDeltas.isNotEmpty
+          ? _recentPointerDeltas.last
+          : const Offset(0, 0);
+      final stateBefore = transformBloc.state;
+      final proposed = stateBefore.transform.applyPan(delta);
+      final dynamicCapped = Transform2DUtils.capTransformWithZoomLimits(
+        transform: proposed,
+        diagramRect: stateBefore.diagramRect,
+        size: stateBefore.viewportSize,
+        dynamic: true,
+        minZoom: widget.configuration.minZoom,
+        maxZoom: widget.configuration.maxZoom,
+        preserveCentering: true,
+        recenterSmallContent: false,
+      );
+      final strict = Transform2DUtils.capTransformWithZoomLimits(
+        transform: stateBefore.transform,
+        diagramRect: stateBefore.diagramRect,
+        size: stateBefore.viewportSize,
+        dynamic: false,
+        minZoom: widget.configuration.minZoom,
+        maxZoom: widget.configuration.maxZoom,
+        preserveCentering: true,
+        recenterSmallContent: false,
+      );
+      // Apply pan
+      transformBloc.add(TransformEvent.pan(
+        delta: delta,
+        currentTransform: stateBefore.transform,
+      ));
+      // If capping altered the proposed translation, we hit elastic boundary → bounce now
+      // For pointer-drag inertia, bounce earlier to match expectations
+      final deviates =
+          (proposed.translation - dynamicCapped.translation).distance > 0.5;
+      // Or if proposed is beyond the dynamic window and delta keeps pushing outward, bounce now
+      bool pinnedOutward = false;
+      const double eps = 0.5;
+      final border = Transform2DUtils.dynamicBorderWidth;
+      final leftLimit = strict.translation.dx - border + eps;
+      final rightLimit = strict.translation.dx + border - eps;
+      final topLimit = strict.translation.dy - border + eps;
+      final bottomLimit = strict.translation.dy + border - eps;
+      final px = proposed.translation.dx;
+      final py = proposed.translation.dy;
+      if ((px <= leftLimit && delta.dx < 0) ||
+          (px >= rightLimit && delta.dx > 0) ||
+          (py <= topLimit && delta.dy < 0) ||
+          (py >= bottomLimit && delta.dy > 0)) {
+        pinnedOutward = true;
       }
-      if (initialV.distance > cfg.inertialMinStartVelocity) {
-        // Start inertia in physical space
-        _inertia.start(
-          initialVelocity: initialV,
-          interval: cfg.autoScrollInterval,
-          frictionFactor: cfg.inertialFriction,
-          minStopVelocity: cfg.inertialMinStopVelocity,
-          maxDuration: cfg.inertialMaxDuration,
-          onTick: (delta) {
-            if (!mounted) return;
-            // If a bounce-back is already in progress, stop inertia and ignore further ticks
-            if (_isBouncingBack) {
-              _inertia.stop();
-              return;
-            }
-            // If a bounce-back is in progress, stop inertia immediately
-            if (_isBouncingBack) {
-              _inertia.stop();
-              return;
-            }
-            final stateBefore = transformBloc.state;
-            final proposed = stateBefore.transform.applyPan(delta);
-            final dynamicCapped = Transform2DUtils.capTransformWithZoomLimits(
-              transform: proposed,
-              diagramRect: stateBefore.diagramRect,
-              size: stateBefore.viewportSize,
-              dynamic: true,
-              minZoom: widget.configuration.minZoom,
-              maxZoom: widget.configuration.maxZoom,
-              preserveCentering: true,
-              recenterSmallContent: false,
-            );
-            final strict = Transform2DUtils.capTransformWithZoomLimits(
-              transform: stateBefore.transform,
-              diagramRect: stateBefore.diagramRect,
-              size: stateBefore.viewportSize,
-              dynamic: false,
-              minZoom: widget.configuration.minZoom,
-              maxZoom: widget.configuration.maxZoom,
-              preserveCentering: true,
-              recenterSmallContent: false,
-            );
-            // Apply pan
-            transformBloc.add(TransformEvent.pan(
-              delta: delta,
-              currentTransform: stateBefore.transform,
-            ));
-            // If capping altered the proposed translation, we hit elastic boundary → bounce now
-            // For pointer-drag inertia, bounce earlier to match expectations
-            final deviates =
-                (proposed.translation - dynamicCapped.translation).distance >
-                    0.5;
-            // Or if proposed is beyond the dynamic window and delta keeps pushing outward, bounce now
-            bool pinnedOutward = false;
-            const double eps = 0.5;
-            final border = Transform2DUtils.dynamicBorderWidth;
-            final leftLimit = strict.translation.dx - border + eps;
-            final rightLimit = strict.translation.dx + border - eps;
-            final topLimit = strict.translation.dy - border + eps;
-            final bottomLimit = strict.translation.dy + border - eps;
-            final px = proposed.translation.dx;
-            final py = proposed.translation.dy;
-            if ((px <= leftLimit && delta.dx < 0) ||
-                (px >= rightLimit && delta.dx > 0) ||
-                (py <= topLimit && delta.dy < 0) ||
-                (py >= bottomLimit && delta.dy > 0)) {
-              pinnedOutward = true;
-            }
-            if (deviates || pinnedOutward) {
-              _inertia.stop();
-              transformBloc.setFrozenDuringDrag(false);
-              transformBloc.clearBounceBackFlag();
-              // Immediate bounce towards strict bounds
-              _isBouncingBack = true;
-              _bounceFlagTimer?.cancel();
-              _bounceFlagTimer = Timer(widget.configuration.bounceDuration, () {
-                if (mounted) _isBouncingBack = false;
-                _bounceFlagTimer = null;
-              });
-              transformBloc.bounceBack(widget.configuration.bounceDuration);
-            }
-          },
-          onStop: () {
-            if (!mounted) return;
-            // If a bounce-back has already been initiated during inertia, avoid double-bounce
-            if (_isBouncingBack) return;
-            // After inertia ends, run bounce-back to return within limits
-            transformBloc.setFrozenDuringDrag(false);
-            transformBloc.clearBounceBackFlag();
-            _isBouncingBack = true;
-            _bounceFlagTimer?.cancel();
-            _bounceFlagTimer = Timer(widget.configuration.bounceDuration, () {
-              if (mounted) _isBouncingBack = false;
-              _bounceFlagTimer = null;
-            });
-            transformBloc.bounceBack(widget.configuration.bounceDuration);
-          },
-        );
-      } else {
-        // No inertia: normal bounce-back
+      if (deviates || pinnedOutward) {
+        _inertia.stop();
         transformBloc.setFrozenDuringDrag(false);
         transformBloc.clearBounceBackFlag();
+        // Immediate bounce towards strict bounds
         _isBouncingBack = true;
         _bounceFlagTimer?.cancel();
         _bounceFlagTimer = Timer(widget.configuration.bounceDuration, () {
@@ -1128,6 +1216,11 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
   /// Handle pointer signal events (mouse wheel)
   void _handlePointerSignal(
       BuildContext context, PointerSignalEvent event, double topPadding) {
+    // During an object drag session, ignore wheel/scroll/zoom signals entirely.
+    // Drag must remain exclusive (auto-scroll aside, which is driven separately).
+    if (_draggingOnObject) {
+      return;
+    }
     if (_isBouncingBack) {
       _bounceFlagTimer?.cancel();
       _isBouncingBack = false;
@@ -1168,7 +1261,8 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
       // Use global hardware keyboard state to avoid focus-related misses.
       final Set<LogicalKeyboardKey> globalKeys =
           HardwareKeyboard.instance.logicalKeysPressed;
-      final Set<LogicalKeyboardKey> rawKeys = RawKeyboard.instance.keysPressed;
+      final Set<LogicalKeyboardKey> rawKeys =
+          HardwareKeyboard.instance.logicalKeysPressed;
       final bool ctrlOrCmdPressed =
           _pressedKeys.contains(LogicalKeyboardKey.controlLeft) ||
               _pressedKeys.contains(LogicalKeyboardKey.controlRight) ||
@@ -1259,7 +1353,7 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
       // Amplify small deltas for better sensitivity, especially for MM
       Offset adjusted = event.scrollDelta;
       const double minStep = 0.6;
-      const double mouseMultiplier = 1.8; // classic mouse/MM
+      const double mouseMultiplier = 2.0; // classic mouse/MM
       if (event.kind == PointerDeviceKind.mouse) {
         adjusted = Offset(
           (adjusted.dx.abs() < minStep
@@ -1274,14 +1368,42 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
       }
       // Determine if this is a classic (coarse) wheel vs smooth (MM/trackpad-like)
       final bool isMouse = event.kind == PointerDeviceKind.mouse;
-      final bool isSmooth = event.scrollDelta.dx.abs() <= 4.0 &&
-          event.scrollDelta.dy.abs() <= 4.0;
+      final bool isSmooth = event.scrollDelta.dx.abs() <= 28.0 &&
+          event.scrollDelta.dy.abs() <= 28.0;
 
-      if (isMouse && !isSmooth) {
-        // Classic wheel: strict clamping (no elastic overscroll, no session, no inertia)
+      // Enforce strict clamp for standard mouse wheel (no overscroll, no inertia)
+      if (isMouse) {
         final tBloc = context.read<TransformBloc>();
         final stNow = tBloc.state;
-        final proposed = stNow.transform.applyPan(adjusted);
+        final proposed = stNow.transform.applyPan(event.scrollDelta);
+        final strict = Transform2DUtils.capTransformWithZoomLimits(
+          transform: proposed,
+          diagramRect: stNow.diagramRect,
+          size: stNow.viewportSize,
+          dynamic: false,
+          minZoom: widget.configuration.minZoom,
+          maxZoom: widget.configuration.maxZoom,
+          preserveCentering: true,
+          recenterSmallContent: false,
+        );
+        tBloc.add(TransformEvent.updateTransform(transform: strict));
+        return;
+      }
+
+      // Treat events as smooth if a Magic Mouse scroll session is active, even if a single delta is > 4 px.
+      // This prevents misclassification of MM bursts and allows inertia to follow the latest command.
+      final Duration dtSinceLast = _lastWheelEventMonotonic == null
+          ? const Duration(days: 365)
+          : (event.timeStamp - _lastWheelEventMonotonic!);
+      final bool treatAsClassic = isMouse &&
+          !isSmooth &&
+          !_wheelScrollSessionActive &&
+          dtSinceLast.inMilliseconds > 250;
+      if (treatAsClassic) {
+        // Classic wheel: strict clamp only, no overscroll and no inertia
+        final tBloc = context.read<TransformBloc>();
+        final stNow = tBloc.state;
+        final proposed = stNow.transform.applyPan(event.scrollDelta);
         final strict = Transform2DUtils.capTransformWithZoomLimits(
           transform: proposed,
           diagramRect: stNow.diagramRect,
@@ -1311,10 +1433,166 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
         });
 
         // Apply immediate pan internally so behavior does not depend on controller
-        context.read<TransformBloc>().add(TransformEvent.pan(
-              delta: adjusted,
-              currentTransform: currentTransform,
-            ));
+        // Always apply at least a minimal step to ensure visible motion for micro-bursts
+        const double mmMinStep = 2.0; // px
+        final Offset applied = Offset(
+          adjusted.dx == 0
+              ? 0
+              : adjusted.dx.abs() < mmMinStep
+                  ? adjusted.dx.sign * mmMinStep
+                  : adjusted.dx,
+          adjusted.dy == 0
+              ? 0
+              : adjusted.dy.abs() < mmMinStep
+                  ? adjusted.dy.sign * mmMinStep
+                  : adjusted.dy,
+        );
+        // Accumulate and FLUSH IMMEDIATELY to avoid losing commands in rapid bursts.
+        // This also guarantees an immediate reversal step if inertia was active.
+        _mmCoalescedDelta += applied;
+        _flushMmCoalescedPanNow(context: context);
+
+        // Reset or steer inertia sampling toward the latest command direction.
+        // If the new delta opposes the recent dominant direction, clear buffers first.
+        if (_recentWheelDeltas.isNotEmpty) {
+          Offset sum = Offset.zero;
+          for (final d in _recentWheelDeltas) {
+            sum += d;
+          }
+          final bool xDominant = sum.dx.abs() >= sum.dy.abs();
+          final double prev = xDominant ? sum.dx : sum.dy;
+          final double nowComp = xDominant ? adjusted.dx : adjusted.dy;
+          if (prev != 0 && nowComp != 0 && (prev.sign != nowComp.sign)) {
+            _recentWheelDeltas.clear();
+            _recentWheelDeltaMs.clear();
+            _lastWheelEventMonotonic = null;
+          }
+        }
+        // Seed buffer with current adjusted sample; inertia will be evaluated on idle (no immediate start)
+        _recentWheelDeltas.add(adjusted);
+        _recentWheelDeltaMs.add(16); // approx one frame
+        _lastWheelEventMonotonic = event.timeStamp;
+        // (MM) Immediate inertia start is disabled; idle debounce below will decide if inertia starts
+        if (widget.configuration.enableInertialScrolling) {
+          // Estimate instantaneous velocity
+          final Offset v = adjusted * (1000.0 / 16.0); // px/s
+          final double startThreshold =
+              (widget.configuration.inertialMinStartVelocity * 0.15)
+                  .clamp(5.0, widget.configuration.inertialMinStartVelocity);
+          // Allow immediate inertia only if recent direction is consistent (avoid alternation cancellation)
+          bool consistentDirection = false;
+          if (_recentWheelDeltas.length >= 2) {
+            Offset recent = Offset.zero;
+            final int n = _recentWheelDeltas.length;
+            for (int i = (n - 1); i >= 0 && i >= n - 4; i--) {
+              recent += _recentWheelDeltas[i];
+            }
+            final bool xDom = recent.dx.abs() >= recent.dy.abs();
+            final double prevComp = xDom ? recent.dx : recent.dy;
+            final double nowComp = xDom ? adjusted.dx : adjusted.dy;
+            if (prevComp == 0 || nowComp == 0) {
+              consistentDirection = true;
+            } else {
+              consistentDirection = prevComp.sign == nowComp.sign;
+            }
+          }
+          if (v.distance > startThreshold && consistentDirection) {
+            _wheelInertiaTimer?.cancel();
+            _inertia.stop();
+            final transformBlocNow = context.read<TransformBloc>();
+            // _wheelInertiaImmediate = true; // removed
+            _inertia.start(
+              initialVelocity: v,
+              interval: widget.configuration.autoScrollInterval,
+              frictionFactor: widget.configuration.inertialFriction,
+              minStopVelocity: widget.configuration.inertialMinStopVelocity,
+              maxDuration: widget.configuration.inertialMaxDuration,
+              onTick: (delta) {
+                if (!mounted) return;
+                if (_isBouncingBack) {
+                  _inertia.stop();
+                  return;
+                }
+                final stateBefore = transformBlocNow.state;
+                final proposed = stateBefore.transform.applyPan(delta);
+                final dynamicCapped =
+                    Transform2DUtils.capTransformWithZoomLimits(
+                  transform: proposed,
+                  diagramRect: stateBefore.diagramRect,
+                  size: stateBefore.viewportSize,
+                  dynamic: true,
+                  minZoom: widget.configuration.minZoom,
+                  maxZoom: widget.configuration.maxZoom,
+                  preserveCentering: true,
+                  recenterSmallContent: false,
+                );
+                final strict = Transform2DUtils.capTransformWithZoomLimits(
+                  transform: stateBefore.transform,
+                  diagramRect: stateBefore.diagramRect,
+                  size: stateBefore.viewportSize,
+                  dynamic: false,
+                  minZoom: widget.configuration.minZoom,
+                  maxZoom: widget.configuration.maxZoom,
+                  preserveCentering: true,
+                  recenterSmallContent: false,
+                );
+                transformBlocNow.add(TransformEvent.pan(
+                  delta: delta,
+                  currentTransform: stateBefore.transform,
+                ));
+                final deviates =
+                    (proposed.translation - dynamicCapped.translation)
+                            .distance >
+                        0.1;
+                bool pinnedOutward = false;
+                const double eps = 0.5;
+                final border = Transform2DUtils.dynamicBorderWidth;
+                final leftLimit = strict.translation.dx - border + eps;
+                final rightLimit = strict.translation.dx + border - eps;
+                final topLimit = strict.translation.dy - border + eps;
+                final bottomLimit = strict.translation.dy + border - eps;
+                final px = proposed.translation.dx;
+                final py = proposed.translation.dy;
+                if ((px <= leftLimit && delta.dx < 0) ||
+                    (px >= rightLimit && delta.dx > 0) ||
+                    (py <= topLimit && delta.dy < 0) ||
+                    (py >= bottomLimit && delta.dy > 0)) {
+                  pinnedOutward = true;
+                }
+                if (deviates || pinnedOutward) {
+                  _inertia.stop();
+                  transformBlocNow.setFrozenDuringDrag(false);
+                  transformBlocNow.clearBounceBackFlag();
+                  _isBouncingBack = true;
+                  _bounceFlagTimer?.cancel();
+                  _bounceFlagTimer =
+                      Timer(widget.configuration.bounceDuration, () {
+                    if (mounted) _isBouncingBack = false;
+                    _bounceFlagTimer = null;
+                  });
+                  transformBlocNow
+                      .bounceBack(widget.configuration.bounceDuration);
+                }
+              },
+              onStop: () {
+                if (!mounted) return;
+                if (_isBouncingBack) return;
+                final transformBlocFinal = context.read<TransformBloc>();
+                transformBlocFinal.setFrozenDuringDrag(false);
+                transformBlocFinal.clearBounceBackFlag();
+                _isBouncingBack = true;
+                _bounceFlagTimer?.cancel();
+                _bounceFlagTimer =
+                    Timer(widget.configuration.bounceDuration, () {
+                  if (mounted) _isBouncingBack = false;
+                  _bounceFlagTimer = null;
+                });
+                transformBlocFinal
+                    .bounceBack(widget.configuration.bounceDuration);
+              },
+            );
+          }
+        }
       }
       final synthetic = PointerScrollEvent(
         position: event.position,
@@ -1600,6 +1878,10 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
 
     // Start gesture only for multi-pointer interactions
     _wasMultiTouchGesture = details.pointerCount > 1;
+    // Reset gesture residual at the start of any gesture session
+    _gestureResidual = Offset.zero;
+    _gesturePanSessionActive = false;
+    _lastGestureFlushDelta = Offset.zero;
     if (_wasMultiTouchGesture) {
       eventBloc.add(EventManagementEvent.startGestureEvent(
         rawEvent: details,
@@ -1614,6 +1896,11 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
   void _handleScaleUpdate(
       BuildContext context, ScaleUpdateDetails details, double topPadding) {
     if (_isBouncingBack) return;
+    // During an object drag session, viewer transforms (pan/zoom) are disabled.
+    // Drag must remain exclusive until pointer up (auto-scroll aside).
+    if (_draggingOnObject) {
+      return;
+    }
     final eventBloc = context.read<EventManagementBloc>();
     final transformBloc = context.read<TransformBloc>();
     final currentTransform = transformBloc.state.transform;
@@ -1702,25 +1989,45 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
       _lastPointerMoveTime = DateTime.timestamp();
     } else if (details.pointerCount > 1 && details.scale == 1.0) {
       // Two-finger trackpad pan when no pinch scale is applied
-      // Amplify small deltas for sensitivity
-      const double minStep = 0.4;
-      const double trackpadMultiplier = 1.8;
+      // 1:1 feeling with finger movement (no multiplier, no min-step)
       Offset panDelta = details.focalPointDelta;
-      panDelta = Offset(
-        (panDelta.dx.abs() < minStep
-                ? (panDelta.dx == 0 ? 0 : panDelta.dx.sign * minStep)
-                : panDelta.dx) *
-            trackpadMultiplier,
-        (panDelta.dy.abs() < minStep
-                ? (panDelta.dy == 0 ? 0 : panDelta.dy.sign * minStep)
-                : panDelta.dy) *
-            trackpadMultiplier,
+      // Abort inertia only for gesture pans (not for mouse drag); immediate apply
+      _inertia.stop();
+      // Immediate apply with dynamic capping and residual accumulation
+      final Transform2D tNow = context.read<TransformBloc>().state.transform;
+      final Offset candidate = _gestureResidual + panDelta;
+      final proposed = tNow.applyPan(candidate);
+      final dynamicCapped = Transform2DUtils.capTransformWithZoomLimits(
+        transform: proposed,
+        diagramRect: context.read<TransformBloc>().state.diagramRect,
+        size: context.read<TransformBloc>().state.viewportSize,
+        dynamic: true,
+        minZoom: widget.configuration.minZoom,
+        maxZoom: widget.configuration.maxZoom,
+        preserveCentering: true,
+        recenterSmallContent: false,
       );
-      transformBloc.add(TransformEvent.pan(
-        delta: panDelta,
-        currentTransform: currentTransform,
-      ));
+      final Offset effective = dynamicCapped.translation - tNow.translation;
+      if (effective == Offset.zero) {
+        _gestureResidual = candidate;
+        if (widget.debug) {
+          debugPrint(
+              '[Viewer] Gesture->PAN (trackpad) no-op; residual=$_gestureResidual');
+        }
+      } else {
+        if (widget.debug) {
+          final Offset residualBefore = candidate - panDelta;
+          debugPrint(
+              '[Viewer] Gesture->PAN (trackpad) applied=$effective from input=$panDelta residual_before=$residualBefore');
+        }
+        transformBloc.add(TransformEvent.pan(
+          delta: effective,
+          currentTransform: tNow,
+        ));
+        _gestureResidual = candidate - effective;
+      }
       _wasTwoFingerPan = true;
+      _gesturePanSessionActive = true;
       // Sample for inertia (reuse pointer sampling buffers)
       final now = DateTime.timestamp();
       if (_lastPointerMoveTime != null) {
@@ -1734,6 +2041,70 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
       }
       _lastPointerMoveTime = now;
 
+      // Track gesture path
+      eventBloc.add(EventManagementEvent.updateGestureEvent(
+        rawEvent: details,
+        logicalPosition: logicalPosition,
+        hitResults: hitResults,
+        pressedKeys: _pressedKeys,
+      ));
+    } else if (details.pointerCount == 1 && details.scale == 1.0) {
+      // Fallback for Magic Mouse finger scrolls delivered as single-pointer gesture updates (no pinch)
+      // Guard: only if last pointer kind looked like mouse (Magic Mouse), not trackpad
+      if (_lastPointerKind != PointerDeviceKind.mouse) {
+        // Not a mouse-originated single-pointer update; ignore here
+        return;
+      }
+      // 1:1 feeling with finger movement on Magic Mouse (no multiplier, no min-step)
+      Offset panDelta = details.focalPointDelta;
+      // Abort inertia on new explicit gesture pan
+      _inertia.stop();
+      // Immediate apply for MM fallback as well
+      final Transform2D tNow2 = context.read<TransformBloc>().state.transform;
+      final Offset candidate2 = _gestureResidual + panDelta;
+      final proposed2 = tNow2.applyPan(candidate2);
+      final dynamicCapped2 = Transform2DUtils.capTransformWithZoomLimits(
+        transform: proposed2,
+        diagramRect: context.read<TransformBloc>().state.diagramRect,
+        size: context.read<TransformBloc>().state.viewportSize,
+        dynamic: true,
+        minZoom: widget.configuration.minZoom,
+        maxZoom: widget.configuration.maxZoom,
+        preserveCentering: true,
+        recenterSmallContent: false,
+      );
+      final Offset effective2 = dynamicCapped2.translation - tNow2.translation;
+      if (effective2 == Offset.zero) {
+        _gestureResidual = candidate2;
+        if (widget.debug) {
+          debugPrint(
+              '[Viewer] Gesture->PAN (MM fallback) no-op; residual=$_gestureResidual');
+        }
+      } else {
+        if (widget.debug) {
+          final Offset residualBefore2 = candidate2 - panDelta;
+          debugPrint(
+              '[Viewer] Gesture->PAN (MM fallback) applied=$effective2 from input=$panDelta residual_before=$residualBefore2');
+        }
+        transformBloc.add(TransformEvent.pan(
+          delta: effective2,
+          currentTransform: tNow2,
+        ));
+        _gestureResidual = candidate2 - effective2;
+      }
+      _gesturePanSessionActive = true;
+      // Sample for inertia as well (same buffers)
+      final now2 = DateTime.timestamp();
+      if (_lastPointerMoveTime != null) {
+        final dtMs2 = now2.difference(_lastPointerMoveTime!).inMilliseconds;
+        _recentPointerDeltaMs.add(dtMs2);
+        _recentPointerDeltas.add(panDelta);
+        while (_recentPointerDeltas.length > 8) {
+          _recentPointerDeltas.removeAt(0);
+          _recentPointerDeltaMs.removeAt(0);
+        }
+      }
+      _lastPointerMoveTime = now2;
       // Track gesture path
       eventBloc.add(EventManagementEvent.updateGestureEvent(
         rawEvent: details,
@@ -1756,11 +2127,21 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
       rawEvent: details,
       pressedKeys: _pressedKeys,
     ));
+    // Reset residual at gesture end so next session starts clean
+    _gestureResidual = Offset.zero;
+    // Seed inertia samples if flush-based sampling produced no dt entries
+    if (_gesturePanSessionActive && _recentPointerDeltaMs.isEmpty) {
+      if (_lastGestureFlushDelta != Offset.zero) {
+        _recentPointerDeltas.add(_lastGestureFlushDelta);
+        _recentPointerDeltaMs.add(16);
+      }
+    }
 
     // Ensure bounce-back only after real multi-touch gesture ends
     final transformBloc = context.read<TransformBloc>();
     transformBloc.setFrozenDuringDrag(false);
-    if (_wasTwoFingerPan && widget.configuration.enableInertialScrolling) {
+    if ((_wasTwoFingerPan || _gesturePanSessionActive) &&
+        widget.configuration.enableInertialScrolling) {
       // Start inertia for two-finger pan end using sampled gesture deltas
       // De-noise tail samples that flip sign on the dominant axis
       if (_recentPointerDeltas.isNotEmpty) {
@@ -1818,7 +2199,7 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
       }
       final double gestureStartThreshold =
           (widget.configuration.inertialMinStartVelocity * 0.4)
-              .clamp(30.0, widget.configuration.inertialMinStartVelocity);
+              .clamp(5.0, widget.configuration.inertialMinStartVelocity);
       if (initialV.distance > gestureStartThreshold ||
           // Fallback: if average is low but the last sample had a strong velocity, use it to kick inertia
           lastSampleVelocity >= gestureStartThreshold * 0.75) {
@@ -1862,11 +2243,12 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
               delta: delta,
               currentTransform: stateBefore.transform,
             ));
+            // Trackpad inertia: allow a bit more elastic room before bouncing
             final deviates =
                 (proposed.translation - dynamicCapped.translation).distance >
-                    0.1;
+                    1.0;
             bool pinnedOutward = false;
-            const double eps = 0.5;
+            const double eps = 1.5;
             final border = Transform2DUtils.dynamicBorderWidth;
             final leftLimit = strict.translation.dx - border + eps;
             final rightLimit = strict.translation.dx + border - eps;
@@ -1907,6 +2289,16 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
             transformBloc.bounceBack(widget.configuration.bounceDuration);
           },
         );
+        // Apply an immediate initial step in the inertia direction for responsiveness
+        final double seconds =
+            widget.configuration.autoScrollInterval.inMilliseconds / 1000.0;
+        final Offset kick =
+            Offset(initialV.dx * seconds, initialV.dy * seconds);
+        final stateKick = transformBloc.state;
+        transformBloc.add(TransformEvent.pan(
+          delta: kick,
+          currentTransform: stateKick.transform,
+        ));
       } else {
         _recentPointerDeltas.clear();
         _recentPointerDeltaMs.clear();
@@ -2019,6 +2411,7 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
     _autoScroll.stop();
     _inertia.stop();
     _bounceFlagTimer?.cancel();
+    _postGestureBounceTimer?.cancel();
     _wheelZoomBounceTimer?.cancel();
     _wheelZoomAnchorTimer?.cancel();
     _wheelInertiaTimer?.cancel();

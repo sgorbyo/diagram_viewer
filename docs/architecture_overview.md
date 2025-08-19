@@ -50,6 +50,8 @@ class Transform2D {
 
 Notes:
 - Border proximity is currently computed in `EventManagementBloc` using the viewport and `edgeThreshold`, and included in pointer drag events (update phase) via metadata.
+Selection rectangle:
+- During a lasso drag that starts on empty space, the Diagrammer emits `SelectionArea(start|update|end)` PhysicalEvents with the logical rectangle and the list of covered object IDs (computed via convex hit-path intersection). The Controller decides the authoritative selection set.
 
 ### **Diagram Commands (Controller → Diagrammer)**
 - **ApplyDefaultPanZoom**: Execute default pan/zoom behavior
@@ -59,6 +61,7 @@ Notes:
 - **AutoScrollStep**: Execute incremental scroll
 - **StopAutoScroll**: Stop ongoing auto-scroll immediately
 - **ShowDragOverlay / UpdateDragOverlay / HideDragOverlay**: optional ghost overlay control during DnD
+- **HighlightSelection / ClearSelectionHighlight**: Render or clear a transient overlay showing the minimal axis-aligned logical bounding rectangle enclosing a set of objects. Rendering-only; no selection state changes.
 
 Autoscroll execution contract (current):
 - The controller decides when to autoscroll (based on border proximity) and emits `AutoScrollStep` with a velocity vector; it must emit `StopAutoScroll` when leaving the edge region or on drag end.
@@ -82,11 +85,15 @@ Autoscroll execution contract (current):
    - Text-on-path helpers (compute position and tangent-aligned orientation)
    - Path end trimming against other objects' clip paths
    - Generic path hit-testing utilities (point-to-path distance with tolerance)
+- Emit `SelectionArea` events during rectangular selection, including covered object IDs.
+- Execute selection highlight overlay commands; overlays are purely visual and separate from business logic.
+- Render selected objects with a distinct style only when the Controller’s model marks them as selected.
 
 ### **Controller Responsibilities**
 - Business logic interpretation
 - Model state management
 - Object selection and manipulation
+- Own selection semantics end-to-end (toggle/additive/subtractive rules, platform modifiers). On `SelectionArea` events, compute and publish the authoritative selection set and/or drive `HighlightSelection/ClearSelectionHighlight`.
 - Auto-scroll orchestration
 - Start in‑app DnD (source in external widgets), handle DnD target events, command visual feedback, and perform final model updates on drop
 - Diagram extent calculation
@@ -199,14 +206,15 @@ Known limitations (current):
 ## Desktop Input Mapping and Device Behaviors
 
 - **Classic mouse wheel**
-  - Scroll without modifiers → discrete pan steps.
-  - Inertial scrolling and overscroll bounce are disabled.
+  - Scroll without modifiers → forwarded to the controller (the viewer does not apply pan internally).
+  - Inertial scrolling and overscroll bounce are disabled for the classic wheel path handled by the controller.
   - Ctrl/Cmd + wheel → zoom about cursor; at effective min/max, extra ticks are ignored (no pan side‑effects).
 
 - **Magic Mouse**
   - One‑finger slide emits `PointerScrollEvent` captured by `Listener`.
-  - Pan is applied immediately using adjusted physical deltas (min‑step + multiplier) for better sensitivity.
+  - Pan is applied immediately using adjusted physical deltas; a minimum per‑axis step (≥ 1.5 px) guarantees visible motion on micro‑ticks.
   - A short "scroll session window" groups bursts and resets inertia/bounce/buffers on first event to avoid cross‑talk; on idle, samples drive inertia with de‑noise and peak fallback; bounce runs only if needed.
+  - Inertia starts immediately only when the recent direction is consistent with the new tick; under rapid alternation, immediate inertia is suppressed to avoid cancel/flip, but immediate pan is never dropped.
   - Cmd + slide → zoom with gentle per‑step factor for fine control.
 
 - **Trackpad**
