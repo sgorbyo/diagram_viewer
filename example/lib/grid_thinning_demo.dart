@@ -72,6 +72,13 @@ class GridThinningDemoController implements IDiagramController {
           transformSnapshot, timestamp, snappedLogicalPosition) {
         // Handle drag target drop
       },
+      // Selection area events: no-op in demo (selection owned by app)
+      selectionAreaStart: (eventId, logicalRect, transformSnapshot, timestamp,
+          coveredObjectIds) {},
+      selectionAreaUpdate: (eventId, logicalRect, transformSnapshot, timestamp,
+          coveredObjectIds) {},
+      selectionAreaEnd: (eventId, logicalRect, transformSnapshot, timestamp,
+          coveredObjectIds) {},
     );
   }
 

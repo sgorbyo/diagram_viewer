@@ -129,6 +129,7 @@ class DiagramEventTranslator {
           mouseButton,
           eventKey,
           activeInteraction,
+          pressedKeys, // Pass pressedKeys to _handlePointerStart
         );
 
       case InteractionPhase.update:
@@ -142,6 +143,7 @@ class DiagramEventTranslator {
           delta,
           eventKey,
           borderProximity,
+          pressedKeys, // Pass pressedKeys to _handlePointerUpdate
         );
 
       case InteractionPhase.end:
@@ -155,6 +157,7 @@ class DiagramEventTranslator {
           isOnObject,
           mouseButton,
           eventKey,
+          pressedKeys, // Pass pressedKeys to _handlePointerEnd
         );
     }
   }
@@ -260,6 +263,7 @@ class DiagramEventTranslator {
     MouseButton? mouseButton,
     String eventKey,
     InteractionType? activeInteraction,
+    Set<LogicalKeyboardKey> pressedKeys, // Add pressed keys parameter
   ) {
     // Store event state
     _activeEvents[eventKey] = _EventState(
@@ -271,40 +275,27 @@ class DiagramEventTranslator {
       isOnObject: isOnObject,
     );
 
-    // Determine if this is a potential drag
-    if (isOnObject) {
-      // Object interaction - could become drag
-      return DiagramEventUnion.dragBegin(
-        DiagramDragBegin(
-          eventId: eventId,
-          logicalPosition: logicalPosition,
-          screenPosition: screenPosition,
-          transformSnapshot: transformSnapshot,
-          hitList: hitList,
-          timestamp: Duration.zero,
-          metadata: {},
-          fingerCount: 1,
-          mouseButton: mouseButton,
-          isOnObject: isOnObject,
-        ),
-      );
-    } else {
-      // Empty space - could become pan
-      return DiagramEventUnion.dragBegin(
-        DiagramDragBegin(
-          eventId: eventId,
-          logicalPosition: logicalPosition,
-          screenPosition: screenPosition,
-          transformSnapshot: transformSnapshot,
-          hitList: hitList,
-          timestamp: Duration.zero,
-          metadata: {},
-          fingerCount: 1,
-          mouseButton: mouseButton,
-          isOnObject: isOnObject,
-        ),
-      );
-    }
+    // Create metadata with pressed keys for controller decision making
+    final metadata = <String, dynamic>{
+      'pressedKeys': pressedKeys.map((k) => k.keyLabel).toList(),
+      'pressedMouseButtons': mouseButton?.name ?? 'none',
+    };
+
+    // Always emit dragBegin - let controller decide what to do with it
+    return DiagramEventUnion.dragBegin(
+      DiagramDragBegin(
+        eventId: eventId,
+        logicalPosition: logicalPosition,
+        screenPosition: screenPosition,
+        transformSnapshot: transformSnapshot,
+        hitList: hitList,
+        timestamp: Duration.zero,
+        metadata: metadata,
+        fingerCount: 1,
+        mouseButton: mouseButton,
+        isOnObject: isOnObject,
+      ),
+    );
   }
 
   /// Handle pointer update events
@@ -318,6 +309,7 @@ class DiagramEventTranslator {
     Offset? delta,
     String eventKey,
     BorderProximity borderProximity,
+    Set<LogicalKeyboardKey> pressedKeys, // Add pressed keys parameter
   ) {
     final state = _activeEvents[eventKey];
     if (state == null) {
@@ -344,6 +336,20 @@ class DiagramEventTranslator {
         totalDelta.distance > 0.5 ||
         duration > const Duration(milliseconds: 100);
     if (significant) {
+      // Create metadata with pressed keys and border proximity
+      final metadata = <String, dynamic>{
+        'pressedKeys': pressedKeys.map((k) => k.keyLabel).toList(),
+        'borderProximity': {
+          'isNearLeft': borderProximity.isNearLeft,
+          'isNearRight': borderProximity.isNearRight,
+          'isNearTop': borderProximity.isNearTop,
+          'isNearBottom': borderProximity.isNearBottom,
+          'distanceFromEdge': borderProximity.distanceFromEdge,
+          'threshold': borderProximity.threshold,
+          'normalizedDistance': borderProximity.normalizedDistance,
+        },
+      };
+
       return DiagramEventUnion.dragContinue(
         DiagramDragContinue(
           eventId: eventId,
@@ -352,17 +358,7 @@ class DiagramEventTranslator {
           transformSnapshot: transformSnapshot,
           hitList: hitList,
           timestamp: duration,
-          metadata: {
-            'borderProximity': {
-              'isNearLeft': borderProximity.isNearLeft,
-              'isNearRight': borderProximity.isNearRight,
-              'isNearTop': borderProximity.isNearTop,
-              'isNearBottom': borderProximity.isNearBottom,
-              'distanceFromEdge': borderProximity.distanceFromEdge,
-              'threshold': borderProximity.threshold,
-              'normalizedDistance': borderProximity.normalizedDistance,
-            },
-          },
+          metadata: metadata,
           delta: effectiveDelta,
           totalDelta: totalDelta,
           duration: duration,
@@ -385,6 +381,7 @@ class DiagramEventTranslator {
     bool isOnObject,
     MouseButton? mouseButton,
     String eventKey,
+    Set<LogicalKeyboardKey> pressedKeys, // Add pressed keys parameter
   ) {
     final state = _activeEvents[eventKey];
     if (state == null) {
@@ -397,9 +394,15 @@ class DiagramEventTranslator {
     // Remove from active events
     _activeEvents.remove(eventKey);
 
+    // Create metadata with pressed keys for controller decision making
+    final metadata = <String, dynamic>{
+      'pressedKeys': pressedKeys.map((k) => k.keyLabel).toList(),
+      'pressedMouseButtons': mouseButton?.name ?? 'none',
+    };
+
     // Determine final event type using multiple criteria
     if (_isDrag(totalDelta, duration)) {
-      // This was a drag
+      // This was a drag - let controller decide what type
       return DiagramEventUnion.dragEnd(
         DiagramDragEnd(
           eventId: eventId,
@@ -408,7 +411,7 @@ class DiagramEventTranslator {
           transformSnapshot: transformSnapshot,
           hitList: hitList,
           timestamp: duration,
-          metadata: {},
+          metadata: metadata,
           totalDelta: totalDelta,
           totalDuration: duration,
           finalVelocity: _calculateVelocity(totalDelta, duration),
@@ -416,7 +419,7 @@ class DiagramEventTranslator {
         ),
       );
     } else {
-      // This was a tap
+      // This was a tap - let controller decide what to do with it
       return DiagramEventUnion.tap(
         DiagramTap(
           eventId: eventId,
@@ -425,7 +428,7 @@ class DiagramEventTranslator {
           transformSnapshot: transformSnapshot,
           hitList: hitList,
           timestamp: duration,
-          metadata: {},
+          metadata: metadata,
           fingerCount: 1,
           mouseButton: mouseButton,
           isOnObject: isOnObject,

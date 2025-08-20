@@ -53,6 +53,9 @@ void main() {
         dragTargetLeave: (_, __, ___) => fail('unexpected'),
         dragTargetDrop: (_, __, ___, ____, _____, ______, _______) =>
             fail('unexpected'),
+        selectionAreaStart: (_, __, ___, ____, _____) => fail('unexpected'),
+        selectionAreaUpdate: (_, __, ___, ____, _____) => fail('unexpected'),
+        selectionAreaEnd: (_, __, ___, ____, _____) => fail('unexpected'),
       );
     });
 
@@ -93,6 +96,9 @@ void main() {
         dragTargetLeave: (_, __, ___) => fail('unexpected'),
         dragTargetDrop: (_, __, ___, ____, _____, ______, _______) =>
             fail('unexpected'),
+        selectionAreaStart: (_, __, ___, ____, _____) => fail('unexpected'),
+        selectionAreaUpdate: (_, __, ___, ____, _____) => fail('unexpected'),
+        selectionAreaEnd: (_, __, ___, ____, _____) => fail('unexpected'),
       );
     });
 
@@ -127,6 +133,9 @@ void main() {
             fail('unexpected'),
         dragTargetDrop: (_, __, ___, ____, _____, ______, _______) =>
             fail('unexpected'),
+        selectionAreaStart: (_, __, ___, ____, _____) => fail('unexpected'),
+        selectionAreaUpdate: (_, __, ___, ____, _____) => fail('unexpected'),
+        selectionAreaEnd: (_, __, ___, ____, _____) => fail('unexpected'),
       );
     });
 
@@ -166,6 +175,9 @@ void main() {
         dragTargetOver: (_, __, ___, ____, _____, ______, _______) =>
             fail('unexpected'),
         dragTargetLeave: (_, __, ___) => fail('unexpected'),
+        selectionAreaStart: (_, __, ___, ____, _____) => fail('unexpected'),
+        selectionAreaUpdate: (_, __, ___, ____, _____) => fail('unexpected'),
+        selectionAreaEnd: (_, __, ___, ____, _____) => fail('unexpected'),
       );
     });
   });

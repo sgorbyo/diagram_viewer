@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:diagram_viewer/events/diagram_event_translator.dart';
 import 'package:diagram_viewer/events/physical_event.dart';
 import 'package:diagram_viewer/events/diagram_event.dart';
 import 'package:diagram_viewer/events/transform_2d.dart';
 import 'package:diagram_viewer/events/border_proximity.dart';
+import 'package:diagram_viewer/events/mouse_button.dart';
 // Removed unused import
 import 'package:diagram_viewer/interfaces/diagram_object_entity.dart';
 
@@ -563,6 +565,59 @@ void main() {
         // Assert - Both events should be handled independently
         expect(result1, isNot(equals(result2)));
       });
+    });
+
+    test('should include pressed keys in drag event metadata', () {
+      final physical = PhysicalEvent.pointer(
+        eventId: 'e1',
+        logicalPosition: const Offset(100, 80),
+        screenPosition: const Offset(200, 160),
+        transformSnapshot: testTransform,
+        hitList: [],
+        borderProximity: BorderProximity.none,
+        phase: InteractionPhase.start,
+        rawEvent: PointerDownEvent(
+          pointer: 1,
+          position: const Offset(100, 80),
+          kind: PointerDeviceKind.touch,
+        ),
+        delta: null,
+        currentViewport: const Rect.fromLTWH(0, 0, 800, 600),
+        pressedMouseButtons: {MouseButton.left},
+        pressedKeys: {LogicalKeyboardKey.shift, LogicalKeyboardKey.control},
+        activeInteraction: null,
+      );
+
+      final result = translator.translate(physical);
+      expect(result, isNotNull);
+      result!.maybeWhen(
+        dragBegin: (event) {
+          expect(event.metadata['pressedKeys'], contains('Shift'));
+          expect(event.metadata['pressedKeys'], contains('Control'));
+          expect(event.metadata['pressedMouseButtons'], equals('left'));
+        },
+        // Unused branches
+        tap: (_) => fail('unexpected'),
+        doubleTap: (_) => fail('unexpected'),
+        longPress: (_) => fail('unexpected'),
+        scroll: (_) => fail('unexpected'),
+        dragContinue: (_) => fail('unexpected'),
+        dragEnd: (_) => fail('unexpected'),
+        pinchBegin: (_) => fail('unexpected'),
+        pinchContinue: (_) => fail('unexpected'),
+        pinchEnd: (_) => fail('unexpected'),
+        dragTargetEnter: (_, __, ___, ____, _____, ______) =>
+            fail('unexpected'),
+        dragTargetOver: (_, __, ___, ____, _____, ______, _______) =>
+            fail('unexpected'),
+        dragTargetLeave: (_, __, ___) => fail('unexpected'),
+        dragTargetDrop: (_, __, ___, ____, _____, ______, _______) =>
+            fail('unexpected'),
+        selectionAreaStart: (_, __, ___, ____, _____) => fail('unexpected'),
+        selectionAreaUpdate: (_, __, ___, ____, _____) => fail('unexpected'),
+        selectionAreaEnd: (_, __, ___, ____, _____) => fail('unexpected'),
+        orElse: () => fail('Expected dragBegin'),
+      );
     });
   });
 }
