@@ -1,5 +1,7 @@
 ## Development Plan – Selection Area, Selected Visuals, and Highlight Overlay
 
+Last update: 2025-08-20
+
 ### Current Status
 - All tests are green and static analysis reports no issues.
 - Documentation has been aligned with current input behavior (classic wheel forwarded to controller; Magic Mouse/trackpad 1:1 mapping).
@@ -98,4 +100,5 @@ Implement the documented selection workflow end‑to‑end without changing busi
 - Do we need a configurable minimum drag distance to enter SelectionArea mode (to avoid tiny drags becoming selections)?
 - Should selection overlay style be themeable (color/opacity/dash) via `DiagramConfiguration`?
 
-
+## Ongoing ToDo List:
+- 
