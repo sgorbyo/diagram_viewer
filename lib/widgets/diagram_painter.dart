@@ -155,6 +155,13 @@ class DiagramPainter extends CustomPainter {
     for (final object in sortedObjects) {
       if (object.isVisible) {
         object.paint(canvas);
+        if (object.isSelected) {
+          final Paint sel = Paint()
+            ..color = configuration.selectedStrokeColor
+            ..style = PaintingStyle.stroke
+            ..strokeWidth = configuration.selectedStrokeWidth;
+          canvas.drawRect(object.logicalBounds, sel);
+        }
       }
     }
   }

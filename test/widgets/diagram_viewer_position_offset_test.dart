@@ -89,25 +89,12 @@ void main() {
     final last = controller.received.last;
     late Offset logicalFromEvent;
     late Transform2D snapshot;
-    last.when(
+    last.maybeWhen(
       tap: (e) {
         logicalFromEvent = e.logicalPosition;
         snapshot = e.transformSnapshot;
       },
-      // others unused
-      doubleTap: (_) {},
-      longPress: (_) {},
-      scroll: (_) {},
-      dragBegin: (_) {},
-      dragContinue: (_) {},
-      dragEnd: (_) {},
-      pinchBegin: (_) {},
-      pinchContinue: (_) {},
-      pinchEnd: (_) {},
-      dragTargetEnter: (_, __, ___, ____, _____, ______) {},
-      dragTargetOver: (_, __, ___, ____, _____, ______, _______) {},
-      dragTargetLeave: (_, __, ___) {},
-      dragTargetDrop: (_, __, ___, ____, _____, ______, _______) {},
+      orElse: () => fail('Expected tap event'),
     );
 
     final renderBox = tester.renderObject(viewerFinder) as RenderBox;

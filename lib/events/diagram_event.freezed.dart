@@ -3937,6 +3937,27 @@ mixin _$DiagramEventUnion {
     required TResult Function(DiagramPinchEnd event) pinchEnd,
     required TResult Function(
             String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaStart,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaUpdate,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaEnd,
+    required TResult Function(
+            String eventId,
             Object dataPreview,
             Offset screenPosition,
             Offset logicalPosition,
@@ -3978,6 +3999,27 @@ mixin _$DiagramEventUnion {
     TResult? Function(DiagramPinchBegin event)? pinchBegin,
     TResult? Function(DiagramPinchContinue event)? pinchContinue,
     TResult? Function(DiagramPinchEnd event)? pinchEnd,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaStart,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaUpdate,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaEnd,
     TResult? Function(
             String eventId,
             Object dataPreview,
@@ -4023,6 +4065,27 @@ mixin _$DiagramEventUnion {
     TResult Function(DiagramPinchEnd event)? pinchEnd,
     TResult Function(
             String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaStart,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaUpdate,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaEnd,
+    TResult Function(
+            String eventId,
             Object dataPreview,
             Offset screenPosition,
             Offset logicalPosition,
@@ -4065,6 +4128,9 @@ mixin _$DiagramEventUnion {
     required TResult Function(_PinchBegin value) pinchBegin,
     required TResult Function(_PinchContinue value) pinchContinue,
     required TResult Function(_PinchEnd value) pinchEnd,
+    required TResult Function(_SelectionAreaStart value) selectionAreaStart,
+    required TResult Function(_SelectionAreaUpdate value) selectionAreaUpdate,
+    required TResult Function(_SelectionAreaEnd value) selectionAreaEnd,
     required TResult Function(_DragTargetEnter value) dragTargetEnter,
     required TResult Function(_DragTargetOver value) dragTargetOver,
     required TResult Function(_DragTargetLeave value) dragTargetLeave,
@@ -4083,6 +4149,9 @@ mixin _$DiagramEventUnion {
     TResult? Function(_PinchBegin value)? pinchBegin,
     TResult? Function(_PinchContinue value)? pinchContinue,
     TResult? Function(_PinchEnd value)? pinchEnd,
+    TResult? Function(_SelectionAreaStart value)? selectionAreaStart,
+    TResult? Function(_SelectionAreaUpdate value)? selectionAreaUpdate,
+    TResult? Function(_SelectionAreaEnd value)? selectionAreaEnd,
     TResult? Function(_DragTargetEnter value)? dragTargetEnter,
     TResult? Function(_DragTargetOver value)? dragTargetOver,
     TResult? Function(_DragTargetLeave value)? dragTargetLeave,
@@ -4101,6 +4170,9 @@ mixin _$DiagramEventUnion {
     TResult Function(_PinchBegin value)? pinchBegin,
     TResult Function(_PinchContinue value)? pinchContinue,
     TResult Function(_PinchEnd value)? pinchEnd,
+    TResult Function(_SelectionAreaStart value)? selectionAreaStart,
+    TResult Function(_SelectionAreaUpdate value)? selectionAreaUpdate,
+    TResult Function(_SelectionAreaEnd value)? selectionAreaEnd,
     TResult Function(_DragTargetEnter value)? dragTargetEnter,
     TResult Function(_DragTargetOver value)? dragTargetOver,
     TResult Function(_DragTargetLeave value)? dragTargetLeave,
@@ -4221,6 +4293,27 @@ class _$TapImpl implements _Tap {
     required TResult Function(DiagramPinchEnd event) pinchEnd,
     required TResult Function(
             String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaStart,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaUpdate,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaEnd,
+    required TResult Function(
+            String eventId,
             Object dataPreview,
             Offset screenPosition,
             Offset logicalPosition,
@@ -4267,6 +4360,27 @@ class _$TapImpl implements _Tap {
     TResult? Function(DiagramPinchEnd event)? pinchEnd,
     TResult? Function(
             String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaStart,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaUpdate,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaEnd,
+    TResult? Function(
+            String eventId,
             Object dataPreview,
             Offset screenPosition,
             Offset logicalPosition,
@@ -4311,6 +4425,27 @@ class _$TapImpl implements _Tap {
     TResult Function(DiagramPinchBegin event)? pinchBegin,
     TResult Function(DiagramPinchContinue event)? pinchContinue,
     TResult Function(DiagramPinchEnd event)? pinchEnd,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaStart,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaUpdate,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaEnd,
     TResult Function(
             String eventId,
             Object dataPreview,
@@ -4361,6 +4496,9 @@ class _$TapImpl implements _Tap {
     required TResult Function(_PinchBegin value) pinchBegin,
     required TResult Function(_PinchContinue value) pinchContinue,
     required TResult Function(_PinchEnd value) pinchEnd,
+    required TResult Function(_SelectionAreaStart value) selectionAreaStart,
+    required TResult Function(_SelectionAreaUpdate value) selectionAreaUpdate,
+    required TResult Function(_SelectionAreaEnd value) selectionAreaEnd,
     required TResult Function(_DragTargetEnter value) dragTargetEnter,
     required TResult Function(_DragTargetOver value) dragTargetOver,
     required TResult Function(_DragTargetLeave value) dragTargetLeave,
@@ -4382,6 +4520,9 @@ class _$TapImpl implements _Tap {
     TResult? Function(_PinchBegin value)? pinchBegin,
     TResult? Function(_PinchContinue value)? pinchContinue,
     TResult? Function(_PinchEnd value)? pinchEnd,
+    TResult? Function(_SelectionAreaStart value)? selectionAreaStart,
+    TResult? Function(_SelectionAreaUpdate value)? selectionAreaUpdate,
+    TResult? Function(_SelectionAreaEnd value)? selectionAreaEnd,
     TResult? Function(_DragTargetEnter value)? dragTargetEnter,
     TResult? Function(_DragTargetOver value)? dragTargetOver,
     TResult? Function(_DragTargetLeave value)? dragTargetLeave,
@@ -4403,6 +4544,9 @@ class _$TapImpl implements _Tap {
     TResult Function(_PinchBegin value)? pinchBegin,
     TResult Function(_PinchContinue value)? pinchContinue,
     TResult Function(_PinchEnd value)? pinchEnd,
+    TResult Function(_SelectionAreaStart value)? selectionAreaStart,
+    TResult Function(_SelectionAreaUpdate value)? selectionAreaUpdate,
+    TResult Function(_SelectionAreaEnd value)? selectionAreaEnd,
     TResult Function(_DragTargetEnter value)? dragTargetEnter,
     TResult Function(_DragTargetOver value)? dragTargetOver,
     TResult Function(_DragTargetLeave value)? dragTargetLeave,
@@ -4520,6 +4664,27 @@ class _$DoubleTapImpl implements _DoubleTap {
     required TResult Function(DiagramPinchEnd event) pinchEnd,
     required TResult Function(
             String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaStart,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaUpdate,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaEnd,
+    required TResult Function(
+            String eventId,
             Object dataPreview,
             Offset screenPosition,
             Offset logicalPosition,
@@ -4566,6 +4731,27 @@ class _$DoubleTapImpl implements _DoubleTap {
     TResult? Function(DiagramPinchEnd event)? pinchEnd,
     TResult? Function(
             String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaStart,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaUpdate,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaEnd,
+    TResult? Function(
+            String eventId,
             Object dataPreview,
             Offset screenPosition,
             Offset logicalPosition,
@@ -4610,6 +4796,27 @@ class _$DoubleTapImpl implements _DoubleTap {
     TResult Function(DiagramPinchBegin event)? pinchBegin,
     TResult Function(DiagramPinchContinue event)? pinchContinue,
     TResult Function(DiagramPinchEnd event)? pinchEnd,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaStart,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaUpdate,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaEnd,
     TResult Function(
             String eventId,
             Object dataPreview,
@@ -4660,6 +4867,9 @@ class _$DoubleTapImpl implements _DoubleTap {
     required TResult Function(_PinchBegin value) pinchBegin,
     required TResult Function(_PinchContinue value) pinchContinue,
     required TResult Function(_PinchEnd value) pinchEnd,
+    required TResult Function(_SelectionAreaStart value) selectionAreaStart,
+    required TResult Function(_SelectionAreaUpdate value) selectionAreaUpdate,
+    required TResult Function(_SelectionAreaEnd value) selectionAreaEnd,
     required TResult Function(_DragTargetEnter value) dragTargetEnter,
     required TResult Function(_DragTargetOver value) dragTargetOver,
     required TResult Function(_DragTargetLeave value) dragTargetLeave,
@@ -4681,6 +4891,9 @@ class _$DoubleTapImpl implements _DoubleTap {
     TResult? Function(_PinchBegin value)? pinchBegin,
     TResult? Function(_PinchContinue value)? pinchContinue,
     TResult? Function(_PinchEnd value)? pinchEnd,
+    TResult? Function(_SelectionAreaStart value)? selectionAreaStart,
+    TResult? Function(_SelectionAreaUpdate value)? selectionAreaUpdate,
+    TResult? Function(_SelectionAreaEnd value)? selectionAreaEnd,
     TResult? Function(_DragTargetEnter value)? dragTargetEnter,
     TResult? Function(_DragTargetOver value)? dragTargetOver,
     TResult? Function(_DragTargetLeave value)? dragTargetLeave,
@@ -4702,6 +4915,9 @@ class _$DoubleTapImpl implements _DoubleTap {
     TResult Function(_PinchBegin value)? pinchBegin,
     TResult Function(_PinchContinue value)? pinchContinue,
     TResult Function(_PinchEnd value)? pinchEnd,
+    TResult Function(_SelectionAreaStart value)? selectionAreaStart,
+    TResult Function(_SelectionAreaUpdate value)? selectionAreaUpdate,
+    TResult Function(_SelectionAreaEnd value)? selectionAreaEnd,
     TResult Function(_DragTargetEnter value)? dragTargetEnter,
     TResult Function(_DragTargetOver value)? dragTargetOver,
     TResult Function(_DragTargetLeave value)? dragTargetLeave,
@@ -4819,6 +5035,27 @@ class _$LongPressImpl implements _LongPress {
     required TResult Function(DiagramPinchEnd event) pinchEnd,
     required TResult Function(
             String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaStart,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaUpdate,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaEnd,
+    required TResult Function(
+            String eventId,
             Object dataPreview,
             Offset screenPosition,
             Offset logicalPosition,
@@ -4865,6 +5102,27 @@ class _$LongPressImpl implements _LongPress {
     TResult? Function(DiagramPinchEnd event)? pinchEnd,
     TResult? Function(
             String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaStart,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaUpdate,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaEnd,
+    TResult? Function(
+            String eventId,
             Object dataPreview,
             Offset screenPosition,
             Offset logicalPosition,
@@ -4909,6 +5167,27 @@ class _$LongPressImpl implements _LongPress {
     TResult Function(DiagramPinchBegin event)? pinchBegin,
     TResult Function(DiagramPinchContinue event)? pinchContinue,
     TResult Function(DiagramPinchEnd event)? pinchEnd,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaStart,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaUpdate,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaEnd,
     TResult Function(
             String eventId,
             Object dataPreview,
@@ -4959,6 +5238,9 @@ class _$LongPressImpl implements _LongPress {
     required TResult Function(_PinchBegin value) pinchBegin,
     required TResult Function(_PinchContinue value) pinchContinue,
     required TResult Function(_PinchEnd value) pinchEnd,
+    required TResult Function(_SelectionAreaStart value) selectionAreaStart,
+    required TResult Function(_SelectionAreaUpdate value) selectionAreaUpdate,
+    required TResult Function(_SelectionAreaEnd value) selectionAreaEnd,
     required TResult Function(_DragTargetEnter value) dragTargetEnter,
     required TResult Function(_DragTargetOver value) dragTargetOver,
     required TResult Function(_DragTargetLeave value) dragTargetLeave,
@@ -4980,6 +5262,9 @@ class _$LongPressImpl implements _LongPress {
     TResult? Function(_PinchBegin value)? pinchBegin,
     TResult? Function(_PinchContinue value)? pinchContinue,
     TResult? Function(_PinchEnd value)? pinchEnd,
+    TResult? Function(_SelectionAreaStart value)? selectionAreaStart,
+    TResult? Function(_SelectionAreaUpdate value)? selectionAreaUpdate,
+    TResult? Function(_SelectionAreaEnd value)? selectionAreaEnd,
     TResult? Function(_DragTargetEnter value)? dragTargetEnter,
     TResult? Function(_DragTargetOver value)? dragTargetOver,
     TResult? Function(_DragTargetLeave value)? dragTargetLeave,
@@ -5001,6 +5286,9 @@ class _$LongPressImpl implements _LongPress {
     TResult Function(_PinchBegin value)? pinchBegin,
     TResult Function(_PinchContinue value)? pinchContinue,
     TResult Function(_PinchEnd value)? pinchEnd,
+    TResult Function(_SelectionAreaStart value)? selectionAreaStart,
+    TResult Function(_SelectionAreaUpdate value)? selectionAreaUpdate,
+    TResult Function(_SelectionAreaEnd value)? selectionAreaEnd,
     TResult Function(_DragTargetEnter value)? dragTargetEnter,
     TResult Function(_DragTargetOver value)? dragTargetOver,
     TResult Function(_DragTargetLeave value)? dragTargetLeave,
@@ -5118,6 +5406,27 @@ class _$ScrollImpl implements _Scroll {
     required TResult Function(DiagramPinchEnd event) pinchEnd,
     required TResult Function(
             String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaStart,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaUpdate,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaEnd,
+    required TResult Function(
+            String eventId,
             Object dataPreview,
             Offset screenPosition,
             Offset logicalPosition,
@@ -5164,6 +5473,27 @@ class _$ScrollImpl implements _Scroll {
     TResult? Function(DiagramPinchEnd event)? pinchEnd,
     TResult? Function(
             String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaStart,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaUpdate,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaEnd,
+    TResult? Function(
+            String eventId,
             Object dataPreview,
             Offset screenPosition,
             Offset logicalPosition,
@@ -5208,6 +5538,27 @@ class _$ScrollImpl implements _Scroll {
     TResult Function(DiagramPinchBegin event)? pinchBegin,
     TResult Function(DiagramPinchContinue event)? pinchContinue,
     TResult Function(DiagramPinchEnd event)? pinchEnd,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaStart,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaUpdate,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaEnd,
     TResult Function(
             String eventId,
             Object dataPreview,
@@ -5258,6 +5609,9 @@ class _$ScrollImpl implements _Scroll {
     required TResult Function(_PinchBegin value) pinchBegin,
     required TResult Function(_PinchContinue value) pinchContinue,
     required TResult Function(_PinchEnd value) pinchEnd,
+    required TResult Function(_SelectionAreaStart value) selectionAreaStart,
+    required TResult Function(_SelectionAreaUpdate value) selectionAreaUpdate,
+    required TResult Function(_SelectionAreaEnd value) selectionAreaEnd,
     required TResult Function(_DragTargetEnter value) dragTargetEnter,
     required TResult Function(_DragTargetOver value) dragTargetOver,
     required TResult Function(_DragTargetLeave value) dragTargetLeave,
@@ -5279,6 +5633,9 @@ class _$ScrollImpl implements _Scroll {
     TResult? Function(_PinchBegin value)? pinchBegin,
     TResult? Function(_PinchContinue value)? pinchContinue,
     TResult? Function(_PinchEnd value)? pinchEnd,
+    TResult? Function(_SelectionAreaStart value)? selectionAreaStart,
+    TResult? Function(_SelectionAreaUpdate value)? selectionAreaUpdate,
+    TResult? Function(_SelectionAreaEnd value)? selectionAreaEnd,
     TResult? Function(_DragTargetEnter value)? dragTargetEnter,
     TResult? Function(_DragTargetOver value)? dragTargetOver,
     TResult? Function(_DragTargetLeave value)? dragTargetLeave,
@@ -5300,6 +5657,9 @@ class _$ScrollImpl implements _Scroll {
     TResult Function(_PinchBegin value)? pinchBegin,
     TResult Function(_PinchContinue value)? pinchContinue,
     TResult Function(_PinchEnd value)? pinchEnd,
+    TResult Function(_SelectionAreaStart value)? selectionAreaStart,
+    TResult Function(_SelectionAreaUpdate value)? selectionAreaUpdate,
+    TResult Function(_SelectionAreaEnd value)? selectionAreaEnd,
     TResult Function(_DragTargetEnter value)? dragTargetEnter,
     TResult Function(_DragTargetOver value)? dragTargetOver,
     TResult Function(_DragTargetLeave value)? dragTargetLeave,
@@ -5417,6 +5777,27 @@ class _$DragBeginImpl implements _DragBegin {
     required TResult Function(DiagramPinchEnd event) pinchEnd,
     required TResult Function(
             String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaStart,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaUpdate,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaEnd,
+    required TResult Function(
+            String eventId,
             Object dataPreview,
             Offset screenPosition,
             Offset logicalPosition,
@@ -5463,6 +5844,27 @@ class _$DragBeginImpl implements _DragBegin {
     TResult? Function(DiagramPinchEnd event)? pinchEnd,
     TResult? Function(
             String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaStart,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaUpdate,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaEnd,
+    TResult? Function(
+            String eventId,
             Object dataPreview,
             Offset screenPosition,
             Offset logicalPosition,
@@ -5507,6 +5909,27 @@ class _$DragBeginImpl implements _DragBegin {
     TResult Function(DiagramPinchBegin event)? pinchBegin,
     TResult Function(DiagramPinchContinue event)? pinchContinue,
     TResult Function(DiagramPinchEnd event)? pinchEnd,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaStart,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaUpdate,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaEnd,
     TResult Function(
             String eventId,
             Object dataPreview,
@@ -5557,6 +5980,9 @@ class _$DragBeginImpl implements _DragBegin {
     required TResult Function(_PinchBegin value) pinchBegin,
     required TResult Function(_PinchContinue value) pinchContinue,
     required TResult Function(_PinchEnd value) pinchEnd,
+    required TResult Function(_SelectionAreaStart value) selectionAreaStart,
+    required TResult Function(_SelectionAreaUpdate value) selectionAreaUpdate,
+    required TResult Function(_SelectionAreaEnd value) selectionAreaEnd,
     required TResult Function(_DragTargetEnter value) dragTargetEnter,
     required TResult Function(_DragTargetOver value) dragTargetOver,
     required TResult Function(_DragTargetLeave value) dragTargetLeave,
@@ -5578,6 +6004,9 @@ class _$DragBeginImpl implements _DragBegin {
     TResult? Function(_PinchBegin value)? pinchBegin,
     TResult? Function(_PinchContinue value)? pinchContinue,
     TResult? Function(_PinchEnd value)? pinchEnd,
+    TResult? Function(_SelectionAreaStart value)? selectionAreaStart,
+    TResult? Function(_SelectionAreaUpdate value)? selectionAreaUpdate,
+    TResult? Function(_SelectionAreaEnd value)? selectionAreaEnd,
     TResult? Function(_DragTargetEnter value)? dragTargetEnter,
     TResult? Function(_DragTargetOver value)? dragTargetOver,
     TResult? Function(_DragTargetLeave value)? dragTargetLeave,
@@ -5599,6 +6028,9 @@ class _$DragBeginImpl implements _DragBegin {
     TResult Function(_PinchBegin value)? pinchBegin,
     TResult Function(_PinchContinue value)? pinchContinue,
     TResult Function(_PinchEnd value)? pinchEnd,
+    TResult Function(_SelectionAreaStart value)? selectionAreaStart,
+    TResult Function(_SelectionAreaUpdate value)? selectionAreaUpdate,
+    TResult Function(_SelectionAreaEnd value)? selectionAreaEnd,
     TResult Function(_DragTargetEnter value)? dragTargetEnter,
     TResult Function(_DragTargetOver value)? dragTargetOver,
     TResult Function(_DragTargetLeave value)? dragTargetLeave,
@@ -5716,6 +6148,27 @@ class _$DragContinueImpl implements _DragContinue {
     required TResult Function(DiagramPinchEnd event) pinchEnd,
     required TResult Function(
             String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaStart,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaUpdate,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaEnd,
+    required TResult Function(
+            String eventId,
             Object dataPreview,
             Offset screenPosition,
             Offset logicalPosition,
@@ -5762,6 +6215,27 @@ class _$DragContinueImpl implements _DragContinue {
     TResult? Function(DiagramPinchEnd event)? pinchEnd,
     TResult? Function(
             String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaStart,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaUpdate,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaEnd,
+    TResult? Function(
+            String eventId,
             Object dataPreview,
             Offset screenPosition,
             Offset logicalPosition,
@@ -5806,6 +6280,27 @@ class _$DragContinueImpl implements _DragContinue {
     TResult Function(DiagramPinchBegin event)? pinchBegin,
     TResult Function(DiagramPinchContinue event)? pinchContinue,
     TResult Function(DiagramPinchEnd event)? pinchEnd,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaStart,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaUpdate,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaEnd,
     TResult Function(
             String eventId,
             Object dataPreview,
@@ -5856,6 +6351,9 @@ class _$DragContinueImpl implements _DragContinue {
     required TResult Function(_PinchBegin value) pinchBegin,
     required TResult Function(_PinchContinue value) pinchContinue,
     required TResult Function(_PinchEnd value) pinchEnd,
+    required TResult Function(_SelectionAreaStart value) selectionAreaStart,
+    required TResult Function(_SelectionAreaUpdate value) selectionAreaUpdate,
+    required TResult Function(_SelectionAreaEnd value) selectionAreaEnd,
     required TResult Function(_DragTargetEnter value) dragTargetEnter,
     required TResult Function(_DragTargetOver value) dragTargetOver,
     required TResult Function(_DragTargetLeave value) dragTargetLeave,
@@ -5877,6 +6375,9 @@ class _$DragContinueImpl implements _DragContinue {
     TResult? Function(_PinchBegin value)? pinchBegin,
     TResult? Function(_PinchContinue value)? pinchContinue,
     TResult? Function(_PinchEnd value)? pinchEnd,
+    TResult? Function(_SelectionAreaStart value)? selectionAreaStart,
+    TResult? Function(_SelectionAreaUpdate value)? selectionAreaUpdate,
+    TResult? Function(_SelectionAreaEnd value)? selectionAreaEnd,
     TResult? Function(_DragTargetEnter value)? dragTargetEnter,
     TResult? Function(_DragTargetOver value)? dragTargetOver,
     TResult? Function(_DragTargetLeave value)? dragTargetLeave,
@@ -5898,6 +6399,9 @@ class _$DragContinueImpl implements _DragContinue {
     TResult Function(_PinchBegin value)? pinchBegin,
     TResult Function(_PinchContinue value)? pinchContinue,
     TResult Function(_PinchEnd value)? pinchEnd,
+    TResult Function(_SelectionAreaStart value)? selectionAreaStart,
+    TResult Function(_SelectionAreaUpdate value)? selectionAreaUpdate,
+    TResult Function(_SelectionAreaEnd value)? selectionAreaEnd,
     TResult Function(_DragTargetEnter value)? dragTargetEnter,
     TResult Function(_DragTargetOver value)? dragTargetOver,
     TResult Function(_DragTargetLeave value)? dragTargetLeave,
@@ -6016,6 +6520,27 @@ class _$DragEndImpl implements _DragEnd {
     required TResult Function(DiagramPinchEnd event) pinchEnd,
     required TResult Function(
             String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaStart,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaUpdate,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaEnd,
+    required TResult Function(
+            String eventId,
             Object dataPreview,
             Offset screenPosition,
             Offset logicalPosition,
@@ -6062,6 +6587,27 @@ class _$DragEndImpl implements _DragEnd {
     TResult? Function(DiagramPinchEnd event)? pinchEnd,
     TResult? Function(
             String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaStart,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaUpdate,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaEnd,
+    TResult? Function(
+            String eventId,
             Object dataPreview,
             Offset screenPosition,
             Offset logicalPosition,
@@ -6106,6 +6652,27 @@ class _$DragEndImpl implements _DragEnd {
     TResult Function(DiagramPinchBegin event)? pinchBegin,
     TResult Function(DiagramPinchContinue event)? pinchContinue,
     TResult Function(DiagramPinchEnd event)? pinchEnd,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaStart,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaUpdate,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaEnd,
     TResult Function(
             String eventId,
             Object dataPreview,
@@ -6156,6 +6723,9 @@ class _$DragEndImpl implements _DragEnd {
     required TResult Function(_PinchBegin value) pinchBegin,
     required TResult Function(_PinchContinue value) pinchContinue,
     required TResult Function(_PinchEnd value) pinchEnd,
+    required TResult Function(_SelectionAreaStart value) selectionAreaStart,
+    required TResult Function(_SelectionAreaUpdate value) selectionAreaUpdate,
+    required TResult Function(_SelectionAreaEnd value) selectionAreaEnd,
     required TResult Function(_DragTargetEnter value) dragTargetEnter,
     required TResult Function(_DragTargetOver value) dragTargetOver,
     required TResult Function(_DragTargetLeave value) dragTargetLeave,
@@ -6177,6 +6747,9 @@ class _$DragEndImpl implements _DragEnd {
     TResult? Function(_PinchBegin value)? pinchBegin,
     TResult? Function(_PinchContinue value)? pinchContinue,
     TResult? Function(_PinchEnd value)? pinchEnd,
+    TResult? Function(_SelectionAreaStart value)? selectionAreaStart,
+    TResult? Function(_SelectionAreaUpdate value)? selectionAreaUpdate,
+    TResult? Function(_SelectionAreaEnd value)? selectionAreaEnd,
     TResult? Function(_DragTargetEnter value)? dragTargetEnter,
     TResult? Function(_DragTargetOver value)? dragTargetOver,
     TResult? Function(_DragTargetLeave value)? dragTargetLeave,
@@ -6198,6 +6771,9 @@ class _$DragEndImpl implements _DragEnd {
     TResult Function(_PinchBegin value)? pinchBegin,
     TResult Function(_PinchContinue value)? pinchContinue,
     TResult Function(_PinchEnd value)? pinchEnd,
+    TResult Function(_SelectionAreaStart value)? selectionAreaStart,
+    TResult Function(_SelectionAreaUpdate value)? selectionAreaUpdate,
+    TResult Function(_SelectionAreaEnd value)? selectionAreaEnd,
     TResult Function(_DragTargetEnter value)? dragTargetEnter,
     TResult Function(_DragTargetOver value)? dragTargetOver,
     TResult Function(_DragTargetLeave value)? dragTargetLeave,
@@ -6315,6 +6891,27 @@ class _$PinchBeginImpl implements _PinchBegin {
     required TResult Function(DiagramPinchEnd event) pinchEnd,
     required TResult Function(
             String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaStart,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaUpdate,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaEnd,
+    required TResult Function(
+            String eventId,
             Object dataPreview,
             Offset screenPosition,
             Offset logicalPosition,
@@ -6361,6 +6958,27 @@ class _$PinchBeginImpl implements _PinchBegin {
     TResult? Function(DiagramPinchEnd event)? pinchEnd,
     TResult? Function(
             String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaStart,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaUpdate,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaEnd,
+    TResult? Function(
+            String eventId,
             Object dataPreview,
             Offset screenPosition,
             Offset logicalPosition,
@@ -6405,6 +7023,27 @@ class _$PinchBeginImpl implements _PinchBegin {
     TResult Function(DiagramPinchBegin event)? pinchBegin,
     TResult Function(DiagramPinchContinue event)? pinchContinue,
     TResult Function(DiagramPinchEnd event)? pinchEnd,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaStart,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaUpdate,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaEnd,
     TResult Function(
             String eventId,
             Object dataPreview,
@@ -6455,6 +7094,9 @@ class _$PinchBeginImpl implements _PinchBegin {
     required TResult Function(_PinchBegin value) pinchBegin,
     required TResult Function(_PinchContinue value) pinchContinue,
     required TResult Function(_PinchEnd value) pinchEnd,
+    required TResult Function(_SelectionAreaStart value) selectionAreaStart,
+    required TResult Function(_SelectionAreaUpdate value) selectionAreaUpdate,
+    required TResult Function(_SelectionAreaEnd value) selectionAreaEnd,
     required TResult Function(_DragTargetEnter value) dragTargetEnter,
     required TResult Function(_DragTargetOver value) dragTargetOver,
     required TResult Function(_DragTargetLeave value) dragTargetLeave,
@@ -6476,6 +7118,9 @@ class _$PinchBeginImpl implements _PinchBegin {
     TResult? Function(_PinchBegin value)? pinchBegin,
     TResult? Function(_PinchContinue value)? pinchContinue,
     TResult? Function(_PinchEnd value)? pinchEnd,
+    TResult? Function(_SelectionAreaStart value)? selectionAreaStart,
+    TResult? Function(_SelectionAreaUpdate value)? selectionAreaUpdate,
+    TResult? Function(_SelectionAreaEnd value)? selectionAreaEnd,
     TResult? Function(_DragTargetEnter value)? dragTargetEnter,
     TResult? Function(_DragTargetOver value)? dragTargetOver,
     TResult? Function(_DragTargetLeave value)? dragTargetLeave,
@@ -6497,6 +7142,9 @@ class _$PinchBeginImpl implements _PinchBegin {
     TResult Function(_PinchBegin value)? pinchBegin,
     TResult Function(_PinchContinue value)? pinchContinue,
     TResult Function(_PinchEnd value)? pinchEnd,
+    TResult Function(_SelectionAreaStart value)? selectionAreaStart,
+    TResult Function(_SelectionAreaUpdate value)? selectionAreaUpdate,
+    TResult Function(_SelectionAreaEnd value)? selectionAreaEnd,
     TResult Function(_DragTargetEnter value)? dragTargetEnter,
     TResult Function(_DragTargetOver value)? dragTargetOver,
     TResult Function(_DragTargetLeave value)? dragTargetLeave,
@@ -6614,6 +7262,27 @@ class _$PinchContinueImpl implements _PinchContinue {
     required TResult Function(DiagramPinchEnd event) pinchEnd,
     required TResult Function(
             String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaStart,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaUpdate,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaEnd,
+    required TResult Function(
+            String eventId,
             Object dataPreview,
             Offset screenPosition,
             Offset logicalPosition,
@@ -6660,6 +7329,27 @@ class _$PinchContinueImpl implements _PinchContinue {
     TResult? Function(DiagramPinchEnd event)? pinchEnd,
     TResult? Function(
             String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaStart,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaUpdate,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaEnd,
+    TResult? Function(
+            String eventId,
             Object dataPreview,
             Offset screenPosition,
             Offset logicalPosition,
@@ -6704,6 +7394,27 @@ class _$PinchContinueImpl implements _PinchContinue {
     TResult Function(DiagramPinchBegin event)? pinchBegin,
     TResult Function(DiagramPinchContinue event)? pinchContinue,
     TResult Function(DiagramPinchEnd event)? pinchEnd,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaStart,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaUpdate,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaEnd,
     TResult Function(
             String eventId,
             Object dataPreview,
@@ -6754,6 +7465,9 @@ class _$PinchContinueImpl implements _PinchContinue {
     required TResult Function(_PinchBegin value) pinchBegin,
     required TResult Function(_PinchContinue value) pinchContinue,
     required TResult Function(_PinchEnd value) pinchEnd,
+    required TResult Function(_SelectionAreaStart value) selectionAreaStart,
+    required TResult Function(_SelectionAreaUpdate value) selectionAreaUpdate,
+    required TResult Function(_SelectionAreaEnd value) selectionAreaEnd,
     required TResult Function(_DragTargetEnter value) dragTargetEnter,
     required TResult Function(_DragTargetOver value) dragTargetOver,
     required TResult Function(_DragTargetLeave value) dragTargetLeave,
@@ -6775,6 +7489,9 @@ class _$PinchContinueImpl implements _PinchContinue {
     TResult? Function(_PinchBegin value)? pinchBegin,
     TResult? Function(_PinchContinue value)? pinchContinue,
     TResult? Function(_PinchEnd value)? pinchEnd,
+    TResult? Function(_SelectionAreaStart value)? selectionAreaStart,
+    TResult? Function(_SelectionAreaUpdate value)? selectionAreaUpdate,
+    TResult? Function(_SelectionAreaEnd value)? selectionAreaEnd,
     TResult? Function(_DragTargetEnter value)? dragTargetEnter,
     TResult? Function(_DragTargetOver value)? dragTargetOver,
     TResult? Function(_DragTargetLeave value)? dragTargetLeave,
@@ -6796,6 +7513,9 @@ class _$PinchContinueImpl implements _PinchContinue {
     TResult Function(_PinchBegin value)? pinchBegin,
     TResult Function(_PinchContinue value)? pinchContinue,
     TResult Function(_PinchEnd value)? pinchEnd,
+    TResult Function(_SelectionAreaStart value)? selectionAreaStart,
+    TResult Function(_SelectionAreaUpdate value)? selectionAreaUpdate,
+    TResult Function(_SelectionAreaEnd value)? selectionAreaEnd,
     TResult Function(_DragTargetEnter value)? dragTargetEnter,
     TResult Function(_DragTargetOver value)? dragTargetOver,
     TResult Function(_DragTargetLeave value)? dragTargetLeave,
@@ -6914,6 +7634,27 @@ class _$PinchEndImpl implements _PinchEnd {
     required TResult Function(DiagramPinchEnd event) pinchEnd,
     required TResult Function(
             String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaStart,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaUpdate,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaEnd,
+    required TResult Function(
+            String eventId,
             Object dataPreview,
             Offset screenPosition,
             Offset logicalPosition,
@@ -6960,6 +7701,27 @@ class _$PinchEndImpl implements _PinchEnd {
     TResult? Function(DiagramPinchEnd event)? pinchEnd,
     TResult? Function(
             String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaStart,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaUpdate,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaEnd,
+    TResult? Function(
+            String eventId,
             Object dataPreview,
             Offset screenPosition,
             Offset logicalPosition,
@@ -7004,6 +7766,27 @@ class _$PinchEndImpl implements _PinchEnd {
     TResult Function(DiagramPinchBegin event)? pinchBegin,
     TResult Function(DiagramPinchContinue event)? pinchContinue,
     TResult Function(DiagramPinchEnd event)? pinchEnd,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaStart,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaUpdate,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaEnd,
     TResult Function(
             String eventId,
             Object dataPreview,
@@ -7054,6 +7837,9 @@ class _$PinchEndImpl implements _PinchEnd {
     required TResult Function(_PinchBegin value) pinchBegin,
     required TResult Function(_PinchContinue value) pinchContinue,
     required TResult Function(_PinchEnd value) pinchEnd,
+    required TResult Function(_SelectionAreaStart value) selectionAreaStart,
+    required TResult Function(_SelectionAreaUpdate value) selectionAreaUpdate,
+    required TResult Function(_SelectionAreaEnd value) selectionAreaEnd,
     required TResult Function(_DragTargetEnter value) dragTargetEnter,
     required TResult Function(_DragTargetOver value) dragTargetOver,
     required TResult Function(_DragTargetLeave value) dragTargetLeave,
@@ -7075,6 +7861,9 @@ class _$PinchEndImpl implements _PinchEnd {
     TResult? Function(_PinchBegin value)? pinchBegin,
     TResult? Function(_PinchContinue value)? pinchContinue,
     TResult? Function(_PinchEnd value)? pinchEnd,
+    TResult? Function(_SelectionAreaStart value)? selectionAreaStart,
+    TResult? Function(_SelectionAreaUpdate value)? selectionAreaUpdate,
+    TResult? Function(_SelectionAreaEnd value)? selectionAreaEnd,
     TResult? Function(_DragTargetEnter value)? dragTargetEnter,
     TResult? Function(_DragTargetOver value)? dragTargetOver,
     TResult? Function(_DragTargetLeave value)? dragTargetLeave,
@@ -7096,6 +7885,9 @@ class _$PinchEndImpl implements _PinchEnd {
     TResult Function(_PinchBegin value)? pinchBegin,
     TResult Function(_PinchContinue value)? pinchContinue,
     TResult Function(_PinchEnd value)? pinchEnd,
+    TResult Function(_SelectionAreaStart value)? selectionAreaStart,
+    TResult Function(_SelectionAreaUpdate value)? selectionAreaUpdate,
+    TResult Function(_SelectionAreaEnd value)? selectionAreaEnd,
     TResult Function(_DragTargetEnter value)? dragTargetEnter,
     TResult Function(_DragTargetOver value)? dragTargetOver,
     TResult Function(_DragTargetLeave value)? dragTargetLeave,
@@ -7118,6 +7910,1336 @@ abstract class _PinchEnd implements DiagramEventUnion {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PinchEndImplCopyWith<_$PinchEndImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$SelectionAreaStartImplCopyWith<$Res> {
+  factory _$$SelectionAreaStartImplCopyWith(_$SelectionAreaStartImpl value,
+          $Res Function(_$SelectionAreaStartImpl) then) =
+      __$$SelectionAreaStartImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call(
+      {String eventId,
+      Rect logicalRect,
+      Transform2D transformSnapshot,
+      Duration timestamp,
+      List<String> coveredObjectIds});
+
+  $Transform2DCopyWith<$Res> get transformSnapshot;
+}
+
+/// @nodoc
+class __$$SelectionAreaStartImplCopyWithImpl<$Res>
+    extends _$DiagramEventUnionCopyWithImpl<$Res, _$SelectionAreaStartImpl>
+    implements _$$SelectionAreaStartImplCopyWith<$Res> {
+  __$$SelectionAreaStartImplCopyWithImpl(_$SelectionAreaStartImpl _value,
+      $Res Function(_$SelectionAreaStartImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of DiagramEventUnion
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? eventId = null,
+    Object? logicalRect = null,
+    Object? transformSnapshot = null,
+    Object? timestamp = null,
+    Object? coveredObjectIds = null,
+  }) {
+    return _then(_$SelectionAreaStartImpl(
+      eventId: null == eventId
+          ? _value.eventId
+          : eventId // ignore: cast_nullable_to_non_nullable
+              as String,
+      logicalRect: null == logicalRect
+          ? _value.logicalRect
+          : logicalRect // ignore: cast_nullable_to_non_nullable
+              as Rect,
+      transformSnapshot: null == transformSnapshot
+          ? _value.transformSnapshot
+          : transformSnapshot // ignore: cast_nullable_to_non_nullable
+              as Transform2D,
+      timestamp: null == timestamp
+          ? _value.timestamp
+          : timestamp // ignore: cast_nullable_to_non_nullable
+              as Duration,
+      coveredObjectIds: null == coveredObjectIds
+          ? _value._coveredObjectIds
+          : coveredObjectIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+    ));
+  }
+
+  /// Create a copy of DiagramEventUnion
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $Transform2DCopyWith<$Res> get transformSnapshot {
+    return $Transform2DCopyWith<$Res>(_value.transformSnapshot, (value) {
+      return _then(_value.copyWith(transformSnapshot: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$SelectionAreaStartImpl implements _SelectionAreaStart {
+  const _$SelectionAreaStartImpl(
+      {required this.eventId,
+      required this.logicalRect,
+      required this.transformSnapshot,
+      required this.timestamp,
+      required final List<String> coveredObjectIds})
+      : _coveredObjectIds = coveredObjectIds;
+
+  @override
+  final String eventId;
+  @override
+  final Rect logicalRect;
+  @override
+  final Transform2D transformSnapshot;
+  @override
+  final Duration timestamp;
+  final List<String> _coveredObjectIds;
+  @override
+  List<String> get coveredObjectIds {
+    if (_coveredObjectIds is EqualUnmodifiableListView)
+      return _coveredObjectIds;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_coveredObjectIds);
+  }
+
+  @override
+  String toString() {
+    return 'DiagramEventUnion.selectionAreaStart(eventId: $eventId, logicalRect: $logicalRect, transformSnapshot: $transformSnapshot, timestamp: $timestamp, coveredObjectIds: $coveredObjectIds)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SelectionAreaStartImpl &&
+            (identical(other.eventId, eventId) || other.eventId == eventId) &&
+            (identical(other.logicalRect, logicalRect) ||
+                other.logicalRect == logicalRect) &&
+            (identical(other.transformSnapshot, transformSnapshot) ||
+                other.transformSnapshot == transformSnapshot) &&
+            (identical(other.timestamp, timestamp) ||
+                other.timestamp == timestamp) &&
+            const DeepCollectionEquality()
+                .equals(other._coveredObjectIds, _coveredObjectIds));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      eventId,
+      logicalRect,
+      transformSnapshot,
+      timestamp,
+      const DeepCollectionEquality().hash(_coveredObjectIds));
+
+  /// Create a copy of DiagramEventUnion
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SelectionAreaStartImplCopyWith<_$SelectionAreaStartImpl> get copyWith =>
+      __$$SelectionAreaStartImplCopyWithImpl<_$SelectionAreaStartImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(DiagramTap event) tap,
+    required TResult Function(DiagramDoubleTap event) doubleTap,
+    required TResult Function(DiagramLongPress event) longPress,
+    required TResult Function(DiagramScroll event) scroll,
+    required TResult Function(DiagramDragBegin event) dragBegin,
+    required TResult Function(DiagramDragContinue event) dragContinue,
+    required TResult Function(DiagramDragEnd event) dragEnd,
+    required TResult Function(DiagramPinchBegin event) pinchBegin,
+    required TResult Function(DiagramPinchContinue event) pinchContinue,
+    required TResult Function(DiagramPinchEnd event) pinchEnd,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaStart,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaUpdate,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaEnd,
+    required TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetEnter,
+    required TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            Offset? snappedLogicalPosition)
+        dragTargetOver,
+    required TResult Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)
+        dragTargetLeave,
+    required TResult Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            Offset? snappedLogicalPosition)
+        dragTargetDrop,
+  }) {
+    return selectionAreaStart(
+        eventId, logicalRect, transformSnapshot, timestamp, coveredObjectIds);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(DiagramTap event)? tap,
+    TResult? Function(DiagramDoubleTap event)? doubleTap,
+    TResult? Function(DiagramLongPress event)? longPress,
+    TResult? Function(DiagramScroll event)? scroll,
+    TResult? Function(DiagramDragBegin event)? dragBegin,
+    TResult? Function(DiagramDragContinue event)? dragContinue,
+    TResult? Function(DiagramDragEnd event)? dragEnd,
+    TResult? Function(DiagramPinchBegin event)? pinchBegin,
+    TResult? Function(DiagramPinchContinue event)? pinchContinue,
+    TResult? Function(DiagramPinchEnd event)? pinchEnd,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaStart,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaUpdate,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaEnd,
+    TResult? Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetEnter,
+    TResult? Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
+        dragTargetOver,
+    TResult? Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)?
+        dragTargetLeave,
+    TResult? Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
+        dragTargetDrop,
+  }) {
+    return selectionAreaStart?.call(
+        eventId, logicalRect, transformSnapshot, timestamp, coveredObjectIds);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(DiagramTap event)? tap,
+    TResult Function(DiagramDoubleTap event)? doubleTap,
+    TResult Function(DiagramLongPress event)? longPress,
+    TResult Function(DiagramScroll event)? scroll,
+    TResult Function(DiagramDragBegin event)? dragBegin,
+    TResult Function(DiagramDragContinue event)? dragContinue,
+    TResult Function(DiagramDragEnd event)? dragEnd,
+    TResult Function(DiagramPinchBegin event)? pinchBegin,
+    TResult Function(DiagramPinchContinue event)? pinchContinue,
+    TResult Function(DiagramPinchEnd event)? pinchEnd,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaStart,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaUpdate,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaEnd,
+    TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetEnter,
+    TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
+        dragTargetOver,
+    TResult Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)?
+        dragTargetLeave,
+    TResult Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
+        dragTargetDrop,
+    required TResult orElse(),
+  }) {
+    if (selectionAreaStart != null) {
+      return selectionAreaStart(
+          eventId, logicalRect, transformSnapshot, timestamp, coveredObjectIds);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Tap value) tap,
+    required TResult Function(_DoubleTap value) doubleTap,
+    required TResult Function(_LongPress value) longPress,
+    required TResult Function(_Scroll value) scroll,
+    required TResult Function(_DragBegin value) dragBegin,
+    required TResult Function(_DragContinue value) dragContinue,
+    required TResult Function(_DragEnd value) dragEnd,
+    required TResult Function(_PinchBegin value) pinchBegin,
+    required TResult Function(_PinchContinue value) pinchContinue,
+    required TResult Function(_PinchEnd value) pinchEnd,
+    required TResult Function(_SelectionAreaStart value) selectionAreaStart,
+    required TResult Function(_SelectionAreaUpdate value) selectionAreaUpdate,
+    required TResult Function(_SelectionAreaEnd value) selectionAreaEnd,
+    required TResult Function(_DragTargetEnter value) dragTargetEnter,
+    required TResult Function(_DragTargetOver value) dragTargetOver,
+    required TResult Function(_DragTargetLeave value) dragTargetLeave,
+    required TResult Function(_DragTargetDrop value) dragTargetDrop,
+  }) {
+    return selectionAreaStart(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Tap value)? tap,
+    TResult? Function(_DoubleTap value)? doubleTap,
+    TResult? Function(_LongPress value)? longPress,
+    TResult? Function(_Scroll value)? scroll,
+    TResult? Function(_DragBegin value)? dragBegin,
+    TResult? Function(_DragContinue value)? dragContinue,
+    TResult? Function(_DragEnd value)? dragEnd,
+    TResult? Function(_PinchBegin value)? pinchBegin,
+    TResult? Function(_PinchContinue value)? pinchContinue,
+    TResult? Function(_PinchEnd value)? pinchEnd,
+    TResult? Function(_SelectionAreaStart value)? selectionAreaStart,
+    TResult? Function(_SelectionAreaUpdate value)? selectionAreaUpdate,
+    TResult? Function(_SelectionAreaEnd value)? selectionAreaEnd,
+    TResult? Function(_DragTargetEnter value)? dragTargetEnter,
+    TResult? Function(_DragTargetOver value)? dragTargetOver,
+    TResult? Function(_DragTargetLeave value)? dragTargetLeave,
+    TResult? Function(_DragTargetDrop value)? dragTargetDrop,
+  }) {
+    return selectionAreaStart?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Tap value)? tap,
+    TResult Function(_DoubleTap value)? doubleTap,
+    TResult Function(_LongPress value)? longPress,
+    TResult Function(_Scroll value)? scroll,
+    TResult Function(_DragBegin value)? dragBegin,
+    TResult Function(_DragContinue value)? dragContinue,
+    TResult Function(_DragEnd value)? dragEnd,
+    TResult Function(_PinchBegin value)? pinchBegin,
+    TResult Function(_PinchContinue value)? pinchContinue,
+    TResult Function(_PinchEnd value)? pinchEnd,
+    TResult Function(_SelectionAreaStart value)? selectionAreaStart,
+    TResult Function(_SelectionAreaUpdate value)? selectionAreaUpdate,
+    TResult Function(_SelectionAreaEnd value)? selectionAreaEnd,
+    TResult Function(_DragTargetEnter value)? dragTargetEnter,
+    TResult Function(_DragTargetOver value)? dragTargetOver,
+    TResult Function(_DragTargetLeave value)? dragTargetLeave,
+    TResult Function(_DragTargetDrop value)? dragTargetDrop,
+    required TResult orElse(),
+  }) {
+    if (selectionAreaStart != null) {
+      return selectionAreaStart(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _SelectionAreaStart implements DiagramEventUnion {
+  const factory _SelectionAreaStart(
+      {required final String eventId,
+      required final Rect logicalRect,
+      required final Transform2D transformSnapshot,
+      required final Duration timestamp,
+      required final List<String> coveredObjectIds}) = _$SelectionAreaStartImpl;
+
+  String get eventId;
+  Rect get logicalRect;
+  Transform2D get transformSnapshot;
+  Duration get timestamp;
+  List<String> get coveredObjectIds;
+
+  /// Create a copy of DiagramEventUnion
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$SelectionAreaStartImplCopyWith<_$SelectionAreaStartImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$SelectionAreaUpdateImplCopyWith<$Res> {
+  factory _$$SelectionAreaUpdateImplCopyWith(_$SelectionAreaUpdateImpl value,
+          $Res Function(_$SelectionAreaUpdateImpl) then) =
+      __$$SelectionAreaUpdateImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call(
+      {String eventId,
+      Rect logicalRect,
+      Transform2D transformSnapshot,
+      Duration timestamp,
+      List<String> coveredObjectIds});
+
+  $Transform2DCopyWith<$Res> get transformSnapshot;
+}
+
+/// @nodoc
+class __$$SelectionAreaUpdateImplCopyWithImpl<$Res>
+    extends _$DiagramEventUnionCopyWithImpl<$Res, _$SelectionAreaUpdateImpl>
+    implements _$$SelectionAreaUpdateImplCopyWith<$Res> {
+  __$$SelectionAreaUpdateImplCopyWithImpl(_$SelectionAreaUpdateImpl _value,
+      $Res Function(_$SelectionAreaUpdateImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of DiagramEventUnion
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? eventId = null,
+    Object? logicalRect = null,
+    Object? transformSnapshot = null,
+    Object? timestamp = null,
+    Object? coveredObjectIds = null,
+  }) {
+    return _then(_$SelectionAreaUpdateImpl(
+      eventId: null == eventId
+          ? _value.eventId
+          : eventId // ignore: cast_nullable_to_non_nullable
+              as String,
+      logicalRect: null == logicalRect
+          ? _value.logicalRect
+          : logicalRect // ignore: cast_nullable_to_non_nullable
+              as Rect,
+      transformSnapshot: null == transformSnapshot
+          ? _value.transformSnapshot
+          : transformSnapshot // ignore: cast_nullable_to_non_nullable
+              as Transform2D,
+      timestamp: null == timestamp
+          ? _value.timestamp
+          : timestamp // ignore: cast_nullable_to_non_nullable
+              as Duration,
+      coveredObjectIds: null == coveredObjectIds
+          ? _value._coveredObjectIds
+          : coveredObjectIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+    ));
+  }
+
+  /// Create a copy of DiagramEventUnion
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $Transform2DCopyWith<$Res> get transformSnapshot {
+    return $Transform2DCopyWith<$Res>(_value.transformSnapshot, (value) {
+      return _then(_value.copyWith(transformSnapshot: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$SelectionAreaUpdateImpl implements _SelectionAreaUpdate {
+  const _$SelectionAreaUpdateImpl(
+      {required this.eventId,
+      required this.logicalRect,
+      required this.transformSnapshot,
+      required this.timestamp,
+      required final List<String> coveredObjectIds})
+      : _coveredObjectIds = coveredObjectIds;
+
+  @override
+  final String eventId;
+  @override
+  final Rect logicalRect;
+  @override
+  final Transform2D transformSnapshot;
+  @override
+  final Duration timestamp;
+  final List<String> _coveredObjectIds;
+  @override
+  List<String> get coveredObjectIds {
+    if (_coveredObjectIds is EqualUnmodifiableListView)
+      return _coveredObjectIds;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_coveredObjectIds);
+  }
+
+  @override
+  String toString() {
+    return 'DiagramEventUnion.selectionAreaUpdate(eventId: $eventId, logicalRect: $logicalRect, transformSnapshot: $transformSnapshot, timestamp: $timestamp, coveredObjectIds: $coveredObjectIds)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SelectionAreaUpdateImpl &&
+            (identical(other.eventId, eventId) || other.eventId == eventId) &&
+            (identical(other.logicalRect, logicalRect) ||
+                other.logicalRect == logicalRect) &&
+            (identical(other.transformSnapshot, transformSnapshot) ||
+                other.transformSnapshot == transformSnapshot) &&
+            (identical(other.timestamp, timestamp) ||
+                other.timestamp == timestamp) &&
+            const DeepCollectionEquality()
+                .equals(other._coveredObjectIds, _coveredObjectIds));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      eventId,
+      logicalRect,
+      transformSnapshot,
+      timestamp,
+      const DeepCollectionEquality().hash(_coveredObjectIds));
+
+  /// Create a copy of DiagramEventUnion
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SelectionAreaUpdateImplCopyWith<_$SelectionAreaUpdateImpl> get copyWith =>
+      __$$SelectionAreaUpdateImplCopyWithImpl<_$SelectionAreaUpdateImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(DiagramTap event) tap,
+    required TResult Function(DiagramDoubleTap event) doubleTap,
+    required TResult Function(DiagramLongPress event) longPress,
+    required TResult Function(DiagramScroll event) scroll,
+    required TResult Function(DiagramDragBegin event) dragBegin,
+    required TResult Function(DiagramDragContinue event) dragContinue,
+    required TResult Function(DiagramDragEnd event) dragEnd,
+    required TResult Function(DiagramPinchBegin event) pinchBegin,
+    required TResult Function(DiagramPinchContinue event) pinchContinue,
+    required TResult Function(DiagramPinchEnd event) pinchEnd,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaStart,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaUpdate,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaEnd,
+    required TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetEnter,
+    required TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            Offset? snappedLogicalPosition)
+        dragTargetOver,
+    required TResult Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)
+        dragTargetLeave,
+    required TResult Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            Offset? snappedLogicalPosition)
+        dragTargetDrop,
+  }) {
+    return selectionAreaUpdate(
+        eventId, logicalRect, transformSnapshot, timestamp, coveredObjectIds);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(DiagramTap event)? tap,
+    TResult? Function(DiagramDoubleTap event)? doubleTap,
+    TResult? Function(DiagramLongPress event)? longPress,
+    TResult? Function(DiagramScroll event)? scroll,
+    TResult? Function(DiagramDragBegin event)? dragBegin,
+    TResult? Function(DiagramDragContinue event)? dragContinue,
+    TResult? Function(DiagramDragEnd event)? dragEnd,
+    TResult? Function(DiagramPinchBegin event)? pinchBegin,
+    TResult? Function(DiagramPinchContinue event)? pinchContinue,
+    TResult? Function(DiagramPinchEnd event)? pinchEnd,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaStart,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaUpdate,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaEnd,
+    TResult? Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetEnter,
+    TResult? Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
+        dragTargetOver,
+    TResult? Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)?
+        dragTargetLeave,
+    TResult? Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
+        dragTargetDrop,
+  }) {
+    return selectionAreaUpdate?.call(
+        eventId, logicalRect, transformSnapshot, timestamp, coveredObjectIds);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(DiagramTap event)? tap,
+    TResult Function(DiagramDoubleTap event)? doubleTap,
+    TResult Function(DiagramLongPress event)? longPress,
+    TResult Function(DiagramScroll event)? scroll,
+    TResult Function(DiagramDragBegin event)? dragBegin,
+    TResult Function(DiagramDragContinue event)? dragContinue,
+    TResult Function(DiagramDragEnd event)? dragEnd,
+    TResult Function(DiagramPinchBegin event)? pinchBegin,
+    TResult Function(DiagramPinchContinue event)? pinchContinue,
+    TResult Function(DiagramPinchEnd event)? pinchEnd,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaStart,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaUpdate,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaEnd,
+    TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetEnter,
+    TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
+        dragTargetOver,
+    TResult Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)?
+        dragTargetLeave,
+    TResult Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
+        dragTargetDrop,
+    required TResult orElse(),
+  }) {
+    if (selectionAreaUpdate != null) {
+      return selectionAreaUpdate(
+          eventId, logicalRect, transformSnapshot, timestamp, coveredObjectIds);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Tap value) tap,
+    required TResult Function(_DoubleTap value) doubleTap,
+    required TResult Function(_LongPress value) longPress,
+    required TResult Function(_Scroll value) scroll,
+    required TResult Function(_DragBegin value) dragBegin,
+    required TResult Function(_DragContinue value) dragContinue,
+    required TResult Function(_DragEnd value) dragEnd,
+    required TResult Function(_PinchBegin value) pinchBegin,
+    required TResult Function(_PinchContinue value) pinchContinue,
+    required TResult Function(_PinchEnd value) pinchEnd,
+    required TResult Function(_SelectionAreaStart value) selectionAreaStart,
+    required TResult Function(_SelectionAreaUpdate value) selectionAreaUpdate,
+    required TResult Function(_SelectionAreaEnd value) selectionAreaEnd,
+    required TResult Function(_DragTargetEnter value) dragTargetEnter,
+    required TResult Function(_DragTargetOver value) dragTargetOver,
+    required TResult Function(_DragTargetLeave value) dragTargetLeave,
+    required TResult Function(_DragTargetDrop value) dragTargetDrop,
+  }) {
+    return selectionAreaUpdate(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Tap value)? tap,
+    TResult? Function(_DoubleTap value)? doubleTap,
+    TResult? Function(_LongPress value)? longPress,
+    TResult? Function(_Scroll value)? scroll,
+    TResult? Function(_DragBegin value)? dragBegin,
+    TResult? Function(_DragContinue value)? dragContinue,
+    TResult? Function(_DragEnd value)? dragEnd,
+    TResult? Function(_PinchBegin value)? pinchBegin,
+    TResult? Function(_PinchContinue value)? pinchContinue,
+    TResult? Function(_PinchEnd value)? pinchEnd,
+    TResult? Function(_SelectionAreaStart value)? selectionAreaStart,
+    TResult? Function(_SelectionAreaUpdate value)? selectionAreaUpdate,
+    TResult? Function(_SelectionAreaEnd value)? selectionAreaEnd,
+    TResult? Function(_DragTargetEnter value)? dragTargetEnter,
+    TResult? Function(_DragTargetOver value)? dragTargetOver,
+    TResult? Function(_DragTargetLeave value)? dragTargetLeave,
+    TResult? Function(_DragTargetDrop value)? dragTargetDrop,
+  }) {
+    return selectionAreaUpdate?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Tap value)? tap,
+    TResult Function(_DoubleTap value)? doubleTap,
+    TResult Function(_LongPress value)? longPress,
+    TResult Function(_Scroll value)? scroll,
+    TResult Function(_DragBegin value)? dragBegin,
+    TResult Function(_DragContinue value)? dragContinue,
+    TResult Function(_DragEnd value)? dragEnd,
+    TResult Function(_PinchBegin value)? pinchBegin,
+    TResult Function(_PinchContinue value)? pinchContinue,
+    TResult Function(_PinchEnd value)? pinchEnd,
+    TResult Function(_SelectionAreaStart value)? selectionAreaStart,
+    TResult Function(_SelectionAreaUpdate value)? selectionAreaUpdate,
+    TResult Function(_SelectionAreaEnd value)? selectionAreaEnd,
+    TResult Function(_DragTargetEnter value)? dragTargetEnter,
+    TResult Function(_DragTargetOver value)? dragTargetOver,
+    TResult Function(_DragTargetLeave value)? dragTargetLeave,
+    TResult Function(_DragTargetDrop value)? dragTargetDrop,
+    required TResult orElse(),
+  }) {
+    if (selectionAreaUpdate != null) {
+      return selectionAreaUpdate(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _SelectionAreaUpdate implements DiagramEventUnion {
+  const factory _SelectionAreaUpdate(
+          {required final String eventId,
+          required final Rect logicalRect,
+          required final Transform2D transformSnapshot,
+          required final Duration timestamp,
+          required final List<String> coveredObjectIds}) =
+      _$SelectionAreaUpdateImpl;
+
+  String get eventId;
+  Rect get logicalRect;
+  Transform2D get transformSnapshot;
+  Duration get timestamp;
+  List<String> get coveredObjectIds;
+
+  /// Create a copy of DiagramEventUnion
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$SelectionAreaUpdateImplCopyWith<_$SelectionAreaUpdateImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$SelectionAreaEndImplCopyWith<$Res> {
+  factory _$$SelectionAreaEndImplCopyWith(_$SelectionAreaEndImpl value,
+          $Res Function(_$SelectionAreaEndImpl) then) =
+      __$$SelectionAreaEndImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call(
+      {String eventId,
+      Rect logicalRect,
+      Transform2D transformSnapshot,
+      Duration timestamp,
+      List<String> coveredObjectIds});
+
+  $Transform2DCopyWith<$Res> get transformSnapshot;
+}
+
+/// @nodoc
+class __$$SelectionAreaEndImplCopyWithImpl<$Res>
+    extends _$DiagramEventUnionCopyWithImpl<$Res, _$SelectionAreaEndImpl>
+    implements _$$SelectionAreaEndImplCopyWith<$Res> {
+  __$$SelectionAreaEndImplCopyWithImpl(_$SelectionAreaEndImpl _value,
+      $Res Function(_$SelectionAreaEndImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of DiagramEventUnion
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? eventId = null,
+    Object? logicalRect = null,
+    Object? transformSnapshot = null,
+    Object? timestamp = null,
+    Object? coveredObjectIds = null,
+  }) {
+    return _then(_$SelectionAreaEndImpl(
+      eventId: null == eventId
+          ? _value.eventId
+          : eventId // ignore: cast_nullable_to_non_nullable
+              as String,
+      logicalRect: null == logicalRect
+          ? _value.logicalRect
+          : logicalRect // ignore: cast_nullable_to_non_nullable
+              as Rect,
+      transformSnapshot: null == transformSnapshot
+          ? _value.transformSnapshot
+          : transformSnapshot // ignore: cast_nullable_to_non_nullable
+              as Transform2D,
+      timestamp: null == timestamp
+          ? _value.timestamp
+          : timestamp // ignore: cast_nullable_to_non_nullable
+              as Duration,
+      coveredObjectIds: null == coveredObjectIds
+          ? _value._coveredObjectIds
+          : coveredObjectIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+    ));
+  }
+
+  /// Create a copy of DiagramEventUnion
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $Transform2DCopyWith<$Res> get transformSnapshot {
+    return $Transform2DCopyWith<$Res>(_value.transformSnapshot, (value) {
+      return _then(_value.copyWith(transformSnapshot: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$SelectionAreaEndImpl implements _SelectionAreaEnd {
+  const _$SelectionAreaEndImpl(
+      {required this.eventId,
+      required this.logicalRect,
+      required this.transformSnapshot,
+      required this.timestamp,
+      required final List<String> coveredObjectIds})
+      : _coveredObjectIds = coveredObjectIds;
+
+  @override
+  final String eventId;
+  @override
+  final Rect logicalRect;
+  @override
+  final Transform2D transformSnapshot;
+  @override
+  final Duration timestamp;
+  final List<String> _coveredObjectIds;
+  @override
+  List<String> get coveredObjectIds {
+    if (_coveredObjectIds is EqualUnmodifiableListView)
+      return _coveredObjectIds;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_coveredObjectIds);
+  }
+
+  @override
+  String toString() {
+    return 'DiagramEventUnion.selectionAreaEnd(eventId: $eventId, logicalRect: $logicalRect, transformSnapshot: $transformSnapshot, timestamp: $timestamp, coveredObjectIds: $coveredObjectIds)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SelectionAreaEndImpl &&
+            (identical(other.eventId, eventId) || other.eventId == eventId) &&
+            (identical(other.logicalRect, logicalRect) ||
+                other.logicalRect == logicalRect) &&
+            (identical(other.transformSnapshot, transformSnapshot) ||
+                other.transformSnapshot == transformSnapshot) &&
+            (identical(other.timestamp, timestamp) ||
+                other.timestamp == timestamp) &&
+            const DeepCollectionEquality()
+                .equals(other._coveredObjectIds, _coveredObjectIds));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      eventId,
+      logicalRect,
+      transformSnapshot,
+      timestamp,
+      const DeepCollectionEquality().hash(_coveredObjectIds));
+
+  /// Create a copy of DiagramEventUnion
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SelectionAreaEndImplCopyWith<_$SelectionAreaEndImpl> get copyWith =>
+      __$$SelectionAreaEndImplCopyWithImpl<_$SelectionAreaEndImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(DiagramTap event) tap,
+    required TResult Function(DiagramDoubleTap event) doubleTap,
+    required TResult Function(DiagramLongPress event) longPress,
+    required TResult Function(DiagramScroll event) scroll,
+    required TResult Function(DiagramDragBegin event) dragBegin,
+    required TResult Function(DiagramDragContinue event) dragContinue,
+    required TResult Function(DiagramDragEnd event) dragEnd,
+    required TResult Function(DiagramPinchBegin event) pinchBegin,
+    required TResult Function(DiagramPinchContinue event) pinchContinue,
+    required TResult Function(DiagramPinchEnd event) pinchEnd,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaStart,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaUpdate,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaEnd,
+    required TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)
+        dragTargetEnter,
+    required TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            Offset? snappedLogicalPosition)
+        dragTargetOver,
+    required TResult Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)
+        dragTargetLeave,
+    required TResult Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            Offset? snappedLogicalPosition)
+        dragTargetDrop,
+  }) {
+    return selectionAreaEnd(
+        eventId, logicalRect, transformSnapshot, timestamp, coveredObjectIds);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(DiagramTap event)? tap,
+    TResult? Function(DiagramDoubleTap event)? doubleTap,
+    TResult? Function(DiagramLongPress event)? longPress,
+    TResult? Function(DiagramScroll event)? scroll,
+    TResult? Function(DiagramDragBegin event)? dragBegin,
+    TResult? Function(DiagramDragContinue event)? dragContinue,
+    TResult? Function(DiagramDragEnd event)? dragEnd,
+    TResult? Function(DiagramPinchBegin event)? pinchBegin,
+    TResult? Function(DiagramPinchContinue event)? pinchContinue,
+    TResult? Function(DiagramPinchEnd event)? pinchEnd,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaStart,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaUpdate,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaEnd,
+    TResult? Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetEnter,
+    TResult? Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
+        dragTargetOver,
+    TResult? Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)?
+        dragTargetLeave,
+    TResult? Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
+        dragTargetDrop,
+  }) {
+    return selectionAreaEnd?.call(
+        eventId, logicalRect, transformSnapshot, timestamp, coveredObjectIds);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(DiagramTap event)? tap,
+    TResult Function(DiagramDoubleTap event)? doubleTap,
+    TResult Function(DiagramLongPress event)? longPress,
+    TResult Function(DiagramScroll event)? scroll,
+    TResult Function(DiagramDragBegin event)? dragBegin,
+    TResult Function(DiagramDragContinue event)? dragContinue,
+    TResult Function(DiagramDragEnd event)? dragEnd,
+    TResult Function(DiagramPinchBegin event)? pinchBegin,
+    TResult Function(DiagramPinchContinue event)? pinchContinue,
+    TResult Function(DiagramPinchEnd event)? pinchEnd,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaStart,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaUpdate,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaEnd,
+    TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp)?
+        dragTargetEnter,
+    TResult Function(
+            String eventId,
+            Object dataPreview,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
+        dragTargetOver,
+    TResult Function(
+            String eventId, Transform2D transformSnapshot, Duration timestamp)?
+        dragTargetLeave,
+    TResult Function(
+            String eventId,
+            Object data,
+            Offset screenPosition,
+            Offset logicalPosition,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            Offset? snappedLogicalPosition)?
+        dragTargetDrop,
+    required TResult orElse(),
+  }) {
+    if (selectionAreaEnd != null) {
+      return selectionAreaEnd(
+          eventId, logicalRect, transformSnapshot, timestamp, coveredObjectIds);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Tap value) tap,
+    required TResult Function(_DoubleTap value) doubleTap,
+    required TResult Function(_LongPress value) longPress,
+    required TResult Function(_Scroll value) scroll,
+    required TResult Function(_DragBegin value) dragBegin,
+    required TResult Function(_DragContinue value) dragContinue,
+    required TResult Function(_DragEnd value) dragEnd,
+    required TResult Function(_PinchBegin value) pinchBegin,
+    required TResult Function(_PinchContinue value) pinchContinue,
+    required TResult Function(_PinchEnd value) pinchEnd,
+    required TResult Function(_SelectionAreaStart value) selectionAreaStart,
+    required TResult Function(_SelectionAreaUpdate value) selectionAreaUpdate,
+    required TResult Function(_SelectionAreaEnd value) selectionAreaEnd,
+    required TResult Function(_DragTargetEnter value) dragTargetEnter,
+    required TResult Function(_DragTargetOver value) dragTargetOver,
+    required TResult Function(_DragTargetLeave value) dragTargetLeave,
+    required TResult Function(_DragTargetDrop value) dragTargetDrop,
+  }) {
+    return selectionAreaEnd(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Tap value)? tap,
+    TResult? Function(_DoubleTap value)? doubleTap,
+    TResult? Function(_LongPress value)? longPress,
+    TResult? Function(_Scroll value)? scroll,
+    TResult? Function(_DragBegin value)? dragBegin,
+    TResult? Function(_DragContinue value)? dragContinue,
+    TResult? Function(_DragEnd value)? dragEnd,
+    TResult? Function(_PinchBegin value)? pinchBegin,
+    TResult? Function(_PinchContinue value)? pinchContinue,
+    TResult? Function(_PinchEnd value)? pinchEnd,
+    TResult? Function(_SelectionAreaStart value)? selectionAreaStart,
+    TResult? Function(_SelectionAreaUpdate value)? selectionAreaUpdate,
+    TResult? Function(_SelectionAreaEnd value)? selectionAreaEnd,
+    TResult? Function(_DragTargetEnter value)? dragTargetEnter,
+    TResult? Function(_DragTargetOver value)? dragTargetOver,
+    TResult? Function(_DragTargetLeave value)? dragTargetLeave,
+    TResult? Function(_DragTargetDrop value)? dragTargetDrop,
+  }) {
+    return selectionAreaEnd?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Tap value)? tap,
+    TResult Function(_DoubleTap value)? doubleTap,
+    TResult Function(_LongPress value)? longPress,
+    TResult Function(_Scroll value)? scroll,
+    TResult Function(_DragBegin value)? dragBegin,
+    TResult Function(_DragContinue value)? dragContinue,
+    TResult Function(_DragEnd value)? dragEnd,
+    TResult Function(_PinchBegin value)? pinchBegin,
+    TResult Function(_PinchContinue value)? pinchContinue,
+    TResult Function(_PinchEnd value)? pinchEnd,
+    TResult Function(_SelectionAreaStart value)? selectionAreaStart,
+    TResult Function(_SelectionAreaUpdate value)? selectionAreaUpdate,
+    TResult Function(_SelectionAreaEnd value)? selectionAreaEnd,
+    TResult Function(_DragTargetEnter value)? dragTargetEnter,
+    TResult Function(_DragTargetOver value)? dragTargetOver,
+    TResult Function(_DragTargetLeave value)? dragTargetLeave,
+    TResult Function(_DragTargetDrop value)? dragTargetDrop,
+    required TResult orElse(),
+  }) {
+    if (selectionAreaEnd != null) {
+      return selectionAreaEnd(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _SelectionAreaEnd implements DiagramEventUnion {
+  const factory _SelectionAreaEnd(
+      {required final String eventId,
+      required final Rect logicalRect,
+      required final Transform2D transformSnapshot,
+      required final Duration timestamp,
+      required final List<String> coveredObjectIds}) = _$SelectionAreaEndImpl;
+
+  String get eventId;
+  Rect get logicalRect;
+  Transform2D get transformSnapshot;
+  Duration get timestamp;
+  List<String> get coveredObjectIds;
+
+  /// Create a copy of DiagramEventUnion
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$SelectionAreaEndImplCopyWith<_$SelectionAreaEndImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -7275,6 +9397,27 @@ class _$DragTargetEnterImpl implements _DragTargetEnter {
     required TResult Function(DiagramPinchEnd event) pinchEnd,
     required TResult Function(
             String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaStart,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaUpdate,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaEnd,
+    required TResult Function(
+            String eventId,
             Object dataPreview,
             Offset screenPosition,
             Offset logicalPosition,
@@ -7322,6 +9465,27 @@ class _$DragTargetEnterImpl implements _DragTargetEnter {
     TResult? Function(DiagramPinchEnd event)? pinchEnd,
     TResult? Function(
             String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaStart,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaUpdate,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaEnd,
+    TResult? Function(
+            String eventId,
             Object dataPreview,
             Offset screenPosition,
             Offset logicalPosition,
@@ -7367,6 +9531,27 @@ class _$DragTargetEnterImpl implements _DragTargetEnter {
     TResult Function(DiagramPinchBegin event)? pinchBegin,
     TResult Function(DiagramPinchContinue event)? pinchContinue,
     TResult Function(DiagramPinchEnd event)? pinchEnd,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaStart,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaUpdate,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaEnd,
     TResult Function(
             String eventId,
             Object dataPreview,
@@ -7418,6 +9603,9 @@ class _$DragTargetEnterImpl implements _DragTargetEnter {
     required TResult Function(_PinchBegin value) pinchBegin,
     required TResult Function(_PinchContinue value) pinchContinue,
     required TResult Function(_PinchEnd value) pinchEnd,
+    required TResult Function(_SelectionAreaStart value) selectionAreaStart,
+    required TResult Function(_SelectionAreaUpdate value) selectionAreaUpdate,
+    required TResult Function(_SelectionAreaEnd value) selectionAreaEnd,
     required TResult Function(_DragTargetEnter value) dragTargetEnter,
     required TResult Function(_DragTargetOver value) dragTargetOver,
     required TResult Function(_DragTargetLeave value) dragTargetLeave,
@@ -7439,6 +9627,9 @@ class _$DragTargetEnterImpl implements _DragTargetEnter {
     TResult? Function(_PinchBegin value)? pinchBegin,
     TResult? Function(_PinchContinue value)? pinchContinue,
     TResult? Function(_PinchEnd value)? pinchEnd,
+    TResult? Function(_SelectionAreaStart value)? selectionAreaStart,
+    TResult? Function(_SelectionAreaUpdate value)? selectionAreaUpdate,
+    TResult? Function(_SelectionAreaEnd value)? selectionAreaEnd,
     TResult? Function(_DragTargetEnter value)? dragTargetEnter,
     TResult? Function(_DragTargetOver value)? dragTargetOver,
     TResult? Function(_DragTargetLeave value)? dragTargetLeave,
@@ -7460,6 +9651,9 @@ class _$DragTargetEnterImpl implements _DragTargetEnter {
     TResult Function(_PinchBegin value)? pinchBegin,
     TResult Function(_PinchContinue value)? pinchContinue,
     TResult Function(_PinchEnd value)? pinchEnd,
+    TResult Function(_SelectionAreaStart value)? selectionAreaStart,
+    TResult Function(_SelectionAreaUpdate value)? selectionAreaUpdate,
+    TResult Function(_SelectionAreaEnd value)? selectionAreaEnd,
     TResult Function(_DragTargetEnter value)? dragTargetEnter,
     TResult Function(_DragTargetOver value)? dragTargetOver,
     TResult Function(_DragTargetLeave value)? dragTargetLeave,
@@ -7662,6 +9856,27 @@ class _$DragTargetOverImpl implements _DragTargetOver {
     required TResult Function(DiagramPinchEnd event) pinchEnd,
     required TResult Function(
             String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaStart,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaUpdate,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaEnd,
+    required TResult Function(
+            String eventId,
             Object dataPreview,
             Offset screenPosition,
             Offset logicalPosition,
@@ -7709,6 +9924,27 @@ class _$DragTargetOverImpl implements _DragTargetOver {
     TResult? Function(DiagramPinchEnd event)? pinchEnd,
     TResult? Function(
             String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaStart,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaUpdate,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaEnd,
+    TResult? Function(
+            String eventId,
             Object dataPreview,
             Offset screenPosition,
             Offset logicalPosition,
@@ -7754,6 +9990,27 @@ class _$DragTargetOverImpl implements _DragTargetOver {
     TResult Function(DiagramPinchBegin event)? pinchBegin,
     TResult Function(DiagramPinchContinue event)? pinchContinue,
     TResult Function(DiagramPinchEnd event)? pinchEnd,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaStart,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaUpdate,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaEnd,
     TResult Function(
             String eventId,
             Object dataPreview,
@@ -7811,6 +10068,9 @@ class _$DragTargetOverImpl implements _DragTargetOver {
     required TResult Function(_PinchBegin value) pinchBegin,
     required TResult Function(_PinchContinue value) pinchContinue,
     required TResult Function(_PinchEnd value) pinchEnd,
+    required TResult Function(_SelectionAreaStart value) selectionAreaStart,
+    required TResult Function(_SelectionAreaUpdate value) selectionAreaUpdate,
+    required TResult Function(_SelectionAreaEnd value) selectionAreaEnd,
     required TResult Function(_DragTargetEnter value) dragTargetEnter,
     required TResult Function(_DragTargetOver value) dragTargetOver,
     required TResult Function(_DragTargetLeave value) dragTargetLeave,
@@ -7832,6 +10092,9 @@ class _$DragTargetOverImpl implements _DragTargetOver {
     TResult? Function(_PinchBegin value)? pinchBegin,
     TResult? Function(_PinchContinue value)? pinchContinue,
     TResult? Function(_PinchEnd value)? pinchEnd,
+    TResult? Function(_SelectionAreaStart value)? selectionAreaStart,
+    TResult? Function(_SelectionAreaUpdate value)? selectionAreaUpdate,
+    TResult? Function(_SelectionAreaEnd value)? selectionAreaEnd,
     TResult? Function(_DragTargetEnter value)? dragTargetEnter,
     TResult? Function(_DragTargetOver value)? dragTargetOver,
     TResult? Function(_DragTargetLeave value)? dragTargetLeave,
@@ -7853,6 +10116,9 @@ class _$DragTargetOverImpl implements _DragTargetOver {
     TResult Function(_PinchBegin value)? pinchBegin,
     TResult Function(_PinchContinue value)? pinchContinue,
     TResult Function(_PinchEnd value)? pinchEnd,
+    TResult Function(_SelectionAreaStart value)? selectionAreaStart,
+    TResult Function(_SelectionAreaUpdate value)? selectionAreaUpdate,
+    TResult Function(_SelectionAreaEnd value)? selectionAreaEnd,
     TResult Function(_DragTargetEnter value)? dragTargetEnter,
     TResult Function(_DragTargetOver value)? dragTargetOver,
     TResult Function(_DragTargetLeave value)? dragTargetLeave,
@@ -8007,6 +10273,27 @@ class _$DragTargetLeaveImpl implements _DragTargetLeave {
     required TResult Function(DiagramPinchEnd event) pinchEnd,
     required TResult Function(
             String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaStart,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaUpdate,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaEnd,
+    required TResult Function(
+            String eventId,
             Object dataPreview,
             Offset screenPosition,
             Offset logicalPosition,
@@ -8053,6 +10340,27 @@ class _$DragTargetLeaveImpl implements _DragTargetLeave {
     TResult? Function(DiagramPinchEnd event)? pinchEnd,
     TResult? Function(
             String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaStart,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaUpdate,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaEnd,
+    TResult? Function(
+            String eventId,
             Object dataPreview,
             Offset screenPosition,
             Offset logicalPosition,
@@ -8097,6 +10405,27 @@ class _$DragTargetLeaveImpl implements _DragTargetLeave {
     TResult Function(DiagramPinchBegin event)? pinchBegin,
     TResult Function(DiagramPinchContinue event)? pinchContinue,
     TResult Function(DiagramPinchEnd event)? pinchEnd,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaStart,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaUpdate,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaEnd,
     TResult Function(
             String eventId,
             Object dataPreview,
@@ -8147,6 +10476,9 @@ class _$DragTargetLeaveImpl implements _DragTargetLeave {
     required TResult Function(_PinchBegin value) pinchBegin,
     required TResult Function(_PinchContinue value) pinchContinue,
     required TResult Function(_PinchEnd value) pinchEnd,
+    required TResult Function(_SelectionAreaStart value) selectionAreaStart,
+    required TResult Function(_SelectionAreaUpdate value) selectionAreaUpdate,
+    required TResult Function(_SelectionAreaEnd value) selectionAreaEnd,
     required TResult Function(_DragTargetEnter value) dragTargetEnter,
     required TResult Function(_DragTargetOver value) dragTargetOver,
     required TResult Function(_DragTargetLeave value) dragTargetLeave,
@@ -8168,6 +10500,9 @@ class _$DragTargetLeaveImpl implements _DragTargetLeave {
     TResult? Function(_PinchBegin value)? pinchBegin,
     TResult? Function(_PinchContinue value)? pinchContinue,
     TResult? Function(_PinchEnd value)? pinchEnd,
+    TResult? Function(_SelectionAreaStart value)? selectionAreaStart,
+    TResult? Function(_SelectionAreaUpdate value)? selectionAreaUpdate,
+    TResult? Function(_SelectionAreaEnd value)? selectionAreaEnd,
     TResult? Function(_DragTargetEnter value)? dragTargetEnter,
     TResult? Function(_DragTargetOver value)? dragTargetOver,
     TResult? Function(_DragTargetLeave value)? dragTargetLeave,
@@ -8189,6 +10524,9 @@ class _$DragTargetLeaveImpl implements _DragTargetLeave {
     TResult Function(_PinchBegin value)? pinchBegin,
     TResult Function(_PinchContinue value)? pinchContinue,
     TResult Function(_PinchEnd value)? pinchEnd,
+    TResult Function(_SelectionAreaStart value)? selectionAreaStart,
+    TResult Function(_SelectionAreaUpdate value)? selectionAreaUpdate,
+    TResult Function(_SelectionAreaEnd value)? selectionAreaEnd,
     TResult Function(_DragTargetEnter value)? dragTargetEnter,
     TResult Function(_DragTargetOver value)? dragTargetOver,
     TResult Function(_DragTargetLeave value)? dragTargetLeave,
@@ -8384,6 +10722,27 @@ class _$DragTargetDropImpl implements _DragTargetDrop {
     required TResult Function(DiagramPinchEnd event) pinchEnd,
     required TResult Function(
             String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaStart,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaUpdate,
+    required TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)
+        selectionAreaEnd,
+    required TResult Function(
+            String eventId,
             Object dataPreview,
             Offset screenPosition,
             Offset logicalPosition,
@@ -8431,6 +10790,27 @@ class _$DragTargetDropImpl implements _DragTargetDrop {
     TResult? Function(DiagramPinchEnd event)? pinchEnd,
     TResult? Function(
             String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaStart,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaUpdate,
+    TResult? Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaEnd,
+    TResult? Function(
+            String eventId,
             Object dataPreview,
             Offset screenPosition,
             Offset logicalPosition,
@@ -8476,6 +10856,27 @@ class _$DragTargetDropImpl implements _DragTargetDrop {
     TResult Function(DiagramPinchBegin event)? pinchBegin,
     TResult Function(DiagramPinchContinue event)? pinchContinue,
     TResult Function(DiagramPinchEnd event)? pinchEnd,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaStart,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaUpdate,
+    TResult Function(
+            String eventId,
+            Rect logicalRect,
+            Transform2D transformSnapshot,
+            Duration timestamp,
+            List<String> coveredObjectIds)?
+        selectionAreaEnd,
     TResult Function(
             String eventId,
             Object dataPreview,
@@ -8527,6 +10928,9 @@ class _$DragTargetDropImpl implements _DragTargetDrop {
     required TResult Function(_PinchBegin value) pinchBegin,
     required TResult Function(_PinchContinue value) pinchContinue,
     required TResult Function(_PinchEnd value) pinchEnd,
+    required TResult Function(_SelectionAreaStart value) selectionAreaStart,
+    required TResult Function(_SelectionAreaUpdate value) selectionAreaUpdate,
+    required TResult Function(_SelectionAreaEnd value) selectionAreaEnd,
     required TResult Function(_DragTargetEnter value) dragTargetEnter,
     required TResult Function(_DragTargetOver value) dragTargetOver,
     required TResult Function(_DragTargetLeave value) dragTargetLeave,
@@ -8548,6 +10952,9 @@ class _$DragTargetDropImpl implements _DragTargetDrop {
     TResult? Function(_PinchBegin value)? pinchBegin,
     TResult? Function(_PinchContinue value)? pinchContinue,
     TResult? Function(_PinchEnd value)? pinchEnd,
+    TResult? Function(_SelectionAreaStart value)? selectionAreaStart,
+    TResult? Function(_SelectionAreaUpdate value)? selectionAreaUpdate,
+    TResult? Function(_SelectionAreaEnd value)? selectionAreaEnd,
     TResult? Function(_DragTargetEnter value)? dragTargetEnter,
     TResult? Function(_DragTargetOver value)? dragTargetOver,
     TResult? Function(_DragTargetLeave value)? dragTargetLeave,
@@ -8569,6 +10976,9 @@ class _$DragTargetDropImpl implements _DragTargetDrop {
     TResult Function(_PinchBegin value)? pinchBegin,
     TResult Function(_PinchContinue value)? pinchContinue,
     TResult Function(_PinchEnd value)? pinchEnd,
+    TResult Function(_SelectionAreaStart value)? selectionAreaStart,
+    TResult Function(_SelectionAreaUpdate value)? selectionAreaUpdate,
+    TResult Function(_SelectionAreaEnd value)? selectionAreaEnd,
     TResult Function(_DragTargetEnter value)? dragTargetEnter,
     TResult Function(_DragTargetOver value)? dragTargetOver,
     TResult Function(_DragTargetLeave value)? dragTargetLeave,

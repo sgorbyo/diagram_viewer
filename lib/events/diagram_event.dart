@@ -223,6 +223,31 @@ class DiagramEventUnion with _$DiagramEventUnion {
       _PinchContinue;
   const factory DiagramEventUnion.pinchEnd(DiagramPinchEnd event) = _PinchEnd;
 
+  // Selection area (rectangular lasso) events
+  const factory DiagramEventUnion.selectionAreaStart({
+    required String eventId,
+    required Rect logicalRect,
+    required Transform2D transformSnapshot,
+    required Duration timestamp,
+    required List<String> coveredObjectIds,
+  }) = _SelectionAreaStart;
+
+  const factory DiagramEventUnion.selectionAreaUpdate({
+    required String eventId,
+    required Rect logicalRect,
+    required Transform2D transformSnapshot,
+    required Duration timestamp,
+    required List<String> coveredObjectIds,
+  }) = _SelectionAreaUpdate;
+
+  const factory DiagramEventUnion.selectionAreaEnd({
+    required String eventId,
+    required Rect logicalRect,
+    required Transform2D transformSnapshot,
+    required Duration timestamp,
+    required List<String> coveredObjectIds,
+  }) = _SelectionAreaEnd;
+
   // In‑App Drag & Drop (Target) events
   const factory DiagramEventUnion.dragTargetEnter({
     required String eventId,

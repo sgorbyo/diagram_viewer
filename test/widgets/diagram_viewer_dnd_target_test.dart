@@ -201,7 +201,7 @@ void main() {
       late Offset screenPosition;
       late Offset logicalPosition;
       late Transform2D snapshot;
-      lastOver.when(
+      lastOver.maybeWhen(
         dragTargetOver: (eventId, dataPreview, screenPos, logicalPos,
             transformSnapshot, timestamp, snapped) {
           screenPosition = screenPos;
@@ -213,6 +213,7 @@ void main() {
         doubleTap: (_) => null,
         longPress: (_) => null,
         scroll: (_) => null,
+        orElse: () => fail('Expected dragTargetOver'),
         dragBegin: (_) => null,
         dragContinue: (_) => null,
         dragEnd: (_) => null,

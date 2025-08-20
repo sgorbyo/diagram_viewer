@@ -151,6 +151,9 @@ class TestDiagramController implements IDiagramController {
       longPress: (event) {
         // No action needed for long press
       },
+      selectionAreaStart: (a, b, c, d, e) {},
+      selectionAreaUpdate: (a, b, c, d, e) {},
+      selectionAreaEnd: (a, b, c, d, e) {},
     );
   }
 

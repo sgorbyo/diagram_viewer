@@ -56,7 +56,7 @@ void main() {
         // Assert
         expect(result, isNotNull);
         expect(result, isA<DiagramEventUnion>());
-        result!.when(
+        result!.maybeWhen(
           tap: (event) => fail('Expected dragBegin, got tap'),
           doubleTap: (event) => fail('Expected dragBegin, got doubleTap'),
           longPress: (event) => fail('Expected dragBegin, got longPress'),
@@ -69,20 +69,7 @@ void main() {
             expect(event.fingerCount, equals(1));
             expect(event.mouseButton, isNull);
           },
-          dragContinue: (event) => fail('Expected dragBegin, got dragContinue'),
-          dragEnd: (event) => fail('Expected dragBegin, got dragEnd'),
-          pinchBegin: (event) => fail('Expected dragBegin, got pinchBegin'),
-          pinchContinue: (event) =>
-              fail('Expected dragBegin, got pinchContinue'),
-          pinchEnd: (event) => fail('Expected dragBegin, got pinchEnd'),
-          dragTargetEnter: (a, b, c, d, e, f) =>
-              fail('Expected dragBegin, got dragTargetEnter'),
-          dragTargetOver: (a, b, c, d, e, f, g) =>
-              fail('Expected dragBegin, got dragTargetOver'),
-          dragTargetLeave: (a, b, c) =>
-              fail('Expected dragBegin, got dragTargetLeave'),
-          dragTargetDrop: (a, b, c, d, e, f, g) =>
-              fail('Expected dragBegin, got dragTargetDrop'),
+          orElse: () => fail('Expected dragBegin'),
         );
       });
 
@@ -141,7 +128,7 @@ void main() {
 
         // Assert
         expect(result, isNotNull);
-        result!.when(
+        result!.maybeWhen(
           tap: (event) => fail('Expected dragContinue, got tap'),
           doubleTap: (event) => fail('Expected dragContinue, got doubleTap'),
           longPress: (event) => fail('Expected dragContinue, got longPress'),
@@ -154,19 +141,7 @@ void main() {
             expect(event.totalDelta, equals(const Offset(10, 10)));
             expect(event.duration.inMilliseconds, greaterThanOrEqualTo(0));
           },
-          dragEnd: (event) => fail('Expected dragContinue, got dragEnd'),
-          pinchBegin: (event) => fail('Expected dragContinue, got pinchBegin'),
-          pinchContinue: (event) =>
-              fail('Expected dragContinue, got pinchContinue'),
-          pinchEnd: (event) => fail('Expected dragContinue, got pinchEnd'),
-          dragTargetEnter: (a, b, c, d, e, f) =>
-              fail('Expected dragContinue, got dragTargetEnter'),
-          dragTargetOver: (a, b, c, d, e, f, g) =>
-              fail('Expected dragContinue, got dragTargetOver'),
-          dragTargetLeave: (a, b, c) =>
-              fail('Expected dragContinue, got dragTargetLeave'),
-          dragTargetDrop: (a, b, c, d, e, f, g) =>
-              fail('Expected dragContinue, got dragTargetDrop'),
+          orElse: () => fail('Expected dragContinue'),
         );
       });
 
@@ -255,7 +230,7 @@ void main() {
 
         // Assert
         expect(result, isNotNull);
-        result!.when(
+        result!.maybeWhen(
           tap: (event) => fail('Expected dragEnd, got tap'),
           doubleTap: (event) => fail('Expected dragEnd, got doubleTap'),
           longPress: (event) => fail('Expected dragEnd, got longPress'),
@@ -269,17 +244,7 @@ void main() {
             expect(event.totalDuration.inMilliseconds, greaterThan(0));
             expect(event.wasCancelled, isFalse);
           },
-          pinchBegin: (event) => fail('Expected dragEnd, got pinchBegin'),
-          pinchContinue: (event) => fail('Expected dragEnd, got pinchContinue'),
-          pinchEnd: (event) => fail('Expected dragEnd, got pinchEnd'),
-          dragTargetEnter: (a, b, c, d, e, f) =>
-              fail('Expected dragEnd, got dragTargetEnter'),
-          dragTargetOver: (a, b, c, d, e, f, g) =>
-              fail('Expected dragEnd, got dragTargetOver'),
-          dragTargetLeave: (a, b, c) =>
-              fail('Expected dragEnd, got dragTargetLeave'),
-          dragTargetDrop: (a, b, c, d, e, f, g) =>
-              fail('Expected dragEnd, got dragTargetDrop'),
+          orElse: () => fail('Expected dragEnd'),
         );
       });
 
@@ -342,7 +307,7 @@ void main() {
 
         // Assert
         expect(result, isNotNull);
-        result!.when(
+        result!.maybeWhen(
           tap: (event) {
             expect(event.eventId, equals('test-1'));
             expect(event.logicalPosition, equals(const Offset(100.5, 100.5)));
@@ -352,23 +317,7 @@ void main() {
             expect(event.mouseButton, isNull);
             expect(event.pressDuration.inMilliseconds, greaterThan(0));
           },
-          doubleTap: (event) => fail('Expected tap, got doubleTap'),
-          longPress: (event) => fail('Expected tap, got longPress'),
-          scroll: (event) => fail('Expected tap, got scroll'),
-          dragBegin: (event) => fail('Expected tap, got dragBegin'),
-          dragContinue: (event) => fail('Expected tap, got dragContinue'),
-          dragEnd: (event) => fail('Expected tap, got dragEnd'),
-          pinchBegin: (event) => fail('Expected tap, got pinchBegin'),
-          pinchContinue: (event) => fail('Expected tap, got pinchContinue'),
-          pinchEnd: (event) => fail('Expected tap, got pinchEnd'),
-          dragTargetEnter: (a, b, c, d, e, f) =>
-              fail('Expected tap, got dragTargetEnter'),
-          dragTargetOver: (a, b, c, d, e, f, g) =>
-              fail('Expected tap, got dragTargetOver'),
-          dragTargetLeave: (a, b, c) =>
-              fail('Expected tap, got dragTargetLeave'),
-          dragTargetDrop: (a, b, c, d, e, f, g) =>
-              fail('Expected tap, got dragTargetDrop'),
+          orElse: () => fail('Expected tap'),
         );
       });
 
@@ -405,7 +354,7 @@ void main() {
 
         // Assert
         expect(result, isNotNull);
-        result!.when(
+        result!.maybeWhen(
           tap: (event) => fail('Expected dragBegin, got tap'),
           doubleTap: (event) => fail('Expected dragBegin, got doubleTap'),
           longPress: (event) => fail('Expected dragBegin, got longPress'),
@@ -414,20 +363,7 @@ void main() {
             expect(event.isOnObject, isTrue);
             expect(event.hitList, equals(testObjects));
           },
-          dragContinue: (event) => fail('Expected dragBegin, got dragContinue'),
-          dragEnd: (event) => fail('Expected dragBegin, got dragEnd'),
-          pinchBegin: (event) => fail('Expected dragBegin, got pinchBegin'),
-          pinchContinue: (event) =>
-              fail('Expected dragBegin, got pinchContinue'),
-          pinchEnd: (event) => fail('Expected dragBegin, got pinchEnd'),
-          dragTargetEnter: (a, b, c, d, e, f) =>
-              fail('Expected dragBegin, got dragTargetEnter'),
-          dragTargetOver: (a, b, c, d, e, f, g) =>
-              fail('Expected dragBegin, got dragTargetOver'),
-          dragTargetLeave: (a, b, c) =>
-              fail('Expected dragBegin, got dragTargetLeave'),
-          dragTargetDrop: (a, b, c, d, e, f, g) =>
-              fail('Expected dragBegin, got dragTargetDrop'),
+          orElse: () => fail('Expected dragBegin'),
         );
       });
     });
@@ -453,7 +389,7 @@ void main() {
 
         // Assert
         expect(result, isNotNull);
-        result!.when(
+        result!.maybeWhen(
           tap: (event) => fail('Expected scroll, got tap'),
           doubleTap: (event) => fail('Expected scroll, got doubleTap'),
           longPress: (event) => fail('Expected scroll, got longPress'),
@@ -464,20 +400,7 @@ void main() {
             expect(event.scrollDirection, equals(const Offset(0, -1)));
             expect(event.isInertial, isFalse);
           },
-          dragBegin: (event) => fail('Expected scroll, got dragBegin'),
-          dragContinue: (event) => fail('Expected scroll, got dragContinue'),
-          dragEnd: (event) => fail('Expected scroll, got dragEnd'),
-          pinchBegin: (event) => fail('Expected scroll, got pinchBegin'),
-          pinchContinue: (event) => fail('Expected scroll, got pinchContinue'),
-          pinchEnd: (event) => fail('Expected scroll, got pinchEnd'),
-          dragTargetEnter: (a, b, c, d, e, f) =>
-              fail('Expected scroll, got dragTargetEnter'),
-          dragTargetOver: (a, b, c, d, e, f, g) =>
-              fail('Expected scroll, got dragTargetOver'),
-          dragTargetLeave: (a, b, c) =>
-              fail('Expected scroll, got dragTargetLeave'),
-          dragTargetDrop: (a, b, c, d, e, f, g) =>
-              fail('Expected scroll, got dragTargetDrop'),
+          orElse: () => fail('Expected scroll'),
         );
       });
     });
@@ -566,67 +489,19 @@ void main() {
         expect(endResult, isNotNull);
 
         // Assert - Verify all phases were handled correctly
-        startResult!.when(
+        startResult!.maybeWhen(
           dragBegin: (event) => expect(event.eventId, equals('test-1')),
-          tap: (event) => fail('Expected dragBegin'),
-          doubleTap: (event) => fail('Expected dragBegin'),
-          longPress: (event) => fail('Expected dragBegin'),
-          scroll: (event) => fail('Expected dragBegin'),
-          dragContinue: (event) => fail('Expected dragBegin'),
-          dragEnd: (event) => fail('Expected dragBegin'),
-          pinchBegin: (event) => fail('Expected dragBegin'),
-          pinchContinue: (event) => fail('Expected dragBegin'),
-          pinchEnd: (event) => fail('Expected dragBegin'),
-          dragTargetEnter: (a, b, c, d, e, f) =>
-              fail('Expected dragBegin, got dragTargetEnter'),
-          dragTargetOver: (a, b, c, d, e, f, g) =>
-              fail('Expected dragBegin, got dragTargetOver'),
-          dragTargetLeave: (a, b, c) =>
-              fail('Expected dragBegin, got dragTargetLeave'),
-          dragTargetDrop: (a, b, c, d, e, f, g) =>
-              fail('Expected dragBegin, got dragTargetDrop'),
+          orElse: () => fail('Expected dragBegin'),
         );
 
-        moveResult!.when(
+        moveResult!.maybeWhen(
           dragContinue: (event) => expect(event.eventId, equals('test-1')),
-          tap: (event) => fail('Expected dragContinue'),
-          doubleTap: (event) => fail('Expected dragContinue'),
-          longPress: (event) => fail('Expected dragContinue'),
-          scroll: (event) => fail('Expected dragContinue'),
-          dragBegin: (event) => fail('Expected dragContinue'),
-          dragEnd: (event) => fail('Expected dragContinue'),
-          pinchBegin: (event) => fail('Expected dragContinue'),
-          pinchContinue: (event) => fail('Expected dragContinue'),
-          pinchEnd: (event) => fail('Expected dragContinue'),
-          dragTargetEnter: (a, b, c, d, e, f) =>
-              fail('Expected dragContinue, got dragTargetEnter'),
-          dragTargetOver: (a, b, c, d, e, f, g) =>
-              fail('Expected dragContinue, got dragTargetOver'),
-          dragTargetLeave: (a, b, c) =>
-              fail('Expected dragContinue, got dragTargetLeave'),
-          dragTargetDrop: (a, b, c, d, e, f, g) =>
-              fail('Expected dragContinue, got dragTargetDrop'),
+          orElse: () => fail('Expected dragContinue'),
         );
 
-        endResult!.when(
+        endResult!.maybeWhen(
           dragEnd: (event) => expect(event.eventId, equals('test-1')),
-          tap: (event) => fail('Expected dragEnd'),
-          doubleTap: (event) => fail('Expected dragEnd'),
-          longPress: (event) => fail('Expected dragEnd'),
-          scroll: (event) => fail('Expected dragEnd'),
-          dragBegin: (event) => fail('Expected dragEnd'),
-          dragContinue: (event) => fail('Expected dragEnd'),
-          pinchBegin: (event) => fail('Expected dragEnd'),
-          pinchContinue: (event) => fail('Expected dragEnd'),
-          pinchEnd: (event) => fail('Expected dragEnd'),
-          dragTargetEnter: (a, b, c, d, e, f) =>
-              fail('Expected dragEnd, got dragTargetEnter'),
-          dragTargetOver: (a, b, c, d, e, f, g) =>
-              fail('Expected dragEnd, got dragTargetOver'),
-          dragTargetLeave: (a, b, c) =>
-              fail('Expected dragEnd, got dragTargetLeave'),
-          dragTargetDrop: (a, b, c, d, e, f, g) =>
-              fail('Expected dragEnd, got dragTargetDrop'),
+          orElse: () => fail('Expected dragEnd'),
         );
       });
 
@@ -710,6 +585,9 @@ class _MockDiagramObject implements DiagramObjectEntity {
 
   @override
   bool get isInteractive => true;
+
+  @override
+  bool get isSelected => false;
 
   @override
   bool contains(Offset point) {

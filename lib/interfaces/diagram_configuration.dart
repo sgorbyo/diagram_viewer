@@ -228,6 +228,18 @@ class DiagramConfiguration with _$DiagramConfiguration {
     /// with many objects. When false, linear search is used.
     /// Defaults to false for backward compatibility.
     @Default(false) bool enableSpatialIndex,
+
+    /// Stroke color used to render selection highlights around selected objects.
+    /// Defaults to a semi-transparent blue.
+    @Default(Color(0xFF3B82F6)) Color selectedStrokeColor,
+
+    /// Stroke width used to render selection highlights.
+    /// Defaults to 2.0 logical pixels.
+    @Default(2.0) double selectedStrokeWidth,
+
+    /// Optional fill color for selected objects' highlight (not used by default).
+    /// If fully transparent, only the stroke is drawn.
+    @Default(Colors.transparent) Color selectedFillColor,
   }) = _DiagramConfiguration;
 
   /// Creates a default configuration suitable for most diagram types.

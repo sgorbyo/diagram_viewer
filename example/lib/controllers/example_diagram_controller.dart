@@ -288,6 +288,11 @@ class ExampleDiagramController implements IDiagramController {
           }
         }
       },
+      // Selection area events: no-op in example controller (selection owned by app)
+      selectionAreaStart: (eventId, rect, transformSnapshot, timestamp, ids) {},
+      selectionAreaUpdate: (eventId, rect, transformSnapshot, timestamp, ids) {},
+      selectionAreaEnd: (eventId, rect, transformSnapshot, timestamp, ids) {},
+
       // Handle other events with default behavior
       doubleTap: (event) => _handleDoubleTap(event),
       longPress: (event) => _handleLongPress(event),

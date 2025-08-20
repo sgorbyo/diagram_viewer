@@ -162,4 +162,8 @@ abstract class DiagramObjectEntity extends Equatable {
   /// Default implementation returns true. Override this method to implement
   /// interaction logic.
   bool get isInteractive => true;
+
+  /// Presentation hint: whether this object is considered selected.
+  /// The controller's model should drive this flag. Default: false.
+  bool get isSelected => false;
 }

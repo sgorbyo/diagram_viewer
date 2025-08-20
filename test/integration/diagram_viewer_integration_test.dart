@@ -36,7 +36,7 @@ class IntegrationTestController implements IDiagramController {
   void _handlePhysicalEvent(DiagramEventUnion event) {
     _receivedEvents.add(event);
 
-    event.when(
+    event.maybeWhen(
       tap: (tapEvent) {
         // Handle tap events
         if (tapEvent.hitList.isNotEmpty) {
@@ -112,6 +112,7 @@ class IntegrationTestController implements IDiagramController {
         Duration timestamp,
         Offset? snapped,
       ) {},
+      orElse: () {},
     );
   }
 
@@ -264,7 +265,7 @@ void main() {
 
         final lastEvent = controller.receivedEvents.last;
         bool isTapEvent = false;
-        lastEvent.when(
+        lastEvent.maybeWhen(
           tap: (event) => isTapEvent = true,
           doubleTap: (event) => isTapEvent = false,
           longPress: (event) => isTapEvent = false,
@@ -310,6 +311,7 @@ void main() {
             Offset? snapped,
           ) =>
               isTapEvent = false,
+          orElse: () {},
         );
         expect(isTapEvent, isTrue);
       });

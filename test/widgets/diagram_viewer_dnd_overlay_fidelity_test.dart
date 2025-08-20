@@ -117,24 +117,11 @@ void main() {
         ));
     expect(overs, isNotEmpty);
     late Offset expectedCenter;
-    overs.last.when(
-      dragTargetOver:
-          (id, dataPreview, screenPos, logicalPos, snapshot, ts, snapped) {
-        expectedCenter = screenPos;
+    overs.last.maybeWhen(
+      dragTargetOver: (a, b, c, d, e, f, g) {
+        expectedCenter = c;
       },
-      tap: (_) => null,
-      doubleTap: (_) => null,
-      longPress: (_) => null,
-      scroll: (_) => null,
-      dragBegin: (_) => null,
-      dragContinue: (_) => null,
-      dragEnd: (_) => null,
-      pinchBegin: (_) => null,
-      pinchContinue: (_) => null,
-      pinchEnd: (_) => null,
-      dragTargetEnter: (a, b, c, d, e, f) => null,
-      dragTargetLeave: (a, b, c) => null,
-      dragTargetDrop: (a, b, c, d, e, f, g) => null,
+      orElse: () => fail('Expected dragTargetOver'),
     );
     // Debug info
     // ignore: avoid_print

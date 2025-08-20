@@ -216,6 +216,18 @@ mixin _$DiagramConfiguration {
   /// Defaults to false for backward compatibility.
   bool get enableSpatialIndex => throw _privateConstructorUsedError;
 
+  /// Stroke color used to render selection highlights around selected objects.
+  /// Defaults to a semi-transparent blue.
+  Color get selectedStrokeColor => throw _privateConstructorUsedError;
+
+  /// Stroke width used to render selection highlights.
+  /// Defaults to 2.0 logical pixels.
+  double get selectedStrokeWidth => throw _privateConstructorUsedError;
+
+  /// Optional fill color for selected objects' highlight (not used by default).
+  /// If fully transparent, only the stroke is drawn.
+  Color get selectedFillColor => throw _privateConstructorUsedError;
+
   /// Create a copy of DiagramConfiguration
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -259,7 +271,10 @@ abstract class $DiagramConfigurationCopyWith<$Res> {
       bool enableAdaptiveGridDensity,
       double minGridLinePixelSpacing,
       int maxGridLines,
-      bool enableSpatialIndex});
+      bool enableSpatialIndex,
+      Color selectedStrokeColor,
+      double selectedStrokeWidth,
+      Color selectedFillColor});
 }
 
 /// @nodoc
@@ -308,6 +323,9 @@ class _$DiagramConfigurationCopyWithImpl<$Res,
     Object? minGridLinePixelSpacing = null,
     Object? maxGridLines = null,
     Object? enableSpatialIndex = null,
+    Object? selectedStrokeColor = null,
+    Object? selectedStrokeWidth = null,
+    Object? selectedFillColor = null,
   }) {
     return _then(_value.copyWith(
       backgroundColor: null == backgroundColor
@@ -430,6 +448,18 @@ class _$DiagramConfigurationCopyWithImpl<$Res,
           ? _value.enableSpatialIndex
           : enableSpatialIndex // ignore: cast_nullable_to_non_nullable
               as bool,
+      selectedStrokeColor: null == selectedStrokeColor
+          ? _value.selectedStrokeColor
+          : selectedStrokeColor // ignore: cast_nullable_to_non_nullable
+              as Color,
+      selectedStrokeWidth: null == selectedStrokeWidth
+          ? _value.selectedStrokeWidth
+          : selectedStrokeWidth // ignore: cast_nullable_to_non_nullable
+              as double,
+      selectedFillColor: null == selectedFillColor
+          ? _value.selectedFillColor
+          : selectedFillColor // ignore: cast_nullable_to_non_nullable
+              as Color,
     ) as $Val);
   }
 }
@@ -472,7 +502,10 @@ abstract class _$$DiagramConfigurationImplCopyWith<$Res>
       bool enableAdaptiveGridDensity,
       double minGridLinePixelSpacing,
       int maxGridLines,
-      bool enableSpatialIndex});
+      bool enableSpatialIndex,
+      Color selectedStrokeColor,
+      double selectedStrokeWidth,
+      Color selectedFillColor});
 }
 
 /// @nodoc
@@ -518,6 +551,9 @@ class __$$DiagramConfigurationImplCopyWithImpl<$Res>
     Object? minGridLinePixelSpacing = null,
     Object? maxGridLines = null,
     Object? enableSpatialIndex = null,
+    Object? selectedStrokeColor = null,
+    Object? selectedStrokeWidth = null,
+    Object? selectedFillColor = null,
   }) {
     return _then(_$DiagramConfigurationImpl(
       backgroundColor: null == backgroundColor
@@ -640,6 +676,18 @@ class __$$DiagramConfigurationImplCopyWithImpl<$Res>
           ? _value.enableSpatialIndex
           : enableSpatialIndex // ignore: cast_nullable_to_non_nullable
               as bool,
+      selectedStrokeColor: null == selectedStrokeColor
+          ? _value.selectedStrokeColor
+          : selectedStrokeColor // ignore: cast_nullable_to_non_nullable
+              as Color,
+      selectedStrokeWidth: null == selectedStrokeWidth
+          ? _value.selectedStrokeWidth
+          : selectedStrokeWidth // ignore: cast_nullable_to_non_nullable
+              as double,
+      selectedFillColor: null == selectedFillColor
+          ? _value.selectedFillColor
+          : selectedFillColor // ignore: cast_nullable_to_non_nullable
+              as Color,
     ));
   }
 }
@@ -677,7 +725,10 @@ class _$DiagramConfigurationImpl implements _DiagramConfiguration {
       this.enableAdaptiveGridDensity = true,
       this.minGridLinePixelSpacing = 2.0,
       this.maxGridLines = 200,
-      this.enableSpatialIndex = false});
+      this.enableSpatialIndex = false,
+      this.selectedStrokeColor = const Color(0xFF3B82F6),
+      this.selectedStrokeWidth = 2.0,
+      this.selectedFillColor = Colors.transparent});
 
   /// Background color of the diagram area.
   ///
@@ -939,9 +990,27 @@ class _$DiagramConfigurationImpl implements _DiagramConfiguration {
   @JsonKey()
   final bool enableSpatialIndex;
 
+  /// Stroke color used to render selection highlights around selected objects.
+  /// Defaults to a semi-transparent blue.
+  @override
+  @JsonKey()
+  final Color selectedStrokeColor;
+
+  /// Stroke width used to render selection highlights.
+  /// Defaults to 2.0 logical pixels.
+  @override
+  @JsonKey()
+  final double selectedStrokeWidth;
+
+  /// Optional fill color for selected objects' highlight (not used by default).
+  /// If fully transparent, only the stroke is drawn.
+  @override
+  @JsonKey()
+  final Color selectedFillColor;
+
   @override
   String toString() {
-    return 'DiagramConfiguration(backgroundColor: $backgroundColor, outsideColor: $outsideColor, edgeThreshold: $edgeThreshold, maxZoom: $maxZoom, minZoom: $minZoom, overscrollPixels: $overscrollPixels, bounceDuration: $bounceDuration, bounceCurve: $bounceCurve, autoScrollInterval: $autoScrollInterval, autoScrollAcceleration: $autoScrollAcceleration, enableTranslation: $enableTranslation, enableScale: $enableScale, enableRotation: $enableRotation, clipContent: $clipContent, enableInertialScrolling: $enableInertialScrolling, inertialFriction: $inertialFriction, inertialMinStartVelocity: $inertialMinStartVelocity, inertialMinStopVelocity: $inertialMinStopVelocity, inertialMaxDuration: $inertialMaxDuration, enableKeyboardShortcuts: $enableKeyboardShortcuts, enableAccessibility: $enableAccessibility, enableBlocDebugObserver: $enableBlocDebugObserver, snapGridEnabled: $snapGridEnabled, snapGridSpacing: $snapGridSpacing, snapGridOrigin: $snapGridOrigin, showSnapGrid: $showSnapGrid, enableAdaptiveGridDensity: $enableAdaptiveGridDensity, minGridLinePixelSpacing: $minGridLinePixelSpacing, maxGridLines: $maxGridLines, enableSpatialIndex: $enableSpatialIndex)';
+    return 'DiagramConfiguration(backgroundColor: $backgroundColor, outsideColor: $outsideColor, edgeThreshold: $edgeThreshold, maxZoom: $maxZoom, minZoom: $minZoom, overscrollPixels: $overscrollPixels, bounceDuration: $bounceDuration, bounceCurve: $bounceCurve, autoScrollInterval: $autoScrollInterval, autoScrollAcceleration: $autoScrollAcceleration, enableTranslation: $enableTranslation, enableScale: $enableScale, enableRotation: $enableRotation, clipContent: $clipContent, enableInertialScrolling: $enableInertialScrolling, inertialFriction: $inertialFriction, inertialMinStartVelocity: $inertialMinStartVelocity, inertialMinStopVelocity: $inertialMinStopVelocity, inertialMaxDuration: $inertialMaxDuration, enableKeyboardShortcuts: $enableKeyboardShortcuts, enableAccessibility: $enableAccessibility, enableBlocDebugObserver: $enableBlocDebugObserver, snapGridEnabled: $snapGridEnabled, snapGridSpacing: $snapGridSpacing, snapGridOrigin: $snapGridOrigin, showSnapGrid: $showSnapGrid, enableAdaptiveGridDensity: $enableAdaptiveGridDensity, minGridLinePixelSpacing: $minGridLinePixelSpacing, maxGridLines: $maxGridLines, enableSpatialIndex: $enableSpatialIndex, selectedStrokeColor: $selectedStrokeColor, selectedStrokeWidth: $selectedStrokeWidth, selectedFillColor: $selectedFillColor)';
   }
 
   @override
@@ -999,15 +1068,20 @@ class _$DiagramConfigurationImpl implements _DiagramConfiguration {
                 other.snapGridOrigin == snapGridOrigin) &&
             (identical(other.showSnapGrid, showSnapGrid) ||
                 other.showSnapGrid == showSnapGrid) &&
-            (identical(other.enableAdaptiveGridDensity,
-                    enableAdaptiveGridDensity) ||
+            (identical(other.enableAdaptiveGridDensity, enableAdaptiveGridDensity) ||
                 other.enableAdaptiveGridDensity == enableAdaptiveGridDensity) &&
             (identical(other.minGridLinePixelSpacing, minGridLinePixelSpacing) ||
                 other.minGridLinePixelSpacing == minGridLinePixelSpacing) &&
             (identical(other.maxGridLines, maxGridLines) ||
                 other.maxGridLines == maxGridLines) &&
             (identical(other.enableSpatialIndex, enableSpatialIndex) ||
-                other.enableSpatialIndex == enableSpatialIndex));
+                other.enableSpatialIndex == enableSpatialIndex) &&
+            (identical(other.selectedStrokeColor, selectedStrokeColor) ||
+                other.selectedStrokeColor == selectedStrokeColor) &&
+            (identical(other.selectedStrokeWidth, selectedStrokeWidth) ||
+                other.selectedStrokeWidth == selectedStrokeWidth) &&
+            (identical(other.selectedFillColor, selectedFillColor) ||
+                other.selectedFillColor == selectedFillColor));
   }
 
   @override
@@ -1042,7 +1116,10 @@ class _$DiagramConfigurationImpl implements _DiagramConfiguration {
         enableAdaptiveGridDensity,
         minGridLinePixelSpacing,
         maxGridLines,
-        enableSpatialIndex
+        enableSpatialIndex,
+        selectedStrokeColor,
+        selectedStrokeWidth,
+        selectedFillColor
       ]);
 
   /// Create a copy of DiagramConfiguration
@@ -1087,7 +1164,10 @@ abstract class _DiagramConfiguration implements DiagramConfiguration {
       final bool enableAdaptiveGridDensity,
       final double minGridLinePixelSpacing,
       final int maxGridLines,
-      final bool enableSpatialIndex}) = _$DiagramConfigurationImpl;
+      final bool enableSpatialIndex,
+      final Color selectedStrokeColor,
+      final double selectedStrokeWidth,
+      final Color selectedFillColor}) = _$DiagramConfigurationImpl;
 
   /// Background color of the diagram area.
   ///
@@ -1318,6 +1398,21 @@ abstract class _DiagramConfiguration implements DiagramConfiguration {
   /// Defaults to false for backward compatibility.
   @override
   bool get enableSpatialIndex;
+
+  /// Stroke color used to render selection highlights around selected objects.
+  /// Defaults to a semi-transparent blue.
+  @override
+  Color get selectedStrokeColor;
+
+  /// Stroke width used to render selection highlights.
+  /// Defaults to 2.0 logical pixels.
+  @override
+  double get selectedStrokeWidth;
+
+  /// Optional fill color for selected objects' highlight (not used by default).
+  /// If fully transparent, only the stroke is drawn.
+  @override
+  Color get selectedFillColor;
 
   /// Create a copy of DiagramConfiguration
   /// with the given fields replaced by the non-null parameter values.
