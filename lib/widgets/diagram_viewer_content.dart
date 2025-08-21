@@ -206,10 +206,8 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
       return;
     }
 
-    transformBloc.add(TransformEvent.pan(
-      delta: delta,
-      currentTransform: currentTransform,
-    ));
+    _safePanDirect(transformBloc, delta, currentTransform,
+        contextName: 'auto-scroll-step');
   }
 
   // Safe inertia wrapper that respects selection state
@@ -1635,10 +1633,8 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
                   preserveCentering: true,
                   recenterSmallContent: false,
                 );
-                transformBlocNow.add(TransformEvent.pan(
-                  delta: delta,
-                  currentTransform: stateBefore.transform,
-                ));
+                _safePanDirect(transformBlocNow, delta, stateBefore.transform,
+                    contextName: 'wheel-inertia-1');
                 final deviates =
                     (proposed.translation - dynamicCapped.translation)
                             .distance >
@@ -1857,10 +1853,8 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
                   preserveCentering: true,
                   recenterSmallContent: false,
                 );
-                transformBlocNow.add(TransformEvent.pan(
-                  delta: delta,
-                  currentTransform: stateBefore.transform,
-                ));
+                _safePanDirect(transformBlocNow, delta, stateBefore.transform,
+                    contextName: 'wheel-inertia-2');
                 final deviates =
                     (proposed.translation - dynamicCapped.translation)
                             .distance >
@@ -2114,10 +2108,8 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
           debugPrint(
               '[Viewer] Gesture->PAN (trackpad) applied=$effective from input=$panDelta residual_before=$residualBefore');
         }
-        transformBloc.add(TransformEvent.pan(
-          delta: effective,
-          currentTransform: tNow,
-        ));
+        _safePanDirect(transformBloc, effective, tNow,
+            contextName: 'gesture-trackpad');
         _gestureResidual = candidate - effective;
       }
       _wasTwoFingerPan = true;
@@ -2180,10 +2172,8 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
           debugPrint(
               '[Viewer] Gesture->PAN (MM fallback) applied=$effective2 from input=$panDelta residual_before=$residualBefore2');
         }
-        transformBloc.add(TransformEvent.pan(
-          delta: effective2,
-          currentTransform: tNow2,
-        ));
+        _safePanDirect(transformBloc, effective2, tNow2,
+            contextName: 'gesture-mm-fallback');
         _gestureResidual = candidate2 - effective2;
       }
       _gesturePanSessionActive = true;
@@ -2333,10 +2323,8 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
               preserveCentering: true,
               recenterSmallContent: false,
             );
-            transformBloc.add(TransformEvent.pan(
-              delta: delta,
-              currentTransform: stateBefore.transform,
-            ));
+            _safePanDirect(transformBloc, delta, stateBefore.transform,
+                contextName: 'trackpad-inertia');
             // Trackpad inertia: allow a bit more elastic room before bouncing
             final deviates =
                 (proposed.translation - dynamicCapped.translation).distance >
@@ -2389,10 +2377,8 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
         final Offset kick =
             Offset(initialV.dx * seconds, initialV.dy * seconds);
         final stateKick = transformBloc.state;
-        transformBloc.add(TransformEvent.pan(
-          delta: kick,
-          currentTransform: stateKick.transform,
-        ));
+        _safePanDirect(transformBloc, kick, stateKick.transform,
+            contextName: 'trackpad-kick');
       } else {
         _recentPointerDeltas.clear();
         _recentPointerDeltaMs.clear();
