@@ -206,8 +206,10 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
       return;
     }
 
-    _safePanDirect(transformBloc, delta, currentTransform,
-        contextName: 'auto-scroll-step');
+    transformBloc.add(TransformEvent.pan(
+      delta: delta,
+      currentTransform: currentTransform,
+    ));
   }
 
   // Safe inertia wrapper that respects selection state
