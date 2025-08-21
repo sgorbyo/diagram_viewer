@@ -49,6 +49,9 @@ class MockDiagramController implements IDiagramController {
         showDragOverlay: (_, __) {},
         updateDragOverlay: (_) {},
         hideDragOverlay: () {},
+        showSelectionOverlay: (_) {},
+        updateSelectionRect: (_) {},
+        hideSelectionOverlay: () {},
         setCursor: (_) {},
       );
     });

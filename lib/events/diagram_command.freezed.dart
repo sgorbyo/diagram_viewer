@@ -32,6 +32,9 @@ mixin _$DiagramCommand {
         showDragOverlay,
     required TResult Function(Offset position) updateDragOverlay,
     required TResult Function() hideDragOverlay,
+    required TResult Function(Offset startPosition) showSelectionOverlay,
+    required TResult Function(Offset currentPosition) updateSelectionRect,
+    required TResult Function() hideSelectionOverlay,
     required TResult Function(CursorEffect effect) setCursor,
   }) =>
       throw _privateConstructorUsedError;
@@ -49,6 +52,9 @@ mixin _$DiagramCommand {
     TResult? Function(Object? ghostSpec, Offset position)? showDragOverlay,
     TResult? Function(Offset position)? updateDragOverlay,
     TResult? Function()? hideDragOverlay,
+    TResult? Function(Offset startPosition)? showSelectionOverlay,
+    TResult? Function(Offset currentPosition)? updateSelectionRect,
+    TResult? Function()? hideSelectionOverlay,
     TResult? Function(CursorEffect effect)? setCursor,
   }) =>
       throw _privateConstructorUsedError;
@@ -65,6 +71,9 @@ mixin _$DiagramCommand {
     TResult Function(Object? ghostSpec, Offset position)? showDragOverlay,
     TResult Function(Offset position)? updateDragOverlay,
     TResult Function()? hideDragOverlay,
+    TResult Function(Offset startPosition)? showSelectionOverlay,
+    TResult Function(Offset currentPosition)? updateSelectionRect,
+    TResult Function()? hideSelectionOverlay,
     TResult Function(CursorEffect effect)? setCursor,
     required TResult orElse(),
   }) =>
@@ -81,6 +90,12 @@ mixin _$DiagramCommand {
     required TResult Function(ShowDragOverlayCommand value) showDragOverlay,
     required TResult Function(UpdateDragOverlayCommand value) updateDragOverlay,
     required TResult Function(HideDragOverlayCommand value) hideDragOverlay,
+    required TResult Function(ShowSelectionOverlayCommand value)
+        showSelectionOverlay,
+    required TResult Function(UpdateSelectionRectCommand value)
+        updateSelectionRect,
+    required TResult Function(HideSelectionOverlayCommand value)
+        hideSelectionOverlay,
     required TResult Function(_SetCursorCommand value) setCursor,
   }) =>
       throw _privateConstructorUsedError;
@@ -95,6 +110,9 @@ mixin _$DiagramCommand {
     TResult? Function(ShowDragOverlayCommand value)? showDragOverlay,
     TResult? Function(UpdateDragOverlayCommand value)? updateDragOverlay,
     TResult? Function(HideDragOverlayCommand value)? hideDragOverlay,
+    TResult? Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
+    TResult? Function(UpdateSelectionRectCommand value)? updateSelectionRect,
+    TResult? Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
     TResult? Function(_SetCursorCommand value)? setCursor,
   }) =>
       throw _privateConstructorUsedError;
@@ -109,6 +127,9 @@ mixin _$DiagramCommand {
     TResult Function(ShowDragOverlayCommand value)? showDragOverlay,
     TResult Function(UpdateDragOverlayCommand value)? updateDragOverlay,
     TResult Function(HideDragOverlayCommand value)? hideDragOverlay,
+    TResult Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
+    TResult Function(UpdateSelectionRectCommand value)? updateSelectionRect,
+    TResult Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
     TResult Function(_SetCursorCommand value)? setCursor,
     required TResult orElse(),
   }) =>
@@ -233,6 +254,9 @@ class _$ApplyDefaultPanZoomCommandImpl extends ApplyDefaultPanZoomCommand {
         showDragOverlay,
     required TResult Function(Offset position) updateDragOverlay,
     required TResult Function() hideDragOverlay,
+    required TResult Function(Offset startPosition) showSelectionOverlay,
+    required TResult Function(Offset currentPosition) updateSelectionRect,
+    required TResult Function() hideSelectionOverlay,
     required TResult Function(CursorEffect effect) setCursor,
   }) {
     return applyDefaultPanZoom(origin);
@@ -253,6 +277,9 @@ class _$ApplyDefaultPanZoomCommandImpl extends ApplyDefaultPanZoomCommand {
     TResult? Function(Object? ghostSpec, Offset position)? showDragOverlay,
     TResult? Function(Offset position)? updateDragOverlay,
     TResult? Function()? hideDragOverlay,
+    TResult? Function(Offset startPosition)? showSelectionOverlay,
+    TResult? Function(Offset currentPosition)? updateSelectionRect,
+    TResult? Function()? hideSelectionOverlay,
     TResult? Function(CursorEffect effect)? setCursor,
   }) {
     return applyDefaultPanZoom?.call(origin);
@@ -272,6 +299,9 @@ class _$ApplyDefaultPanZoomCommandImpl extends ApplyDefaultPanZoomCommand {
     TResult Function(Object? ghostSpec, Offset position)? showDragOverlay,
     TResult Function(Offset position)? updateDragOverlay,
     TResult Function()? hideDragOverlay,
+    TResult Function(Offset startPosition)? showSelectionOverlay,
+    TResult Function(Offset currentPosition)? updateSelectionRect,
+    TResult Function()? hideSelectionOverlay,
     TResult Function(CursorEffect effect)? setCursor,
     required TResult orElse(),
   }) {
@@ -294,6 +324,12 @@ class _$ApplyDefaultPanZoomCommandImpl extends ApplyDefaultPanZoomCommand {
     required TResult Function(ShowDragOverlayCommand value) showDragOverlay,
     required TResult Function(UpdateDragOverlayCommand value) updateDragOverlay,
     required TResult Function(HideDragOverlayCommand value) hideDragOverlay,
+    required TResult Function(ShowSelectionOverlayCommand value)
+        showSelectionOverlay,
+    required TResult Function(UpdateSelectionRectCommand value)
+        updateSelectionRect,
+    required TResult Function(HideSelectionOverlayCommand value)
+        hideSelectionOverlay,
     required TResult Function(_SetCursorCommand value) setCursor,
   }) {
     return applyDefaultPanZoom(this);
@@ -311,6 +347,9 @@ class _$ApplyDefaultPanZoomCommandImpl extends ApplyDefaultPanZoomCommand {
     TResult? Function(ShowDragOverlayCommand value)? showDragOverlay,
     TResult? Function(UpdateDragOverlayCommand value)? updateDragOverlay,
     TResult? Function(HideDragOverlayCommand value)? hideDragOverlay,
+    TResult? Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
+    TResult? Function(UpdateSelectionRectCommand value)? updateSelectionRect,
+    TResult? Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
     TResult? Function(_SetCursorCommand value)? setCursor,
   }) {
     return applyDefaultPanZoom?.call(this);
@@ -328,6 +367,9 @@ class _$ApplyDefaultPanZoomCommandImpl extends ApplyDefaultPanZoomCommand {
     TResult Function(ShowDragOverlayCommand value)? showDragOverlay,
     TResult Function(UpdateDragOverlayCommand value)? updateDragOverlay,
     TResult Function(HideDragOverlayCommand value)? hideDragOverlay,
+    TResult Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
+    TResult Function(UpdateSelectionRectCommand value)? updateSelectionRect,
+    TResult Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
     TResult Function(_SetCursorCommand value)? setCursor,
     required TResult orElse(),
   }) {
@@ -448,6 +490,9 @@ class _$SetTransformCommandImpl extends SetTransformCommand {
         showDragOverlay,
     required TResult Function(Offset position) updateDragOverlay,
     required TResult Function() hideDragOverlay,
+    required TResult Function(Offset startPosition) showSelectionOverlay,
+    required TResult Function(Offset currentPosition) updateSelectionRect,
+    required TResult Function() hideSelectionOverlay,
     required TResult Function(CursorEffect effect) setCursor,
   }) {
     return setTransform(transform);
@@ -468,6 +513,9 @@ class _$SetTransformCommandImpl extends SetTransformCommand {
     TResult? Function(Object? ghostSpec, Offset position)? showDragOverlay,
     TResult? Function(Offset position)? updateDragOverlay,
     TResult? Function()? hideDragOverlay,
+    TResult? Function(Offset startPosition)? showSelectionOverlay,
+    TResult? Function(Offset currentPosition)? updateSelectionRect,
+    TResult? Function()? hideSelectionOverlay,
     TResult? Function(CursorEffect effect)? setCursor,
   }) {
     return setTransform?.call(transform);
@@ -487,6 +535,9 @@ class _$SetTransformCommandImpl extends SetTransformCommand {
     TResult Function(Object? ghostSpec, Offset position)? showDragOverlay,
     TResult Function(Offset position)? updateDragOverlay,
     TResult Function()? hideDragOverlay,
+    TResult Function(Offset startPosition)? showSelectionOverlay,
+    TResult Function(Offset currentPosition)? updateSelectionRect,
+    TResult Function()? hideSelectionOverlay,
     TResult Function(CursorEffect effect)? setCursor,
     required TResult orElse(),
   }) {
@@ -509,6 +560,12 @@ class _$SetTransformCommandImpl extends SetTransformCommand {
     required TResult Function(ShowDragOverlayCommand value) showDragOverlay,
     required TResult Function(UpdateDragOverlayCommand value) updateDragOverlay,
     required TResult Function(HideDragOverlayCommand value) hideDragOverlay,
+    required TResult Function(ShowSelectionOverlayCommand value)
+        showSelectionOverlay,
+    required TResult Function(UpdateSelectionRectCommand value)
+        updateSelectionRect,
+    required TResult Function(HideSelectionOverlayCommand value)
+        hideSelectionOverlay,
     required TResult Function(_SetCursorCommand value) setCursor,
   }) {
     return setTransform(this);
@@ -526,6 +583,9 @@ class _$SetTransformCommandImpl extends SetTransformCommand {
     TResult? Function(ShowDragOverlayCommand value)? showDragOverlay,
     TResult? Function(UpdateDragOverlayCommand value)? updateDragOverlay,
     TResult? Function(HideDragOverlayCommand value)? hideDragOverlay,
+    TResult? Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
+    TResult? Function(UpdateSelectionRectCommand value)? updateSelectionRect,
+    TResult? Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
     TResult? Function(_SetCursorCommand value)? setCursor,
   }) {
     return setTransform?.call(this);
@@ -543,6 +603,9 @@ class _$SetTransformCommandImpl extends SetTransformCommand {
     TResult Function(ShowDragOverlayCommand value)? showDragOverlay,
     TResult Function(UpdateDragOverlayCommand value)? updateDragOverlay,
     TResult Function(HideDragOverlayCommand value)? hideDragOverlay,
+    TResult Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
+    TResult Function(UpdateSelectionRectCommand value)? updateSelectionRect,
+    TResult Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
     TResult Function(_SetCursorCommand value)? setCursor,
     required TResult orElse(),
   }) {
@@ -670,6 +733,9 @@ class _$RedrawCommandImpl extends RedrawCommand {
         showDragOverlay,
     required TResult Function(Offset position) updateDragOverlay,
     required TResult Function() hideDragOverlay,
+    required TResult Function(Offset startPosition) showSelectionOverlay,
+    required TResult Function(Offset currentPosition) updateSelectionRect,
+    required TResult Function() hideSelectionOverlay,
     required TResult Function(CursorEffect effect) setCursor,
   }) {
     return redraw(renderables, logicalExtent);
@@ -690,6 +756,9 @@ class _$RedrawCommandImpl extends RedrawCommand {
     TResult? Function(Object? ghostSpec, Offset position)? showDragOverlay,
     TResult? Function(Offset position)? updateDragOverlay,
     TResult? Function()? hideDragOverlay,
+    TResult? Function(Offset startPosition)? showSelectionOverlay,
+    TResult? Function(Offset currentPosition)? updateSelectionRect,
+    TResult? Function()? hideSelectionOverlay,
     TResult? Function(CursorEffect effect)? setCursor,
   }) {
     return redraw?.call(renderables, logicalExtent);
@@ -709,6 +778,9 @@ class _$RedrawCommandImpl extends RedrawCommand {
     TResult Function(Object? ghostSpec, Offset position)? showDragOverlay,
     TResult Function(Offset position)? updateDragOverlay,
     TResult Function()? hideDragOverlay,
+    TResult Function(Offset startPosition)? showSelectionOverlay,
+    TResult Function(Offset currentPosition)? updateSelectionRect,
+    TResult Function()? hideSelectionOverlay,
     TResult Function(CursorEffect effect)? setCursor,
     required TResult orElse(),
   }) {
@@ -731,6 +803,12 @@ class _$RedrawCommandImpl extends RedrawCommand {
     required TResult Function(ShowDragOverlayCommand value) showDragOverlay,
     required TResult Function(UpdateDragOverlayCommand value) updateDragOverlay,
     required TResult Function(HideDragOverlayCommand value) hideDragOverlay,
+    required TResult Function(ShowSelectionOverlayCommand value)
+        showSelectionOverlay,
+    required TResult Function(UpdateSelectionRectCommand value)
+        updateSelectionRect,
+    required TResult Function(HideSelectionOverlayCommand value)
+        hideSelectionOverlay,
     required TResult Function(_SetCursorCommand value) setCursor,
   }) {
     return redraw(this);
@@ -748,6 +826,9 @@ class _$RedrawCommandImpl extends RedrawCommand {
     TResult? Function(ShowDragOverlayCommand value)? showDragOverlay,
     TResult? Function(UpdateDragOverlayCommand value)? updateDragOverlay,
     TResult? Function(HideDragOverlayCommand value)? hideDragOverlay,
+    TResult? Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
+    TResult? Function(UpdateSelectionRectCommand value)? updateSelectionRect,
+    TResult? Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
     TResult? Function(_SetCursorCommand value)? setCursor,
   }) {
     return redraw?.call(this);
@@ -765,6 +846,9 @@ class _$RedrawCommandImpl extends RedrawCommand {
     TResult Function(ShowDragOverlayCommand value)? showDragOverlay,
     TResult Function(UpdateDragOverlayCommand value)? updateDragOverlay,
     TResult Function(HideDragOverlayCommand value)? hideDragOverlay,
+    TResult Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
+    TResult Function(UpdateSelectionRectCommand value)? updateSelectionRect,
+    TResult Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
     TResult Function(_SetCursorCommand value)? setCursor,
     required TResult orElse(),
   }) {
@@ -902,6 +986,9 @@ class _$ElasticBounceBackCommandImpl extends ElasticBounceBackCommand {
         showDragOverlay,
     required TResult Function(Offset position) updateDragOverlay,
     required TResult Function() hideDragOverlay,
+    required TResult Function(Offset startPosition) showSelectionOverlay,
+    required TResult Function(Offset currentPosition) updateSelectionRect,
+    required TResult Function() hideSelectionOverlay,
     required TResult Function(CursorEffect effect) setCursor,
   }) {
     return elasticBounceBack(targetTransform, duration);
@@ -922,6 +1009,9 @@ class _$ElasticBounceBackCommandImpl extends ElasticBounceBackCommand {
     TResult? Function(Object? ghostSpec, Offset position)? showDragOverlay,
     TResult? Function(Offset position)? updateDragOverlay,
     TResult? Function()? hideDragOverlay,
+    TResult? Function(Offset startPosition)? showSelectionOverlay,
+    TResult? Function(Offset currentPosition)? updateSelectionRect,
+    TResult? Function()? hideSelectionOverlay,
     TResult? Function(CursorEffect effect)? setCursor,
   }) {
     return elasticBounceBack?.call(targetTransform, duration);
@@ -941,6 +1031,9 @@ class _$ElasticBounceBackCommandImpl extends ElasticBounceBackCommand {
     TResult Function(Object? ghostSpec, Offset position)? showDragOverlay,
     TResult Function(Offset position)? updateDragOverlay,
     TResult Function()? hideDragOverlay,
+    TResult Function(Offset startPosition)? showSelectionOverlay,
+    TResult Function(Offset currentPosition)? updateSelectionRect,
+    TResult Function()? hideSelectionOverlay,
     TResult Function(CursorEffect effect)? setCursor,
     required TResult orElse(),
   }) {
@@ -963,6 +1056,12 @@ class _$ElasticBounceBackCommandImpl extends ElasticBounceBackCommand {
     required TResult Function(ShowDragOverlayCommand value) showDragOverlay,
     required TResult Function(UpdateDragOverlayCommand value) updateDragOverlay,
     required TResult Function(HideDragOverlayCommand value) hideDragOverlay,
+    required TResult Function(ShowSelectionOverlayCommand value)
+        showSelectionOverlay,
+    required TResult Function(UpdateSelectionRectCommand value)
+        updateSelectionRect,
+    required TResult Function(HideSelectionOverlayCommand value)
+        hideSelectionOverlay,
     required TResult Function(_SetCursorCommand value) setCursor,
   }) {
     return elasticBounceBack(this);
@@ -980,6 +1079,9 @@ class _$ElasticBounceBackCommandImpl extends ElasticBounceBackCommand {
     TResult? Function(ShowDragOverlayCommand value)? showDragOverlay,
     TResult? Function(UpdateDragOverlayCommand value)? updateDragOverlay,
     TResult? Function(HideDragOverlayCommand value)? hideDragOverlay,
+    TResult? Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
+    TResult? Function(UpdateSelectionRectCommand value)? updateSelectionRect,
+    TResult? Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
     TResult? Function(_SetCursorCommand value)? setCursor,
   }) {
     return elasticBounceBack?.call(this);
@@ -997,6 +1099,9 @@ class _$ElasticBounceBackCommandImpl extends ElasticBounceBackCommand {
     TResult Function(ShowDragOverlayCommand value)? showDragOverlay,
     TResult Function(UpdateDragOverlayCommand value)? updateDragOverlay,
     TResult Function(HideDragOverlayCommand value)? hideDragOverlay,
+    TResult Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
+    TResult Function(UpdateSelectionRectCommand value)? updateSelectionRect,
+    TResult Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
     TResult Function(_SetCursorCommand value)? setCursor,
     required TResult orElse(),
   }) {
@@ -1121,6 +1226,9 @@ class _$AutoScrollStepCommandImpl extends AutoScrollStepCommand {
         showDragOverlay,
     required TResult Function(Offset position) updateDragOverlay,
     required TResult Function() hideDragOverlay,
+    required TResult Function(Offset startPosition) showSelectionOverlay,
+    required TResult Function(Offset currentPosition) updateSelectionRect,
+    required TResult Function() hideSelectionOverlay,
     required TResult Function(CursorEffect effect) setCursor,
   }) {
     return autoScrollStep(velocity, stepDuration);
@@ -1141,6 +1249,9 @@ class _$AutoScrollStepCommandImpl extends AutoScrollStepCommand {
     TResult? Function(Object? ghostSpec, Offset position)? showDragOverlay,
     TResult? Function(Offset position)? updateDragOverlay,
     TResult? Function()? hideDragOverlay,
+    TResult? Function(Offset startPosition)? showSelectionOverlay,
+    TResult? Function(Offset currentPosition)? updateSelectionRect,
+    TResult? Function()? hideSelectionOverlay,
     TResult? Function(CursorEffect effect)? setCursor,
   }) {
     return autoScrollStep?.call(velocity, stepDuration);
@@ -1160,6 +1271,9 @@ class _$AutoScrollStepCommandImpl extends AutoScrollStepCommand {
     TResult Function(Object? ghostSpec, Offset position)? showDragOverlay,
     TResult Function(Offset position)? updateDragOverlay,
     TResult Function()? hideDragOverlay,
+    TResult Function(Offset startPosition)? showSelectionOverlay,
+    TResult Function(Offset currentPosition)? updateSelectionRect,
+    TResult Function()? hideSelectionOverlay,
     TResult Function(CursorEffect effect)? setCursor,
     required TResult orElse(),
   }) {
@@ -1182,6 +1296,12 @@ class _$AutoScrollStepCommandImpl extends AutoScrollStepCommand {
     required TResult Function(ShowDragOverlayCommand value) showDragOverlay,
     required TResult Function(UpdateDragOverlayCommand value) updateDragOverlay,
     required TResult Function(HideDragOverlayCommand value) hideDragOverlay,
+    required TResult Function(ShowSelectionOverlayCommand value)
+        showSelectionOverlay,
+    required TResult Function(UpdateSelectionRectCommand value)
+        updateSelectionRect,
+    required TResult Function(HideSelectionOverlayCommand value)
+        hideSelectionOverlay,
     required TResult Function(_SetCursorCommand value) setCursor,
   }) {
     return autoScrollStep(this);
@@ -1199,6 +1319,9 @@ class _$AutoScrollStepCommandImpl extends AutoScrollStepCommand {
     TResult? Function(ShowDragOverlayCommand value)? showDragOverlay,
     TResult? Function(UpdateDragOverlayCommand value)? updateDragOverlay,
     TResult? Function(HideDragOverlayCommand value)? hideDragOverlay,
+    TResult? Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
+    TResult? Function(UpdateSelectionRectCommand value)? updateSelectionRect,
+    TResult? Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
     TResult? Function(_SetCursorCommand value)? setCursor,
   }) {
     return autoScrollStep?.call(this);
@@ -1216,6 +1339,9 @@ class _$AutoScrollStepCommandImpl extends AutoScrollStepCommand {
     TResult Function(ShowDragOverlayCommand value)? showDragOverlay,
     TResult Function(UpdateDragOverlayCommand value)? updateDragOverlay,
     TResult Function(HideDragOverlayCommand value)? hideDragOverlay,
+    TResult Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
+    TResult Function(UpdateSelectionRectCommand value)? updateSelectionRect,
+    TResult Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
     TResult Function(_SetCursorCommand value)? setCursor,
     required TResult orElse(),
   }) {
@@ -1299,6 +1425,9 @@ class _$StopAutoScrollCommandImpl extends StopAutoScrollCommand {
         showDragOverlay,
     required TResult Function(Offset position) updateDragOverlay,
     required TResult Function() hideDragOverlay,
+    required TResult Function(Offset startPosition) showSelectionOverlay,
+    required TResult Function(Offset currentPosition) updateSelectionRect,
+    required TResult Function() hideSelectionOverlay,
     required TResult Function(CursorEffect effect) setCursor,
   }) {
     return stopAutoScroll();
@@ -1319,6 +1448,9 @@ class _$StopAutoScrollCommandImpl extends StopAutoScrollCommand {
     TResult? Function(Object? ghostSpec, Offset position)? showDragOverlay,
     TResult? Function(Offset position)? updateDragOverlay,
     TResult? Function()? hideDragOverlay,
+    TResult? Function(Offset startPosition)? showSelectionOverlay,
+    TResult? Function(Offset currentPosition)? updateSelectionRect,
+    TResult? Function()? hideSelectionOverlay,
     TResult? Function(CursorEffect effect)? setCursor,
   }) {
     return stopAutoScroll?.call();
@@ -1338,6 +1470,9 @@ class _$StopAutoScrollCommandImpl extends StopAutoScrollCommand {
     TResult Function(Object? ghostSpec, Offset position)? showDragOverlay,
     TResult Function(Offset position)? updateDragOverlay,
     TResult Function()? hideDragOverlay,
+    TResult Function(Offset startPosition)? showSelectionOverlay,
+    TResult Function(Offset currentPosition)? updateSelectionRect,
+    TResult Function()? hideSelectionOverlay,
     TResult Function(CursorEffect effect)? setCursor,
     required TResult orElse(),
   }) {
@@ -1360,6 +1495,12 @@ class _$StopAutoScrollCommandImpl extends StopAutoScrollCommand {
     required TResult Function(ShowDragOverlayCommand value) showDragOverlay,
     required TResult Function(UpdateDragOverlayCommand value) updateDragOverlay,
     required TResult Function(HideDragOverlayCommand value) hideDragOverlay,
+    required TResult Function(ShowSelectionOverlayCommand value)
+        showSelectionOverlay,
+    required TResult Function(UpdateSelectionRectCommand value)
+        updateSelectionRect,
+    required TResult Function(HideSelectionOverlayCommand value)
+        hideSelectionOverlay,
     required TResult Function(_SetCursorCommand value) setCursor,
   }) {
     return stopAutoScroll(this);
@@ -1377,6 +1518,9 @@ class _$StopAutoScrollCommandImpl extends StopAutoScrollCommand {
     TResult? Function(ShowDragOverlayCommand value)? showDragOverlay,
     TResult? Function(UpdateDragOverlayCommand value)? updateDragOverlay,
     TResult? Function(HideDragOverlayCommand value)? hideDragOverlay,
+    TResult? Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
+    TResult? Function(UpdateSelectionRectCommand value)? updateSelectionRect,
+    TResult? Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
     TResult? Function(_SetCursorCommand value)? setCursor,
   }) {
     return stopAutoScroll?.call(this);
@@ -1394,6 +1538,9 @@ class _$StopAutoScrollCommandImpl extends StopAutoScrollCommand {
     TResult Function(ShowDragOverlayCommand value)? showDragOverlay,
     TResult Function(UpdateDragOverlayCommand value)? updateDragOverlay,
     TResult Function(HideDragOverlayCommand value)? hideDragOverlay,
+    TResult Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
+    TResult Function(UpdateSelectionRectCommand value)? updateSelectionRect,
+    TResult Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
     TResult Function(_SetCursorCommand value)? setCursor,
     required TResult orElse(),
   }) {
@@ -1502,6 +1649,9 @@ class _$ShowDragOverlayCommandImpl extends ShowDragOverlayCommand {
         showDragOverlay,
     required TResult Function(Offset position) updateDragOverlay,
     required TResult Function() hideDragOverlay,
+    required TResult Function(Offset startPosition) showSelectionOverlay,
+    required TResult Function(Offset currentPosition) updateSelectionRect,
+    required TResult Function() hideSelectionOverlay,
     required TResult Function(CursorEffect effect) setCursor,
   }) {
     return showDragOverlay(ghostSpec, position);
@@ -1522,6 +1672,9 @@ class _$ShowDragOverlayCommandImpl extends ShowDragOverlayCommand {
     TResult? Function(Object? ghostSpec, Offset position)? showDragOverlay,
     TResult? Function(Offset position)? updateDragOverlay,
     TResult? Function()? hideDragOverlay,
+    TResult? Function(Offset startPosition)? showSelectionOverlay,
+    TResult? Function(Offset currentPosition)? updateSelectionRect,
+    TResult? Function()? hideSelectionOverlay,
     TResult? Function(CursorEffect effect)? setCursor,
   }) {
     return showDragOverlay?.call(ghostSpec, position);
@@ -1541,6 +1694,9 @@ class _$ShowDragOverlayCommandImpl extends ShowDragOverlayCommand {
     TResult Function(Object? ghostSpec, Offset position)? showDragOverlay,
     TResult Function(Offset position)? updateDragOverlay,
     TResult Function()? hideDragOverlay,
+    TResult Function(Offset startPosition)? showSelectionOverlay,
+    TResult Function(Offset currentPosition)? updateSelectionRect,
+    TResult Function()? hideSelectionOverlay,
     TResult Function(CursorEffect effect)? setCursor,
     required TResult orElse(),
   }) {
@@ -1563,6 +1719,12 @@ class _$ShowDragOverlayCommandImpl extends ShowDragOverlayCommand {
     required TResult Function(ShowDragOverlayCommand value) showDragOverlay,
     required TResult Function(UpdateDragOverlayCommand value) updateDragOverlay,
     required TResult Function(HideDragOverlayCommand value) hideDragOverlay,
+    required TResult Function(ShowSelectionOverlayCommand value)
+        showSelectionOverlay,
+    required TResult Function(UpdateSelectionRectCommand value)
+        updateSelectionRect,
+    required TResult Function(HideSelectionOverlayCommand value)
+        hideSelectionOverlay,
     required TResult Function(_SetCursorCommand value) setCursor,
   }) {
     return showDragOverlay(this);
@@ -1580,6 +1742,9 @@ class _$ShowDragOverlayCommandImpl extends ShowDragOverlayCommand {
     TResult? Function(ShowDragOverlayCommand value)? showDragOverlay,
     TResult? Function(UpdateDragOverlayCommand value)? updateDragOverlay,
     TResult? Function(HideDragOverlayCommand value)? hideDragOverlay,
+    TResult? Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
+    TResult? Function(UpdateSelectionRectCommand value)? updateSelectionRect,
+    TResult? Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
     TResult? Function(_SetCursorCommand value)? setCursor,
   }) {
     return showDragOverlay?.call(this);
@@ -1597,6 +1762,9 @@ class _$ShowDragOverlayCommandImpl extends ShowDragOverlayCommand {
     TResult Function(ShowDragOverlayCommand value)? showDragOverlay,
     TResult Function(UpdateDragOverlayCommand value)? updateDragOverlay,
     TResult Function(HideDragOverlayCommand value)? hideDragOverlay,
+    TResult Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
+    TResult Function(UpdateSelectionRectCommand value)? updateSelectionRect,
+    TResult Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
     TResult Function(_SetCursorCommand value)? setCursor,
     required TResult orElse(),
   }) {
@@ -1709,6 +1877,9 @@ class _$UpdateDragOverlayCommandImpl extends UpdateDragOverlayCommand {
         showDragOverlay,
     required TResult Function(Offset position) updateDragOverlay,
     required TResult Function() hideDragOverlay,
+    required TResult Function(Offset startPosition) showSelectionOverlay,
+    required TResult Function(Offset currentPosition) updateSelectionRect,
+    required TResult Function() hideSelectionOverlay,
     required TResult Function(CursorEffect effect) setCursor,
   }) {
     return updateDragOverlay(position);
@@ -1729,6 +1900,9 @@ class _$UpdateDragOverlayCommandImpl extends UpdateDragOverlayCommand {
     TResult? Function(Object? ghostSpec, Offset position)? showDragOverlay,
     TResult? Function(Offset position)? updateDragOverlay,
     TResult? Function()? hideDragOverlay,
+    TResult? Function(Offset startPosition)? showSelectionOverlay,
+    TResult? Function(Offset currentPosition)? updateSelectionRect,
+    TResult? Function()? hideSelectionOverlay,
     TResult? Function(CursorEffect effect)? setCursor,
   }) {
     return updateDragOverlay?.call(position);
@@ -1748,6 +1922,9 @@ class _$UpdateDragOverlayCommandImpl extends UpdateDragOverlayCommand {
     TResult Function(Object? ghostSpec, Offset position)? showDragOverlay,
     TResult Function(Offset position)? updateDragOverlay,
     TResult Function()? hideDragOverlay,
+    TResult Function(Offset startPosition)? showSelectionOverlay,
+    TResult Function(Offset currentPosition)? updateSelectionRect,
+    TResult Function()? hideSelectionOverlay,
     TResult Function(CursorEffect effect)? setCursor,
     required TResult orElse(),
   }) {
@@ -1770,6 +1947,12 @@ class _$UpdateDragOverlayCommandImpl extends UpdateDragOverlayCommand {
     required TResult Function(ShowDragOverlayCommand value) showDragOverlay,
     required TResult Function(UpdateDragOverlayCommand value) updateDragOverlay,
     required TResult Function(HideDragOverlayCommand value) hideDragOverlay,
+    required TResult Function(ShowSelectionOverlayCommand value)
+        showSelectionOverlay,
+    required TResult Function(UpdateSelectionRectCommand value)
+        updateSelectionRect,
+    required TResult Function(HideSelectionOverlayCommand value)
+        hideSelectionOverlay,
     required TResult Function(_SetCursorCommand value) setCursor,
   }) {
     return updateDragOverlay(this);
@@ -1787,6 +1970,9 @@ class _$UpdateDragOverlayCommandImpl extends UpdateDragOverlayCommand {
     TResult? Function(ShowDragOverlayCommand value)? showDragOverlay,
     TResult? Function(UpdateDragOverlayCommand value)? updateDragOverlay,
     TResult? Function(HideDragOverlayCommand value)? hideDragOverlay,
+    TResult? Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
+    TResult? Function(UpdateSelectionRectCommand value)? updateSelectionRect,
+    TResult? Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
     TResult? Function(_SetCursorCommand value)? setCursor,
   }) {
     return updateDragOverlay?.call(this);
@@ -1804,6 +1990,9 @@ class _$UpdateDragOverlayCommandImpl extends UpdateDragOverlayCommand {
     TResult Function(ShowDragOverlayCommand value)? showDragOverlay,
     TResult Function(UpdateDragOverlayCommand value)? updateDragOverlay,
     TResult Function(HideDragOverlayCommand value)? hideDragOverlay,
+    TResult Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
+    TResult Function(UpdateSelectionRectCommand value)? updateSelectionRect,
+    TResult Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
     TResult Function(_SetCursorCommand value)? setCursor,
     required TResult orElse(),
   }) {
@@ -1886,6 +2075,9 @@ class _$HideDragOverlayCommandImpl extends HideDragOverlayCommand {
         showDragOverlay,
     required TResult Function(Offset position) updateDragOverlay,
     required TResult Function() hideDragOverlay,
+    required TResult Function(Offset startPosition) showSelectionOverlay,
+    required TResult Function(Offset currentPosition) updateSelectionRect,
+    required TResult Function() hideSelectionOverlay,
     required TResult Function(CursorEffect effect) setCursor,
   }) {
     return hideDragOverlay();
@@ -1906,6 +2098,9 @@ class _$HideDragOverlayCommandImpl extends HideDragOverlayCommand {
     TResult? Function(Object? ghostSpec, Offset position)? showDragOverlay,
     TResult? Function(Offset position)? updateDragOverlay,
     TResult? Function()? hideDragOverlay,
+    TResult? Function(Offset startPosition)? showSelectionOverlay,
+    TResult? Function(Offset currentPosition)? updateSelectionRect,
+    TResult? Function()? hideSelectionOverlay,
     TResult? Function(CursorEffect effect)? setCursor,
   }) {
     return hideDragOverlay?.call();
@@ -1925,6 +2120,9 @@ class _$HideDragOverlayCommandImpl extends HideDragOverlayCommand {
     TResult Function(Object? ghostSpec, Offset position)? showDragOverlay,
     TResult Function(Offset position)? updateDragOverlay,
     TResult Function()? hideDragOverlay,
+    TResult Function(Offset startPosition)? showSelectionOverlay,
+    TResult Function(Offset currentPosition)? updateSelectionRect,
+    TResult Function()? hideSelectionOverlay,
     TResult Function(CursorEffect effect)? setCursor,
     required TResult orElse(),
   }) {
@@ -1947,6 +2145,12 @@ class _$HideDragOverlayCommandImpl extends HideDragOverlayCommand {
     required TResult Function(ShowDragOverlayCommand value) showDragOverlay,
     required TResult Function(UpdateDragOverlayCommand value) updateDragOverlay,
     required TResult Function(HideDragOverlayCommand value) hideDragOverlay,
+    required TResult Function(ShowSelectionOverlayCommand value)
+        showSelectionOverlay,
+    required TResult Function(UpdateSelectionRectCommand value)
+        updateSelectionRect,
+    required TResult Function(HideSelectionOverlayCommand value)
+        hideSelectionOverlay,
     required TResult Function(_SetCursorCommand value) setCursor,
   }) {
     return hideDragOverlay(this);
@@ -1964,6 +2168,9 @@ class _$HideDragOverlayCommandImpl extends HideDragOverlayCommand {
     TResult? Function(ShowDragOverlayCommand value)? showDragOverlay,
     TResult? Function(UpdateDragOverlayCommand value)? updateDragOverlay,
     TResult? Function(HideDragOverlayCommand value)? hideDragOverlay,
+    TResult? Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
+    TResult? Function(UpdateSelectionRectCommand value)? updateSelectionRect,
+    TResult? Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
     TResult? Function(_SetCursorCommand value)? setCursor,
   }) {
     return hideDragOverlay?.call(this);
@@ -1981,6 +2188,9 @@ class _$HideDragOverlayCommandImpl extends HideDragOverlayCommand {
     TResult Function(ShowDragOverlayCommand value)? showDragOverlay,
     TResult Function(UpdateDragOverlayCommand value)? updateDragOverlay,
     TResult Function(HideDragOverlayCommand value)? hideDragOverlay,
+    TResult Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
+    TResult Function(UpdateSelectionRectCommand value)? updateSelectionRect,
+    TResult Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
     TResult Function(_SetCursorCommand value)? setCursor,
     required TResult orElse(),
   }) {
@@ -1994,6 +2204,654 @@ class _$HideDragOverlayCommandImpl extends HideDragOverlayCommand {
 abstract class HideDragOverlayCommand extends DiagramCommand {
   const factory HideDragOverlayCommand() = _$HideDragOverlayCommandImpl;
   const HideDragOverlayCommand._() : super._();
+}
+
+/// @nodoc
+abstract class _$$ShowSelectionOverlayCommandImplCopyWith<$Res> {
+  factory _$$ShowSelectionOverlayCommandImplCopyWith(
+          _$ShowSelectionOverlayCommandImpl value,
+          $Res Function(_$ShowSelectionOverlayCommandImpl) then) =
+      __$$ShowSelectionOverlayCommandImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({Offset startPosition});
+}
+
+/// @nodoc
+class __$$ShowSelectionOverlayCommandImplCopyWithImpl<$Res>
+    extends _$DiagramCommandCopyWithImpl<$Res,
+        _$ShowSelectionOverlayCommandImpl>
+    implements _$$ShowSelectionOverlayCommandImplCopyWith<$Res> {
+  __$$ShowSelectionOverlayCommandImplCopyWithImpl(
+      _$ShowSelectionOverlayCommandImpl _value,
+      $Res Function(_$ShowSelectionOverlayCommandImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of DiagramCommand
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? startPosition = null,
+  }) {
+    return _then(_$ShowSelectionOverlayCommandImpl(
+      startPosition: null == startPosition
+          ? _value.startPosition
+          : startPosition // ignore: cast_nullable_to_non_nullable
+              as Offset,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$ShowSelectionOverlayCommandImpl extends ShowSelectionOverlayCommand {
+  const _$ShowSelectionOverlayCommandImpl({required this.startPosition})
+      : super._();
+
+  @override
+  final Offset startPosition;
+
+  @override
+  String toString() {
+    return 'DiagramCommand.showSelectionOverlay(startPosition: $startPosition)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ShowSelectionOverlayCommandImpl &&
+            (identical(other.startPosition, startPosition) ||
+                other.startPosition == startPosition));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, startPosition);
+
+  /// Create a copy of DiagramCommand
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ShowSelectionOverlayCommandImplCopyWith<_$ShowSelectionOverlayCommandImpl>
+      get copyWith => __$$ShowSelectionOverlayCommandImplCopyWithImpl<
+          _$ShowSelectionOverlayCommandImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(PhysicalEvent origin) applyDefaultPanZoom,
+    required TResult Function(Transform2D transform) setTransform,
+    required TResult Function(
+            List<DiagramObjectEntity> renderables, Rect logicalExtent)
+        redraw,
+    required TResult Function(Transform2D targetTransform, Duration duration)
+        elasticBounceBack,
+    required TResult Function(Offset velocity, Duration stepDuration)
+        autoScrollStep,
+    required TResult Function() stopAutoScroll,
+    required TResult Function(Object? ghostSpec, Offset position)
+        showDragOverlay,
+    required TResult Function(Offset position) updateDragOverlay,
+    required TResult Function() hideDragOverlay,
+    required TResult Function(Offset startPosition) showSelectionOverlay,
+    required TResult Function(Offset currentPosition) updateSelectionRect,
+    required TResult Function() hideSelectionOverlay,
+    required TResult Function(CursorEffect effect) setCursor,
+  }) {
+    return showSelectionOverlay(startPosition);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(PhysicalEvent origin)? applyDefaultPanZoom,
+    TResult? Function(Transform2D transform)? setTransform,
+    TResult? Function(
+            List<DiagramObjectEntity> renderables, Rect logicalExtent)?
+        redraw,
+    TResult? Function(Transform2D targetTransform, Duration duration)?
+        elasticBounceBack,
+    TResult? Function(Offset velocity, Duration stepDuration)? autoScrollStep,
+    TResult? Function()? stopAutoScroll,
+    TResult? Function(Object? ghostSpec, Offset position)? showDragOverlay,
+    TResult? Function(Offset position)? updateDragOverlay,
+    TResult? Function()? hideDragOverlay,
+    TResult? Function(Offset startPosition)? showSelectionOverlay,
+    TResult? Function(Offset currentPosition)? updateSelectionRect,
+    TResult? Function()? hideSelectionOverlay,
+    TResult? Function(CursorEffect effect)? setCursor,
+  }) {
+    return showSelectionOverlay?.call(startPosition);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(PhysicalEvent origin)? applyDefaultPanZoom,
+    TResult Function(Transform2D transform)? setTransform,
+    TResult Function(List<DiagramObjectEntity> renderables, Rect logicalExtent)?
+        redraw,
+    TResult Function(Transform2D targetTransform, Duration duration)?
+        elasticBounceBack,
+    TResult Function(Offset velocity, Duration stepDuration)? autoScrollStep,
+    TResult Function()? stopAutoScroll,
+    TResult Function(Object? ghostSpec, Offset position)? showDragOverlay,
+    TResult Function(Offset position)? updateDragOverlay,
+    TResult Function()? hideDragOverlay,
+    TResult Function(Offset startPosition)? showSelectionOverlay,
+    TResult Function(Offset currentPosition)? updateSelectionRect,
+    TResult Function()? hideSelectionOverlay,
+    TResult Function(CursorEffect effect)? setCursor,
+    required TResult orElse(),
+  }) {
+    if (showSelectionOverlay != null) {
+      return showSelectionOverlay(startPosition);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(ApplyDefaultPanZoomCommand value)
+        applyDefaultPanZoom,
+    required TResult Function(SetTransformCommand value) setTransform,
+    required TResult Function(RedrawCommand value) redraw,
+    required TResult Function(ElasticBounceBackCommand value) elasticBounceBack,
+    required TResult Function(AutoScrollStepCommand value) autoScrollStep,
+    required TResult Function(StopAutoScrollCommand value) stopAutoScroll,
+    required TResult Function(ShowDragOverlayCommand value) showDragOverlay,
+    required TResult Function(UpdateDragOverlayCommand value) updateDragOverlay,
+    required TResult Function(HideDragOverlayCommand value) hideDragOverlay,
+    required TResult Function(ShowSelectionOverlayCommand value)
+        showSelectionOverlay,
+    required TResult Function(UpdateSelectionRectCommand value)
+        updateSelectionRect,
+    required TResult Function(HideSelectionOverlayCommand value)
+        hideSelectionOverlay,
+    required TResult Function(_SetCursorCommand value) setCursor,
+  }) {
+    return showSelectionOverlay(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
+    TResult? Function(SetTransformCommand value)? setTransform,
+    TResult? Function(RedrawCommand value)? redraw,
+    TResult? Function(ElasticBounceBackCommand value)? elasticBounceBack,
+    TResult? Function(AutoScrollStepCommand value)? autoScrollStep,
+    TResult? Function(StopAutoScrollCommand value)? stopAutoScroll,
+    TResult? Function(ShowDragOverlayCommand value)? showDragOverlay,
+    TResult? Function(UpdateDragOverlayCommand value)? updateDragOverlay,
+    TResult? Function(HideDragOverlayCommand value)? hideDragOverlay,
+    TResult? Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
+    TResult? Function(UpdateSelectionRectCommand value)? updateSelectionRect,
+    TResult? Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult? Function(_SetCursorCommand value)? setCursor,
+  }) {
+    return showSelectionOverlay?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
+    TResult Function(SetTransformCommand value)? setTransform,
+    TResult Function(RedrawCommand value)? redraw,
+    TResult Function(ElasticBounceBackCommand value)? elasticBounceBack,
+    TResult Function(AutoScrollStepCommand value)? autoScrollStep,
+    TResult Function(StopAutoScrollCommand value)? stopAutoScroll,
+    TResult Function(ShowDragOverlayCommand value)? showDragOverlay,
+    TResult Function(UpdateDragOverlayCommand value)? updateDragOverlay,
+    TResult Function(HideDragOverlayCommand value)? hideDragOverlay,
+    TResult Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
+    TResult Function(UpdateSelectionRectCommand value)? updateSelectionRect,
+    TResult Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult Function(_SetCursorCommand value)? setCursor,
+    required TResult orElse(),
+  }) {
+    if (showSelectionOverlay != null) {
+      return showSelectionOverlay(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class ShowSelectionOverlayCommand extends DiagramCommand {
+  const factory ShowSelectionOverlayCommand(
+          {required final Offset startPosition}) =
+      _$ShowSelectionOverlayCommandImpl;
+  const ShowSelectionOverlayCommand._() : super._();
+
+  Offset get startPosition;
+
+  /// Create a copy of DiagramCommand
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ShowSelectionOverlayCommandImplCopyWith<_$ShowSelectionOverlayCommandImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$UpdateSelectionRectCommandImplCopyWith<$Res> {
+  factory _$$UpdateSelectionRectCommandImplCopyWith(
+          _$UpdateSelectionRectCommandImpl value,
+          $Res Function(_$UpdateSelectionRectCommandImpl) then) =
+      __$$UpdateSelectionRectCommandImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({Offset currentPosition});
+}
+
+/// @nodoc
+class __$$UpdateSelectionRectCommandImplCopyWithImpl<$Res>
+    extends _$DiagramCommandCopyWithImpl<$Res, _$UpdateSelectionRectCommandImpl>
+    implements _$$UpdateSelectionRectCommandImplCopyWith<$Res> {
+  __$$UpdateSelectionRectCommandImplCopyWithImpl(
+      _$UpdateSelectionRectCommandImpl _value,
+      $Res Function(_$UpdateSelectionRectCommandImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of DiagramCommand
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? currentPosition = null,
+  }) {
+    return _then(_$UpdateSelectionRectCommandImpl(
+      currentPosition: null == currentPosition
+          ? _value.currentPosition
+          : currentPosition // ignore: cast_nullable_to_non_nullable
+              as Offset,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$UpdateSelectionRectCommandImpl extends UpdateSelectionRectCommand {
+  const _$UpdateSelectionRectCommandImpl({required this.currentPosition})
+      : super._();
+
+  @override
+  final Offset currentPosition;
+
+  @override
+  String toString() {
+    return 'DiagramCommand.updateSelectionRect(currentPosition: $currentPosition)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$UpdateSelectionRectCommandImpl &&
+            (identical(other.currentPosition, currentPosition) ||
+                other.currentPosition == currentPosition));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, currentPosition);
+
+  /// Create a copy of DiagramCommand
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$UpdateSelectionRectCommandImplCopyWith<_$UpdateSelectionRectCommandImpl>
+      get copyWith => __$$UpdateSelectionRectCommandImplCopyWithImpl<
+          _$UpdateSelectionRectCommandImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(PhysicalEvent origin) applyDefaultPanZoom,
+    required TResult Function(Transform2D transform) setTransform,
+    required TResult Function(
+            List<DiagramObjectEntity> renderables, Rect logicalExtent)
+        redraw,
+    required TResult Function(Transform2D targetTransform, Duration duration)
+        elasticBounceBack,
+    required TResult Function(Offset velocity, Duration stepDuration)
+        autoScrollStep,
+    required TResult Function() stopAutoScroll,
+    required TResult Function(Object? ghostSpec, Offset position)
+        showDragOverlay,
+    required TResult Function(Offset position) updateDragOverlay,
+    required TResult Function() hideDragOverlay,
+    required TResult Function(Offset startPosition) showSelectionOverlay,
+    required TResult Function(Offset currentPosition) updateSelectionRect,
+    required TResult Function() hideSelectionOverlay,
+    required TResult Function(CursorEffect effect) setCursor,
+  }) {
+    return updateSelectionRect(currentPosition);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(PhysicalEvent origin)? applyDefaultPanZoom,
+    TResult? Function(Transform2D transform)? setTransform,
+    TResult? Function(
+            List<DiagramObjectEntity> renderables, Rect logicalExtent)?
+        redraw,
+    TResult? Function(Transform2D targetTransform, Duration duration)?
+        elasticBounceBack,
+    TResult? Function(Offset velocity, Duration stepDuration)? autoScrollStep,
+    TResult? Function()? stopAutoScroll,
+    TResult? Function(Object? ghostSpec, Offset position)? showDragOverlay,
+    TResult? Function(Offset position)? updateDragOverlay,
+    TResult? Function()? hideDragOverlay,
+    TResult? Function(Offset startPosition)? showSelectionOverlay,
+    TResult? Function(Offset currentPosition)? updateSelectionRect,
+    TResult? Function()? hideSelectionOverlay,
+    TResult? Function(CursorEffect effect)? setCursor,
+  }) {
+    return updateSelectionRect?.call(currentPosition);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(PhysicalEvent origin)? applyDefaultPanZoom,
+    TResult Function(Transform2D transform)? setTransform,
+    TResult Function(List<DiagramObjectEntity> renderables, Rect logicalExtent)?
+        redraw,
+    TResult Function(Transform2D targetTransform, Duration duration)?
+        elasticBounceBack,
+    TResult Function(Offset velocity, Duration stepDuration)? autoScrollStep,
+    TResult Function()? stopAutoScroll,
+    TResult Function(Object? ghostSpec, Offset position)? showDragOverlay,
+    TResult Function(Offset position)? updateDragOverlay,
+    TResult Function()? hideDragOverlay,
+    TResult Function(Offset startPosition)? showSelectionOverlay,
+    TResult Function(Offset currentPosition)? updateSelectionRect,
+    TResult Function()? hideSelectionOverlay,
+    TResult Function(CursorEffect effect)? setCursor,
+    required TResult orElse(),
+  }) {
+    if (updateSelectionRect != null) {
+      return updateSelectionRect(currentPosition);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(ApplyDefaultPanZoomCommand value)
+        applyDefaultPanZoom,
+    required TResult Function(SetTransformCommand value) setTransform,
+    required TResult Function(RedrawCommand value) redraw,
+    required TResult Function(ElasticBounceBackCommand value) elasticBounceBack,
+    required TResult Function(AutoScrollStepCommand value) autoScrollStep,
+    required TResult Function(StopAutoScrollCommand value) stopAutoScroll,
+    required TResult Function(ShowDragOverlayCommand value) showDragOverlay,
+    required TResult Function(UpdateDragOverlayCommand value) updateDragOverlay,
+    required TResult Function(HideDragOverlayCommand value) hideDragOverlay,
+    required TResult Function(ShowSelectionOverlayCommand value)
+        showSelectionOverlay,
+    required TResult Function(UpdateSelectionRectCommand value)
+        updateSelectionRect,
+    required TResult Function(HideSelectionOverlayCommand value)
+        hideSelectionOverlay,
+    required TResult Function(_SetCursorCommand value) setCursor,
+  }) {
+    return updateSelectionRect(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
+    TResult? Function(SetTransformCommand value)? setTransform,
+    TResult? Function(RedrawCommand value)? redraw,
+    TResult? Function(ElasticBounceBackCommand value)? elasticBounceBack,
+    TResult? Function(AutoScrollStepCommand value)? autoScrollStep,
+    TResult? Function(StopAutoScrollCommand value)? stopAutoScroll,
+    TResult? Function(ShowDragOverlayCommand value)? showDragOverlay,
+    TResult? Function(UpdateDragOverlayCommand value)? updateDragOverlay,
+    TResult? Function(HideDragOverlayCommand value)? hideDragOverlay,
+    TResult? Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
+    TResult? Function(UpdateSelectionRectCommand value)? updateSelectionRect,
+    TResult? Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult? Function(_SetCursorCommand value)? setCursor,
+  }) {
+    return updateSelectionRect?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
+    TResult Function(SetTransformCommand value)? setTransform,
+    TResult Function(RedrawCommand value)? redraw,
+    TResult Function(ElasticBounceBackCommand value)? elasticBounceBack,
+    TResult Function(AutoScrollStepCommand value)? autoScrollStep,
+    TResult Function(StopAutoScrollCommand value)? stopAutoScroll,
+    TResult Function(ShowDragOverlayCommand value)? showDragOverlay,
+    TResult Function(UpdateDragOverlayCommand value)? updateDragOverlay,
+    TResult Function(HideDragOverlayCommand value)? hideDragOverlay,
+    TResult Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
+    TResult Function(UpdateSelectionRectCommand value)? updateSelectionRect,
+    TResult Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult Function(_SetCursorCommand value)? setCursor,
+    required TResult orElse(),
+  }) {
+    if (updateSelectionRect != null) {
+      return updateSelectionRect(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class UpdateSelectionRectCommand extends DiagramCommand {
+  const factory UpdateSelectionRectCommand(
+          {required final Offset currentPosition}) =
+      _$UpdateSelectionRectCommandImpl;
+  const UpdateSelectionRectCommand._() : super._();
+
+  Offset get currentPosition;
+
+  /// Create a copy of DiagramCommand
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$UpdateSelectionRectCommandImplCopyWith<_$UpdateSelectionRectCommandImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$HideSelectionOverlayCommandImplCopyWith<$Res> {
+  factory _$$HideSelectionOverlayCommandImplCopyWith(
+          _$HideSelectionOverlayCommandImpl value,
+          $Res Function(_$HideSelectionOverlayCommandImpl) then) =
+      __$$HideSelectionOverlayCommandImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$HideSelectionOverlayCommandImplCopyWithImpl<$Res>
+    extends _$DiagramCommandCopyWithImpl<$Res,
+        _$HideSelectionOverlayCommandImpl>
+    implements _$$HideSelectionOverlayCommandImplCopyWith<$Res> {
+  __$$HideSelectionOverlayCommandImplCopyWithImpl(
+      _$HideSelectionOverlayCommandImpl _value,
+      $Res Function(_$HideSelectionOverlayCommandImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of DiagramCommand
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$HideSelectionOverlayCommandImpl extends HideSelectionOverlayCommand {
+  const _$HideSelectionOverlayCommandImpl() : super._();
+
+  @override
+  String toString() {
+    return 'DiagramCommand.hideSelectionOverlay()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$HideSelectionOverlayCommandImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(PhysicalEvent origin) applyDefaultPanZoom,
+    required TResult Function(Transform2D transform) setTransform,
+    required TResult Function(
+            List<DiagramObjectEntity> renderables, Rect logicalExtent)
+        redraw,
+    required TResult Function(Transform2D targetTransform, Duration duration)
+        elasticBounceBack,
+    required TResult Function(Offset velocity, Duration stepDuration)
+        autoScrollStep,
+    required TResult Function() stopAutoScroll,
+    required TResult Function(Object? ghostSpec, Offset position)
+        showDragOverlay,
+    required TResult Function(Offset position) updateDragOverlay,
+    required TResult Function() hideDragOverlay,
+    required TResult Function(Offset startPosition) showSelectionOverlay,
+    required TResult Function(Offset currentPosition) updateSelectionRect,
+    required TResult Function() hideSelectionOverlay,
+    required TResult Function(CursorEffect effect) setCursor,
+  }) {
+    return hideSelectionOverlay();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(PhysicalEvent origin)? applyDefaultPanZoom,
+    TResult? Function(Transform2D transform)? setTransform,
+    TResult? Function(
+            List<DiagramObjectEntity> renderables, Rect logicalExtent)?
+        redraw,
+    TResult? Function(Transform2D targetTransform, Duration duration)?
+        elasticBounceBack,
+    TResult? Function(Offset velocity, Duration stepDuration)? autoScrollStep,
+    TResult? Function()? stopAutoScroll,
+    TResult? Function(Object? ghostSpec, Offset position)? showDragOverlay,
+    TResult? Function(Offset position)? updateDragOverlay,
+    TResult? Function()? hideDragOverlay,
+    TResult? Function(Offset startPosition)? showSelectionOverlay,
+    TResult? Function(Offset currentPosition)? updateSelectionRect,
+    TResult? Function()? hideSelectionOverlay,
+    TResult? Function(CursorEffect effect)? setCursor,
+  }) {
+    return hideSelectionOverlay?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(PhysicalEvent origin)? applyDefaultPanZoom,
+    TResult Function(Transform2D transform)? setTransform,
+    TResult Function(List<DiagramObjectEntity> renderables, Rect logicalExtent)?
+        redraw,
+    TResult Function(Transform2D targetTransform, Duration duration)?
+        elasticBounceBack,
+    TResult Function(Offset velocity, Duration stepDuration)? autoScrollStep,
+    TResult Function()? stopAutoScroll,
+    TResult Function(Object? ghostSpec, Offset position)? showDragOverlay,
+    TResult Function(Offset position)? updateDragOverlay,
+    TResult Function()? hideDragOverlay,
+    TResult Function(Offset startPosition)? showSelectionOverlay,
+    TResult Function(Offset currentPosition)? updateSelectionRect,
+    TResult Function()? hideSelectionOverlay,
+    TResult Function(CursorEffect effect)? setCursor,
+    required TResult orElse(),
+  }) {
+    if (hideSelectionOverlay != null) {
+      return hideSelectionOverlay();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(ApplyDefaultPanZoomCommand value)
+        applyDefaultPanZoom,
+    required TResult Function(SetTransformCommand value) setTransform,
+    required TResult Function(RedrawCommand value) redraw,
+    required TResult Function(ElasticBounceBackCommand value) elasticBounceBack,
+    required TResult Function(AutoScrollStepCommand value) autoScrollStep,
+    required TResult Function(StopAutoScrollCommand value) stopAutoScroll,
+    required TResult Function(ShowDragOverlayCommand value) showDragOverlay,
+    required TResult Function(UpdateDragOverlayCommand value) updateDragOverlay,
+    required TResult Function(HideDragOverlayCommand value) hideDragOverlay,
+    required TResult Function(ShowSelectionOverlayCommand value)
+        showSelectionOverlay,
+    required TResult Function(UpdateSelectionRectCommand value)
+        updateSelectionRect,
+    required TResult Function(HideSelectionOverlayCommand value)
+        hideSelectionOverlay,
+    required TResult Function(_SetCursorCommand value) setCursor,
+  }) {
+    return hideSelectionOverlay(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
+    TResult? Function(SetTransformCommand value)? setTransform,
+    TResult? Function(RedrawCommand value)? redraw,
+    TResult? Function(ElasticBounceBackCommand value)? elasticBounceBack,
+    TResult? Function(AutoScrollStepCommand value)? autoScrollStep,
+    TResult? Function(StopAutoScrollCommand value)? stopAutoScroll,
+    TResult? Function(ShowDragOverlayCommand value)? showDragOverlay,
+    TResult? Function(UpdateDragOverlayCommand value)? updateDragOverlay,
+    TResult? Function(HideDragOverlayCommand value)? hideDragOverlay,
+    TResult? Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
+    TResult? Function(UpdateSelectionRectCommand value)? updateSelectionRect,
+    TResult? Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult? Function(_SetCursorCommand value)? setCursor,
+  }) {
+    return hideSelectionOverlay?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
+    TResult Function(SetTransformCommand value)? setTransform,
+    TResult Function(RedrawCommand value)? redraw,
+    TResult Function(ElasticBounceBackCommand value)? elasticBounceBack,
+    TResult Function(AutoScrollStepCommand value)? autoScrollStep,
+    TResult Function(StopAutoScrollCommand value)? stopAutoScroll,
+    TResult Function(ShowDragOverlayCommand value)? showDragOverlay,
+    TResult Function(UpdateDragOverlayCommand value)? updateDragOverlay,
+    TResult Function(HideDragOverlayCommand value)? hideDragOverlay,
+    TResult Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
+    TResult Function(UpdateSelectionRectCommand value)? updateSelectionRect,
+    TResult Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult Function(_SetCursorCommand value)? setCursor,
+    required TResult orElse(),
+  }) {
+    if (hideSelectionOverlay != null) {
+      return hideSelectionOverlay(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class HideSelectionOverlayCommand extends DiagramCommand {
+  const factory HideSelectionOverlayCommand() =
+      _$HideSelectionOverlayCommandImpl;
+  const HideSelectionOverlayCommand._() : super._();
 }
 
 /// @nodoc
@@ -2079,6 +2937,9 @@ class _$SetCursorCommandImpl extends _SetCursorCommand {
         showDragOverlay,
     required TResult Function(Offset position) updateDragOverlay,
     required TResult Function() hideDragOverlay,
+    required TResult Function(Offset startPosition) showSelectionOverlay,
+    required TResult Function(Offset currentPosition) updateSelectionRect,
+    required TResult Function() hideSelectionOverlay,
     required TResult Function(CursorEffect effect) setCursor,
   }) {
     return setCursor(effect);
@@ -2099,6 +2960,9 @@ class _$SetCursorCommandImpl extends _SetCursorCommand {
     TResult? Function(Object? ghostSpec, Offset position)? showDragOverlay,
     TResult? Function(Offset position)? updateDragOverlay,
     TResult? Function()? hideDragOverlay,
+    TResult? Function(Offset startPosition)? showSelectionOverlay,
+    TResult? Function(Offset currentPosition)? updateSelectionRect,
+    TResult? Function()? hideSelectionOverlay,
     TResult? Function(CursorEffect effect)? setCursor,
   }) {
     return setCursor?.call(effect);
@@ -2118,6 +2982,9 @@ class _$SetCursorCommandImpl extends _SetCursorCommand {
     TResult Function(Object? ghostSpec, Offset position)? showDragOverlay,
     TResult Function(Offset position)? updateDragOverlay,
     TResult Function()? hideDragOverlay,
+    TResult Function(Offset startPosition)? showSelectionOverlay,
+    TResult Function(Offset currentPosition)? updateSelectionRect,
+    TResult Function()? hideSelectionOverlay,
     TResult Function(CursorEffect effect)? setCursor,
     required TResult orElse(),
   }) {
@@ -2140,6 +3007,12 @@ class _$SetCursorCommandImpl extends _SetCursorCommand {
     required TResult Function(ShowDragOverlayCommand value) showDragOverlay,
     required TResult Function(UpdateDragOverlayCommand value) updateDragOverlay,
     required TResult Function(HideDragOverlayCommand value) hideDragOverlay,
+    required TResult Function(ShowSelectionOverlayCommand value)
+        showSelectionOverlay,
+    required TResult Function(UpdateSelectionRectCommand value)
+        updateSelectionRect,
+    required TResult Function(HideSelectionOverlayCommand value)
+        hideSelectionOverlay,
     required TResult Function(_SetCursorCommand value) setCursor,
   }) {
     return setCursor(this);
@@ -2157,6 +3030,9 @@ class _$SetCursorCommandImpl extends _SetCursorCommand {
     TResult? Function(ShowDragOverlayCommand value)? showDragOverlay,
     TResult? Function(UpdateDragOverlayCommand value)? updateDragOverlay,
     TResult? Function(HideDragOverlayCommand value)? hideDragOverlay,
+    TResult? Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
+    TResult? Function(UpdateSelectionRectCommand value)? updateSelectionRect,
+    TResult? Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
     TResult? Function(_SetCursorCommand value)? setCursor,
   }) {
     return setCursor?.call(this);
@@ -2174,6 +3050,9 @@ class _$SetCursorCommandImpl extends _SetCursorCommand {
     TResult Function(ShowDragOverlayCommand value)? showDragOverlay,
     TResult Function(UpdateDragOverlayCommand value)? updateDragOverlay,
     TResult Function(HideDragOverlayCommand value)? hideDragOverlay,
+    TResult Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
+    TResult Function(UpdateSelectionRectCommand value)? updateSelectionRect,
+    TResult Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
     TResult Function(_SetCursorCommand value)? setCursor,
     required TResult orElse(),
   }) {

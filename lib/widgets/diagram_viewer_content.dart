@@ -100,6 +100,12 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
 
   // Removed coalesced gesture flush: switched to immediate apply path
 
+  // Selection rectangle overlay state
+  bool _selectionOverlayVisible = false;
+  Offset _selectionStartPosition = Offset.zero;
+  Offset _selectionCurrentPosition = Offset.zero;
+  Rect _selectionRect = Rect.zero;
+
   void _flushMmCoalescedPanNow({required BuildContext context}) {
     if (!mounted) return;
     final transformBlocNow = context.read<TransformBloc>();
@@ -131,10 +137,8 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
       return;
     }
     // Send only the effective movement and keep leftover as residual
-    transformBlocNow.add(TransformEvent.pan(
-      delta: effective,
-      currentTransform: tNow,
-    ));
+    _safePanDirect(transformBlocNow, effective, tNow,
+        contextName: 'magic-mouse');
     _mmResidual = candidate - effective;
     if (widget.debug && _mmResidual != Offset.zero) {
       debugPrint('[MM] applied=$effective residual=$_mmResidual');
@@ -166,6 +170,89 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
         topLeft.dy >= 0.0 &&
         right <= viewport.width &&
         bottom <= viewport.height;
+  }
+
+  // Helper method to check if pan is allowed
+  bool _isPanAllowed() {
+    return !_selectionOverlayVisible;
+  }
+
+  // Safe pan wrapper that respects selection state
+  void _safePan(
+      BuildContext context, Offset delta, Transform2D currentTransform,
+      {String? contextName}) {
+    if (!_isPanAllowed()) {
+      if (widget.debug) {
+        debugPrint(
+            '[Viewer] Pan blocked during selection (context: $contextName)');
+      }
+      return;
+    }
+
+    final transformBloc = context.read<TransformBloc>();
+    _safePanDirect(transformBloc, delta, currentTransform,
+        contextName: 'auto-scroll');
+  }
+
+  // Safe pan wrapper for cases without BuildContext (Magic Mouse, auto-scroll)
+  void _safePanDirect(
+      TransformBloc transformBloc, Offset delta, Transform2D currentTransform,
+      {String? contextName}) {
+    if (!_isPanAllowed()) {
+      if (widget.debug) {
+        debugPrint(
+            '[Viewer] Pan blocked during selection (context: $contextName)');
+      }
+      return;
+    }
+
+    transformBloc.add(TransformEvent.pan(
+      delta: delta,
+      currentTransform: currentTransform,
+    ));
+  }
+
+  // Safe inertia wrapper that respects selection state
+  void _safeStartInertia(BuildContext context, Offset initialVelocity,
+      {String? contextName}) {
+    if (!_isPanAllowed()) {
+      if (widget.debug) {
+        debugPrint(
+            '[Viewer] Inertia blocked during selection (context: $contextName)');
+      }
+      return;
+    }
+
+    _inertia.start(
+      initialVelocity: initialVelocity,
+      interval: widget.configuration.autoScrollInterval,
+      frictionFactor: widget.configuration.inertialFriction,
+      minStopVelocity: widget.configuration.inertialMinStopVelocity,
+      maxDuration: widget.configuration.inertialMaxDuration,
+      onTick: (delta) {
+        if (!mounted) return;
+        if (_isBouncingBack) {
+          _inertia.stop();
+          return;
+        }
+        _safePan(context, delta, context.read<TransformBloc>().state.transform,
+            contextName: 'inertia-tick');
+      },
+      onStop: () {
+        if (!mounted) return;
+        if (_isBouncingBack) return;
+        final transformBloc = context.read<TransformBloc>();
+        transformBloc.setFrozenDuringDrag(false);
+        transformBloc.clearBounceBackFlag();
+        _isBouncingBack = true;
+        _bounceFlagTimer?.cancel();
+        _bounceFlagTimer = Timer(widget.configuration.bounceDuration, () {
+          if (mounted) _isBouncingBack = false;
+          _bounceFlagTimer = null;
+        });
+        transformBloc.bounceBack(widget.configuration.bounceDuration);
+      },
+    );
   }
 
   // removed unused helpers
@@ -233,6 +320,7 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
               );
             },
             dragContinue: (dragEvent) {
+              // Remove internal selection logic - let controller handle it
               final snapped = cfg.snapGridEnabled
                   ? Transform2DUtils.snapPointToGrid(
                       point: dragEvent.logicalPosition,
@@ -245,6 +333,7 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
               );
             },
             dragEnd: (dragEndEvent) {
+              // Remove internal selection logic - let controller handle it
               final snapped = cfg.snapGridEnabled
                   ? Transform2DUtils.snapPointToGrid(
                       point: dragEndEvent.logicalPosition,
@@ -281,6 +370,11 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
                 timestamp: timestamp,
                 snappedLogicalPosition: snapped,
               );
+            },
+            dragBegin: (dragBeginEvent) {
+              // Remove internal selection logic - let controller handle it
+              // The controller will send appropriate commands for selection overlay
+              return DiagramEventUnion.dragBegin(dragBeginEvent);
             },
             orElse: () => diagramEvent,
           );
@@ -361,10 +455,8 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
                 if (!mounted) return;
                 final transformBloc = context.read<TransformBloc>();
                 final currentTransform = transformBloc.state.transform;
-                transformBloc.add(TransformEvent.pan(
-                  delta: delta,
-                  currentTransform: currentTransform,
-                ));
+                _safePanDirect(transformBloc, delta, currentTransform,
+                    contextName: 'auto-scroll-step');
 
                 // NEW: keep drag/object in sync during auto-scroll by synthesizing a pointer update
                 final eventBloc = context.read<EventManagementBloc>();
@@ -477,6 +569,34 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
               _dragOverlaySpec = null;
               _dragOverlayLocalCenter = null;
               _overlayControlledByController = false;
+            });
+          },
+          // Selection overlay commands
+          showSelectionOverlay: (startPosition) {
+            setState(() {
+              _selectionOverlayVisible = true;
+              _selectionStartPosition = startPosition;
+              _selectionCurrentPosition = startPosition;
+              _selectionRect = Rect.fromPoints(startPosition, startPosition);
+            });
+          },
+          updateSelectionRect: (currentPosition) {
+            if (_selectionOverlayVisible) {
+              setState(() {
+                _selectionCurrentPosition = currentPosition;
+                _selectionRect = Rect.fromPoints(
+                  _selectionStartPosition,
+                  currentPosition,
+                );
+              });
+            }
+          },
+          hideSelectionOverlay: () {
+            setState(() {
+              _selectionOverlayVisible = false;
+              _selectionStartPosition = Offset.zero;
+              _selectionCurrentPosition = Offset.zero;
+              _selectionRect = Rect.zero;
             });
           },
           setCursor: (effect) {
@@ -722,6 +842,20 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
                           ),
                         ),
                       ),
+                      // Selection rectangle overlay
+                      if (_selectionOverlayVisible)
+                        Positioned.fill(
+                          child: IgnorePointer(
+                            child: CustomPaint(
+                              painter: _SelectionOverlayPainter(
+                                selectionRect: _selectionRect,
+                                transform: transformState.transform,
+                                configuration: widget.configuration,
+                              ),
+                              size: Size.infinite,
+                            ),
+                          ),
+                        ),
                       // DnD ghost overlay and DragTarget layer
                       Positioned.fill(
                         child: DragTarget<Map<String, dynamic>>(
@@ -1056,9 +1190,12 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
       pressedKeys: _pressedKeys,
     ));
 
-    // Apply pan only when dragging empty area and we did not start on an object
-    // If a drag on object is active, do not pan the canvas.
-    if (!_draggingOnObject && hitResults.isEmpty && event.buttons != 0) {
+    // Apply pan only when dragging empty area, we did not start on an object, and selection is not active
+    // If a drag on object is active or selection is active, do not pan the canvas.
+    if (!_draggingOnObject &&
+        hitResults.isEmpty &&
+        event.buttons != 0 &&
+        !_selectionOverlayVisible) {
       // Abort any ongoing inertia on new explicit user pan
       _inertia.stop();
       // Predict effective applied delta after dynamic capping
@@ -1079,10 +1216,8 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
         debugPrint(
             '[Viewer] Pointer->PAN (drag) applied=$effective from input=${event.delta}');
       }
-      transformBloc.add(TransformEvent.pan(
-        delta: effective,
-        currentTransform: currentTransform,
-      ));
+      _safePan(context, effective, currentTransform,
+          contextName: 'pointer-drag');
     }
 
     // Velocity sampling for inertia (physical)
@@ -1133,6 +1268,7 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
         return;
       }
       // Compute a tiny end-step using last pointer deltas to match previous behavior
+
       final Offset delta = _recentPointerDeltas.isNotEmpty
           ? _recentPointerDeltas.last
           : const Offset(0, 0);
@@ -1158,11 +1294,9 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
         preserveCentering: true,
         recenterSmallContent: false,
       );
-      // Apply pan
-      transformBloc.add(TransformEvent.pan(
-        delta: delta,
-        currentTransform: stateBefore.transform,
-      ));
+      // Apply pan only if selection is not active
+      _safePan(context, delta, stateBefore.transform,
+          contextName: 'pointer-inertia');
       // If capping altered the proposed translation, we hit elastic boundary → bounce now
       // For pointer-drag inertia, bounce earlier to match expectations
       final deviates =
@@ -2438,5 +2572,48 @@ class _GhostWidget extends StatelessWidget {
         border: Border.all(color: Colors.blueAccent.withValues(alpha: 0.7)),
       ),
     );
+  }
+}
+
+class _SelectionOverlayPainter extends CustomPainter {
+  final Rect selectionRect;
+  final Transform2D transform;
+  final DiagramConfiguration configuration;
+
+  const _SelectionOverlayPainter({
+    required this.selectionRect,
+    required this.transform,
+    required this.configuration,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    // Convert logical rectangle to physical coordinates
+    final topLeft = transform.logicalToPhysical(selectionRect.topLeft);
+    final bottomRight = transform.logicalToPhysical(selectionRect.bottomRight);
+    final physicalRect = Rect.fromPoints(topLeft, bottomRight);
+
+    // Draw selection rectangle with semi-transparent fill and border
+    final fillPaint = Paint()
+      ..color = Colors.blue.withValues(alpha: 0.1)
+      ..style = PaintingStyle.fill;
+
+    final borderPaint = Paint()
+      ..color = Colors.blue.withValues(alpha: 0.7)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.0;
+
+    // Draw fill
+    canvas.drawRect(physicalRect, fillPaint);
+
+    // Draw border
+    canvas.drawRect(physicalRect, borderPaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant _SelectionOverlayPainter oldDelegate) {
+    return oldDelegate.selectionRect != selectionRect ||
+        oldDelegate.transform != transform ||
+        oldDelegate.configuration != configuration;
   }
 }

@@ -40,6 +40,7 @@
 			"cwd": "example",
 			"request": "launch",
 			"type": "dart",
+			"program": "lib/main.dart",
 			"flutterMode": "debug"
 		},
 		{

@@ -34,8 +34,32 @@ class ExampleDiagramController implements IDiagramController {
   final List<ConnectionEntity> _ephemeralConnections = [];
   bool _enableDemoConnections = false;
 
+  // Selection functionality
+  bool _selectionModeEnabled = false;
+  bool _isSelecting = false;
+  Offset? _selectionStartPosition;
+  Offset? _selectionCurrentPosition;
+
   void setDemoConnectionsEnabled(bool enabled) {
     _enableDemoConnections = enabled;
+  }
+
+  /// Enable or disable selection mode
+  void setSelectionMode(bool enabled) {
+    _selectionModeEnabled = enabled;
+  }
+
+  /// Check if selection mode is enabled
+  bool get isSelectionModeEnabled => _selectionModeEnabled;
+
+  /// Add an object to the controller (for testing purposes)
+  void addObject(DiagramObjectEntity object) {
+    // For now, just add to ephemeral connections for testing
+    if (object is ConnectionEntity) {
+      _ephemeralConnections.add(object);
+    }
+    // Note: This is a simplified implementation for testing
+    // In a real app, you'd want to add to the appropriate storage
   }
 
   ExampleDiagramController({bool populateInitial = true}) {
@@ -71,7 +95,23 @@ class ExampleDiagramController implements IDiagramController {
         }
       },
       dragBegin: (event) {
-        if (event.hitList.isNotEmpty) {
+        // Check if this should be a selection operation
+        final bool shouldSelect = _selectionModeEnabled ||
+            (event.metadata['pressedKeys'] as List<dynamic>?)
+                    ?.contains('Shift') ==
+                true;
+
+        if (shouldSelect && event.hitList.isEmpty) {
+          // Start selection - show overlay
+          _isSelecting = true;
+          _selectionStartPosition = event.logicalPosition;
+          _selectionCurrentPosition = event.logicalPosition;
+
+          // Send command to show selection overlay
+          _commandController.add(DiagramCommand.showSelectionOverlay(
+            startPosition: event.logicalPosition,
+          ));
+        } else if (event.hitList.isNotEmpty) {
           // Start object drag - store the object being dragged
           _draggedObject = event.hitList.first;
           // calcola offset relativo dal centro per evitare il "salto"
@@ -86,7 +126,15 @@ class ExampleDiagramController implements IDiagramController {
         }
       },
       dragContinue: (event) {
-        if (_draggedObject != null) {
+        if (_isSelecting) {
+          // Update selection rectangle
+          _selectionCurrentPosition = event.logicalPosition;
+
+          // Send command to update selection overlay
+          _commandController.add(DiagramCommand.updateSelectionRect(
+            currentPosition: event.logicalPosition,
+          ));
+        } else if (_draggedObject != null) {
           // Continue object drag - use the stored object regardless of hitList
           try {
             final hinted =
@@ -150,7 +198,33 @@ class ExampleDiagramController implements IDiagramController {
         }
       },
       dragEnd: (event) {
-        if (_draggedObject != null) {
+        if (_isSelecting) {
+          // End selection - hide overlay and calculate results
+          _isSelecting = false;
+
+          // Send command to hide selection overlay
+          _commandController.add(const DiagramCommand.hideSelectionOverlay());
+
+          // Calculate selection rectangle and find intersected objects
+          if (_selectionStartPosition != null &&
+              _selectionCurrentPosition != null) {
+            final selectionRect = Rect.fromPoints(
+              _selectionStartPosition!,
+              _selectionCurrentPosition!,
+            );
+
+            final intersectedObjects = _findObjectsInRect(selectionRect);
+            final objectIds = intersectedObjects.map((obj) => obj.id).toList();
+
+            // Send selection result to controller (for now, just print)
+            print('Selection result: ${objectIds.length} objects selected');
+            print('Selected object IDs: $objectIds');
+          }
+
+          // Reset selection state
+          _selectionStartPosition = null;
+          _selectionCurrentPosition = null;
+        } else if (_draggedObject != null) {
           // End object drag
           _endObjectDrag();
           _draggedObject = null;
@@ -522,6 +596,29 @@ class ExampleDiagramController implements IDiagramController {
 
   void _handleLongPress(DiagramLongPress event) {
     // Long press
+  }
+
+  /// Find all objects that intersect with the given rectangle
+  List<DiagramObjectEntity> _findObjectsInRect(Rect selectionRect) {
+    final allObjects = <DiagramObjectEntity>[];
+
+    // Add circles from storage
+    _storage.values.forEach((model) {
+      final entity = CerchioEntity(
+        center: model.center,
+        radius: model.radius,
+        id: model.id,
+      );
+      allObjects.add(entity);
+    });
+
+    // Add demo connections
+    allObjects.addAll(_ephemeralConnections);
+
+    return allObjects.where((obj) {
+      // Check if object bounds intersect with selection rectangle
+      return obj.logicalBounds.overlaps(selectionRect);
+    }).toList();
   }
 
   @override

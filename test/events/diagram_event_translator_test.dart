@@ -576,9 +576,9 @@ void main() {
         hitList: [],
         borderProximity: BorderProximity.none,
         phase: InteractionPhase.start,
-        rawEvent: PointerDownEvent(
+        rawEvent: const PointerDownEvent(
           pointer: 1,
-          position: const Offset(100, 80),
+          position: Offset(100, 80),
           kind: PointerDeviceKind.touch,
         ),
         delta: null,

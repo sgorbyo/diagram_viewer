@@ -111,6 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   const SizedBox(height: 8),
                   _SnapGridControls(
                     initial: _config,
+                    controller: controller,
                     onChanged: (cfg) {
                       setState(() {
                         _config = cfg;
@@ -144,10 +145,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
 class _SnapGridControls extends StatefulWidget {
   final DiagramConfiguration initial;
+  final ExampleDiagramController controller;
   final ValueChanged<DiagramConfiguration> onChanged;
   final ValueChanged<bool> onToggleDemoConnections;
   const _SnapGridControls(
       {required this.initial,
+      required this.controller,
       required this.onChanged,
       required this.onToggleDemoConnections});
 
@@ -230,6 +233,16 @@ class _SnapGridControlsState extends State<_SnapGridControls> {
           onChanged: (v) {
             setState(() => demoConnections = v);
             widget.onToggleDemoConnections(v);
+          },
+        ),
+        SwitchListTile(
+          contentPadding: EdgeInsets.zero,
+          title: const Text('Select'),
+          subtitle: const Text('Enable selection mode'),
+          value: widget.controller.isSelectionModeEnabled,
+          onChanged: (v) {
+            widget.controller.setSelectionMode(v);
+            setState(() {}); // Trigger rebuild to update UI
           },
         ),
         const SizedBox(height: 8),

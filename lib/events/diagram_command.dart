@@ -144,6 +144,18 @@ class DiagramCommand with _$DiagramCommand {
 
   const factory DiagramCommand.hideDragOverlay() = HideDragOverlayCommand;
 
+  // Selection overlay commands
+  const factory DiagramCommand.showSelectionOverlay({
+    required Offset startPosition,
+  }) = ShowSelectionOverlayCommand;
+
+  const factory DiagramCommand.updateSelectionRect({
+    required Offset currentPosition,
+  }) = UpdateSelectionRectCommand;
+
+  const factory DiagramCommand.hideSelectionOverlay() =
+      HideSelectionOverlayCommand;
+
   /// Set cursor effect (desktop/web). No-op on mobile platforms.
   const factory DiagramCommand.setCursor({
     required CursorEffect effect,
@@ -195,6 +207,11 @@ class DiagramCommand with _$DiagramCommand {
         updateDragOverlay: (position) =>
             'UpdateDragOverlay(position: $position)',
         hideDragOverlay: () => 'HideDragOverlay',
+        showSelectionOverlay: (startPosition) =>
+            'ShowSelectionOverlay(startPosition: $startPosition)',
+        updateSelectionRect: (currentPosition) =>
+            'UpdateSelectionRect(currentPosition: $currentPosition)',
+        hideSelectionOverlay: () => 'HideSelectionOverlay',
         setCursor: (effect) => 'SetCursor(effect: $effect)',
       );
 }
