@@ -48,7 +48,7 @@ void main() {
           delta: null,
           currentViewport: Rect.zero,
           pressedMouseButtons: {},
-          pressedKeys: {},
+          pressedKeys: {LogicalKeyboardKey.shift},
           activeInteraction: null,
         );
 
@@ -70,6 +70,8 @@ void main() {
             expect(event.isOnObject, isFalse);
             expect(event.fingerCount, equals(1));
             expect(event.mouseButton, isNull);
+            // pressedKeys should be propagated into metadata
+            expect(event.metadata['pressedKeys'], contains('Shift'));
           },
           orElse: () => fail('Expected dragBegin'),
         );
@@ -96,7 +98,7 @@ void main() {
           delta: null,
           currentViewport: Rect.zero,
           pressedMouseButtons: {},
-          pressedKeys: {},
+          pressedKeys: {LogicalKeyboardKey.shift},
           activeInteraction: null,
         );
 
@@ -121,7 +123,7 @@ void main() {
           delta: const Offset(10, 10),
           currentViewport: Rect.zero,
           pressedMouseButtons: {},
-          pressedKeys: {},
+          pressedKeys: {LogicalKeyboardKey.shift},
           activeInteraction: null,
         );
 
@@ -142,6 +144,7 @@ void main() {
             expect(event.delta, equals(const Offset(10, 10)));
             expect(event.totalDelta, equals(const Offset(10, 10)));
             expect(event.duration.inMilliseconds, greaterThanOrEqualTo(0));
+            expect(event.metadata['pressedKeys'], contains('Shift'));
           },
           orElse: () => fail('Expected dragContinue'),
         );
@@ -167,7 +170,7 @@ void main() {
           delta: null,
           currentViewport: Rect.zero,
           pressedMouseButtons: {},
-          pressedKeys: {},
+          pressedKeys: {LogicalKeyboardKey.shift},
           activeInteraction: null,
         );
 
@@ -195,7 +198,7 @@ void main() {
           delta: const Offset(10, 10),
           currentViewport: Rect.zero,
           pressedMouseButtons: {},
-          pressedKeys: {},
+          pressedKeys: {LogicalKeyboardKey.shift},
           activeInteraction: null,
         );
 
@@ -223,7 +226,7 @@ void main() {
           delta: null,
           currentViewport: Rect.zero,
           pressedMouseButtons: {},
-          pressedKeys: {},
+          pressedKeys: {LogicalKeyboardKey.shift},
           activeInteraction: null,
         );
 
@@ -245,6 +248,7 @@ void main() {
             expect(event.totalDelta, equals(const Offset(10, 10)));
             expect(event.totalDuration.inMilliseconds, greaterThan(0));
             expect(event.wasCancelled, isFalse);
+            expect(event.metadata['pressedKeys'], contains('Shift'));
           },
           orElse: () => fail('Expected dragEnd'),
         );
@@ -271,7 +275,7 @@ void main() {
           delta: null,
           currentViewport: Rect.zero,
           pressedMouseButtons: {},
-          pressedKeys: {},
+          pressedKeys: {LogicalKeyboardKey.shift},
           activeInteraction: null,
         );
 
@@ -300,7 +304,7 @@ void main() {
           delta: null,
           currentViewport: Rect.zero,
           pressedMouseButtons: {},
-          pressedKeys: {},
+          pressedKeys: {LogicalKeyboardKey.shift},
           activeInteraction: null,
         );
 
@@ -318,6 +322,7 @@ void main() {
             expect(event.fingerCount, equals(1));
             expect(event.mouseButton, isNull);
             expect(event.pressDuration.inMilliseconds, greaterThan(0));
+            expect(event.metadata['pressedKeys'], contains('Shift'));
           },
           orElse: () => fail('Expected tap'),
         );
@@ -347,7 +352,7 @@ void main() {
           delta: null,
           currentViewport: Rect.zero,
           pressedMouseButtons: {},
-          pressedKeys: {},
+          pressedKeys: {LogicalKeyboardKey.shift},
           activeInteraction: null,
         );
 

@@ -119,9 +119,9 @@ class ExampleDiagramController implements IDiagramController {
               event.logicalPosition - _draggedObject!.center;
           _startObjectDrag(_draggedObject!);
         } else {
-          // Background drag - let DiagramViewer handle pan
-          _commandController.add(DiagramCommand.setTransform(
-            transform: event.transformSnapshot,
+          // Background drag - let DiagramViewer handle pan using its default logic
+          _commandController.add(DiagramCommand.handleAsUsual(
+            originalEvent: DiagramEventUnion.dragBegin(event),
           ));
         }
       },
@@ -188,12 +188,9 @@ class ExampleDiagramController implements IDiagramController {
             }
           }
         } else {
-          // Background pan - calculate pan transform based on delta
-          final currentTransform = event.transformSnapshot;
-          final panDelta = event.delta;
-          final newTransform = currentTransform.applyPan(panDelta);
-          _commandController.add(DiagramCommand.setTransform(
-            transform: newTransform,
+          // Background pan - let DiagramViewer handle using its default logic
+          _commandController.add(DiagramCommand.handleAsUsual(
+            originalEvent: DiagramEventUnion.dragContinue(event),
           ));
         }
       },
@@ -236,7 +233,9 @@ class ExampleDiagramController implements IDiagramController {
           }
         } else {
           // Background drag end - let DiagramViewer handle bounce-back/inertia
-          // No-op: avoid issuing setTransform here to prevent an immediate snap
+          _commandController.add(DiagramCommand.handleAsUsual(
+            originalEvent: DiagramEventUnion.dragEnd(event),
+          ));
         }
       },
       scroll: (event) {

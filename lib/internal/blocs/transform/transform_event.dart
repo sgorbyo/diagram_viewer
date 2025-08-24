@@ -30,11 +30,9 @@ class TransformEvent with _$TransformEvent {
   /// Reset transform to identity
   const factory TransformEvent.reset() = _Reset;
 
-  /// Update diagram bounds
+  /// Update diagram bounds and apply transform correction if needed.
   const factory TransformEvent.updateDiagramBounds({
     required Rect diagramRect,
     required Size viewportSize,
   }) = _UpdateDiagramBounds;
-
-  // (no extra constructors)
 }

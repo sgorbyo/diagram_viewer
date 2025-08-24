@@ -23,6 +23,9 @@ mixin _$DiagramCommand {
     required TResult Function(
             List<DiagramObjectEntity> renderables, Rect logicalExtent)
         redraw,
+    required TResult Function() enableAutoscroll,
+    required TResult Function() disableAutoscroll,
+    required TResult Function() returnToBounds,
     required TResult Function(Transform2D targetTransform, Duration duration)
         elasticBounceBack,
     required TResult Function(Offset velocity, Duration stepDuration)
@@ -35,6 +38,7 @@ mixin _$DiagramCommand {
     required TResult Function(Offset startPosition) showSelectionOverlay,
     required TResult Function(Offset currentPosition) updateSelectionRect,
     required TResult Function() hideSelectionOverlay,
+    required TResult Function(DiagramEventUnion originalEvent) handleAsUsual,
     required TResult Function(CursorEffect effect) setCursor,
   }) =>
       throw _privateConstructorUsedError;
@@ -45,6 +49,9 @@ mixin _$DiagramCommand {
     TResult? Function(
             List<DiagramObjectEntity> renderables, Rect logicalExtent)?
         redraw,
+    TResult? Function()? enableAutoscroll,
+    TResult? Function()? disableAutoscroll,
+    TResult? Function()? returnToBounds,
     TResult? Function(Transform2D targetTransform, Duration duration)?
         elasticBounceBack,
     TResult? Function(Offset velocity, Duration stepDuration)? autoScrollStep,
@@ -55,6 +62,7 @@ mixin _$DiagramCommand {
     TResult? Function(Offset startPosition)? showSelectionOverlay,
     TResult? Function(Offset currentPosition)? updateSelectionRect,
     TResult? Function()? hideSelectionOverlay,
+    TResult? Function(DiagramEventUnion originalEvent)? handleAsUsual,
     TResult? Function(CursorEffect effect)? setCursor,
   }) =>
       throw _privateConstructorUsedError;
@@ -64,6 +72,9 @@ mixin _$DiagramCommand {
     TResult Function(Transform2D transform)? setTransform,
     TResult Function(List<DiagramObjectEntity> renderables, Rect logicalExtent)?
         redraw,
+    TResult Function()? enableAutoscroll,
+    TResult Function()? disableAutoscroll,
+    TResult Function()? returnToBounds,
     TResult Function(Transform2D targetTransform, Duration duration)?
         elasticBounceBack,
     TResult Function(Offset velocity, Duration stepDuration)? autoScrollStep,
@@ -74,6 +85,7 @@ mixin _$DiagramCommand {
     TResult Function(Offset startPosition)? showSelectionOverlay,
     TResult Function(Offset currentPosition)? updateSelectionRect,
     TResult Function()? hideSelectionOverlay,
+    TResult Function(DiagramEventUnion originalEvent)? handleAsUsual,
     TResult Function(CursorEffect effect)? setCursor,
     required TResult orElse(),
   }) =>
@@ -84,6 +96,9 @@ mixin _$DiagramCommand {
         applyDefaultPanZoom,
     required TResult Function(SetTransformCommand value) setTransform,
     required TResult Function(RedrawCommand value) redraw,
+    required TResult Function(EnableAutoscrollCommand value) enableAutoscroll,
+    required TResult Function(DisableAutoscrollCommand value) disableAutoscroll,
+    required TResult Function(ReturnToBoundsCommand value) returnToBounds,
     required TResult Function(ElasticBounceBackCommand value) elasticBounceBack,
     required TResult Function(AutoScrollStepCommand value) autoScrollStep,
     required TResult Function(StopAutoScrollCommand value) stopAutoScroll,
@@ -96,6 +111,7 @@ mixin _$DiagramCommand {
         updateSelectionRect,
     required TResult Function(HideSelectionOverlayCommand value)
         hideSelectionOverlay,
+    required TResult Function(_HandleAsUsualCommand value) handleAsUsual,
     required TResult Function(_SetCursorCommand value) setCursor,
   }) =>
       throw _privateConstructorUsedError;
@@ -104,6 +120,9 @@ mixin _$DiagramCommand {
     TResult? Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
     TResult? Function(SetTransformCommand value)? setTransform,
     TResult? Function(RedrawCommand value)? redraw,
+    TResult? Function(EnableAutoscrollCommand value)? enableAutoscroll,
+    TResult? Function(DisableAutoscrollCommand value)? disableAutoscroll,
+    TResult? Function(ReturnToBoundsCommand value)? returnToBounds,
     TResult? Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult? Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult? Function(StopAutoScrollCommand value)? stopAutoScroll,
@@ -113,6 +132,7 @@ mixin _$DiagramCommand {
     TResult? Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
     TResult? Function(UpdateSelectionRectCommand value)? updateSelectionRect,
     TResult? Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult? Function(_HandleAsUsualCommand value)? handleAsUsual,
     TResult? Function(_SetCursorCommand value)? setCursor,
   }) =>
       throw _privateConstructorUsedError;
@@ -121,6 +141,9 @@ mixin _$DiagramCommand {
     TResult Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
     TResult Function(SetTransformCommand value)? setTransform,
     TResult Function(RedrawCommand value)? redraw,
+    TResult Function(EnableAutoscrollCommand value)? enableAutoscroll,
+    TResult Function(DisableAutoscrollCommand value)? disableAutoscroll,
+    TResult Function(ReturnToBoundsCommand value)? returnToBounds,
     TResult Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult Function(StopAutoScrollCommand value)? stopAutoScroll,
@@ -130,6 +153,7 @@ mixin _$DiagramCommand {
     TResult Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
     TResult Function(UpdateSelectionRectCommand value)? updateSelectionRect,
     TResult Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult Function(_HandleAsUsualCommand value)? handleAsUsual,
     TResult Function(_SetCursorCommand value)? setCursor,
     required TResult orElse(),
   }) =>
@@ -245,6 +269,9 @@ class _$ApplyDefaultPanZoomCommandImpl extends ApplyDefaultPanZoomCommand {
     required TResult Function(
             List<DiagramObjectEntity> renderables, Rect logicalExtent)
         redraw,
+    required TResult Function() enableAutoscroll,
+    required TResult Function() disableAutoscroll,
+    required TResult Function() returnToBounds,
     required TResult Function(Transform2D targetTransform, Duration duration)
         elasticBounceBack,
     required TResult Function(Offset velocity, Duration stepDuration)
@@ -257,6 +284,7 @@ class _$ApplyDefaultPanZoomCommandImpl extends ApplyDefaultPanZoomCommand {
     required TResult Function(Offset startPosition) showSelectionOverlay,
     required TResult Function(Offset currentPosition) updateSelectionRect,
     required TResult Function() hideSelectionOverlay,
+    required TResult Function(DiagramEventUnion originalEvent) handleAsUsual,
     required TResult Function(CursorEffect effect) setCursor,
   }) {
     return applyDefaultPanZoom(origin);
@@ -270,6 +298,9 @@ class _$ApplyDefaultPanZoomCommandImpl extends ApplyDefaultPanZoomCommand {
     TResult? Function(
             List<DiagramObjectEntity> renderables, Rect logicalExtent)?
         redraw,
+    TResult? Function()? enableAutoscroll,
+    TResult? Function()? disableAutoscroll,
+    TResult? Function()? returnToBounds,
     TResult? Function(Transform2D targetTransform, Duration duration)?
         elasticBounceBack,
     TResult? Function(Offset velocity, Duration stepDuration)? autoScrollStep,
@@ -280,6 +311,7 @@ class _$ApplyDefaultPanZoomCommandImpl extends ApplyDefaultPanZoomCommand {
     TResult? Function(Offset startPosition)? showSelectionOverlay,
     TResult? Function(Offset currentPosition)? updateSelectionRect,
     TResult? Function()? hideSelectionOverlay,
+    TResult? Function(DiagramEventUnion originalEvent)? handleAsUsual,
     TResult? Function(CursorEffect effect)? setCursor,
   }) {
     return applyDefaultPanZoom?.call(origin);
@@ -292,6 +324,9 @@ class _$ApplyDefaultPanZoomCommandImpl extends ApplyDefaultPanZoomCommand {
     TResult Function(Transform2D transform)? setTransform,
     TResult Function(List<DiagramObjectEntity> renderables, Rect logicalExtent)?
         redraw,
+    TResult Function()? enableAutoscroll,
+    TResult Function()? disableAutoscroll,
+    TResult Function()? returnToBounds,
     TResult Function(Transform2D targetTransform, Duration duration)?
         elasticBounceBack,
     TResult Function(Offset velocity, Duration stepDuration)? autoScrollStep,
@@ -302,6 +337,7 @@ class _$ApplyDefaultPanZoomCommandImpl extends ApplyDefaultPanZoomCommand {
     TResult Function(Offset startPosition)? showSelectionOverlay,
     TResult Function(Offset currentPosition)? updateSelectionRect,
     TResult Function()? hideSelectionOverlay,
+    TResult Function(DiagramEventUnion originalEvent)? handleAsUsual,
     TResult Function(CursorEffect effect)? setCursor,
     required TResult orElse(),
   }) {
@@ -318,6 +354,9 @@ class _$ApplyDefaultPanZoomCommandImpl extends ApplyDefaultPanZoomCommand {
         applyDefaultPanZoom,
     required TResult Function(SetTransformCommand value) setTransform,
     required TResult Function(RedrawCommand value) redraw,
+    required TResult Function(EnableAutoscrollCommand value) enableAutoscroll,
+    required TResult Function(DisableAutoscrollCommand value) disableAutoscroll,
+    required TResult Function(ReturnToBoundsCommand value) returnToBounds,
     required TResult Function(ElasticBounceBackCommand value) elasticBounceBack,
     required TResult Function(AutoScrollStepCommand value) autoScrollStep,
     required TResult Function(StopAutoScrollCommand value) stopAutoScroll,
@@ -330,6 +369,7 @@ class _$ApplyDefaultPanZoomCommandImpl extends ApplyDefaultPanZoomCommand {
         updateSelectionRect,
     required TResult Function(HideSelectionOverlayCommand value)
         hideSelectionOverlay,
+    required TResult Function(_HandleAsUsualCommand value) handleAsUsual,
     required TResult Function(_SetCursorCommand value) setCursor,
   }) {
     return applyDefaultPanZoom(this);
@@ -341,6 +381,9 @@ class _$ApplyDefaultPanZoomCommandImpl extends ApplyDefaultPanZoomCommand {
     TResult? Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
     TResult? Function(SetTransformCommand value)? setTransform,
     TResult? Function(RedrawCommand value)? redraw,
+    TResult? Function(EnableAutoscrollCommand value)? enableAutoscroll,
+    TResult? Function(DisableAutoscrollCommand value)? disableAutoscroll,
+    TResult? Function(ReturnToBoundsCommand value)? returnToBounds,
     TResult? Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult? Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult? Function(StopAutoScrollCommand value)? stopAutoScroll,
@@ -350,6 +393,7 @@ class _$ApplyDefaultPanZoomCommandImpl extends ApplyDefaultPanZoomCommand {
     TResult? Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
     TResult? Function(UpdateSelectionRectCommand value)? updateSelectionRect,
     TResult? Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult? Function(_HandleAsUsualCommand value)? handleAsUsual,
     TResult? Function(_SetCursorCommand value)? setCursor,
   }) {
     return applyDefaultPanZoom?.call(this);
@@ -361,6 +405,9 @@ class _$ApplyDefaultPanZoomCommandImpl extends ApplyDefaultPanZoomCommand {
     TResult Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
     TResult Function(SetTransformCommand value)? setTransform,
     TResult Function(RedrawCommand value)? redraw,
+    TResult Function(EnableAutoscrollCommand value)? enableAutoscroll,
+    TResult Function(DisableAutoscrollCommand value)? disableAutoscroll,
+    TResult Function(ReturnToBoundsCommand value)? returnToBounds,
     TResult Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult Function(StopAutoScrollCommand value)? stopAutoScroll,
@@ -370,6 +417,7 @@ class _$ApplyDefaultPanZoomCommandImpl extends ApplyDefaultPanZoomCommand {
     TResult Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
     TResult Function(UpdateSelectionRectCommand value)? updateSelectionRect,
     TResult Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult Function(_HandleAsUsualCommand value)? handleAsUsual,
     TResult Function(_SetCursorCommand value)? setCursor,
     required TResult orElse(),
   }) {
@@ -481,6 +529,9 @@ class _$SetTransformCommandImpl extends SetTransformCommand {
     required TResult Function(
             List<DiagramObjectEntity> renderables, Rect logicalExtent)
         redraw,
+    required TResult Function() enableAutoscroll,
+    required TResult Function() disableAutoscroll,
+    required TResult Function() returnToBounds,
     required TResult Function(Transform2D targetTransform, Duration duration)
         elasticBounceBack,
     required TResult Function(Offset velocity, Duration stepDuration)
@@ -493,6 +544,7 @@ class _$SetTransformCommandImpl extends SetTransformCommand {
     required TResult Function(Offset startPosition) showSelectionOverlay,
     required TResult Function(Offset currentPosition) updateSelectionRect,
     required TResult Function() hideSelectionOverlay,
+    required TResult Function(DiagramEventUnion originalEvent) handleAsUsual,
     required TResult Function(CursorEffect effect) setCursor,
   }) {
     return setTransform(transform);
@@ -506,6 +558,9 @@ class _$SetTransformCommandImpl extends SetTransformCommand {
     TResult? Function(
             List<DiagramObjectEntity> renderables, Rect logicalExtent)?
         redraw,
+    TResult? Function()? enableAutoscroll,
+    TResult? Function()? disableAutoscroll,
+    TResult? Function()? returnToBounds,
     TResult? Function(Transform2D targetTransform, Duration duration)?
         elasticBounceBack,
     TResult? Function(Offset velocity, Duration stepDuration)? autoScrollStep,
@@ -516,6 +571,7 @@ class _$SetTransformCommandImpl extends SetTransformCommand {
     TResult? Function(Offset startPosition)? showSelectionOverlay,
     TResult? Function(Offset currentPosition)? updateSelectionRect,
     TResult? Function()? hideSelectionOverlay,
+    TResult? Function(DiagramEventUnion originalEvent)? handleAsUsual,
     TResult? Function(CursorEffect effect)? setCursor,
   }) {
     return setTransform?.call(transform);
@@ -528,6 +584,9 @@ class _$SetTransformCommandImpl extends SetTransformCommand {
     TResult Function(Transform2D transform)? setTransform,
     TResult Function(List<DiagramObjectEntity> renderables, Rect logicalExtent)?
         redraw,
+    TResult Function()? enableAutoscroll,
+    TResult Function()? disableAutoscroll,
+    TResult Function()? returnToBounds,
     TResult Function(Transform2D targetTransform, Duration duration)?
         elasticBounceBack,
     TResult Function(Offset velocity, Duration stepDuration)? autoScrollStep,
@@ -538,6 +597,7 @@ class _$SetTransformCommandImpl extends SetTransformCommand {
     TResult Function(Offset startPosition)? showSelectionOverlay,
     TResult Function(Offset currentPosition)? updateSelectionRect,
     TResult Function()? hideSelectionOverlay,
+    TResult Function(DiagramEventUnion originalEvent)? handleAsUsual,
     TResult Function(CursorEffect effect)? setCursor,
     required TResult orElse(),
   }) {
@@ -554,6 +614,9 @@ class _$SetTransformCommandImpl extends SetTransformCommand {
         applyDefaultPanZoom,
     required TResult Function(SetTransformCommand value) setTransform,
     required TResult Function(RedrawCommand value) redraw,
+    required TResult Function(EnableAutoscrollCommand value) enableAutoscroll,
+    required TResult Function(DisableAutoscrollCommand value) disableAutoscroll,
+    required TResult Function(ReturnToBoundsCommand value) returnToBounds,
     required TResult Function(ElasticBounceBackCommand value) elasticBounceBack,
     required TResult Function(AutoScrollStepCommand value) autoScrollStep,
     required TResult Function(StopAutoScrollCommand value) stopAutoScroll,
@@ -566,6 +629,7 @@ class _$SetTransformCommandImpl extends SetTransformCommand {
         updateSelectionRect,
     required TResult Function(HideSelectionOverlayCommand value)
         hideSelectionOverlay,
+    required TResult Function(_HandleAsUsualCommand value) handleAsUsual,
     required TResult Function(_SetCursorCommand value) setCursor,
   }) {
     return setTransform(this);
@@ -577,6 +641,9 @@ class _$SetTransformCommandImpl extends SetTransformCommand {
     TResult? Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
     TResult? Function(SetTransformCommand value)? setTransform,
     TResult? Function(RedrawCommand value)? redraw,
+    TResult? Function(EnableAutoscrollCommand value)? enableAutoscroll,
+    TResult? Function(DisableAutoscrollCommand value)? disableAutoscroll,
+    TResult? Function(ReturnToBoundsCommand value)? returnToBounds,
     TResult? Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult? Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult? Function(StopAutoScrollCommand value)? stopAutoScroll,
@@ -586,6 +653,7 @@ class _$SetTransformCommandImpl extends SetTransformCommand {
     TResult? Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
     TResult? Function(UpdateSelectionRectCommand value)? updateSelectionRect,
     TResult? Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult? Function(_HandleAsUsualCommand value)? handleAsUsual,
     TResult? Function(_SetCursorCommand value)? setCursor,
   }) {
     return setTransform?.call(this);
@@ -597,6 +665,9 @@ class _$SetTransformCommandImpl extends SetTransformCommand {
     TResult Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
     TResult Function(SetTransformCommand value)? setTransform,
     TResult Function(RedrawCommand value)? redraw,
+    TResult Function(EnableAutoscrollCommand value)? enableAutoscroll,
+    TResult Function(DisableAutoscrollCommand value)? disableAutoscroll,
+    TResult Function(ReturnToBoundsCommand value)? returnToBounds,
     TResult Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult Function(StopAutoScrollCommand value)? stopAutoScroll,
@@ -606,6 +677,7 @@ class _$SetTransformCommandImpl extends SetTransformCommand {
     TResult Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
     TResult Function(UpdateSelectionRectCommand value)? updateSelectionRect,
     TResult Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult Function(_HandleAsUsualCommand value)? handleAsUsual,
     TResult Function(_SetCursorCommand value)? setCursor,
     required TResult orElse(),
   }) {
@@ -724,6 +796,9 @@ class _$RedrawCommandImpl extends RedrawCommand {
     required TResult Function(
             List<DiagramObjectEntity> renderables, Rect logicalExtent)
         redraw,
+    required TResult Function() enableAutoscroll,
+    required TResult Function() disableAutoscroll,
+    required TResult Function() returnToBounds,
     required TResult Function(Transform2D targetTransform, Duration duration)
         elasticBounceBack,
     required TResult Function(Offset velocity, Duration stepDuration)
@@ -736,6 +811,7 @@ class _$RedrawCommandImpl extends RedrawCommand {
     required TResult Function(Offset startPosition) showSelectionOverlay,
     required TResult Function(Offset currentPosition) updateSelectionRect,
     required TResult Function() hideSelectionOverlay,
+    required TResult Function(DiagramEventUnion originalEvent) handleAsUsual,
     required TResult Function(CursorEffect effect) setCursor,
   }) {
     return redraw(renderables, logicalExtent);
@@ -749,6 +825,9 @@ class _$RedrawCommandImpl extends RedrawCommand {
     TResult? Function(
             List<DiagramObjectEntity> renderables, Rect logicalExtent)?
         redraw,
+    TResult? Function()? enableAutoscroll,
+    TResult? Function()? disableAutoscroll,
+    TResult? Function()? returnToBounds,
     TResult? Function(Transform2D targetTransform, Duration duration)?
         elasticBounceBack,
     TResult? Function(Offset velocity, Duration stepDuration)? autoScrollStep,
@@ -759,6 +838,7 @@ class _$RedrawCommandImpl extends RedrawCommand {
     TResult? Function(Offset startPosition)? showSelectionOverlay,
     TResult? Function(Offset currentPosition)? updateSelectionRect,
     TResult? Function()? hideSelectionOverlay,
+    TResult? Function(DiagramEventUnion originalEvent)? handleAsUsual,
     TResult? Function(CursorEffect effect)? setCursor,
   }) {
     return redraw?.call(renderables, logicalExtent);
@@ -771,6 +851,9 @@ class _$RedrawCommandImpl extends RedrawCommand {
     TResult Function(Transform2D transform)? setTransform,
     TResult Function(List<DiagramObjectEntity> renderables, Rect logicalExtent)?
         redraw,
+    TResult Function()? enableAutoscroll,
+    TResult Function()? disableAutoscroll,
+    TResult Function()? returnToBounds,
     TResult Function(Transform2D targetTransform, Duration duration)?
         elasticBounceBack,
     TResult Function(Offset velocity, Duration stepDuration)? autoScrollStep,
@@ -781,6 +864,7 @@ class _$RedrawCommandImpl extends RedrawCommand {
     TResult Function(Offset startPosition)? showSelectionOverlay,
     TResult Function(Offset currentPosition)? updateSelectionRect,
     TResult Function()? hideSelectionOverlay,
+    TResult Function(DiagramEventUnion originalEvent)? handleAsUsual,
     TResult Function(CursorEffect effect)? setCursor,
     required TResult orElse(),
   }) {
@@ -797,6 +881,9 @@ class _$RedrawCommandImpl extends RedrawCommand {
         applyDefaultPanZoom,
     required TResult Function(SetTransformCommand value) setTransform,
     required TResult Function(RedrawCommand value) redraw,
+    required TResult Function(EnableAutoscrollCommand value) enableAutoscroll,
+    required TResult Function(DisableAutoscrollCommand value) disableAutoscroll,
+    required TResult Function(ReturnToBoundsCommand value) returnToBounds,
     required TResult Function(ElasticBounceBackCommand value) elasticBounceBack,
     required TResult Function(AutoScrollStepCommand value) autoScrollStep,
     required TResult Function(StopAutoScrollCommand value) stopAutoScroll,
@@ -809,6 +896,7 @@ class _$RedrawCommandImpl extends RedrawCommand {
         updateSelectionRect,
     required TResult Function(HideSelectionOverlayCommand value)
         hideSelectionOverlay,
+    required TResult Function(_HandleAsUsualCommand value) handleAsUsual,
     required TResult Function(_SetCursorCommand value) setCursor,
   }) {
     return redraw(this);
@@ -820,6 +908,9 @@ class _$RedrawCommandImpl extends RedrawCommand {
     TResult? Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
     TResult? Function(SetTransformCommand value)? setTransform,
     TResult? Function(RedrawCommand value)? redraw,
+    TResult? Function(EnableAutoscrollCommand value)? enableAutoscroll,
+    TResult? Function(DisableAutoscrollCommand value)? disableAutoscroll,
+    TResult? Function(ReturnToBoundsCommand value)? returnToBounds,
     TResult? Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult? Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult? Function(StopAutoScrollCommand value)? stopAutoScroll,
@@ -829,6 +920,7 @@ class _$RedrawCommandImpl extends RedrawCommand {
     TResult? Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
     TResult? Function(UpdateSelectionRectCommand value)? updateSelectionRect,
     TResult? Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult? Function(_HandleAsUsualCommand value)? handleAsUsual,
     TResult? Function(_SetCursorCommand value)? setCursor,
   }) {
     return redraw?.call(this);
@@ -840,6 +932,9 @@ class _$RedrawCommandImpl extends RedrawCommand {
     TResult Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
     TResult Function(SetTransformCommand value)? setTransform,
     TResult Function(RedrawCommand value)? redraw,
+    TResult Function(EnableAutoscrollCommand value)? enableAutoscroll,
+    TResult Function(DisableAutoscrollCommand value)? disableAutoscroll,
+    TResult Function(ReturnToBoundsCommand value)? returnToBounds,
     TResult Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult Function(StopAutoScrollCommand value)? stopAutoScroll,
@@ -849,6 +944,7 @@ class _$RedrawCommandImpl extends RedrawCommand {
     TResult Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
     TResult Function(UpdateSelectionRectCommand value)? updateSelectionRect,
     TResult Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult Function(_HandleAsUsualCommand value)? handleAsUsual,
     TResult Function(_SetCursorCommand value)? setCursor,
     required TResult orElse(),
   }) {
@@ -873,6 +969,644 @@ abstract class RedrawCommand extends DiagramCommand {
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$RedrawCommandImplCopyWith<_$RedrawCommandImpl> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$EnableAutoscrollCommandImplCopyWith<$Res> {
+  factory _$$EnableAutoscrollCommandImplCopyWith(
+          _$EnableAutoscrollCommandImpl value,
+          $Res Function(_$EnableAutoscrollCommandImpl) then) =
+      __$$EnableAutoscrollCommandImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$EnableAutoscrollCommandImplCopyWithImpl<$Res>
+    extends _$DiagramCommandCopyWithImpl<$Res, _$EnableAutoscrollCommandImpl>
+    implements _$$EnableAutoscrollCommandImplCopyWith<$Res> {
+  __$$EnableAutoscrollCommandImplCopyWithImpl(
+      _$EnableAutoscrollCommandImpl _value,
+      $Res Function(_$EnableAutoscrollCommandImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of DiagramCommand
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$EnableAutoscrollCommandImpl extends EnableAutoscrollCommand {
+  const _$EnableAutoscrollCommandImpl() : super._();
+
+  @override
+  String toString() {
+    return 'DiagramCommand.enableAutoscroll()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$EnableAutoscrollCommandImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(PhysicalEvent origin) applyDefaultPanZoom,
+    required TResult Function(Transform2D transform) setTransform,
+    required TResult Function(
+            List<DiagramObjectEntity> renderables, Rect logicalExtent)
+        redraw,
+    required TResult Function() enableAutoscroll,
+    required TResult Function() disableAutoscroll,
+    required TResult Function() returnToBounds,
+    required TResult Function(Transform2D targetTransform, Duration duration)
+        elasticBounceBack,
+    required TResult Function(Offset velocity, Duration stepDuration)
+        autoScrollStep,
+    required TResult Function() stopAutoScroll,
+    required TResult Function(Object? ghostSpec, Offset position)
+        showDragOverlay,
+    required TResult Function(Offset position) updateDragOverlay,
+    required TResult Function() hideDragOverlay,
+    required TResult Function(Offset startPosition) showSelectionOverlay,
+    required TResult Function(Offset currentPosition) updateSelectionRect,
+    required TResult Function() hideSelectionOverlay,
+    required TResult Function(DiagramEventUnion originalEvent) handleAsUsual,
+    required TResult Function(CursorEffect effect) setCursor,
+  }) {
+    return enableAutoscroll();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(PhysicalEvent origin)? applyDefaultPanZoom,
+    TResult? Function(Transform2D transform)? setTransform,
+    TResult? Function(
+            List<DiagramObjectEntity> renderables, Rect logicalExtent)?
+        redraw,
+    TResult? Function()? enableAutoscroll,
+    TResult? Function()? disableAutoscroll,
+    TResult? Function()? returnToBounds,
+    TResult? Function(Transform2D targetTransform, Duration duration)?
+        elasticBounceBack,
+    TResult? Function(Offset velocity, Duration stepDuration)? autoScrollStep,
+    TResult? Function()? stopAutoScroll,
+    TResult? Function(Object? ghostSpec, Offset position)? showDragOverlay,
+    TResult? Function(Offset position)? updateDragOverlay,
+    TResult? Function()? hideDragOverlay,
+    TResult? Function(Offset startPosition)? showSelectionOverlay,
+    TResult? Function(Offset currentPosition)? updateSelectionRect,
+    TResult? Function()? hideSelectionOverlay,
+    TResult? Function(DiagramEventUnion originalEvent)? handleAsUsual,
+    TResult? Function(CursorEffect effect)? setCursor,
+  }) {
+    return enableAutoscroll?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(PhysicalEvent origin)? applyDefaultPanZoom,
+    TResult Function(Transform2D transform)? setTransform,
+    TResult Function(List<DiagramObjectEntity> renderables, Rect logicalExtent)?
+        redraw,
+    TResult Function()? enableAutoscroll,
+    TResult Function()? disableAutoscroll,
+    TResult Function()? returnToBounds,
+    TResult Function(Transform2D targetTransform, Duration duration)?
+        elasticBounceBack,
+    TResult Function(Offset velocity, Duration stepDuration)? autoScrollStep,
+    TResult Function()? stopAutoScroll,
+    TResult Function(Object? ghostSpec, Offset position)? showDragOverlay,
+    TResult Function(Offset position)? updateDragOverlay,
+    TResult Function()? hideDragOverlay,
+    TResult Function(Offset startPosition)? showSelectionOverlay,
+    TResult Function(Offset currentPosition)? updateSelectionRect,
+    TResult Function()? hideSelectionOverlay,
+    TResult Function(DiagramEventUnion originalEvent)? handleAsUsual,
+    TResult Function(CursorEffect effect)? setCursor,
+    required TResult orElse(),
+  }) {
+    if (enableAutoscroll != null) {
+      return enableAutoscroll();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(ApplyDefaultPanZoomCommand value)
+        applyDefaultPanZoom,
+    required TResult Function(SetTransformCommand value) setTransform,
+    required TResult Function(RedrawCommand value) redraw,
+    required TResult Function(EnableAutoscrollCommand value) enableAutoscroll,
+    required TResult Function(DisableAutoscrollCommand value) disableAutoscroll,
+    required TResult Function(ReturnToBoundsCommand value) returnToBounds,
+    required TResult Function(ElasticBounceBackCommand value) elasticBounceBack,
+    required TResult Function(AutoScrollStepCommand value) autoScrollStep,
+    required TResult Function(StopAutoScrollCommand value) stopAutoScroll,
+    required TResult Function(ShowDragOverlayCommand value) showDragOverlay,
+    required TResult Function(UpdateDragOverlayCommand value) updateDragOverlay,
+    required TResult Function(HideDragOverlayCommand value) hideDragOverlay,
+    required TResult Function(ShowSelectionOverlayCommand value)
+        showSelectionOverlay,
+    required TResult Function(UpdateSelectionRectCommand value)
+        updateSelectionRect,
+    required TResult Function(HideSelectionOverlayCommand value)
+        hideSelectionOverlay,
+    required TResult Function(_HandleAsUsualCommand value) handleAsUsual,
+    required TResult Function(_SetCursorCommand value) setCursor,
+  }) {
+    return enableAutoscroll(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
+    TResult? Function(SetTransformCommand value)? setTransform,
+    TResult? Function(RedrawCommand value)? redraw,
+    TResult? Function(EnableAutoscrollCommand value)? enableAutoscroll,
+    TResult? Function(DisableAutoscrollCommand value)? disableAutoscroll,
+    TResult? Function(ReturnToBoundsCommand value)? returnToBounds,
+    TResult? Function(ElasticBounceBackCommand value)? elasticBounceBack,
+    TResult? Function(AutoScrollStepCommand value)? autoScrollStep,
+    TResult? Function(StopAutoScrollCommand value)? stopAutoScroll,
+    TResult? Function(ShowDragOverlayCommand value)? showDragOverlay,
+    TResult? Function(UpdateDragOverlayCommand value)? updateDragOverlay,
+    TResult? Function(HideDragOverlayCommand value)? hideDragOverlay,
+    TResult? Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
+    TResult? Function(UpdateSelectionRectCommand value)? updateSelectionRect,
+    TResult? Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult? Function(_HandleAsUsualCommand value)? handleAsUsual,
+    TResult? Function(_SetCursorCommand value)? setCursor,
+  }) {
+    return enableAutoscroll?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
+    TResult Function(SetTransformCommand value)? setTransform,
+    TResult Function(RedrawCommand value)? redraw,
+    TResult Function(EnableAutoscrollCommand value)? enableAutoscroll,
+    TResult Function(DisableAutoscrollCommand value)? disableAutoscroll,
+    TResult Function(ReturnToBoundsCommand value)? returnToBounds,
+    TResult Function(ElasticBounceBackCommand value)? elasticBounceBack,
+    TResult Function(AutoScrollStepCommand value)? autoScrollStep,
+    TResult Function(StopAutoScrollCommand value)? stopAutoScroll,
+    TResult Function(ShowDragOverlayCommand value)? showDragOverlay,
+    TResult Function(UpdateDragOverlayCommand value)? updateDragOverlay,
+    TResult Function(HideDragOverlayCommand value)? hideDragOverlay,
+    TResult Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
+    TResult Function(UpdateSelectionRectCommand value)? updateSelectionRect,
+    TResult Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult Function(_HandleAsUsualCommand value)? handleAsUsual,
+    TResult Function(_SetCursorCommand value)? setCursor,
+    required TResult orElse(),
+  }) {
+    if (enableAutoscroll != null) {
+      return enableAutoscroll(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class EnableAutoscrollCommand extends DiagramCommand {
+  const factory EnableAutoscrollCommand() = _$EnableAutoscrollCommandImpl;
+  const EnableAutoscrollCommand._() : super._();
+}
+
+/// @nodoc
+abstract class _$$DisableAutoscrollCommandImplCopyWith<$Res> {
+  factory _$$DisableAutoscrollCommandImplCopyWith(
+          _$DisableAutoscrollCommandImpl value,
+          $Res Function(_$DisableAutoscrollCommandImpl) then) =
+      __$$DisableAutoscrollCommandImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$DisableAutoscrollCommandImplCopyWithImpl<$Res>
+    extends _$DiagramCommandCopyWithImpl<$Res, _$DisableAutoscrollCommandImpl>
+    implements _$$DisableAutoscrollCommandImplCopyWith<$Res> {
+  __$$DisableAutoscrollCommandImplCopyWithImpl(
+      _$DisableAutoscrollCommandImpl _value,
+      $Res Function(_$DisableAutoscrollCommandImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of DiagramCommand
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$DisableAutoscrollCommandImpl extends DisableAutoscrollCommand {
+  const _$DisableAutoscrollCommandImpl() : super._();
+
+  @override
+  String toString() {
+    return 'DiagramCommand.disableAutoscroll()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$DisableAutoscrollCommandImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(PhysicalEvent origin) applyDefaultPanZoom,
+    required TResult Function(Transform2D transform) setTransform,
+    required TResult Function(
+            List<DiagramObjectEntity> renderables, Rect logicalExtent)
+        redraw,
+    required TResult Function() enableAutoscroll,
+    required TResult Function() disableAutoscroll,
+    required TResult Function() returnToBounds,
+    required TResult Function(Transform2D targetTransform, Duration duration)
+        elasticBounceBack,
+    required TResult Function(Offset velocity, Duration stepDuration)
+        autoScrollStep,
+    required TResult Function() stopAutoScroll,
+    required TResult Function(Object? ghostSpec, Offset position)
+        showDragOverlay,
+    required TResult Function(Offset position) updateDragOverlay,
+    required TResult Function() hideDragOverlay,
+    required TResult Function(Offset startPosition) showSelectionOverlay,
+    required TResult Function(Offset currentPosition) updateSelectionRect,
+    required TResult Function() hideSelectionOverlay,
+    required TResult Function(DiagramEventUnion originalEvent) handleAsUsual,
+    required TResult Function(CursorEffect effect) setCursor,
+  }) {
+    return disableAutoscroll();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(PhysicalEvent origin)? applyDefaultPanZoom,
+    TResult? Function(Transform2D transform)? setTransform,
+    TResult? Function(
+            List<DiagramObjectEntity> renderables, Rect logicalExtent)?
+        redraw,
+    TResult? Function()? enableAutoscroll,
+    TResult? Function()? disableAutoscroll,
+    TResult? Function()? returnToBounds,
+    TResult? Function(Transform2D targetTransform, Duration duration)?
+        elasticBounceBack,
+    TResult? Function(Offset velocity, Duration stepDuration)? autoScrollStep,
+    TResult? Function()? stopAutoScroll,
+    TResult? Function(Object? ghostSpec, Offset position)? showDragOverlay,
+    TResult? Function(Offset position)? updateDragOverlay,
+    TResult? Function()? hideDragOverlay,
+    TResult? Function(Offset startPosition)? showSelectionOverlay,
+    TResult? Function(Offset currentPosition)? updateSelectionRect,
+    TResult? Function()? hideSelectionOverlay,
+    TResult? Function(DiagramEventUnion originalEvent)? handleAsUsual,
+    TResult? Function(CursorEffect effect)? setCursor,
+  }) {
+    return disableAutoscroll?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(PhysicalEvent origin)? applyDefaultPanZoom,
+    TResult Function(Transform2D transform)? setTransform,
+    TResult Function(List<DiagramObjectEntity> renderables, Rect logicalExtent)?
+        redraw,
+    TResult Function()? enableAutoscroll,
+    TResult Function()? disableAutoscroll,
+    TResult Function()? returnToBounds,
+    TResult Function(Transform2D targetTransform, Duration duration)?
+        elasticBounceBack,
+    TResult Function(Offset velocity, Duration stepDuration)? autoScrollStep,
+    TResult Function()? stopAutoScroll,
+    TResult Function(Object? ghostSpec, Offset position)? showDragOverlay,
+    TResult Function(Offset position)? updateDragOverlay,
+    TResult Function()? hideDragOverlay,
+    TResult Function(Offset startPosition)? showSelectionOverlay,
+    TResult Function(Offset currentPosition)? updateSelectionRect,
+    TResult Function()? hideSelectionOverlay,
+    TResult Function(DiagramEventUnion originalEvent)? handleAsUsual,
+    TResult Function(CursorEffect effect)? setCursor,
+    required TResult orElse(),
+  }) {
+    if (disableAutoscroll != null) {
+      return disableAutoscroll();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(ApplyDefaultPanZoomCommand value)
+        applyDefaultPanZoom,
+    required TResult Function(SetTransformCommand value) setTransform,
+    required TResult Function(RedrawCommand value) redraw,
+    required TResult Function(EnableAutoscrollCommand value) enableAutoscroll,
+    required TResult Function(DisableAutoscrollCommand value) disableAutoscroll,
+    required TResult Function(ReturnToBoundsCommand value) returnToBounds,
+    required TResult Function(ElasticBounceBackCommand value) elasticBounceBack,
+    required TResult Function(AutoScrollStepCommand value) autoScrollStep,
+    required TResult Function(StopAutoScrollCommand value) stopAutoScroll,
+    required TResult Function(ShowDragOverlayCommand value) showDragOverlay,
+    required TResult Function(UpdateDragOverlayCommand value) updateDragOverlay,
+    required TResult Function(HideDragOverlayCommand value) hideDragOverlay,
+    required TResult Function(ShowSelectionOverlayCommand value)
+        showSelectionOverlay,
+    required TResult Function(UpdateSelectionRectCommand value)
+        updateSelectionRect,
+    required TResult Function(HideSelectionOverlayCommand value)
+        hideSelectionOverlay,
+    required TResult Function(_HandleAsUsualCommand value) handleAsUsual,
+    required TResult Function(_SetCursorCommand value) setCursor,
+  }) {
+    return disableAutoscroll(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
+    TResult? Function(SetTransformCommand value)? setTransform,
+    TResult? Function(RedrawCommand value)? redraw,
+    TResult? Function(EnableAutoscrollCommand value)? enableAutoscroll,
+    TResult? Function(DisableAutoscrollCommand value)? disableAutoscroll,
+    TResult? Function(ReturnToBoundsCommand value)? returnToBounds,
+    TResult? Function(ElasticBounceBackCommand value)? elasticBounceBack,
+    TResult? Function(AutoScrollStepCommand value)? autoScrollStep,
+    TResult? Function(StopAutoScrollCommand value)? stopAutoScroll,
+    TResult? Function(ShowDragOverlayCommand value)? showDragOverlay,
+    TResult? Function(UpdateDragOverlayCommand value)? updateDragOverlay,
+    TResult? Function(HideDragOverlayCommand value)? hideDragOverlay,
+    TResult? Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
+    TResult? Function(UpdateSelectionRectCommand value)? updateSelectionRect,
+    TResult? Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult? Function(_HandleAsUsualCommand value)? handleAsUsual,
+    TResult? Function(_SetCursorCommand value)? setCursor,
+  }) {
+    return disableAutoscroll?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
+    TResult Function(SetTransformCommand value)? setTransform,
+    TResult Function(RedrawCommand value)? redraw,
+    TResult Function(EnableAutoscrollCommand value)? enableAutoscroll,
+    TResult Function(DisableAutoscrollCommand value)? disableAutoscroll,
+    TResult Function(ReturnToBoundsCommand value)? returnToBounds,
+    TResult Function(ElasticBounceBackCommand value)? elasticBounceBack,
+    TResult Function(AutoScrollStepCommand value)? autoScrollStep,
+    TResult Function(StopAutoScrollCommand value)? stopAutoScroll,
+    TResult Function(ShowDragOverlayCommand value)? showDragOverlay,
+    TResult Function(UpdateDragOverlayCommand value)? updateDragOverlay,
+    TResult Function(HideDragOverlayCommand value)? hideDragOverlay,
+    TResult Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
+    TResult Function(UpdateSelectionRectCommand value)? updateSelectionRect,
+    TResult Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult Function(_HandleAsUsualCommand value)? handleAsUsual,
+    TResult Function(_SetCursorCommand value)? setCursor,
+    required TResult orElse(),
+  }) {
+    if (disableAutoscroll != null) {
+      return disableAutoscroll(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class DisableAutoscrollCommand extends DiagramCommand {
+  const factory DisableAutoscrollCommand() = _$DisableAutoscrollCommandImpl;
+  const DisableAutoscrollCommand._() : super._();
+}
+
+/// @nodoc
+abstract class _$$ReturnToBoundsCommandImplCopyWith<$Res> {
+  factory _$$ReturnToBoundsCommandImplCopyWith(
+          _$ReturnToBoundsCommandImpl value,
+          $Res Function(_$ReturnToBoundsCommandImpl) then) =
+      __$$ReturnToBoundsCommandImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$ReturnToBoundsCommandImplCopyWithImpl<$Res>
+    extends _$DiagramCommandCopyWithImpl<$Res, _$ReturnToBoundsCommandImpl>
+    implements _$$ReturnToBoundsCommandImplCopyWith<$Res> {
+  __$$ReturnToBoundsCommandImplCopyWithImpl(_$ReturnToBoundsCommandImpl _value,
+      $Res Function(_$ReturnToBoundsCommandImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of DiagramCommand
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$ReturnToBoundsCommandImpl extends ReturnToBoundsCommand {
+  const _$ReturnToBoundsCommandImpl() : super._();
+
+  @override
+  String toString() {
+    return 'DiagramCommand.returnToBounds()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ReturnToBoundsCommandImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(PhysicalEvent origin) applyDefaultPanZoom,
+    required TResult Function(Transform2D transform) setTransform,
+    required TResult Function(
+            List<DiagramObjectEntity> renderables, Rect logicalExtent)
+        redraw,
+    required TResult Function() enableAutoscroll,
+    required TResult Function() disableAutoscroll,
+    required TResult Function() returnToBounds,
+    required TResult Function(Transform2D targetTransform, Duration duration)
+        elasticBounceBack,
+    required TResult Function(Offset velocity, Duration stepDuration)
+        autoScrollStep,
+    required TResult Function() stopAutoScroll,
+    required TResult Function(Object? ghostSpec, Offset position)
+        showDragOverlay,
+    required TResult Function(Offset position) updateDragOverlay,
+    required TResult Function() hideDragOverlay,
+    required TResult Function(Offset startPosition) showSelectionOverlay,
+    required TResult Function(Offset currentPosition) updateSelectionRect,
+    required TResult Function() hideSelectionOverlay,
+    required TResult Function(DiagramEventUnion originalEvent) handleAsUsual,
+    required TResult Function(CursorEffect effect) setCursor,
+  }) {
+    return returnToBounds();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(PhysicalEvent origin)? applyDefaultPanZoom,
+    TResult? Function(Transform2D transform)? setTransform,
+    TResult? Function(
+            List<DiagramObjectEntity> renderables, Rect logicalExtent)?
+        redraw,
+    TResult? Function()? enableAutoscroll,
+    TResult? Function()? disableAutoscroll,
+    TResult? Function()? returnToBounds,
+    TResult? Function(Transform2D targetTransform, Duration duration)?
+        elasticBounceBack,
+    TResult? Function(Offset velocity, Duration stepDuration)? autoScrollStep,
+    TResult? Function()? stopAutoScroll,
+    TResult? Function(Object? ghostSpec, Offset position)? showDragOverlay,
+    TResult? Function(Offset position)? updateDragOverlay,
+    TResult? Function()? hideDragOverlay,
+    TResult? Function(Offset startPosition)? showSelectionOverlay,
+    TResult? Function(Offset currentPosition)? updateSelectionRect,
+    TResult? Function()? hideSelectionOverlay,
+    TResult? Function(DiagramEventUnion originalEvent)? handleAsUsual,
+    TResult? Function(CursorEffect effect)? setCursor,
+  }) {
+    return returnToBounds?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(PhysicalEvent origin)? applyDefaultPanZoom,
+    TResult Function(Transform2D transform)? setTransform,
+    TResult Function(List<DiagramObjectEntity> renderables, Rect logicalExtent)?
+        redraw,
+    TResult Function()? enableAutoscroll,
+    TResult Function()? disableAutoscroll,
+    TResult Function()? returnToBounds,
+    TResult Function(Transform2D targetTransform, Duration duration)?
+        elasticBounceBack,
+    TResult Function(Offset velocity, Duration stepDuration)? autoScrollStep,
+    TResult Function()? stopAutoScroll,
+    TResult Function(Object? ghostSpec, Offset position)? showDragOverlay,
+    TResult Function(Offset position)? updateDragOverlay,
+    TResult Function()? hideDragOverlay,
+    TResult Function(Offset startPosition)? showSelectionOverlay,
+    TResult Function(Offset currentPosition)? updateSelectionRect,
+    TResult Function()? hideSelectionOverlay,
+    TResult Function(DiagramEventUnion originalEvent)? handleAsUsual,
+    TResult Function(CursorEffect effect)? setCursor,
+    required TResult orElse(),
+  }) {
+    if (returnToBounds != null) {
+      return returnToBounds();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(ApplyDefaultPanZoomCommand value)
+        applyDefaultPanZoom,
+    required TResult Function(SetTransformCommand value) setTransform,
+    required TResult Function(RedrawCommand value) redraw,
+    required TResult Function(EnableAutoscrollCommand value) enableAutoscroll,
+    required TResult Function(DisableAutoscrollCommand value) disableAutoscroll,
+    required TResult Function(ReturnToBoundsCommand value) returnToBounds,
+    required TResult Function(ElasticBounceBackCommand value) elasticBounceBack,
+    required TResult Function(AutoScrollStepCommand value) autoScrollStep,
+    required TResult Function(StopAutoScrollCommand value) stopAutoScroll,
+    required TResult Function(ShowDragOverlayCommand value) showDragOverlay,
+    required TResult Function(UpdateDragOverlayCommand value) updateDragOverlay,
+    required TResult Function(HideDragOverlayCommand value) hideDragOverlay,
+    required TResult Function(ShowSelectionOverlayCommand value)
+        showSelectionOverlay,
+    required TResult Function(UpdateSelectionRectCommand value)
+        updateSelectionRect,
+    required TResult Function(HideSelectionOverlayCommand value)
+        hideSelectionOverlay,
+    required TResult Function(_HandleAsUsualCommand value) handleAsUsual,
+    required TResult Function(_SetCursorCommand value) setCursor,
+  }) {
+    return returnToBounds(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
+    TResult? Function(SetTransformCommand value)? setTransform,
+    TResult? Function(RedrawCommand value)? redraw,
+    TResult? Function(EnableAutoscrollCommand value)? enableAutoscroll,
+    TResult? Function(DisableAutoscrollCommand value)? disableAutoscroll,
+    TResult? Function(ReturnToBoundsCommand value)? returnToBounds,
+    TResult? Function(ElasticBounceBackCommand value)? elasticBounceBack,
+    TResult? Function(AutoScrollStepCommand value)? autoScrollStep,
+    TResult? Function(StopAutoScrollCommand value)? stopAutoScroll,
+    TResult? Function(ShowDragOverlayCommand value)? showDragOverlay,
+    TResult? Function(UpdateDragOverlayCommand value)? updateDragOverlay,
+    TResult? Function(HideDragOverlayCommand value)? hideDragOverlay,
+    TResult? Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
+    TResult? Function(UpdateSelectionRectCommand value)? updateSelectionRect,
+    TResult? Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult? Function(_HandleAsUsualCommand value)? handleAsUsual,
+    TResult? Function(_SetCursorCommand value)? setCursor,
+  }) {
+    return returnToBounds?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
+    TResult Function(SetTransformCommand value)? setTransform,
+    TResult Function(RedrawCommand value)? redraw,
+    TResult Function(EnableAutoscrollCommand value)? enableAutoscroll,
+    TResult Function(DisableAutoscrollCommand value)? disableAutoscroll,
+    TResult Function(ReturnToBoundsCommand value)? returnToBounds,
+    TResult Function(ElasticBounceBackCommand value)? elasticBounceBack,
+    TResult Function(AutoScrollStepCommand value)? autoScrollStep,
+    TResult Function(StopAutoScrollCommand value)? stopAutoScroll,
+    TResult Function(ShowDragOverlayCommand value)? showDragOverlay,
+    TResult Function(UpdateDragOverlayCommand value)? updateDragOverlay,
+    TResult Function(HideDragOverlayCommand value)? hideDragOverlay,
+    TResult Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
+    TResult Function(UpdateSelectionRectCommand value)? updateSelectionRect,
+    TResult Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult Function(_HandleAsUsualCommand value)? handleAsUsual,
+    TResult Function(_SetCursorCommand value)? setCursor,
+    required TResult orElse(),
+  }) {
+    if (returnToBounds != null) {
+      return returnToBounds(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class ReturnToBoundsCommand extends DiagramCommand {
+  const factory ReturnToBoundsCommand() = _$ReturnToBoundsCommandImpl;
+  const ReturnToBoundsCommand._() : super._();
 }
 
 /// @nodoc
@@ -977,6 +1711,9 @@ class _$ElasticBounceBackCommandImpl extends ElasticBounceBackCommand {
     required TResult Function(
             List<DiagramObjectEntity> renderables, Rect logicalExtent)
         redraw,
+    required TResult Function() enableAutoscroll,
+    required TResult Function() disableAutoscroll,
+    required TResult Function() returnToBounds,
     required TResult Function(Transform2D targetTransform, Duration duration)
         elasticBounceBack,
     required TResult Function(Offset velocity, Duration stepDuration)
@@ -989,6 +1726,7 @@ class _$ElasticBounceBackCommandImpl extends ElasticBounceBackCommand {
     required TResult Function(Offset startPosition) showSelectionOverlay,
     required TResult Function(Offset currentPosition) updateSelectionRect,
     required TResult Function() hideSelectionOverlay,
+    required TResult Function(DiagramEventUnion originalEvent) handleAsUsual,
     required TResult Function(CursorEffect effect) setCursor,
   }) {
     return elasticBounceBack(targetTransform, duration);
@@ -1002,6 +1740,9 @@ class _$ElasticBounceBackCommandImpl extends ElasticBounceBackCommand {
     TResult? Function(
             List<DiagramObjectEntity> renderables, Rect logicalExtent)?
         redraw,
+    TResult? Function()? enableAutoscroll,
+    TResult? Function()? disableAutoscroll,
+    TResult? Function()? returnToBounds,
     TResult? Function(Transform2D targetTransform, Duration duration)?
         elasticBounceBack,
     TResult? Function(Offset velocity, Duration stepDuration)? autoScrollStep,
@@ -1012,6 +1753,7 @@ class _$ElasticBounceBackCommandImpl extends ElasticBounceBackCommand {
     TResult? Function(Offset startPosition)? showSelectionOverlay,
     TResult? Function(Offset currentPosition)? updateSelectionRect,
     TResult? Function()? hideSelectionOverlay,
+    TResult? Function(DiagramEventUnion originalEvent)? handleAsUsual,
     TResult? Function(CursorEffect effect)? setCursor,
   }) {
     return elasticBounceBack?.call(targetTransform, duration);
@@ -1024,6 +1766,9 @@ class _$ElasticBounceBackCommandImpl extends ElasticBounceBackCommand {
     TResult Function(Transform2D transform)? setTransform,
     TResult Function(List<DiagramObjectEntity> renderables, Rect logicalExtent)?
         redraw,
+    TResult Function()? enableAutoscroll,
+    TResult Function()? disableAutoscroll,
+    TResult Function()? returnToBounds,
     TResult Function(Transform2D targetTransform, Duration duration)?
         elasticBounceBack,
     TResult Function(Offset velocity, Duration stepDuration)? autoScrollStep,
@@ -1034,6 +1779,7 @@ class _$ElasticBounceBackCommandImpl extends ElasticBounceBackCommand {
     TResult Function(Offset startPosition)? showSelectionOverlay,
     TResult Function(Offset currentPosition)? updateSelectionRect,
     TResult Function()? hideSelectionOverlay,
+    TResult Function(DiagramEventUnion originalEvent)? handleAsUsual,
     TResult Function(CursorEffect effect)? setCursor,
     required TResult orElse(),
   }) {
@@ -1050,6 +1796,9 @@ class _$ElasticBounceBackCommandImpl extends ElasticBounceBackCommand {
         applyDefaultPanZoom,
     required TResult Function(SetTransformCommand value) setTransform,
     required TResult Function(RedrawCommand value) redraw,
+    required TResult Function(EnableAutoscrollCommand value) enableAutoscroll,
+    required TResult Function(DisableAutoscrollCommand value) disableAutoscroll,
+    required TResult Function(ReturnToBoundsCommand value) returnToBounds,
     required TResult Function(ElasticBounceBackCommand value) elasticBounceBack,
     required TResult Function(AutoScrollStepCommand value) autoScrollStep,
     required TResult Function(StopAutoScrollCommand value) stopAutoScroll,
@@ -1062,6 +1811,7 @@ class _$ElasticBounceBackCommandImpl extends ElasticBounceBackCommand {
         updateSelectionRect,
     required TResult Function(HideSelectionOverlayCommand value)
         hideSelectionOverlay,
+    required TResult Function(_HandleAsUsualCommand value) handleAsUsual,
     required TResult Function(_SetCursorCommand value) setCursor,
   }) {
     return elasticBounceBack(this);
@@ -1073,6 +1823,9 @@ class _$ElasticBounceBackCommandImpl extends ElasticBounceBackCommand {
     TResult? Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
     TResult? Function(SetTransformCommand value)? setTransform,
     TResult? Function(RedrawCommand value)? redraw,
+    TResult? Function(EnableAutoscrollCommand value)? enableAutoscroll,
+    TResult? Function(DisableAutoscrollCommand value)? disableAutoscroll,
+    TResult? Function(ReturnToBoundsCommand value)? returnToBounds,
     TResult? Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult? Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult? Function(StopAutoScrollCommand value)? stopAutoScroll,
@@ -1082,6 +1835,7 @@ class _$ElasticBounceBackCommandImpl extends ElasticBounceBackCommand {
     TResult? Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
     TResult? Function(UpdateSelectionRectCommand value)? updateSelectionRect,
     TResult? Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult? Function(_HandleAsUsualCommand value)? handleAsUsual,
     TResult? Function(_SetCursorCommand value)? setCursor,
   }) {
     return elasticBounceBack?.call(this);
@@ -1093,6 +1847,9 @@ class _$ElasticBounceBackCommandImpl extends ElasticBounceBackCommand {
     TResult Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
     TResult Function(SetTransformCommand value)? setTransform,
     TResult Function(RedrawCommand value)? redraw,
+    TResult Function(EnableAutoscrollCommand value)? enableAutoscroll,
+    TResult Function(DisableAutoscrollCommand value)? disableAutoscroll,
+    TResult Function(ReturnToBoundsCommand value)? returnToBounds,
     TResult Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult Function(StopAutoScrollCommand value)? stopAutoScroll,
@@ -1102,6 +1859,7 @@ class _$ElasticBounceBackCommandImpl extends ElasticBounceBackCommand {
     TResult Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
     TResult Function(UpdateSelectionRectCommand value)? updateSelectionRect,
     TResult Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult Function(_HandleAsUsualCommand value)? handleAsUsual,
     TResult Function(_SetCursorCommand value)? setCursor,
     required TResult orElse(),
   }) {
@@ -1217,6 +1975,9 @@ class _$AutoScrollStepCommandImpl extends AutoScrollStepCommand {
     required TResult Function(
             List<DiagramObjectEntity> renderables, Rect logicalExtent)
         redraw,
+    required TResult Function() enableAutoscroll,
+    required TResult Function() disableAutoscroll,
+    required TResult Function() returnToBounds,
     required TResult Function(Transform2D targetTransform, Duration duration)
         elasticBounceBack,
     required TResult Function(Offset velocity, Duration stepDuration)
@@ -1229,6 +1990,7 @@ class _$AutoScrollStepCommandImpl extends AutoScrollStepCommand {
     required TResult Function(Offset startPosition) showSelectionOverlay,
     required TResult Function(Offset currentPosition) updateSelectionRect,
     required TResult Function() hideSelectionOverlay,
+    required TResult Function(DiagramEventUnion originalEvent) handleAsUsual,
     required TResult Function(CursorEffect effect) setCursor,
   }) {
     return autoScrollStep(velocity, stepDuration);
@@ -1242,6 +2004,9 @@ class _$AutoScrollStepCommandImpl extends AutoScrollStepCommand {
     TResult? Function(
             List<DiagramObjectEntity> renderables, Rect logicalExtent)?
         redraw,
+    TResult? Function()? enableAutoscroll,
+    TResult? Function()? disableAutoscroll,
+    TResult? Function()? returnToBounds,
     TResult? Function(Transform2D targetTransform, Duration duration)?
         elasticBounceBack,
     TResult? Function(Offset velocity, Duration stepDuration)? autoScrollStep,
@@ -1252,6 +2017,7 @@ class _$AutoScrollStepCommandImpl extends AutoScrollStepCommand {
     TResult? Function(Offset startPosition)? showSelectionOverlay,
     TResult? Function(Offset currentPosition)? updateSelectionRect,
     TResult? Function()? hideSelectionOverlay,
+    TResult? Function(DiagramEventUnion originalEvent)? handleAsUsual,
     TResult? Function(CursorEffect effect)? setCursor,
   }) {
     return autoScrollStep?.call(velocity, stepDuration);
@@ -1264,6 +2030,9 @@ class _$AutoScrollStepCommandImpl extends AutoScrollStepCommand {
     TResult Function(Transform2D transform)? setTransform,
     TResult Function(List<DiagramObjectEntity> renderables, Rect logicalExtent)?
         redraw,
+    TResult Function()? enableAutoscroll,
+    TResult Function()? disableAutoscroll,
+    TResult Function()? returnToBounds,
     TResult Function(Transform2D targetTransform, Duration duration)?
         elasticBounceBack,
     TResult Function(Offset velocity, Duration stepDuration)? autoScrollStep,
@@ -1274,6 +2043,7 @@ class _$AutoScrollStepCommandImpl extends AutoScrollStepCommand {
     TResult Function(Offset startPosition)? showSelectionOverlay,
     TResult Function(Offset currentPosition)? updateSelectionRect,
     TResult Function()? hideSelectionOverlay,
+    TResult Function(DiagramEventUnion originalEvent)? handleAsUsual,
     TResult Function(CursorEffect effect)? setCursor,
     required TResult orElse(),
   }) {
@@ -1290,6 +2060,9 @@ class _$AutoScrollStepCommandImpl extends AutoScrollStepCommand {
         applyDefaultPanZoom,
     required TResult Function(SetTransformCommand value) setTransform,
     required TResult Function(RedrawCommand value) redraw,
+    required TResult Function(EnableAutoscrollCommand value) enableAutoscroll,
+    required TResult Function(DisableAutoscrollCommand value) disableAutoscroll,
+    required TResult Function(ReturnToBoundsCommand value) returnToBounds,
     required TResult Function(ElasticBounceBackCommand value) elasticBounceBack,
     required TResult Function(AutoScrollStepCommand value) autoScrollStep,
     required TResult Function(StopAutoScrollCommand value) stopAutoScroll,
@@ -1302,6 +2075,7 @@ class _$AutoScrollStepCommandImpl extends AutoScrollStepCommand {
         updateSelectionRect,
     required TResult Function(HideSelectionOverlayCommand value)
         hideSelectionOverlay,
+    required TResult Function(_HandleAsUsualCommand value) handleAsUsual,
     required TResult Function(_SetCursorCommand value) setCursor,
   }) {
     return autoScrollStep(this);
@@ -1313,6 +2087,9 @@ class _$AutoScrollStepCommandImpl extends AutoScrollStepCommand {
     TResult? Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
     TResult? Function(SetTransformCommand value)? setTransform,
     TResult? Function(RedrawCommand value)? redraw,
+    TResult? Function(EnableAutoscrollCommand value)? enableAutoscroll,
+    TResult? Function(DisableAutoscrollCommand value)? disableAutoscroll,
+    TResult? Function(ReturnToBoundsCommand value)? returnToBounds,
     TResult? Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult? Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult? Function(StopAutoScrollCommand value)? stopAutoScroll,
@@ -1322,6 +2099,7 @@ class _$AutoScrollStepCommandImpl extends AutoScrollStepCommand {
     TResult? Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
     TResult? Function(UpdateSelectionRectCommand value)? updateSelectionRect,
     TResult? Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult? Function(_HandleAsUsualCommand value)? handleAsUsual,
     TResult? Function(_SetCursorCommand value)? setCursor,
   }) {
     return autoScrollStep?.call(this);
@@ -1333,6 +2111,9 @@ class _$AutoScrollStepCommandImpl extends AutoScrollStepCommand {
     TResult Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
     TResult Function(SetTransformCommand value)? setTransform,
     TResult Function(RedrawCommand value)? redraw,
+    TResult Function(EnableAutoscrollCommand value)? enableAutoscroll,
+    TResult Function(DisableAutoscrollCommand value)? disableAutoscroll,
+    TResult Function(ReturnToBoundsCommand value)? returnToBounds,
     TResult Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult Function(StopAutoScrollCommand value)? stopAutoScroll,
@@ -1342,6 +2123,7 @@ class _$AutoScrollStepCommandImpl extends AutoScrollStepCommand {
     TResult Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
     TResult Function(UpdateSelectionRectCommand value)? updateSelectionRect,
     TResult Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult Function(_HandleAsUsualCommand value)? handleAsUsual,
     TResult Function(_SetCursorCommand value)? setCursor,
     required TResult orElse(),
   }) {
@@ -1416,6 +2198,9 @@ class _$StopAutoScrollCommandImpl extends StopAutoScrollCommand {
     required TResult Function(
             List<DiagramObjectEntity> renderables, Rect logicalExtent)
         redraw,
+    required TResult Function() enableAutoscroll,
+    required TResult Function() disableAutoscroll,
+    required TResult Function() returnToBounds,
     required TResult Function(Transform2D targetTransform, Duration duration)
         elasticBounceBack,
     required TResult Function(Offset velocity, Duration stepDuration)
@@ -1428,6 +2213,7 @@ class _$StopAutoScrollCommandImpl extends StopAutoScrollCommand {
     required TResult Function(Offset startPosition) showSelectionOverlay,
     required TResult Function(Offset currentPosition) updateSelectionRect,
     required TResult Function() hideSelectionOverlay,
+    required TResult Function(DiagramEventUnion originalEvent) handleAsUsual,
     required TResult Function(CursorEffect effect) setCursor,
   }) {
     return stopAutoScroll();
@@ -1441,6 +2227,9 @@ class _$StopAutoScrollCommandImpl extends StopAutoScrollCommand {
     TResult? Function(
             List<DiagramObjectEntity> renderables, Rect logicalExtent)?
         redraw,
+    TResult? Function()? enableAutoscroll,
+    TResult? Function()? disableAutoscroll,
+    TResult? Function()? returnToBounds,
     TResult? Function(Transform2D targetTransform, Duration duration)?
         elasticBounceBack,
     TResult? Function(Offset velocity, Duration stepDuration)? autoScrollStep,
@@ -1451,6 +2240,7 @@ class _$StopAutoScrollCommandImpl extends StopAutoScrollCommand {
     TResult? Function(Offset startPosition)? showSelectionOverlay,
     TResult? Function(Offset currentPosition)? updateSelectionRect,
     TResult? Function()? hideSelectionOverlay,
+    TResult? Function(DiagramEventUnion originalEvent)? handleAsUsual,
     TResult? Function(CursorEffect effect)? setCursor,
   }) {
     return stopAutoScroll?.call();
@@ -1463,6 +2253,9 @@ class _$StopAutoScrollCommandImpl extends StopAutoScrollCommand {
     TResult Function(Transform2D transform)? setTransform,
     TResult Function(List<DiagramObjectEntity> renderables, Rect logicalExtent)?
         redraw,
+    TResult Function()? enableAutoscroll,
+    TResult Function()? disableAutoscroll,
+    TResult Function()? returnToBounds,
     TResult Function(Transform2D targetTransform, Duration duration)?
         elasticBounceBack,
     TResult Function(Offset velocity, Duration stepDuration)? autoScrollStep,
@@ -1473,6 +2266,7 @@ class _$StopAutoScrollCommandImpl extends StopAutoScrollCommand {
     TResult Function(Offset startPosition)? showSelectionOverlay,
     TResult Function(Offset currentPosition)? updateSelectionRect,
     TResult Function()? hideSelectionOverlay,
+    TResult Function(DiagramEventUnion originalEvent)? handleAsUsual,
     TResult Function(CursorEffect effect)? setCursor,
     required TResult orElse(),
   }) {
@@ -1489,6 +2283,9 @@ class _$StopAutoScrollCommandImpl extends StopAutoScrollCommand {
         applyDefaultPanZoom,
     required TResult Function(SetTransformCommand value) setTransform,
     required TResult Function(RedrawCommand value) redraw,
+    required TResult Function(EnableAutoscrollCommand value) enableAutoscroll,
+    required TResult Function(DisableAutoscrollCommand value) disableAutoscroll,
+    required TResult Function(ReturnToBoundsCommand value) returnToBounds,
     required TResult Function(ElasticBounceBackCommand value) elasticBounceBack,
     required TResult Function(AutoScrollStepCommand value) autoScrollStep,
     required TResult Function(StopAutoScrollCommand value) stopAutoScroll,
@@ -1501,6 +2298,7 @@ class _$StopAutoScrollCommandImpl extends StopAutoScrollCommand {
         updateSelectionRect,
     required TResult Function(HideSelectionOverlayCommand value)
         hideSelectionOverlay,
+    required TResult Function(_HandleAsUsualCommand value) handleAsUsual,
     required TResult Function(_SetCursorCommand value) setCursor,
   }) {
     return stopAutoScroll(this);
@@ -1512,6 +2310,9 @@ class _$StopAutoScrollCommandImpl extends StopAutoScrollCommand {
     TResult? Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
     TResult? Function(SetTransformCommand value)? setTransform,
     TResult? Function(RedrawCommand value)? redraw,
+    TResult? Function(EnableAutoscrollCommand value)? enableAutoscroll,
+    TResult? Function(DisableAutoscrollCommand value)? disableAutoscroll,
+    TResult? Function(ReturnToBoundsCommand value)? returnToBounds,
     TResult? Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult? Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult? Function(StopAutoScrollCommand value)? stopAutoScroll,
@@ -1521,6 +2322,7 @@ class _$StopAutoScrollCommandImpl extends StopAutoScrollCommand {
     TResult? Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
     TResult? Function(UpdateSelectionRectCommand value)? updateSelectionRect,
     TResult? Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult? Function(_HandleAsUsualCommand value)? handleAsUsual,
     TResult? Function(_SetCursorCommand value)? setCursor,
   }) {
     return stopAutoScroll?.call(this);
@@ -1532,6 +2334,9 @@ class _$StopAutoScrollCommandImpl extends StopAutoScrollCommand {
     TResult Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
     TResult Function(SetTransformCommand value)? setTransform,
     TResult Function(RedrawCommand value)? redraw,
+    TResult Function(EnableAutoscrollCommand value)? enableAutoscroll,
+    TResult Function(DisableAutoscrollCommand value)? disableAutoscroll,
+    TResult Function(ReturnToBoundsCommand value)? returnToBounds,
     TResult Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult Function(StopAutoScrollCommand value)? stopAutoScroll,
@@ -1541,6 +2346,7 @@ class _$StopAutoScrollCommandImpl extends StopAutoScrollCommand {
     TResult Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
     TResult Function(UpdateSelectionRectCommand value)? updateSelectionRect,
     TResult Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult Function(_HandleAsUsualCommand value)? handleAsUsual,
     TResult Function(_SetCursorCommand value)? setCursor,
     required TResult orElse(),
   }) {
@@ -1640,6 +2446,9 @@ class _$ShowDragOverlayCommandImpl extends ShowDragOverlayCommand {
     required TResult Function(
             List<DiagramObjectEntity> renderables, Rect logicalExtent)
         redraw,
+    required TResult Function() enableAutoscroll,
+    required TResult Function() disableAutoscroll,
+    required TResult Function() returnToBounds,
     required TResult Function(Transform2D targetTransform, Duration duration)
         elasticBounceBack,
     required TResult Function(Offset velocity, Duration stepDuration)
@@ -1652,6 +2461,7 @@ class _$ShowDragOverlayCommandImpl extends ShowDragOverlayCommand {
     required TResult Function(Offset startPosition) showSelectionOverlay,
     required TResult Function(Offset currentPosition) updateSelectionRect,
     required TResult Function() hideSelectionOverlay,
+    required TResult Function(DiagramEventUnion originalEvent) handleAsUsual,
     required TResult Function(CursorEffect effect) setCursor,
   }) {
     return showDragOverlay(ghostSpec, position);
@@ -1665,6 +2475,9 @@ class _$ShowDragOverlayCommandImpl extends ShowDragOverlayCommand {
     TResult? Function(
             List<DiagramObjectEntity> renderables, Rect logicalExtent)?
         redraw,
+    TResult? Function()? enableAutoscroll,
+    TResult? Function()? disableAutoscroll,
+    TResult? Function()? returnToBounds,
     TResult? Function(Transform2D targetTransform, Duration duration)?
         elasticBounceBack,
     TResult? Function(Offset velocity, Duration stepDuration)? autoScrollStep,
@@ -1675,6 +2488,7 @@ class _$ShowDragOverlayCommandImpl extends ShowDragOverlayCommand {
     TResult? Function(Offset startPosition)? showSelectionOverlay,
     TResult? Function(Offset currentPosition)? updateSelectionRect,
     TResult? Function()? hideSelectionOverlay,
+    TResult? Function(DiagramEventUnion originalEvent)? handleAsUsual,
     TResult? Function(CursorEffect effect)? setCursor,
   }) {
     return showDragOverlay?.call(ghostSpec, position);
@@ -1687,6 +2501,9 @@ class _$ShowDragOverlayCommandImpl extends ShowDragOverlayCommand {
     TResult Function(Transform2D transform)? setTransform,
     TResult Function(List<DiagramObjectEntity> renderables, Rect logicalExtent)?
         redraw,
+    TResult Function()? enableAutoscroll,
+    TResult Function()? disableAutoscroll,
+    TResult Function()? returnToBounds,
     TResult Function(Transform2D targetTransform, Duration duration)?
         elasticBounceBack,
     TResult Function(Offset velocity, Duration stepDuration)? autoScrollStep,
@@ -1697,6 +2514,7 @@ class _$ShowDragOverlayCommandImpl extends ShowDragOverlayCommand {
     TResult Function(Offset startPosition)? showSelectionOverlay,
     TResult Function(Offset currentPosition)? updateSelectionRect,
     TResult Function()? hideSelectionOverlay,
+    TResult Function(DiagramEventUnion originalEvent)? handleAsUsual,
     TResult Function(CursorEffect effect)? setCursor,
     required TResult orElse(),
   }) {
@@ -1713,6 +2531,9 @@ class _$ShowDragOverlayCommandImpl extends ShowDragOverlayCommand {
         applyDefaultPanZoom,
     required TResult Function(SetTransformCommand value) setTransform,
     required TResult Function(RedrawCommand value) redraw,
+    required TResult Function(EnableAutoscrollCommand value) enableAutoscroll,
+    required TResult Function(DisableAutoscrollCommand value) disableAutoscroll,
+    required TResult Function(ReturnToBoundsCommand value) returnToBounds,
     required TResult Function(ElasticBounceBackCommand value) elasticBounceBack,
     required TResult Function(AutoScrollStepCommand value) autoScrollStep,
     required TResult Function(StopAutoScrollCommand value) stopAutoScroll,
@@ -1725,6 +2546,7 @@ class _$ShowDragOverlayCommandImpl extends ShowDragOverlayCommand {
         updateSelectionRect,
     required TResult Function(HideSelectionOverlayCommand value)
         hideSelectionOverlay,
+    required TResult Function(_HandleAsUsualCommand value) handleAsUsual,
     required TResult Function(_SetCursorCommand value) setCursor,
   }) {
     return showDragOverlay(this);
@@ -1736,6 +2558,9 @@ class _$ShowDragOverlayCommandImpl extends ShowDragOverlayCommand {
     TResult? Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
     TResult? Function(SetTransformCommand value)? setTransform,
     TResult? Function(RedrawCommand value)? redraw,
+    TResult? Function(EnableAutoscrollCommand value)? enableAutoscroll,
+    TResult? Function(DisableAutoscrollCommand value)? disableAutoscroll,
+    TResult? Function(ReturnToBoundsCommand value)? returnToBounds,
     TResult? Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult? Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult? Function(StopAutoScrollCommand value)? stopAutoScroll,
@@ -1745,6 +2570,7 @@ class _$ShowDragOverlayCommandImpl extends ShowDragOverlayCommand {
     TResult? Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
     TResult? Function(UpdateSelectionRectCommand value)? updateSelectionRect,
     TResult? Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult? Function(_HandleAsUsualCommand value)? handleAsUsual,
     TResult? Function(_SetCursorCommand value)? setCursor,
   }) {
     return showDragOverlay?.call(this);
@@ -1756,6 +2582,9 @@ class _$ShowDragOverlayCommandImpl extends ShowDragOverlayCommand {
     TResult Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
     TResult Function(SetTransformCommand value)? setTransform,
     TResult Function(RedrawCommand value)? redraw,
+    TResult Function(EnableAutoscrollCommand value)? enableAutoscroll,
+    TResult Function(DisableAutoscrollCommand value)? disableAutoscroll,
+    TResult Function(ReturnToBoundsCommand value)? returnToBounds,
     TResult Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult Function(StopAutoScrollCommand value)? stopAutoScroll,
@@ -1765,6 +2594,7 @@ class _$ShowDragOverlayCommandImpl extends ShowDragOverlayCommand {
     TResult Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
     TResult Function(UpdateSelectionRectCommand value)? updateSelectionRect,
     TResult Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult Function(_HandleAsUsualCommand value)? handleAsUsual,
     TResult Function(_SetCursorCommand value)? setCursor,
     required TResult orElse(),
   }) {
@@ -1868,6 +2698,9 @@ class _$UpdateDragOverlayCommandImpl extends UpdateDragOverlayCommand {
     required TResult Function(
             List<DiagramObjectEntity> renderables, Rect logicalExtent)
         redraw,
+    required TResult Function() enableAutoscroll,
+    required TResult Function() disableAutoscroll,
+    required TResult Function() returnToBounds,
     required TResult Function(Transform2D targetTransform, Duration duration)
         elasticBounceBack,
     required TResult Function(Offset velocity, Duration stepDuration)
@@ -1880,6 +2713,7 @@ class _$UpdateDragOverlayCommandImpl extends UpdateDragOverlayCommand {
     required TResult Function(Offset startPosition) showSelectionOverlay,
     required TResult Function(Offset currentPosition) updateSelectionRect,
     required TResult Function() hideSelectionOverlay,
+    required TResult Function(DiagramEventUnion originalEvent) handleAsUsual,
     required TResult Function(CursorEffect effect) setCursor,
   }) {
     return updateDragOverlay(position);
@@ -1893,6 +2727,9 @@ class _$UpdateDragOverlayCommandImpl extends UpdateDragOverlayCommand {
     TResult? Function(
             List<DiagramObjectEntity> renderables, Rect logicalExtent)?
         redraw,
+    TResult? Function()? enableAutoscroll,
+    TResult? Function()? disableAutoscroll,
+    TResult? Function()? returnToBounds,
     TResult? Function(Transform2D targetTransform, Duration duration)?
         elasticBounceBack,
     TResult? Function(Offset velocity, Duration stepDuration)? autoScrollStep,
@@ -1903,6 +2740,7 @@ class _$UpdateDragOverlayCommandImpl extends UpdateDragOverlayCommand {
     TResult? Function(Offset startPosition)? showSelectionOverlay,
     TResult? Function(Offset currentPosition)? updateSelectionRect,
     TResult? Function()? hideSelectionOverlay,
+    TResult? Function(DiagramEventUnion originalEvent)? handleAsUsual,
     TResult? Function(CursorEffect effect)? setCursor,
   }) {
     return updateDragOverlay?.call(position);
@@ -1915,6 +2753,9 @@ class _$UpdateDragOverlayCommandImpl extends UpdateDragOverlayCommand {
     TResult Function(Transform2D transform)? setTransform,
     TResult Function(List<DiagramObjectEntity> renderables, Rect logicalExtent)?
         redraw,
+    TResult Function()? enableAutoscroll,
+    TResult Function()? disableAutoscroll,
+    TResult Function()? returnToBounds,
     TResult Function(Transform2D targetTransform, Duration duration)?
         elasticBounceBack,
     TResult Function(Offset velocity, Duration stepDuration)? autoScrollStep,
@@ -1925,6 +2766,7 @@ class _$UpdateDragOverlayCommandImpl extends UpdateDragOverlayCommand {
     TResult Function(Offset startPosition)? showSelectionOverlay,
     TResult Function(Offset currentPosition)? updateSelectionRect,
     TResult Function()? hideSelectionOverlay,
+    TResult Function(DiagramEventUnion originalEvent)? handleAsUsual,
     TResult Function(CursorEffect effect)? setCursor,
     required TResult orElse(),
   }) {
@@ -1941,6 +2783,9 @@ class _$UpdateDragOverlayCommandImpl extends UpdateDragOverlayCommand {
         applyDefaultPanZoom,
     required TResult Function(SetTransformCommand value) setTransform,
     required TResult Function(RedrawCommand value) redraw,
+    required TResult Function(EnableAutoscrollCommand value) enableAutoscroll,
+    required TResult Function(DisableAutoscrollCommand value) disableAutoscroll,
+    required TResult Function(ReturnToBoundsCommand value) returnToBounds,
     required TResult Function(ElasticBounceBackCommand value) elasticBounceBack,
     required TResult Function(AutoScrollStepCommand value) autoScrollStep,
     required TResult Function(StopAutoScrollCommand value) stopAutoScroll,
@@ -1953,6 +2798,7 @@ class _$UpdateDragOverlayCommandImpl extends UpdateDragOverlayCommand {
         updateSelectionRect,
     required TResult Function(HideSelectionOverlayCommand value)
         hideSelectionOverlay,
+    required TResult Function(_HandleAsUsualCommand value) handleAsUsual,
     required TResult Function(_SetCursorCommand value) setCursor,
   }) {
     return updateDragOverlay(this);
@@ -1964,6 +2810,9 @@ class _$UpdateDragOverlayCommandImpl extends UpdateDragOverlayCommand {
     TResult? Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
     TResult? Function(SetTransformCommand value)? setTransform,
     TResult? Function(RedrawCommand value)? redraw,
+    TResult? Function(EnableAutoscrollCommand value)? enableAutoscroll,
+    TResult? Function(DisableAutoscrollCommand value)? disableAutoscroll,
+    TResult? Function(ReturnToBoundsCommand value)? returnToBounds,
     TResult? Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult? Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult? Function(StopAutoScrollCommand value)? stopAutoScroll,
@@ -1973,6 +2822,7 @@ class _$UpdateDragOverlayCommandImpl extends UpdateDragOverlayCommand {
     TResult? Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
     TResult? Function(UpdateSelectionRectCommand value)? updateSelectionRect,
     TResult? Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult? Function(_HandleAsUsualCommand value)? handleAsUsual,
     TResult? Function(_SetCursorCommand value)? setCursor,
   }) {
     return updateDragOverlay?.call(this);
@@ -1984,6 +2834,9 @@ class _$UpdateDragOverlayCommandImpl extends UpdateDragOverlayCommand {
     TResult Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
     TResult Function(SetTransformCommand value)? setTransform,
     TResult Function(RedrawCommand value)? redraw,
+    TResult Function(EnableAutoscrollCommand value)? enableAutoscroll,
+    TResult Function(DisableAutoscrollCommand value)? disableAutoscroll,
+    TResult Function(ReturnToBoundsCommand value)? returnToBounds,
     TResult Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult Function(StopAutoScrollCommand value)? stopAutoScroll,
@@ -1993,6 +2846,7 @@ class _$UpdateDragOverlayCommandImpl extends UpdateDragOverlayCommand {
     TResult Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
     TResult Function(UpdateSelectionRectCommand value)? updateSelectionRect,
     TResult Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult Function(_HandleAsUsualCommand value)? handleAsUsual,
     TResult Function(_SetCursorCommand value)? setCursor,
     required TResult orElse(),
   }) {
@@ -2066,6 +2920,9 @@ class _$HideDragOverlayCommandImpl extends HideDragOverlayCommand {
     required TResult Function(
             List<DiagramObjectEntity> renderables, Rect logicalExtent)
         redraw,
+    required TResult Function() enableAutoscroll,
+    required TResult Function() disableAutoscroll,
+    required TResult Function() returnToBounds,
     required TResult Function(Transform2D targetTransform, Duration duration)
         elasticBounceBack,
     required TResult Function(Offset velocity, Duration stepDuration)
@@ -2078,6 +2935,7 @@ class _$HideDragOverlayCommandImpl extends HideDragOverlayCommand {
     required TResult Function(Offset startPosition) showSelectionOverlay,
     required TResult Function(Offset currentPosition) updateSelectionRect,
     required TResult Function() hideSelectionOverlay,
+    required TResult Function(DiagramEventUnion originalEvent) handleAsUsual,
     required TResult Function(CursorEffect effect) setCursor,
   }) {
     return hideDragOverlay();
@@ -2091,6 +2949,9 @@ class _$HideDragOverlayCommandImpl extends HideDragOverlayCommand {
     TResult? Function(
             List<DiagramObjectEntity> renderables, Rect logicalExtent)?
         redraw,
+    TResult? Function()? enableAutoscroll,
+    TResult? Function()? disableAutoscroll,
+    TResult? Function()? returnToBounds,
     TResult? Function(Transform2D targetTransform, Duration duration)?
         elasticBounceBack,
     TResult? Function(Offset velocity, Duration stepDuration)? autoScrollStep,
@@ -2101,6 +2962,7 @@ class _$HideDragOverlayCommandImpl extends HideDragOverlayCommand {
     TResult? Function(Offset startPosition)? showSelectionOverlay,
     TResult? Function(Offset currentPosition)? updateSelectionRect,
     TResult? Function()? hideSelectionOverlay,
+    TResult? Function(DiagramEventUnion originalEvent)? handleAsUsual,
     TResult? Function(CursorEffect effect)? setCursor,
   }) {
     return hideDragOverlay?.call();
@@ -2113,6 +2975,9 @@ class _$HideDragOverlayCommandImpl extends HideDragOverlayCommand {
     TResult Function(Transform2D transform)? setTransform,
     TResult Function(List<DiagramObjectEntity> renderables, Rect logicalExtent)?
         redraw,
+    TResult Function()? enableAutoscroll,
+    TResult Function()? disableAutoscroll,
+    TResult Function()? returnToBounds,
     TResult Function(Transform2D targetTransform, Duration duration)?
         elasticBounceBack,
     TResult Function(Offset velocity, Duration stepDuration)? autoScrollStep,
@@ -2123,6 +2988,7 @@ class _$HideDragOverlayCommandImpl extends HideDragOverlayCommand {
     TResult Function(Offset startPosition)? showSelectionOverlay,
     TResult Function(Offset currentPosition)? updateSelectionRect,
     TResult Function()? hideSelectionOverlay,
+    TResult Function(DiagramEventUnion originalEvent)? handleAsUsual,
     TResult Function(CursorEffect effect)? setCursor,
     required TResult orElse(),
   }) {
@@ -2139,6 +3005,9 @@ class _$HideDragOverlayCommandImpl extends HideDragOverlayCommand {
         applyDefaultPanZoom,
     required TResult Function(SetTransformCommand value) setTransform,
     required TResult Function(RedrawCommand value) redraw,
+    required TResult Function(EnableAutoscrollCommand value) enableAutoscroll,
+    required TResult Function(DisableAutoscrollCommand value) disableAutoscroll,
+    required TResult Function(ReturnToBoundsCommand value) returnToBounds,
     required TResult Function(ElasticBounceBackCommand value) elasticBounceBack,
     required TResult Function(AutoScrollStepCommand value) autoScrollStep,
     required TResult Function(StopAutoScrollCommand value) stopAutoScroll,
@@ -2151,6 +3020,7 @@ class _$HideDragOverlayCommandImpl extends HideDragOverlayCommand {
         updateSelectionRect,
     required TResult Function(HideSelectionOverlayCommand value)
         hideSelectionOverlay,
+    required TResult Function(_HandleAsUsualCommand value) handleAsUsual,
     required TResult Function(_SetCursorCommand value) setCursor,
   }) {
     return hideDragOverlay(this);
@@ -2162,6 +3032,9 @@ class _$HideDragOverlayCommandImpl extends HideDragOverlayCommand {
     TResult? Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
     TResult? Function(SetTransformCommand value)? setTransform,
     TResult? Function(RedrawCommand value)? redraw,
+    TResult? Function(EnableAutoscrollCommand value)? enableAutoscroll,
+    TResult? Function(DisableAutoscrollCommand value)? disableAutoscroll,
+    TResult? Function(ReturnToBoundsCommand value)? returnToBounds,
     TResult? Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult? Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult? Function(StopAutoScrollCommand value)? stopAutoScroll,
@@ -2171,6 +3044,7 @@ class _$HideDragOverlayCommandImpl extends HideDragOverlayCommand {
     TResult? Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
     TResult? Function(UpdateSelectionRectCommand value)? updateSelectionRect,
     TResult? Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult? Function(_HandleAsUsualCommand value)? handleAsUsual,
     TResult? Function(_SetCursorCommand value)? setCursor,
   }) {
     return hideDragOverlay?.call(this);
@@ -2182,6 +3056,9 @@ class _$HideDragOverlayCommandImpl extends HideDragOverlayCommand {
     TResult Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
     TResult Function(SetTransformCommand value)? setTransform,
     TResult Function(RedrawCommand value)? redraw,
+    TResult Function(EnableAutoscrollCommand value)? enableAutoscroll,
+    TResult Function(DisableAutoscrollCommand value)? disableAutoscroll,
+    TResult Function(ReturnToBoundsCommand value)? returnToBounds,
     TResult Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult Function(StopAutoScrollCommand value)? stopAutoScroll,
@@ -2191,6 +3068,7 @@ class _$HideDragOverlayCommandImpl extends HideDragOverlayCommand {
     TResult Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
     TResult Function(UpdateSelectionRectCommand value)? updateSelectionRect,
     TResult Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult Function(_HandleAsUsualCommand value)? handleAsUsual,
     TResult Function(_SetCursorCommand value)? setCursor,
     required TResult orElse(),
   }) {
@@ -2285,6 +3163,9 @@ class _$ShowSelectionOverlayCommandImpl extends ShowSelectionOverlayCommand {
     required TResult Function(
             List<DiagramObjectEntity> renderables, Rect logicalExtent)
         redraw,
+    required TResult Function() enableAutoscroll,
+    required TResult Function() disableAutoscroll,
+    required TResult Function() returnToBounds,
     required TResult Function(Transform2D targetTransform, Duration duration)
         elasticBounceBack,
     required TResult Function(Offset velocity, Duration stepDuration)
@@ -2297,6 +3178,7 @@ class _$ShowSelectionOverlayCommandImpl extends ShowSelectionOverlayCommand {
     required TResult Function(Offset startPosition) showSelectionOverlay,
     required TResult Function(Offset currentPosition) updateSelectionRect,
     required TResult Function() hideSelectionOverlay,
+    required TResult Function(DiagramEventUnion originalEvent) handleAsUsual,
     required TResult Function(CursorEffect effect) setCursor,
   }) {
     return showSelectionOverlay(startPosition);
@@ -2310,6 +3192,9 @@ class _$ShowSelectionOverlayCommandImpl extends ShowSelectionOverlayCommand {
     TResult? Function(
             List<DiagramObjectEntity> renderables, Rect logicalExtent)?
         redraw,
+    TResult? Function()? enableAutoscroll,
+    TResult? Function()? disableAutoscroll,
+    TResult? Function()? returnToBounds,
     TResult? Function(Transform2D targetTransform, Duration duration)?
         elasticBounceBack,
     TResult? Function(Offset velocity, Duration stepDuration)? autoScrollStep,
@@ -2320,6 +3205,7 @@ class _$ShowSelectionOverlayCommandImpl extends ShowSelectionOverlayCommand {
     TResult? Function(Offset startPosition)? showSelectionOverlay,
     TResult? Function(Offset currentPosition)? updateSelectionRect,
     TResult? Function()? hideSelectionOverlay,
+    TResult? Function(DiagramEventUnion originalEvent)? handleAsUsual,
     TResult? Function(CursorEffect effect)? setCursor,
   }) {
     return showSelectionOverlay?.call(startPosition);
@@ -2332,6 +3218,9 @@ class _$ShowSelectionOverlayCommandImpl extends ShowSelectionOverlayCommand {
     TResult Function(Transform2D transform)? setTransform,
     TResult Function(List<DiagramObjectEntity> renderables, Rect logicalExtent)?
         redraw,
+    TResult Function()? enableAutoscroll,
+    TResult Function()? disableAutoscroll,
+    TResult Function()? returnToBounds,
     TResult Function(Transform2D targetTransform, Duration duration)?
         elasticBounceBack,
     TResult Function(Offset velocity, Duration stepDuration)? autoScrollStep,
@@ -2342,6 +3231,7 @@ class _$ShowSelectionOverlayCommandImpl extends ShowSelectionOverlayCommand {
     TResult Function(Offset startPosition)? showSelectionOverlay,
     TResult Function(Offset currentPosition)? updateSelectionRect,
     TResult Function()? hideSelectionOverlay,
+    TResult Function(DiagramEventUnion originalEvent)? handleAsUsual,
     TResult Function(CursorEffect effect)? setCursor,
     required TResult orElse(),
   }) {
@@ -2358,6 +3248,9 @@ class _$ShowSelectionOverlayCommandImpl extends ShowSelectionOverlayCommand {
         applyDefaultPanZoom,
     required TResult Function(SetTransformCommand value) setTransform,
     required TResult Function(RedrawCommand value) redraw,
+    required TResult Function(EnableAutoscrollCommand value) enableAutoscroll,
+    required TResult Function(DisableAutoscrollCommand value) disableAutoscroll,
+    required TResult Function(ReturnToBoundsCommand value) returnToBounds,
     required TResult Function(ElasticBounceBackCommand value) elasticBounceBack,
     required TResult Function(AutoScrollStepCommand value) autoScrollStep,
     required TResult Function(StopAutoScrollCommand value) stopAutoScroll,
@@ -2370,6 +3263,7 @@ class _$ShowSelectionOverlayCommandImpl extends ShowSelectionOverlayCommand {
         updateSelectionRect,
     required TResult Function(HideSelectionOverlayCommand value)
         hideSelectionOverlay,
+    required TResult Function(_HandleAsUsualCommand value) handleAsUsual,
     required TResult Function(_SetCursorCommand value) setCursor,
   }) {
     return showSelectionOverlay(this);
@@ -2381,6 +3275,9 @@ class _$ShowSelectionOverlayCommandImpl extends ShowSelectionOverlayCommand {
     TResult? Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
     TResult? Function(SetTransformCommand value)? setTransform,
     TResult? Function(RedrawCommand value)? redraw,
+    TResult? Function(EnableAutoscrollCommand value)? enableAutoscroll,
+    TResult? Function(DisableAutoscrollCommand value)? disableAutoscroll,
+    TResult? Function(ReturnToBoundsCommand value)? returnToBounds,
     TResult? Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult? Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult? Function(StopAutoScrollCommand value)? stopAutoScroll,
@@ -2390,6 +3287,7 @@ class _$ShowSelectionOverlayCommandImpl extends ShowSelectionOverlayCommand {
     TResult? Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
     TResult? Function(UpdateSelectionRectCommand value)? updateSelectionRect,
     TResult? Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult? Function(_HandleAsUsualCommand value)? handleAsUsual,
     TResult? Function(_SetCursorCommand value)? setCursor,
   }) {
     return showSelectionOverlay?.call(this);
@@ -2401,6 +3299,9 @@ class _$ShowSelectionOverlayCommandImpl extends ShowSelectionOverlayCommand {
     TResult Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
     TResult Function(SetTransformCommand value)? setTransform,
     TResult Function(RedrawCommand value)? redraw,
+    TResult Function(EnableAutoscrollCommand value)? enableAutoscroll,
+    TResult Function(DisableAutoscrollCommand value)? disableAutoscroll,
+    TResult Function(ReturnToBoundsCommand value)? returnToBounds,
     TResult Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult Function(StopAutoScrollCommand value)? stopAutoScroll,
@@ -2410,6 +3311,7 @@ class _$ShowSelectionOverlayCommandImpl extends ShowSelectionOverlayCommand {
     TResult Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
     TResult Function(UpdateSelectionRectCommand value)? updateSelectionRect,
     TResult Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult Function(_HandleAsUsualCommand value)? handleAsUsual,
     TResult Function(_SetCursorCommand value)? setCursor,
     required TResult orElse(),
   }) {
@@ -2513,6 +3415,9 @@ class _$UpdateSelectionRectCommandImpl extends UpdateSelectionRectCommand {
     required TResult Function(
             List<DiagramObjectEntity> renderables, Rect logicalExtent)
         redraw,
+    required TResult Function() enableAutoscroll,
+    required TResult Function() disableAutoscroll,
+    required TResult Function() returnToBounds,
     required TResult Function(Transform2D targetTransform, Duration duration)
         elasticBounceBack,
     required TResult Function(Offset velocity, Duration stepDuration)
@@ -2525,6 +3430,7 @@ class _$UpdateSelectionRectCommandImpl extends UpdateSelectionRectCommand {
     required TResult Function(Offset startPosition) showSelectionOverlay,
     required TResult Function(Offset currentPosition) updateSelectionRect,
     required TResult Function() hideSelectionOverlay,
+    required TResult Function(DiagramEventUnion originalEvent) handleAsUsual,
     required TResult Function(CursorEffect effect) setCursor,
   }) {
     return updateSelectionRect(currentPosition);
@@ -2538,6 +3444,9 @@ class _$UpdateSelectionRectCommandImpl extends UpdateSelectionRectCommand {
     TResult? Function(
             List<DiagramObjectEntity> renderables, Rect logicalExtent)?
         redraw,
+    TResult? Function()? enableAutoscroll,
+    TResult? Function()? disableAutoscroll,
+    TResult? Function()? returnToBounds,
     TResult? Function(Transform2D targetTransform, Duration duration)?
         elasticBounceBack,
     TResult? Function(Offset velocity, Duration stepDuration)? autoScrollStep,
@@ -2548,6 +3457,7 @@ class _$UpdateSelectionRectCommandImpl extends UpdateSelectionRectCommand {
     TResult? Function(Offset startPosition)? showSelectionOverlay,
     TResult? Function(Offset currentPosition)? updateSelectionRect,
     TResult? Function()? hideSelectionOverlay,
+    TResult? Function(DiagramEventUnion originalEvent)? handleAsUsual,
     TResult? Function(CursorEffect effect)? setCursor,
   }) {
     return updateSelectionRect?.call(currentPosition);
@@ -2560,6 +3470,9 @@ class _$UpdateSelectionRectCommandImpl extends UpdateSelectionRectCommand {
     TResult Function(Transform2D transform)? setTransform,
     TResult Function(List<DiagramObjectEntity> renderables, Rect logicalExtent)?
         redraw,
+    TResult Function()? enableAutoscroll,
+    TResult Function()? disableAutoscroll,
+    TResult Function()? returnToBounds,
     TResult Function(Transform2D targetTransform, Duration duration)?
         elasticBounceBack,
     TResult Function(Offset velocity, Duration stepDuration)? autoScrollStep,
@@ -2570,6 +3483,7 @@ class _$UpdateSelectionRectCommandImpl extends UpdateSelectionRectCommand {
     TResult Function(Offset startPosition)? showSelectionOverlay,
     TResult Function(Offset currentPosition)? updateSelectionRect,
     TResult Function()? hideSelectionOverlay,
+    TResult Function(DiagramEventUnion originalEvent)? handleAsUsual,
     TResult Function(CursorEffect effect)? setCursor,
     required TResult orElse(),
   }) {
@@ -2586,6 +3500,9 @@ class _$UpdateSelectionRectCommandImpl extends UpdateSelectionRectCommand {
         applyDefaultPanZoom,
     required TResult Function(SetTransformCommand value) setTransform,
     required TResult Function(RedrawCommand value) redraw,
+    required TResult Function(EnableAutoscrollCommand value) enableAutoscroll,
+    required TResult Function(DisableAutoscrollCommand value) disableAutoscroll,
+    required TResult Function(ReturnToBoundsCommand value) returnToBounds,
     required TResult Function(ElasticBounceBackCommand value) elasticBounceBack,
     required TResult Function(AutoScrollStepCommand value) autoScrollStep,
     required TResult Function(StopAutoScrollCommand value) stopAutoScroll,
@@ -2598,6 +3515,7 @@ class _$UpdateSelectionRectCommandImpl extends UpdateSelectionRectCommand {
         updateSelectionRect,
     required TResult Function(HideSelectionOverlayCommand value)
         hideSelectionOverlay,
+    required TResult Function(_HandleAsUsualCommand value) handleAsUsual,
     required TResult Function(_SetCursorCommand value) setCursor,
   }) {
     return updateSelectionRect(this);
@@ -2609,6 +3527,9 @@ class _$UpdateSelectionRectCommandImpl extends UpdateSelectionRectCommand {
     TResult? Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
     TResult? Function(SetTransformCommand value)? setTransform,
     TResult? Function(RedrawCommand value)? redraw,
+    TResult? Function(EnableAutoscrollCommand value)? enableAutoscroll,
+    TResult? Function(DisableAutoscrollCommand value)? disableAutoscroll,
+    TResult? Function(ReturnToBoundsCommand value)? returnToBounds,
     TResult? Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult? Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult? Function(StopAutoScrollCommand value)? stopAutoScroll,
@@ -2618,6 +3539,7 @@ class _$UpdateSelectionRectCommandImpl extends UpdateSelectionRectCommand {
     TResult? Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
     TResult? Function(UpdateSelectionRectCommand value)? updateSelectionRect,
     TResult? Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult? Function(_HandleAsUsualCommand value)? handleAsUsual,
     TResult? Function(_SetCursorCommand value)? setCursor,
   }) {
     return updateSelectionRect?.call(this);
@@ -2629,6 +3551,9 @@ class _$UpdateSelectionRectCommandImpl extends UpdateSelectionRectCommand {
     TResult Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
     TResult Function(SetTransformCommand value)? setTransform,
     TResult Function(RedrawCommand value)? redraw,
+    TResult Function(EnableAutoscrollCommand value)? enableAutoscroll,
+    TResult Function(DisableAutoscrollCommand value)? disableAutoscroll,
+    TResult Function(ReturnToBoundsCommand value)? returnToBounds,
     TResult Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult Function(StopAutoScrollCommand value)? stopAutoScroll,
@@ -2638,6 +3563,7 @@ class _$UpdateSelectionRectCommandImpl extends UpdateSelectionRectCommand {
     TResult Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
     TResult Function(UpdateSelectionRectCommand value)? updateSelectionRect,
     TResult Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult Function(_HandleAsUsualCommand value)? handleAsUsual,
     TResult Function(_SetCursorCommand value)? setCursor,
     required TResult orElse(),
   }) {
@@ -2713,6 +3639,9 @@ class _$HideSelectionOverlayCommandImpl extends HideSelectionOverlayCommand {
     required TResult Function(
             List<DiagramObjectEntity> renderables, Rect logicalExtent)
         redraw,
+    required TResult Function() enableAutoscroll,
+    required TResult Function() disableAutoscroll,
+    required TResult Function() returnToBounds,
     required TResult Function(Transform2D targetTransform, Duration duration)
         elasticBounceBack,
     required TResult Function(Offset velocity, Duration stepDuration)
@@ -2725,6 +3654,7 @@ class _$HideSelectionOverlayCommandImpl extends HideSelectionOverlayCommand {
     required TResult Function(Offset startPosition) showSelectionOverlay,
     required TResult Function(Offset currentPosition) updateSelectionRect,
     required TResult Function() hideSelectionOverlay,
+    required TResult Function(DiagramEventUnion originalEvent) handleAsUsual,
     required TResult Function(CursorEffect effect) setCursor,
   }) {
     return hideSelectionOverlay();
@@ -2738,6 +3668,9 @@ class _$HideSelectionOverlayCommandImpl extends HideSelectionOverlayCommand {
     TResult? Function(
             List<DiagramObjectEntity> renderables, Rect logicalExtent)?
         redraw,
+    TResult? Function()? enableAutoscroll,
+    TResult? Function()? disableAutoscroll,
+    TResult? Function()? returnToBounds,
     TResult? Function(Transform2D targetTransform, Duration duration)?
         elasticBounceBack,
     TResult? Function(Offset velocity, Duration stepDuration)? autoScrollStep,
@@ -2748,6 +3681,7 @@ class _$HideSelectionOverlayCommandImpl extends HideSelectionOverlayCommand {
     TResult? Function(Offset startPosition)? showSelectionOverlay,
     TResult? Function(Offset currentPosition)? updateSelectionRect,
     TResult? Function()? hideSelectionOverlay,
+    TResult? Function(DiagramEventUnion originalEvent)? handleAsUsual,
     TResult? Function(CursorEffect effect)? setCursor,
   }) {
     return hideSelectionOverlay?.call();
@@ -2760,6 +3694,9 @@ class _$HideSelectionOverlayCommandImpl extends HideSelectionOverlayCommand {
     TResult Function(Transform2D transform)? setTransform,
     TResult Function(List<DiagramObjectEntity> renderables, Rect logicalExtent)?
         redraw,
+    TResult Function()? enableAutoscroll,
+    TResult Function()? disableAutoscroll,
+    TResult Function()? returnToBounds,
     TResult Function(Transform2D targetTransform, Duration duration)?
         elasticBounceBack,
     TResult Function(Offset velocity, Duration stepDuration)? autoScrollStep,
@@ -2770,6 +3707,7 @@ class _$HideSelectionOverlayCommandImpl extends HideSelectionOverlayCommand {
     TResult Function(Offset startPosition)? showSelectionOverlay,
     TResult Function(Offset currentPosition)? updateSelectionRect,
     TResult Function()? hideSelectionOverlay,
+    TResult Function(DiagramEventUnion originalEvent)? handleAsUsual,
     TResult Function(CursorEffect effect)? setCursor,
     required TResult orElse(),
   }) {
@@ -2786,6 +3724,9 @@ class _$HideSelectionOverlayCommandImpl extends HideSelectionOverlayCommand {
         applyDefaultPanZoom,
     required TResult Function(SetTransformCommand value) setTransform,
     required TResult Function(RedrawCommand value) redraw,
+    required TResult Function(EnableAutoscrollCommand value) enableAutoscroll,
+    required TResult Function(DisableAutoscrollCommand value) disableAutoscroll,
+    required TResult Function(ReturnToBoundsCommand value) returnToBounds,
     required TResult Function(ElasticBounceBackCommand value) elasticBounceBack,
     required TResult Function(AutoScrollStepCommand value) autoScrollStep,
     required TResult Function(StopAutoScrollCommand value) stopAutoScroll,
@@ -2798,6 +3739,7 @@ class _$HideSelectionOverlayCommandImpl extends HideSelectionOverlayCommand {
         updateSelectionRect,
     required TResult Function(HideSelectionOverlayCommand value)
         hideSelectionOverlay,
+    required TResult Function(_HandleAsUsualCommand value) handleAsUsual,
     required TResult Function(_SetCursorCommand value) setCursor,
   }) {
     return hideSelectionOverlay(this);
@@ -2809,6 +3751,9 @@ class _$HideSelectionOverlayCommandImpl extends HideSelectionOverlayCommand {
     TResult? Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
     TResult? Function(SetTransformCommand value)? setTransform,
     TResult? Function(RedrawCommand value)? redraw,
+    TResult? Function(EnableAutoscrollCommand value)? enableAutoscroll,
+    TResult? Function(DisableAutoscrollCommand value)? disableAutoscroll,
+    TResult? Function(ReturnToBoundsCommand value)? returnToBounds,
     TResult? Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult? Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult? Function(StopAutoScrollCommand value)? stopAutoScroll,
@@ -2818,6 +3763,7 @@ class _$HideSelectionOverlayCommandImpl extends HideSelectionOverlayCommand {
     TResult? Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
     TResult? Function(UpdateSelectionRectCommand value)? updateSelectionRect,
     TResult? Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult? Function(_HandleAsUsualCommand value)? handleAsUsual,
     TResult? Function(_SetCursorCommand value)? setCursor,
   }) {
     return hideSelectionOverlay?.call(this);
@@ -2829,6 +3775,9 @@ class _$HideSelectionOverlayCommandImpl extends HideSelectionOverlayCommand {
     TResult Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
     TResult Function(SetTransformCommand value)? setTransform,
     TResult Function(RedrawCommand value)? redraw,
+    TResult Function(EnableAutoscrollCommand value)? enableAutoscroll,
+    TResult Function(DisableAutoscrollCommand value)? disableAutoscroll,
+    TResult Function(ReturnToBoundsCommand value)? returnToBounds,
     TResult Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult Function(StopAutoScrollCommand value)? stopAutoScroll,
@@ -2838,6 +3787,7 @@ class _$HideSelectionOverlayCommandImpl extends HideSelectionOverlayCommand {
     TResult Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
     TResult Function(UpdateSelectionRectCommand value)? updateSelectionRect,
     TResult Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult Function(_HandleAsUsualCommand value)? handleAsUsual,
     TResult Function(_SetCursorCommand value)? setCursor,
     required TResult orElse(),
   }) {
@@ -2852,6 +3802,268 @@ abstract class HideSelectionOverlayCommand extends DiagramCommand {
   const factory HideSelectionOverlayCommand() =
       _$HideSelectionOverlayCommandImpl;
   const HideSelectionOverlayCommand._() : super._();
+}
+
+/// @nodoc
+abstract class _$$HandleAsUsualCommandImplCopyWith<$Res> {
+  factory _$$HandleAsUsualCommandImplCopyWith(_$HandleAsUsualCommandImpl value,
+          $Res Function(_$HandleAsUsualCommandImpl) then) =
+      __$$HandleAsUsualCommandImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({DiagramEventUnion originalEvent});
+
+  $DiagramEventUnionCopyWith<$Res> get originalEvent;
+}
+
+/// @nodoc
+class __$$HandleAsUsualCommandImplCopyWithImpl<$Res>
+    extends _$DiagramCommandCopyWithImpl<$Res, _$HandleAsUsualCommandImpl>
+    implements _$$HandleAsUsualCommandImplCopyWith<$Res> {
+  __$$HandleAsUsualCommandImplCopyWithImpl(_$HandleAsUsualCommandImpl _value,
+      $Res Function(_$HandleAsUsualCommandImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of DiagramCommand
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? originalEvent = null,
+  }) {
+    return _then(_$HandleAsUsualCommandImpl(
+      originalEvent: null == originalEvent
+          ? _value.originalEvent
+          : originalEvent // ignore: cast_nullable_to_non_nullable
+              as DiagramEventUnion,
+    ));
+  }
+
+  /// Create a copy of DiagramCommand
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $DiagramEventUnionCopyWith<$Res> get originalEvent {
+    return $DiagramEventUnionCopyWith<$Res>(_value.originalEvent, (value) {
+      return _then(_value.copyWith(originalEvent: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$HandleAsUsualCommandImpl extends _HandleAsUsualCommand {
+  const _$HandleAsUsualCommandImpl({required this.originalEvent}) : super._();
+
+  @override
+  final DiagramEventUnion originalEvent;
+
+  @override
+  String toString() {
+    return 'DiagramCommand.handleAsUsual(originalEvent: $originalEvent)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$HandleAsUsualCommandImpl &&
+            (identical(other.originalEvent, originalEvent) ||
+                other.originalEvent == originalEvent));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, originalEvent);
+
+  /// Create a copy of DiagramCommand
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$HandleAsUsualCommandImplCopyWith<_$HandleAsUsualCommandImpl>
+      get copyWith =>
+          __$$HandleAsUsualCommandImplCopyWithImpl<_$HandleAsUsualCommandImpl>(
+              this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(PhysicalEvent origin) applyDefaultPanZoom,
+    required TResult Function(Transform2D transform) setTransform,
+    required TResult Function(
+            List<DiagramObjectEntity> renderables, Rect logicalExtent)
+        redraw,
+    required TResult Function() enableAutoscroll,
+    required TResult Function() disableAutoscroll,
+    required TResult Function() returnToBounds,
+    required TResult Function(Transform2D targetTransform, Duration duration)
+        elasticBounceBack,
+    required TResult Function(Offset velocity, Duration stepDuration)
+        autoScrollStep,
+    required TResult Function() stopAutoScroll,
+    required TResult Function(Object? ghostSpec, Offset position)
+        showDragOverlay,
+    required TResult Function(Offset position) updateDragOverlay,
+    required TResult Function() hideDragOverlay,
+    required TResult Function(Offset startPosition) showSelectionOverlay,
+    required TResult Function(Offset currentPosition) updateSelectionRect,
+    required TResult Function() hideSelectionOverlay,
+    required TResult Function(DiagramEventUnion originalEvent) handleAsUsual,
+    required TResult Function(CursorEffect effect) setCursor,
+  }) {
+    return handleAsUsual(originalEvent);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(PhysicalEvent origin)? applyDefaultPanZoom,
+    TResult? Function(Transform2D transform)? setTransform,
+    TResult? Function(
+            List<DiagramObjectEntity> renderables, Rect logicalExtent)?
+        redraw,
+    TResult? Function()? enableAutoscroll,
+    TResult? Function()? disableAutoscroll,
+    TResult? Function()? returnToBounds,
+    TResult? Function(Transform2D targetTransform, Duration duration)?
+        elasticBounceBack,
+    TResult? Function(Offset velocity, Duration stepDuration)? autoScrollStep,
+    TResult? Function()? stopAutoScroll,
+    TResult? Function(Object? ghostSpec, Offset position)? showDragOverlay,
+    TResult? Function(Offset position)? updateDragOverlay,
+    TResult? Function()? hideDragOverlay,
+    TResult? Function(Offset startPosition)? showSelectionOverlay,
+    TResult? Function(Offset currentPosition)? updateSelectionRect,
+    TResult? Function()? hideSelectionOverlay,
+    TResult? Function(DiagramEventUnion originalEvent)? handleAsUsual,
+    TResult? Function(CursorEffect effect)? setCursor,
+  }) {
+    return handleAsUsual?.call(originalEvent);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(PhysicalEvent origin)? applyDefaultPanZoom,
+    TResult Function(Transform2D transform)? setTransform,
+    TResult Function(List<DiagramObjectEntity> renderables, Rect logicalExtent)?
+        redraw,
+    TResult Function()? enableAutoscroll,
+    TResult Function()? disableAutoscroll,
+    TResult Function()? returnToBounds,
+    TResult Function(Transform2D targetTransform, Duration duration)?
+        elasticBounceBack,
+    TResult Function(Offset velocity, Duration stepDuration)? autoScrollStep,
+    TResult Function()? stopAutoScroll,
+    TResult Function(Object? ghostSpec, Offset position)? showDragOverlay,
+    TResult Function(Offset position)? updateDragOverlay,
+    TResult Function()? hideDragOverlay,
+    TResult Function(Offset startPosition)? showSelectionOverlay,
+    TResult Function(Offset currentPosition)? updateSelectionRect,
+    TResult Function()? hideSelectionOverlay,
+    TResult Function(DiagramEventUnion originalEvent)? handleAsUsual,
+    TResult Function(CursorEffect effect)? setCursor,
+    required TResult orElse(),
+  }) {
+    if (handleAsUsual != null) {
+      return handleAsUsual(originalEvent);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(ApplyDefaultPanZoomCommand value)
+        applyDefaultPanZoom,
+    required TResult Function(SetTransformCommand value) setTransform,
+    required TResult Function(RedrawCommand value) redraw,
+    required TResult Function(EnableAutoscrollCommand value) enableAutoscroll,
+    required TResult Function(DisableAutoscrollCommand value) disableAutoscroll,
+    required TResult Function(ReturnToBoundsCommand value) returnToBounds,
+    required TResult Function(ElasticBounceBackCommand value) elasticBounceBack,
+    required TResult Function(AutoScrollStepCommand value) autoScrollStep,
+    required TResult Function(StopAutoScrollCommand value) stopAutoScroll,
+    required TResult Function(ShowDragOverlayCommand value) showDragOverlay,
+    required TResult Function(UpdateDragOverlayCommand value) updateDragOverlay,
+    required TResult Function(HideDragOverlayCommand value) hideDragOverlay,
+    required TResult Function(ShowSelectionOverlayCommand value)
+        showSelectionOverlay,
+    required TResult Function(UpdateSelectionRectCommand value)
+        updateSelectionRect,
+    required TResult Function(HideSelectionOverlayCommand value)
+        hideSelectionOverlay,
+    required TResult Function(_HandleAsUsualCommand value) handleAsUsual,
+    required TResult Function(_SetCursorCommand value) setCursor,
+  }) {
+    return handleAsUsual(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
+    TResult? Function(SetTransformCommand value)? setTransform,
+    TResult? Function(RedrawCommand value)? redraw,
+    TResult? Function(EnableAutoscrollCommand value)? enableAutoscroll,
+    TResult? Function(DisableAutoscrollCommand value)? disableAutoscroll,
+    TResult? Function(ReturnToBoundsCommand value)? returnToBounds,
+    TResult? Function(ElasticBounceBackCommand value)? elasticBounceBack,
+    TResult? Function(AutoScrollStepCommand value)? autoScrollStep,
+    TResult? Function(StopAutoScrollCommand value)? stopAutoScroll,
+    TResult? Function(ShowDragOverlayCommand value)? showDragOverlay,
+    TResult? Function(UpdateDragOverlayCommand value)? updateDragOverlay,
+    TResult? Function(HideDragOverlayCommand value)? hideDragOverlay,
+    TResult? Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
+    TResult? Function(UpdateSelectionRectCommand value)? updateSelectionRect,
+    TResult? Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult? Function(_HandleAsUsualCommand value)? handleAsUsual,
+    TResult? Function(_SetCursorCommand value)? setCursor,
+  }) {
+    return handleAsUsual?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
+    TResult Function(SetTransformCommand value)? setTransform,
+    TResult Function(RedrawCommand value)? redraw,
+    TResult Function(EnableAutoscrollCommand value)? enableAutoscroll,
+    TResult Function(DisableAutoscrollCommand value)? disableAutoscroll,
+    TResult Function(ReturnToBoundsCommand value)? returnToBounds,
+    TResult Function(ElasticBounceBackCommand value)? elasticBounceBack,
+    TResult Function(AutoScrollStepCommand value)? autoScrollStep,
+    TResult Function(StopAutoScrollCommand value)? stopAutoScroll,
+    TResult Function(ShowDragOverlayCommand value)? showDragOverlay,
+    TResult Function(UpdateDragOverlayCommand value)? updateDragOverlay,
+    TResult Function(HideDragOverlayCommand value)? hideDragOverlay,
+    TResult Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
+    TResult Function(UpdateSelectionRectCommand value)? updateSelectionRect,
+    TResult Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult Function(_HandleAsUsualCommand value)? handleAsUsual,
+    TResult Function(_SetCursorCommand value)? setCursor,
+    required TResult orElse(),
+  }) {
+    if (handleAsUsual != null) {
+      return handleAsUsual(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _HandleAsUsualCommand extends DiagramCommand {
+  const factory _HandleAsUsualCommand(
+          {required final DiagramEventUnion originalEvent}) =
+      _$HandleAsUsualCommandImpl;
+  const _HandleAsUsualCommand._() : super._();
+
+  DiagramEventUnion get originalEvent;
+
+  /// Create a copy of DiagramCommand
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$HandleAsUsualCommandImplCopyWith<_$HandleAsUsualCommandImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -2928,6 +4140,9 @@ class _$SetCursorCommandImpl extends _SetCursorCommand {
     required TResult Function(
             List<DiagramObjectEntity> renderables, Rect logicalExtent)
         redraw,
+    required TResult Function() enableAutoscroll,
+    required TResult Function() disableAutoscroll,
+    required TResult Function() returnToBounds,
     required TResult Function(Transform2D targetTransform, Duration duration)
         elasticBounceBack,
     required TResult Function(Offset velocity, Duration stepDuration)
@@ -2940,6 +4155,7 @@ class _$SetCursorCommandImpl extends _SetCursorCommand {
     required TResult Function(Offset startPosition) showSelectionOverlay,
     required TResult Function(Offset currentPosition) updateSelectionRect,
     required TResult Function() hideSelectionOverlay,
+    required TResult Function(DiagramEventUnion originalEvent) handleAsUsual,
     required TResult Function(CursorEffect effect) setCursor,
   }) {
     return setCursor(effect);
@@ -2953,6 +4169,9 @@ class _$SetCursorCommandImpl extends _SetCursorCommand {
     TResult? Function(
             List<DiagramObjectEntity> renderables, Rect logicalExtent)?
         redraw,
+    TResult? Function()? enableAutoscroll,
+    TResult? Function()? disableAutoscroll,
+    TResult? Function()? returnToBounds,
     TResult? Function(Transform2D targetTransform, Duration duration)?
         elasticBounceBack,
     TResult? Function(Offset velocity, Duration stepDuration)? autoScrollStep,
@@ -2963,6 +4182,7 @@ class _$SetCursorCommandImpl extends _SetCursorCommand {
     TResult? Function(Offset startPosition)? showSelectionOverlay,
     TResult? Function(Offset currentPosition)? updateSelectionRect,
     TResult? Function()? hideSelectionOverlay,
+    TResult? Function(DiagramEventUnion originalEvent)? handleAsUsual,
     TResult? Function(CursorEffect effect)? setCursor,
   }) {
     return setCursor?.call(effect);
@@ -2975,6 +4195,9 @@ class _$SetCursorCommandImpl extends _SetCursorCommand {
     TResult Function(Transform2D transform)? setTransform,
     TResult Function(List<DiagramObjectEntity> renderables, Rect logicalExtent)?
         redraw,
+    TResult Function()? enableAutoscroll,
+    TResult Function()? disableAutoscroll,
+    TResult Function()? returnToBounds,
     TResult Function(Transform2D targetTransform, Duration duration)?
         elasticBounceBack,
     TResult Function(Offset velocity, Duration stepDuration)? autoScrollStep,
@@ -2985,6 +4208,7 @@ class _$SetCursorCommandImpl extends _SetCursorCommand {
     TResult Function(Offset startPosition)? showSelectionOverlay,
     TResult Function(Offset currentPosition)? updateSelectionRect,
     TResult Function()? hideSelectionOverlay,
+    TResult Function(DiagramEventUnion originalEvent)? handleAsUsual,
     TResult Function(CursorEffect effect)? setCursor,
     required TResult orElse(),
   }) {
@@ -3001,6 +4225,9 @@ class _$SetCursorCommandImpl extends _SetCursorCommand {
         applyDefaultPanZoom,
     required TResult Function(SetTransformCommand value) setTransform,
     required TResult Function(RedrawCommand value) redraw,
+    required TResult Function(EnableAutoscrollCommand value) enableAutoscroll,
+    required TResult Function(DisableAutoscrollCommand value) disableAutoscroll,
+    required TResult Function(ReturnToBoundsCommand value) returnToBounds,
     required TResult Function(ElasticBounceBackCommand value) elasticBounceBack,
     required TResult Function(AutoScrollStepCommand value) autoScrollStep,
     required TResult Function(StopAutoScrollCommand value) stopAutoScroll,
@@ -3013,6 +4240,7 @@ class _$SetCursorCommandImpl extends _SetCursorCommand {
         updateSelectionRect,
     required TResult Function(HideSelectionOverlayCommand value)
         hideSelectionOverlay,
+    required TResult Function(_HandleAsUsualCommand value) handleAsUsual,
     required TResult Function(_SetCursorCommand value) setCursor,
   }) {
     return setCursor(this);
@@ -3024,6 +4252,9 @@ class _$SetCursorCommandImpl extends _SetCursorCommand {
     TResult? Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
     TResult? Function(SetTransformCommand value)? setTransform,
     TResult? Function(RedrawCommand value)? redraw,
+    TResult? Function(EnableAutoscrollCommand value)? enableAutoscroll,
+    TResult? Function(DisableAutoscrollCommand value)? disableAutoscroll,
+    TResult? Function(ReturnToBoundsCommand value)? returnToBounds,
     TResult? Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult? Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult? Function(StopAutoScrollCommand value)? stopAutoScroll,
@@ -3033,6 +4264,7 @@ class _$SetCursorCommandImpl extends _SetCursorCommand {
     TResult? Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
     TResult? Function(UpdateSelectionRectCommand value)? updateSelectionRect,
     TResult? Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult? Function(_HandleAsUsualCommand value)? handleAsUsual,
     TResult? Function(_SetCursorCommand value)? setCursor,
   }) {
     return setCursor?.call(this);
@@ -3044,6 +4276,9 @@ class _$SetCursorCommandImpl extends _SetCursorCommand {
     TResult Function(ApplyDefaultPanZoomCommand value)? applyDefaultPanZoom,
     TResult Function(SetTransformCommand value)? setTransform,
     TResult Function(RedrawCommand value)? redraw,
+    TResult Function(EnableAutoscrollCommand value)? enableAutoscroll,
+    TResult Function(DisableAutoscrollCommand value)? disableAutoscroll,
+    TResult Function(ReturnToBoundsCommand value)? returnToBounds,
     TResult Function(ElasticBounceBackCommand value)? elasticBounceBack,
     TResult Function(AutoScrollStepCommand value)? autoScrollStep,
     TResult Function(StopAutoScrollCommand value)? stopAutoScroll,
@@ -3053,6 +4288,7 @@ class _$SetCursorCommandImpl extends _SetCursorCommand {
     TResult Function(ShowSelectionOverlayCommand value)? showSelectionOverlay,
     TResult Function(UpdateSelectionRectCommand value)? updateSelectionRect,
     TResult Function(HideSelectionOverlayCommand value)? hideSelectionOverlay,
+    TResult Function(_HandleAsUsualCommand value)? handleAsUsual,
     TResult Function(_SetCursorCommand value)? setCursor,
     required TResult orElse(),
   }) {

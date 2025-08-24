@@ -105,10 +105,10 @@ void main() {
       // Assert - Should have sent commands
       expect(sentCommands, isNotEmpty);
 
-      // Should have sent setTransform command for pan
+      // Should have sent handleAsUsual command for browsing (pan)
       expect(
           sentCommands.any((cmd) => cmd.maybeWhen(
-                setTransform: (_) => true,
+                handleAsUsual: (_) => true,
                 orElse: () => false,
               )),
           isTrue);
@@ -163,10 +163,10 @@ void main() {
               )),
           isTrue);
 
-      // Should NOT have sent setTransform command (selection should block pan)
+      // Should NOT have sent handleAsUsual command (selection should block browsing)
       expect(
           sentCommands.any((cmd) => cmd.maybeWhen(
-                setTransform: (_) => true,
+                handleAsUsual: (_) => true,
                 orElse: () => false,
               )),
           isFalse);
@@ -273,6 +273,62 @@ void main() {
             orElse: () => false,
           ));
       expect(setTransformCommands, isEmpty);
+
+      // CRITICAL: Should NOT have sent ANY handleAsUsual commands (selection blocks browsing)
+      final handleAsUsualCommands = sentCommands.where((cmd) => cmd.maybeWhen(
+            handleAsUsual: (_) => true,
+            orElse: () => false,
+          ));
+      expect(handleAsUsualCommands, isEmpty);
     }, timeout: const Timeout(Duration(seconds: 15)));
+
+    test('should send handleAsUsual command for browsing events', () async {
+      // Arrange
+      controller.setSelectionMode(false);
+      expect(controller.isSelectionModeEnabled, isFalse);
+
+      // Clear any initial commands
+      sentCommands.clear();
+
+      // Act - Send a browsing event that should be handled as usual
+      final browsingEvent = DiagramEventUnion.dragBegin(
+        DiagramDragBegin(
+          eventId: 'test-browsing-event',
+          logicalPosition: const Offset(300, 300),
+          screenPosition: const Offset(600, 600),
+          transformSnapshot: Transform2D.identity,
+          hitList: [], // Empty space
+          timestamp: Duration.zero,
+          metadata: {'pressedKeys': []},
+          fingerCount: 1,
+          mouseButton: MouseButton.left,
+          isOnObject: false,
+        ),
+      );
+
+      controller.eventsSink.add(browsingEvent);
+
+      // Wait for processing
+      await Future.delayed(const Duration(milliseconds: 100));
+
+      // Assert - Should have sent commands
+      expect(sentCommands, isNotEmpty);
+
+      // Should have sent handleAsUsual command for browsing (pan)
+      expect(
+          sentCommands.any((cmd) => cmd.maybeWhen(
+                handleAsUsual: (_) => true,
+                orElse: () => false,
+              )),
+          isTrue);
+
+      // Should NOT have sent setTransform command (browsing handled by viewer)
+      expect(
+          sentCommands.any((cmd) => cmd.maybeWhen(
+                setTransform: (_) => true,
+                orElse: () => false,
+              )),
+          isFalse);
+    }, timeout: const Timeout(Duration(seconds: 10)));
   });
 }

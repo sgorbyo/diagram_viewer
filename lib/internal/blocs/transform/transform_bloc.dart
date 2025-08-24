@@ -46,10 +46,17 @@ class TransformBloc extends Bloc<TransformEvent, TransformState> {
   }
 
   bool _isFrozen = false;
+  bool _skipTransformCorrection = false;
 
   // Public control for freeze during drag
   void setFrozenDuringDrag(bool frozen) {
     _isFrozen = frozen;
+  }
+
+  // Public control for skipping transform correction during autoscroll
+  void setSkipTransformCorrection(bool skip) {
+    print('[TransformBloc] setSkipTransformCorrection: $skip');
+    _skipTransformCorrection = skip;
   }
 
   // Public bounce-back helper
@@ -442,12 +449,14 @@ class TransformBloc extends Bloc<TransformEvent, TransformState> {
 
     final currentTransform = currentState.transform;
 
-    // Recenter only if not frozen during drag
-    // final shouldRecenter = !_isFrozen; // not used
-
     Transform2D effectiveTransform = currentTransform;
 
-    if (!_isFrozen) {
+    // Skip transform correction if explicitly requested (e.g., during autoscroll)
+    if (_skipTransformCorrection) {
+      print(
+          '[TransformBloc] Skipping transform correction due to _skipTransformCorrection flag');
+      effectiveTransform = currentTransform;
+    } else if (!_isFrozen) {
       _needsBounceBack = false;
       // Determine if content is smaller than viewport on any axis at current scale
       final scaledWidth = diagramRect.width * currentTransform.scale;

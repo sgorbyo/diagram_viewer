@@ -46,12 +46,16 @@ class MockDiagramController implements IDiagramController {
         },
         autoScrollStep: (_, __) {},
         stopAutoScroll: () {},
+        enableAutoscroll: () {},
+        disableAutoscroll: () {},
+        returnToBounds: () {},
         showDragOverlay: (_, __) {},
         updateDragOverlay: (_) {},
         hideDragOverlay: () {},
         showSelectionOverlay: (_) {},
         updateSelectionRect: (_) {},
         hideSelectionOverlay: () {},
+        handleAsUsual: (_) {},
         setCursor: (_) {},
       );
     });

@@ -36,6 +36,8 @@ class _Ctrl implements IDiagramController {
     _evt.close();
   }
 
+  void send(DiagramCommand cmd) => _cmd.add(cmd);
+
   _Ctrl() {
     _evt.stream.listen(received.add);
   }
@@ -87,9 +89,17 @@ void main() {
           ),
           isTrue);
 
-      // The overlay should be visible (we'll verify this by checking the widget tree)
-      // Note: The actual overlay visibility is managed by the widget state
-      // We can verify the event was processed correctly
+      // Simulate controller showing the selection overlay (logical coords)
+      controller.send(DiagramCommand.showSelectionOverlay(
+          startPosition: const Offset(10, 10)));
+      await tester.pumpAndSettle();
+
+      // Verify overlay CustomPaint with internal painter is present
+      final paints = tester.widgetList<CustomPaint>(find.byType(CustomPaint));
+      final hasSelectionPainter = paints.any((p) =>
+          p.painter?.runtimeType.toString() == '_SelectionOverlayPainter');
+      expect(hasSelectionPainter, isTrue,
+          reason: 'Selection overlay painter should be present');
     });
 
     testWidgets('should not show selection overlay when dragging on object',
@@ -120,6 +130,12 @@ void main() {
 
       // The overlay should NOT be visible when dragging on object
       // This is controlled by the hitList.isEmpty check in dragBegin
+      final paints = tester.widgetList<CustomPaint>(find.byType(CustomPaint));
+      final hasSelectionPainter = paints.any((p) =>
+          p.painter?.runtimeType.toString() == '_SelectionOverlayPainter');
+      expect(hasSelectionPainter, isFalse,
+          reason:
+              'Selection overlay painter should NOT be present when dragging on object');
     });
 
     testWidgets('should update selection rectangle during drag',
@@ -155,6 +171,22 @@ void main() {
 
       expect(hasDragBegin, isTrue);
       expect(hasDragContinue, isTrue);
+
+      // Simulate controller showing and updating the selection overlay
+      controller.send(DiagramCommand.showSelectionOverlay(
+          startPosition: const Offset(10, 10)));
+      await tester.pumpAndSettle();
+      controller.send(DiagramCommand.updateSelectionRect(
+          currentPosition: const Offset(80, 60)));
+      await tester.pumpAndSettle();
+
+      // Overlay should now be present during continued drag
+      final paints = tester.widgetList<CustomPaint>(find.byType(CustomPaint));
+      final hasSelectionPainter = paints.any((p) =>
+          p.painter?.runtimeType.toString() == '_SelectionOverlayPainter');
+      expect(hasSelectionPainter, isTrue,
+          reason:
+              'Selection overlay painter should be present during dragContinue');
     });
 
     testWidgets('should hide selection overlay when drag ends', (tester) async {
@@ -182,8 +214,22 @@ void main() {
           ),
           isTrue);
 
+      // Simulate controller showing then hiding overlay
+      controller.send(DiagramCommand.showSelectionOverlay(
+          startPosition: const Offset(10, 10)));
+      await tester.pumpAndSettle();
+      // Now hide
+      controller.send(DiagramCommand.hideSelectionOverlay());
+      await tester.pumpAndSettle();
+
       // The overlay should be hidden when drag ends
       // This is controlled by setting _selectionOverlayVisible = false in dragEnd
+      final paintsAfter =
+          tester.widgetList<CustomPaint>(find.byType(CustomPaint));
+      final hasSelectionPainterAfter = paintsAfter.any((p) =>
+          p.painter?.runtimeType.toString() == '_SelectionOverlayPainter');
+      expect(hasSelectionPainterAfter, isFalse,
+          reason: 'Selection overlay painter should be removed after drag end');
     });
 
     // Note: Transform test removed for now as setTransform command behavior

@@ -1,223 +1,175 @@
-# Architecture Overview
+# Diagram Viewer - Architettura Controller-First
 
-## Core Architecture: Diagrammer-Controller Pattern
+## **🎯 PRINCIPIO FONDAMENTALE**
 
-The `diagram_viewer` package implements a **Diagrammer-Controller architecture** that separates rendering concerns from business logic:
+> **TUTTI gli eventi devono essere prima processati dal Controller** (scrolling compreso) e il controller può decidere di:
+> 1. **Trasformare** questi eventi in comandi specifici per il DiagramViewer
+> 2. **Scartare** l'evento  
+> 3. **Chiedere al DiagramViewer** di processare lui l'evento tramite il comando `handleAsUsual`
 
-### **Diagrammer (DiagramViewer)**
-- **Rendering Engine**: Handles UI events, hit-testing, and rendering
-- **Transform Management**: Owns the transformation matrix (zoom + pan)
-- **Event Capture**: Captures and enriches UI events with logical coordinates
-- **Passive Behavior**: Executes commands from Controller, doesn't make business decisions
+## **🏗️ ARCHITETTURA GENERALE**
 
-### **Controller (External)**
-- **Business Logic**: Owns diagram-specific logic (ERD, Genogram, STD, etc.)
-- **Event Interpretation**: Decides between model mutation or default behavior
-- **State Management**: Manages diagram state through BLoCs
-- **Command Emission**: Sends commands to Diagrammer for execution
+```
+┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│   UI Events     │───▶│  DiagramViewer   │───▶│    Controller   │
+│ (mouse, touch,  │    │                  │    │                 │
+│  keyboard)      │    │                  │    │                 │
+└─────────────────┘    └──────────────────┘    └─────────────────┘
+                                │                        │
+                                │                        │
+                                ▼                        ▼
+                       ┌──────────────────┐    ┌─────────────────┐
+                       │  DiagramEvents   │    │ DiagramCommands │
+                       │                  │    │                 │
+                       └──────────────────┘    └─────────────────┘
+```
 
-## Vector Space Management
+## **🔄 FLUSSO DEGLI EVENTI**
 
-### **Coordinate Systems**
-- **Logical Space**: Original diagram coordinates (client's domain)
-- **Physical Space**: Screen coordinates after zoom/pan transformations
-- **Transform2D**: Custom 2D transformation class for efficient operations
+### **1. CAPTURE E TRADUZIONE**
+- **DiagramViewer** riceve eventi fisici (mouse, touch, keyboard)
+- **DiagramEventTranslator** converte questi eventi in `DiagramEventUnion`
+- Gli eventi vengono arricchiti con hit-testing, coordinate logiche, e metadati
 
-### **Transform Operations**
+### **2. PROCESSING DEL CONTROLLER**
+- **Controller** riceve tutti gli eventi tramite `eventsSink`
+- **Controller** decide cosa fare con ogni evento:
+  - **Selezione**: Mostra overlay, calcola oggetti intersecati
+  - **Drag di oggetti**: Modifica il modello, aggiorna posizioni
+  - **Browsing (pan/zoom)**: Invia `handleAsUsual` al viewer
+  - **Altro**: Trasforma in comandi specifici o scarta
+
+### **3. ESECUZIONE DEI COMANDI**
+- **Controller** invia comandi tramite `commandStream`
+- **DiagramViewer** esegue i comandi ricevuti
+- **Comando `handleAsUsual`**: Il viewer processa l'evento con la sua logica interna
+
+## **📋 COMANDI DISPONIBILI**
+
+### **Comandi di Trasformazione**
+- `setTransform`: Applica una trasformazione specifica
+- `applyDefaultPanZoom`: Comportamento predefinito per un evento
+- `elasticBounceBack`: Ritorno elastico ai limiti validi
+
+### **Comandi di Rendering**
+- `redraw`: Aggiorna la visualizzazione con nuovi oggetti
+- `showSelectionOverlay`: Mostra rettangolo di selezione
+- `updateSelectionRect`: Aggiorna rettangolo di selezione
+- `hideSelectionOverlay`: Nasconde rettangolo di selezione
+
+### **Comandi di Browsing**
+- `handleAsUsual`: **NUOVO** - Delega l'evento al viewer per processing interno
+- `autoScrollStep`: Passo di auto-scroll
+- `stopAutoScroll`: Ferma auto-scroll
+
+### **Comandi di Drag & Drop**
+- `showDragOverlay`: Mostra ghost dell'oggetto trascinato
+- `updateDragOverlay`: Aggiorna posizione del ghost
+- `hideDragOverlay`: Nasconde ghost
+
+## **🔒 MUTUA ESCLUSIVITÀ**
+
+### **Principio**
+- **Selezione** e **Browsing (pan/zoom)** non possono verificarsi simultaneamente
+- Il controller gestisce questa esclusività inviando comandi appropriati
+
+### **Implementazione**
 ```dart
-class Transform2D {
-  final double scale;
-  final Offset translation;
-  final double rotation;
-  
-  Transform2D applyZoom(double factor, Offset focalPoint);
-  Transform2D applyPan(Offset delta);
-  Offset logicalToPhysical(Offset logical);
-  Offset physicalToLogical(Offset physical);
+// Nel controller
+if (shouldSelect && event.hitList.isEmpty) {
+  // MODALITÀ SELEZIONE
+  _commandController.add(DiagramCommand.showSelectionOverlay(...));
+} else if (event.hitList.isNotEmpty) {
+  // MODALITÀ DRAG OGGETTO
+  _handleObjectDrag(event);
+} else {
+  // MODALITÀ BROWSING - Delega al viewer
+  _commandController.add(DiagramCommand.handleAsUsual(
+    originalEvent: DiagramEventUnion.dragBegin(event)
+  ));
 }
 ```
 
-## Event and Command System
+## **🎮 COMANDO `handleAsUsual`**
 
-### **Physical Events (Diagrammer → Controller)**
-- **Unified Events**: Platform-agnostic events (pointer, gesture, keyboard)
-- **Enriched Context**: Logical coordinates, hit-test results, border proximity
-- **Event Phases**: Start, update, end for continuous interactions
-- **Edge Proximity Metrics**: Normalized distance and qualitative bands for edge-driven behaviors
-- **In‑App Drag & Drop (Target)**: DragTargetEnter/Over/Leave/Drop with screen/logical positions and data previews (global→local→logical mapping)
- - Rendering model: the viewer is generic and does not know specific object types (nodes, connections, etc.). It invokes each object's `paint` to render itself.
- - Optional snapped hint: include `snappedLogicalPosition` when snap grid is enabled for drag (`dragContinue`, `dragEnd`) and DnD target events (`dragTargetOver`, `dragTargetDrop`).
+### **Scopo**
+Permette al controller di delegare eventi di browsing (pan/zoom/inertia) al DiagramViewer senza dover implementare la logica specifica.
 
-Notes:
-- Border proximity is currently computed in `EventManagementBloc` using the viewport and `edgeThreshold`, and included in pointer drag events (update phase) via metadata.
-Selection rectangle:
-- During a lasso drag that starts on empty space, the Diagrammer emits `SelectionArea(start|update|end)` PhysicalEvents with the logical rectangle and the list of covered object IDs (computed via convex hit-path intersection). The Controller decides the authoritative selection set.
-
-### **Diagram Commands (Controller → Diagrammer)**
-- **ApplyDefaultPanZoom**: Execute default pan/zoom behavior
-- **SetTransform**: Apply specific transformation
-- **Redraw**: Update visualization with new objects
-- **ElasticBounceBack**: Return to valid bounds with animation
-- **AutoScrollStep**: Execute incremental scroll
-- **StopAutoScroll**: Stop ongoing auto-scroll immediately
-- **ShowDragOverlay / UpdateDragOverlay / HideDragOverlay**: optional ghost overlay control during DnD
-- **HighlightSelection / ClearSelectionHighlight**: Render or clear a transient overlay showing the minimal axis-aligned logical bounding rectangle enclosing a set of objects. Rendering-only; no selection state changes.
-
-Autoscroll execution contract (current):
-- The controller decides when to autoscroll (based on border proximity) and emits `AutoScrollStep` with a velocity vector; it must emit `StopAutoScroll` when leaving the edge region or on drag end.
-- The Diagrammer executes autoscroll with a periodic tick (per `autoScrollInterval`) integrating `velocity * dt`, and immediately cancels on `StopAutoScroll` or on new user input.
- - Drag‑sync: while autoscrolling and a pointer drag is active, the Diagrammer synthesizes a post‑frame pointer update preserving the current `eventId` and pressed button bitmask, recomputes hit‑testing and the logical position under the fixed cursor, and forwards `PhysicalEvent.pointer(update)` so that the translator emits `dragContinue` even without physical pointer motion.
-
-## Component Responsibilities
-
-### **Diagrammer Responsibilities**
-- Event capture and enrichment
-- Hit-testing and object detection
-- Transform management and bounds checking
-- Rendering pipeline with z-order sorting
-- Default pan/zoom behaviors
-- Performance optimization (60 FPS target)
-- Execute `AutoScrollStep`/`StopAutoScroll` commands with a timer-based loop
- - Execute `AutoScrollStep`/`StopAutoScroll` commands with a timer-based loop and synthesize pointer updates during autoscroll to keep drags in sync
-- Expose an in‑app drag target layer; convert screen to logical coordinates; execute DnD visual feedback commands
- - Provide generic rendering facilities to objects (self-rendering):
-   - Local canvas rotation around a pivot to simplify drawing at arbitrary angles
-   - Text-on-path helpers (compute position and tangent-aligned orientation)
-   - Path end trimming against other objects' clip paths
-   - Generic path hit-testing utilities (point-to-path distance with tolerance)
-- Emit `SelectionArea` events during rectangular selection, including covered object IDs.
-- Execute selection highlight overlay commands; overlays are purely visual and separate from business logic.
-- Render selected objects with a distinct style only when the Controller’s model marks them as selected.
-
-### **Controller Responsibilities**
-- Business logic interpretation
-- Model state management
-- Object selection and manipulation
-- Own selection semantics end-to-end (toggle/additive/subtractive rules, platform modifiers). On `SelectionArea` events, compute and publish the authoritative selection set and/or drive `HighlightSelection/ClearSelectionHighlight`.
-- Auto-scroll orchestration
-- Start in‑app DnD (source in external widgets), handle DnD target events, command visual feedback, and perform final model updates on drop
-- Diagram extent calculation
-- State machine coordination (BLoCs)
- - Define concrete diagram objects, including connections, which self-render using the provided facilities
-
-Planned consolidation:
-- An internal `AutoScrollService` may consolidate the orchestration in the future to reduce duplication across controllers.
-
-## Data Flow
-
-```
-User Gesture → Diagrammer (enrichment) → Controller (interpretation) → Commands → Diagrammer (execution) → Rendering
+### **Utilizzo**
+```dart
+// Controller delega evento di browsing
+_commandController.add(DiagramCommand.handleAsUsual(
+  originalEvent: DiagramEventUnion.dragBegin(dragEvent)
+));
 ```
 
-## Performance Requirements
+### **Processing nel Viewer**
+```dart
+handleAsUsual: (originalEvent) {
+  // Processa l'evento usando la logica interna del viewer
+  _handleEventAsUsual(originalEvent);
+},
+```
 
-- **60 FPS Rendering**: ≤ 16ms per frame
-- **Efficient Hit-Testing**: Spatial indexing for large diagrams
-- **Memory Management**: Proper stream disposal and BLoC lifecycle
-- **Responsive Interactions**: Immediate feedback for user gestures
+### **Metodi Implementati**
+- `_handleDragBeginAsUsual`: Avvia gestione drag con EventManagementBloc
+- `_handleDragContinueAsUsual`: Applica pan con capping dei limiti
+- `_handleDragEndAsUsual`: Gestisce inertia e pulisce stato
 
-## Extensibility
+## **🚫 COSA NON FARE**
 
-- **Controller Independence**: Different diagram types use same Diagrammer
-- **Event System**: Extensible event types for custom interactions
-- **Command System**: Extensible command types for custom behaviors
-- **Object System**: Unified interface for custom diagram objects
+### **❌ ERRORE COMUNE**
+```dart
+// SBAGLIATO: Bypassare il controller
+transformBloc.add(TransformEvent.pan(delta: delta));
+```
 
-## BLoC Architecture
+### **✅ CORRETTO**
+```dart
+// CORRETTO: Passare dal controller
+_commandController.add(DiagramCommand.handleAsUsual(
+  originalEvent: DiagramEventUnion.dragContinue(dragEvent)
+));
+```
 
-### **Internal BLoCs (Diagrammer)**
-- **TransformBloc**: Manages current transform state
-- **ZoomBloc**: Handles zoom operations and elastic limits
-- **PanBloc**: Handles pan operations and auto-centering
+## **🔧 IMPLEMENTAZIONE TECNICA**
 
-### **External BLoCs (Controller)**
-- **MainDiagramBloc**: Global diagram state management
-- **EventInterpreter**: Maps events to domain intents
-- **AutoScrollService**: Orchestrates auto-scroll behavior
+### **DiagramViewerContent**
+- Implementa `_handleEventAsUsual` per processare eventi delegati
+- Mantiene separazione delle responsabilità
+- Usa la logica esistente di pan/zoom/inertia
 
-## Interaction State Management
+### **ExampleDiagramController**
+- Gestisce selezione vs browsing
+- Invia `handleAsUsual` per eventi di browsing
+- Mantiene mutua esclusività
 
-### **Gesture Concurrency Rules**
-- **Scale beats Pan**: Multi-touch gestures prioritize scale
-- **Object-Drag overrides View-Pan**: When objects are hit
-- **LongPress activates LassoSelecting**: In empty areas
-- **Modifier keys rewire Scroll**: Ctrl/Cmd + scroll = zoom
+### **Test Suite**
+- Verifica mutua esclusività
+- Testa comando `handleAsUsual`
+- Garantisce stabilità dell'architettura
 
-### **Interaction States**
-- **Idle**: No active interaction
-- **Panning**: Viewport pan in progress
-- **Zooming**: Zoom operation in progress
-- **ObjectDragging**: Object manipulation in progress
+## **📈 VANTAGGI DELL'ARCHITETTURA**
 
-## Zoom Behavior Requirements
+1. **Separazione delle Responsabilità**: Controller per business logic, Viewer per rendering
+2. **Mutua Esclusività**: Selezione e browsing non interferiscono
+3. **Estensibilità**: Facile aggiungere nuovi tipi di eventi e comandi
+4. **Testabilità**: Logica di business isolata e testabile
+5. **Manutenibilità**: Codice organizzato e comprensibile
 
-### **Focal Point Stability**
-- **Pinch-to-zoom**: Point between fingers remains stationary
-- **Mouse wheel zoom**: Point under cursor remains stationary
-- **Keyboard zoom**: Center of viewport remains stationary
+## **🔮 FUTURE ESTENSIONI**
 
-### **Zoom Constraints**
-- **Configurable Limits**: minZoom and maxZoom from configuration
-- **Dynamic Min Zoom**: Ensures entire diagram is visible
-- **Elastic Overscroll**: Temporary zoom beyond limits with bounce-back
-- **Minimum Size**: 512x512 minimum diagram size
+### **Auto-Scroll Generalizzato**
+- Supporto per DnD durante selezione
+- Creazione connessioni con drag prolungato
+- Qualsiasi operazione che richiede movimento continuo
 
-## Auto-Centering and Bounds
+### **Comandi Avanzati**
+- `handleAsUsual` per altri tipi di eventi
+- Comandi per gestione stato avanzata
+- Integrazione con sistemi esterni
 
-### **Auto-Centering**
-- Automatically centers diagram when smaller than viewport
-- Maintains equal background on both sides
-- Applied during transform capping operations
+---
 
-### **Elastic Bounds**
-- **Pan Overscroll**: 150px beyond diagram bounds
-- **Zoom Overscroll**: Temporary zoom beyond min/max limits
-- **Bounce-back Animation**: Smooth return to valid bounds
-- **Background Visibility**: Shows background when over-bounds
-
-## Testing Strategy
-
-### **Test-Driven Development**
-- Write failing tests first
-- Implement code to make tests pass
-- Refactor while maintaining test coverage
-
-### **Test Categories**
-- **Unit Tests**: Individual component behavior
-- **Integration Tests**: BLoC communication
-- **Widget Tests**: UI interaction and rendering
-- **Performance Tests**: 60 FPS requirement validation
-
-## Testing and Debugging Support
-
-- **Debug Observer**: Optional BLoC transition logging via `DiagramConfiguration.enableBlocDebugObserver`
-- **Testable Widget**: `TestableDiagramViewer` exposes internal BLoCs via `onBlocsCreated` for tests
-
-Known limitations (current):
-// None specific to autoscroll tests; timer-driven flows stabilized.
-
-## Zoom Behavior Summary
-
-- Standard input mapping: **Ctrl/Cmd + wheel = zoom**; default wheel (no modifiers) forwards scroll to controller.
-- **No pan at limits**: When at effective min/max zoom, additional wheel ticks are ignored and must not introduce translation changes.
-- **Small-content anchoring**: If the diagram is smaller than the viewport on any axis, the viewer maintains the diagram centered on those axes. During a wheel zoom burst that starts in this state, the focal point is anchored to the viewport center for the entire burst to avoid drift.
-- **Large-content anchoring**: When the diagram fills the viewport on both axes, the zoom focal point is the cursor; the point under the cursor remains visually stable during zoom.
-
-## Desktop Input Mapping and Device Behaviors
-
-- **Classic mouse wheel**
-  - Scroll without modifiers → forwarded to the controller (the viewer does not apply pan internally).
-  - Inertial scrolling and overscroll bounce are disabled for the classic wheel path handled by the controller.
-  - Ctrl/Cmd + wheel → zoom about cursor; at effective min/max, extra ticks are ignored (no pan side‑effects).
-
-- **Magic Mouse**
-  - One‑finger slide emits `PointerScrollEvent` captured by `Listener`.
-  - Pan is applied immediately using adjusted physical deltas; a minimum per‑axis step (≥ 1.5 px) guarantees visible motion on micro‑ticks.
-  - A short "scroll session window" groups bursts and resets inertia/bounce/buffers on first event to avoid cross‑talk; on idle, samples drive inertia with de‑noise and peak fallback; bounce runs only if needed.
-  - Inertia starts immediately only when the recent direction is consistent with the new tick; under rapid alternation, immediate inertia is suppressed to avoid cancel/flip, but immediate pan is never dropped.
-  - Cmd + slide → zoom with gentle per‑step factor for fine control.
-
-- **Trackpad**
-  - Two‑finger drag → pan; pinch → zoom.
-  - Same physical‑space filtering and inertia rules as Magic Mouse.
+**Nota**: Questa architettura è stata progettata per evitare la confusione che si è verificata in passato. **TUTTI gli eventi passano sempre dal controller**, che decide come processarli.
 

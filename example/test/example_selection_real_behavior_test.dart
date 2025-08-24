@@ -126,7 +126,7 @@ void main() {
               'Selection should NOT trigger pan commands. Found: ${setTransformCommands.length} setTransform commands');
     }, timeout: const Timeout(Duration(seconds: 15)));
 
-    test('should send setTransform when NOT selecting', () async {
+    test('should send handleAsUsual when NOT selecting', () async {
       // Arrange
       controller.setSelectionMode(false);
       expect(controller.isSelectionModeEnabled, isFalse);
@@ -156,10 +156,10 @@ void main() {
       // Assert - Should have sent commands
       expect(sentCommands, isNotEmpty);
 
-      // Should have sent setTransform command for pan
+      // Should have sent handleAsUsual command for browsing (pan)
       expect(
           sentCommands.any((cmd) => cmd.maybeWhen(
-                setTransform: (_) => true,
+                handleAsUsual: (_) => true,
                 orElse: () => false,
               )),
           isTrue);

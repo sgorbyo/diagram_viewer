@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:diagram_viewer/events/physical_event.dart';
 import 'package:diagram_viewer/events/transform_2d.dart';
+import 'package:diagram_viewer/events/diagram_event.dart';
 import 'package:diagram_viewer/interfaces/diagram_object_entity.dart';
 
 part 'diagram_command.freezed.dart';
@@ -98,6 +99,37 @@ class DiagramCommand with _$DiagramCommand {
     required Rect logicalExtent,
   }) = RedrawCommand;
 
+  /// Enable autoscroll functionality.
+  ///
+  /// This command tells the DiagramViewer to enable automatic scrolling
+  /// when the cursor approaches the viewport edges. This is typically used
+  /// during drag operations (object drag, DnD, connection creation) to
+  /// allow the user to continue the operation beyond the visible area.
+  ///
+  /// When autoscroll is enabled, the diagram will automatically scroll
+  /// in the direction of the cursor when it gets close to the viewport edges.
+  const factory DiagramCommand.enableAutoscroll() = EnableAutoscrollCommand;
+
+  /// Disable autoscroll functionality.
+  ///
+  /// This command tells the DiagramViewer to disable automatic scrolling.
+  /// This is typically used at the end of drag operations to prevent
+  /// unwanted scrolling when the user is not actively dragging.
+  ///
+  /// When autoscroll is disabled, the diagram will not scroll automatically
+  /// regardless of cursor position.
+  const factory DiagramCommand.disableAutoscroll() = DisableAutoscrollCommand;
+
+  /// Return the diagram to valid bounds.
+  ///
+  /// This command tells the DiagramViewer to return the diagram view
+  /// to within the valid bounds, typically after an operation that may
+  /// have left the view in an invalid state (e.g., overscroll during drag).
+  ///
+  /// This command is usually sent after disableAutoscroll to ensure
+  /// the diagram is properly positioned within its constraints.
+  const factory DiagramCommand.returnToBounds() = ReturnToBoundsCommand;
+
   /// Return to valid bounds with animation.
   ///
   /// This command tells the DiagramViewer to animate back to valid bounds
@@ -156,6 +188,17 @@ class DiagramCommand with _$DiagramCommand {
   const factory DiagramCommand.hideSelectionOverlay() =
       HideSelectionOverlayCommand;
 
+  /// Tell the DiagramViewer to handle this event using its default
+  /// pan/zoom/inertia logic. This is used when the controller decides
+  /// that an event should be processed by the viewer's built-in browsing
+  /// mechanisms rather than being transformed into a specific command.
+  ///
+  /// [originalEvent] - The original DiagramEventUnion that should be
+  /// processed by the viewer's default handling
+  const factory DiagramCommand.handleAsUsual({
+    required DiagramEventUnion originalEvent,
+  }) = _HandleAsUsualCommand;
+
   /// Set cursor effect (desktop/web). No-op on mobile platforms.
   const factory DiagramCommand.setCursor({
     required CursorEffect effect,
@@ -187,7 +230,20 @@ class DiagramCommand with _$DiagramCommand {
   bool get affectsContent => isRedraw;
 
   /// Returns true if this command affects auto-scrolling.
-  bool get affectsAutoScroll => isAutoScrollStep || isStopAutoScroll;
+  bool get affectsAutoScroll =>
+      isAutoScrollStep ||
+      isStopAutoScroll ||
+      isEnableAutoscroll ||
+      isDisableAutoscroll;
+
+  /// Returns true if this command is an EnableAutoscroll command.
+  bool get isEnableAutoscroll => this is EnableAutoscrollCommand;
+
+  /// Returns true if this command is a DisableAutoscroll command.
+  bool get isDisableAutoscroll => this is DisableAutoscrollCommand;
+
+  /// Returns true if this command is a ReturnToBounds command.
+  bool get isReturnToBounds => this is ReturnToBoundsCommand;
 
   /// Returns a description of this command for debugging.
   String get description => when(
@@ -202,6 +258,9 @@ class DiagramCommand with _$DiagramCommand {
         autoScrollStep: (velocity, stepDuration) =>
             'AutoScrollStep(velocity: $velocity, duration: $stepDuration)',
         stopAutoScroll: () => 'StopAutoScroll',
+        enableAutoscroll: () => 'EnableAutoscroll',
+        disableAutoscroll: () => 'DisableAutoscroll',
+        returnToBounds: () => 'ReturnToBounds',
         showDragOverlay: (ghostSpec, position) =>
             'ShowDragOverlay(position: $position)',
         updateDragOverlay: (position) =>
@@ -212,6 +271,8 @@ class DiagramCommand with _$DiagramCommand {
         updateSelectionRect: (currentPosition) =>
             'UpdateSelectionRect(currentPosition: $currentPosition)',
         hideSelectionOverlay: () => 'HideSelectionOverlay',
+        handleAsUsual: (originalEvent) =>
+            'HandleAsUsual(${originalEvent.runtimeType})',
         setCursor: (effect) => 'SetCursor(effect: $effect)',
       );
 }

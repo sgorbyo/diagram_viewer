@@ -108,7 +108,7 @@ void main() {
           isFalse);
     });
 
-    test('should send setTransform command when selection is NOT active',
+    test('should send handleAsUsual command when selection is NOT active',
         () async {
       // Arrange
       controller.setSelectionMode(false);
@@ -138,11 +138,11 @@ void main() {
       // Wait a bit for the event to be processed
       await Future.delayed(const Duration(milliseconds: 100));
 
-      // Assert - Should send setTransform command for pan
+      // Assert - Should send handleAsUsual command for browsing (pan)
       expect(sentCommands, isNotEmpty);
       expect(
           sentCommands.any((cmd) => cmd.maybeWhen(
-                setTransform: (_) => true,
+                handleAsUsual: (_) => true,
                 orElse: () => false,
               )),
           isTrue);
