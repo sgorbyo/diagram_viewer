@@ -103,7 +103,7 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
   // Selection rectangle overlay state
   bool _selectionOverlayVisible = false;
   Offset _selectionStartPosition = Offset.zero;
-  Offset _selectionCurrentPosition = Offset.zero;
+  // Removed: unused selection current position (we compute rect directly)
   Rect _selectionRect = Rect.zero;
 
   // Track autoscroll state
@@ -231,47 +231,7 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
   }
 
   // Safe inertia wrapper that respects selection state
-  void _safeStartInertia(BuildContext context, Offset initialVelocity,
-      {String? contextName}) {
-    if (!_isPanAllowed()) {
-      if (widget.debug) {
-        debugPrint(
-            '[Viewer] Inertia blocked during selection (context: $contextName)');
-      }
-      return;
-    }
-
-    _inertia.start(
-      initialVelocity: initialVelocity,
-      interval: widget.configuration.autoScrollInterval,
-      frictionFactor: widget.configuration.inertialFriction,
-      minStopVelocity: widget.configuration.inertialMinStopVelocity,
-      maxDuration: widget.configuration.inertialMaxDuration,
-      onTick: (delta) {
-        if (!mounted) return;
-        if (_isBouncingBack) {
-          _inertia.stop();
-          return;
-        }
-        _safePan(context, delta, context.read<TransformBloc>().state.transform,
-            contextName: 'inertia-tick');
-      },
-      onStop: () {
-        if (!mounted) return;
-        if (_isBouncingBack) return;
-        final transformBloc = context.read<TransformBloc>();
-        transformBloc.setFrozenDuringDrag(false);
-        transformBloc.clearBounceBackFlag();
-        _isBouncingBack = true;
-        _bounceFlagTimer?.cancel();
-        _bounceFlagTimer = Timer(widget.configuration.bounceDuration, () {
-          if (mounted) _isBouncingBack = false;
-          _bounceFlagTimer = null;
-        });
-        transformBloc.bounceBack(widget.configuration.bounceDuration);
-      },
-    );
-  }
+  // Removed: unused _safeStartInertia helper (no external references)
 
   // removed unused helpers
 
@@ -570,6 +530,39 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
           },
           returnToBounds: () {
             // Return the diagram to valid bounds
+            // IMPORTANT: Do not correct bounds during active drag/autoscroll,
+            // otherwise the content and the dragged object would shift under
+            // the cursor causing a perceived "jump".
+            if (_autoscrollEnabled) {
+              if (widget.debug) {
+                debugPrint(
+                    '[Viewer] returnToBounds ignored: autoscroll enabled (drag active)');
+              }
+              return;
+            }
+            // Also guard against an active pointer session just in case the
+            // controller sends returnToBounds before disableAutoscroll.
+            final evtBloc = context.read<EventManagementBloc>();
+            final pointerActive = evtBloc.state.maybeWhen(
+              pointerActive: (
+                String eventId,
+                Set<MouseButton> pressedMouseButtons,
+                Set<LogicalKeyboardKey> pressedKeys,
+                DateTime startTime,
+                Offset startPosition,
+                Offset lastPosition,
+                List<DiagramObjectEntity> lastHitList,
+              ) =>
+                  true,
+              orElse: () => false,
+            );
+            if (pointerActive) {
+              if (widget.debug) {
+                debugPrint(
+                    '[Viewer] returnToBounds ignored: pointer active (drag in progress)');
+              }
+              return;
+            }
             // This is typically called after drag operations to ensure
             // the diagram is properly positioned within its constraints.
             final transformBloc = context.read<TransformBloc>();
@@ -653,14 +646,12 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
             setState(() {
               _selectionOverlayVisible = true;
               _selectionStartPosition = startPosition;
-              _selectionCurrentPosition = startPosition;
               _selectionRect = Rect.fromPoints(startPosition, startPosition);
             });
           },
           updateSelectionRect: (currentPosition) {
             if (_selectionOverlayVisible) {
               setState(() {
-                _selectionCurrentPosition = currentPosition;
                 _selectionRect = Rect.fromPoints(
                   _selectionStartPosition,
                   currentPosition,
@@ -672,7 +663,6 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
             setState(() {
               _selectionOverlayVisible = false; // Hide overlay
               _selectionStartPosition = Offset.zero; // Reset start position
-              _selectionCurrentPosition = Offset.zero; // Reset current position
               _selectionRect = Rect.zero; // Reset rectangle
             });
           },
@@ -691,6 +681,35 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
         _postGestureBounceTimer?.cancel();
         _postGestureBounceTimer = Timer(const Duration(milliseconds: 220), () {
           if (!mounted) return;
+          // Never bounce back while a drag is active or autoscroll is enabled
+          if (_autoscrollEnabled) {
+            if (widget.debug) {
+              debugPrint(
+                  '[Viewer] post-gesture bounce skipped: autoscroll enabled');
+            }
+            return;
+          }
+          final evtBloc = context.read<EventManagementBloc>();
+          final isPointerActive = evtBloc.state.maybeWhen(
+            pointerActive: (
+              String eventId,
+              Set<MouseButton> pressedMouseButtons,
+              Set<LogicalKeyboardKey> pressedKeys,
+              DateTime startTime,
+              Offset startPosition,
+              Offset lastPosition,
+              List<DiagramObjectEntity> lastHitList,
+            ) =>
+                true,
+            orElse: () => false,
+          );
+          if (isPointerActive) {
+            if (widget.debug) {
+              debugPrint(
+                  '[Viewer] post-gesture bounce skipped: pointer active');
+            }
+            return;
+          }
           final tfbNow = context.read<TransformBloc>();
           final stateNow = tfbNow.state;
           final strictNow = Transform2DUtils.capTransformWithZoomLimits(
@@ -2601,7 +2620,6 @@ class _DiagramViewerContentState extends State<DiagramViewerContent> {
     // Use existing pan/zoom logic from the viewer
     // This replicates the behavior that was previously handled by setTransform
 
-    final transformBloc = context.read<TransformBloc>();
     final eventBloc = context.read<EventManagementBloc>();
 
     // Check if we're already in an active pointer state
